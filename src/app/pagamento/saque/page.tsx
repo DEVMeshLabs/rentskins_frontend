@@ -11,14 +11,18 @@ import { PagePaymentWithdrawLocation } from '@/components/Pages/PagePayment/Page
 import { PagePaymentWithdrawPersonal } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawPersonal'
 import { PagePaymentWithdrawTransaction } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawTransaction'
 import useComponentStore from '@/stores/components.store'
+import Authentication from '@/tools/authentication.tool'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 export default function PaymentWithdrawPage() {
+  const { paymentWithdrawIndex, setPaymentWithdrawIndex } = useComponentStore()
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const { paymentWithdrawIndex, setPaymentWithdrawIndex } = useComponentStore()
+  useEffect(() => {
+    Authentication.validateUserSession(router)
+  }, [router])
 
   useEffect(() => setPaymentWithdrawIndex(0), [setPaymentWithdrawIndex])
 

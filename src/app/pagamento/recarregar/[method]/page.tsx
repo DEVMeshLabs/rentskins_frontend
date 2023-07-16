@@ -5,6 +5,7 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import { PagePaymentRechargeMastercard } from '@/components/Pages/PagePayment/PagePaymentRecharge/PagePaymentRechargeMastercard'
 import { PagePaymentRechargePix } from '@/components/Pages/PagePayment/PagePaymentRecharge/PagePaymentRechargePix'
 import { PagePaymentRechargeTicket } from '@/components/Pages/PagePayment/PagePaymentRecharge/PagePaymentRechargeTicket'
+import Authentication from '@/tools/authentication.tool'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -17,6 +18,8 @@ export default function PaymentAddMastercardPage() {
   >(undefined)
 
   useEffect(() => {
+    Authentication.validateUserSession(router)
+
     const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       setIsLoading(true)

@@ -7,16 +7,16 @@ import { useParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function PerfilUsuario() {
-  const { userSteamId } = useParams()
+  const { steamid } = useParams()
   const router = useRouter()
 
   const { user } = useUserStore()
 
   useEffect(() => {
-    if (userSteamId === user.steamid) {
+    if (steamid === user.steamid) {
       router.push('/perfil')
     }
-  }, [userSteamId, user])
+  }, [steamid, user, router])
 
   return (
     <main className="mx-auto flex w-4/5 flex-col items-center py-7">

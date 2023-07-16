@@ -1,5 +1,8 @@
 'use client'
+import { IUser } from '@/interfaces/user.interface'
 import useComponentStore from '@/stores/components.store'
+import JsonWebToken from '@/tools/jsonwebtoken.tool'
+import LocalStorage from '@/tools/localstorage.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import Aos from 'aos'
@@ -43,6 +46,18 @@ export function ModalPaymentMain() {
     )
   }
 
+  const openParameters = () => {
+    const token = LocalStorage.get('token')
+
+    if (token) {
+      const { steamid } = JsonWebToken.verify(token) as IUser
+      if (modalOpen === 'true' && modalType === 'payment' && steamid) {
+        return true
+      }
+    }
+    return false
+  }
+
   const removeDomainQuery = () => {
     router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
   }
@@ -55,7 +70,7 @@ export function ModalPaymentMain() {
   return (
     <Dialog.Root
       modal
-      open={modalOpen === 'true' && modalType === 'payment'}
+      open={openParameters()}
       defaultOpen={false}
       onOpenChange={() => handleModalOnClose()}
     >

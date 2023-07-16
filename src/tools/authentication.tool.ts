@@ -40,4 +40,32 @@ export default class Authentication {
       router.push(URLQuery.removeQuery(['token']))
     }
   }
+
+  public static logout(setLogoutStore: (boolean: boolean) => void) {
+    LocalStorage.remove('token')
+    location.reload()
+    setLogoutStore(false)
+  }
+
+  public static validateUserSession(router: any) {
+    const checkToken = () => {
+      const token = LocalStorage.get('token')
+
+      if (token) {
+        const verification = JsonWebToken.verify(token) as IUser
+
+        if (verification.steamid) {
+          return true
+        }
+
+        return false
+      }
+
+      return false
+    }
+
+    if (!checkToken()) {
+      router.push('/')
+    }
+  }
 }

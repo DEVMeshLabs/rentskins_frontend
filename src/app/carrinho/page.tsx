@@ -1,3 +1,4 @@
+'use client'
 import AllSkinsCart from '@/components/Others/Skins/AllSkinsCart'
 import { PageSummaryCart } from '@/components/Pages/PageSummary/PageSummaryCart'
 

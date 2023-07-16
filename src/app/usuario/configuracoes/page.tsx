@@ -6,6 +6,7 @@ import { IconGear, IconLockedShield, IconPaper } from '@/components/Icons'
 import { PageSettingsInformation } from '@/components/Pages/PageSettings/PageSettingsInformation'
 import { PageSettingsSecurity } from '@/components/Pages/PageSettings/PageSettingsSecurity'
 import { PageSettingsTransactions } from '@/components/Pages/PageSettings/PageSettingsTransactions'
+import Authentication from '@/tools/authentication.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import {
   ReadonlyURLSearchParams,
@@ -20,6 +21,8 @@ export default function Settings() {
   const router = useRouter()
 
   useEffect(() => {
+    Authentication.validateUserSession(router)
+
     const titleQuery = searchParams.get('type') as
       | 'personal'
       | 'transactions'
@@ -62,7 +65,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="flex h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pt-8">
+    <main className="flex h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pt-8">
       <div className="flex h-min w-max flex-col items-end gap-2">
         <div className="flex flex-col items-start gap-6">
           <Common.Title bold={900} size="2xl" color="white">
@@ -90,7 +93,7 @@ export default function Settings() {
       </div>
 
       {renderPageContent()}
-    </div>
+    </main>
   )
 }
 

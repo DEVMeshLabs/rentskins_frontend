@@ -5,6 +5,7 @@ import { PageNotificationTransaction } from '@/components/Pages/PageNotification
 import { historicMock } from '@/Mock/notification.historic.mock'
 import { transactionsMock } from '@/Mock/notification.transaction.mock'
 import useFilterStore from '@/stores/filters.store'
+import Authentication from '@/tools/authentication.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import Aos from 'aos'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -18,6 +19,8 @@ export default function NotificationPage() {
   const router = useRouter()
 
   useEffect(() => {
+    Authentication.validateUserSession(router)
+
     Aos.init({
       duration: 600,
       delay: 0,
