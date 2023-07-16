@@ -47,7 +47,7 @@ export default class Authentication {
     setLogoutStore(false)
   }
 
-  public static validateUserSession(router: any) {
+  public static validateUserSession() {
     const checkToken = () => {
       const token = LocalStorage.get('token')
 
@@ -65,7 +65,7 @@ export default class Authentication {
     }
 
     if (!checkToken()) {
-      router.push('/')
+      window.location.pathname = '/'
     }
   }
 }

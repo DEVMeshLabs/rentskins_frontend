@@ -6,7 +6,6 @@ import { IconGear, IconLockedShield, IconPaper } from '@/components/Icons'
 import { PageSettingsInformation } from '@/components/Pages/PageSettings/PageSettingsInformation'
 import { PageSettingsSecurity } from '@/components/Pages/PageSettings/PageSettingsSecurity'
 import { PageSettingsTransactions } from '@/components/Pages/PageSettings/PageSettingsTransactions'
-import Authentication from '@/tools/authentication.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import {
   ReadonlyURLSearchParams,
@@ -21,8 +20,6 @@ export default function Settings() {
   const router = useRouter()
 
   useEffect(() => {
-    Authentication.validateUserSession(router)
-
     const titleQuery = searchParams.get('type') as
       | 'personal'
       | 'transactions'

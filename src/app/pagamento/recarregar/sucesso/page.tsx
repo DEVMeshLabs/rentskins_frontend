@@ -1,15 +1,9 @@
 'use client'
 import Common from '@/components/Common'
-import Authentication from '@/tools/authentication.tool'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 
 export default function PaymentAddSuccessPage() {
   const router = useRouter()
-
-  useEffect(() => {
-    Authentication.validateUserSession(router)
-  }, [router])
 
   const handleOnContinue = () => {
     router.push('/')

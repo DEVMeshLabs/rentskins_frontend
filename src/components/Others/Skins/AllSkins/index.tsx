@@ -1,14 +1,8 @@
 /* eslint-disable camelcase */
-// import { skins } from '@/Mock'
 'use client'
-import classNames from 'classnames'
-// import { PageSelector } from '@/components/PageSelector'
-// import useComponentStore from '@/stores/components.store'
 import { ISkins } from '@/interfaces/ISkins'
-import Link from 'next/link'
-// import { findByAll } from '@/services/SkinService'
-// import { useQuery } from '@tanstack/react-query'
-// import { OtherCard } from '../../OtherCard/OtherCard'
+import classNames from 'classnames'
+import { useRouter } from 'next/navigation'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 interface IProps {
@@ -22,16 +16,11 @@ export default function AllSkins({
   center = false,
   itemsPerPage = 10,
 }: IProps) {
-  // const { setPageSelectorIndex, pageSelectorIndex } = useComponentStore()
+  const router = useRouter()
 
-  // const allSkins = skinsCategories || skins
-
-  // const allSkinsFilter = allSkins.filter(
-  //   ({ name }: skin) =>
-  //     !name.includes('Coin') &&
-  //     !name.includes('Pin') &&
-  //     !name.includes('Graffiti'),
-  // )
+  const onCardClick = (id: string) => {
+    router.push(`/details/${id}`)
+  }
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -54,40 +43,23 @@ export default function AllSkins({
             }: ISkins,
             index: number,
           ) => {
-            // const itemIndex = index + 1
-            // if (
-            //   itemIndex > itemsPerPage * (pageSelectorIndex - 1) &&
-            //   itemIndex <= itemsPerPage * pageSelectorIndex
-            // )
             return (
-              <>
-                <Link
-                  key={`${id}-${index}`}
-                  href={`/details/${id}`}
-                  className="flex w-[17.5rem]"
-                >
-                  <OtherCard
-                    skinImage={skin_image}
-                    sellerName={skin_name}
-                    skinColor={skin_color}
-                    skinWeapon={skin_weapon}
-                    skinFloat={skin_float}
-                    skinPrice={skin_price}
-                    key={id}
-                  />
-                </Link>
-              </>
+              <div key={'skin-card-' + index}>
+                <OtherCard
+                  onCardClick={() => onCardClick(id)}
+                  skinImage={skin_image}
+                  sellerName={skin_name}
+                  skinColor={skin_color}
+                  skinWeapon={skin_weapon}
+                  skinFloat={skin_float}
+                  skinPrice={skin_price}
+                  key={id}
+                />
+              </div>
             )
-            // return null
           },
         )}
       </div>
-      {/* <PageSelector
-        pages={allSkinsFilter.length / itemsPerPage}
-        handleOnChange={(event) =>
-          setPageSelectorIndex(event.target.value as unknown as number)
-        }
-      /> */}
     </div>
   )
 }

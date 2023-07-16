@@ -9,7 +9,7 @@ export default function AllSkeletonSkins({ quantitySkeletons = 15 }: IProps) {
   return (
     <div className="flex w-full flex-wrap justify-center gap-3">
       {skeletonSkins.map((_, idx) => (
-        <div key={idx}>
+        <div key={'skeleton-skin-' + idx}>
           <SkeletonCardSkin />
         </div>
       ))}

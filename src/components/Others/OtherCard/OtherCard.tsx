@@ -8,6 +8,7 @@ import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
 
 interface Props {
+  onCardClick?: () => void
   sellerName: string
   skinPrice: string
   skinFloat: string
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function OtherCard({
+  onCardClick,
   sellerName,
   skinColor,
   skinImage,
@@ -31,7 +33,7 @@ export function OtherCard({
   )
 
   return (
-    <article className="flex w-72 flex-col gap-3 rounded-lg border-2 border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">
+    <article className="flex w-[17.5rem] flex-col gap-3 rounded-lg border-2 border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern">
         <div
           className={`h-2 w-52 rounded-b-full`}
@@ -39,6 +41,8 @@ export function OtherCard({
         />
         <div className="flex h-[154px] w-[206px] items-center justify-center">
           <Image
+            className="cursor-pointer"
+            onClick={onCardClick}
             src={skinImage}
             alt={sellerName}
             width={206}
@@ -67,7 +71,11 @@ export function OtherCard({
           <Common.Button color="invisible" className="h-9 w-9">
             <IconSteam />
           </Common.Button>
-          <Common.Button color="invisible" className="h-9 w-9">
+          <Common.Button
+            color="invisible"
+            className="h-9 w-9"
+            onClick={onCardClick}
+          >
             <IconOlho />
           </Common.Button>
         </div>
