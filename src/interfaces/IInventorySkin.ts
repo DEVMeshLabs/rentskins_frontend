@@ -3,4 +3,5 @@ export interface ISkinInventory {
   name: string
   name_color: string
   market_name: string
+  tags: any[]
 }

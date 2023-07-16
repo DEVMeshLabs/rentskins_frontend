@@ -15,7 +15,7 @@ export function FormInputCheckbox({
   labelSize = 'md',
   wrapperClassname,
   labelClassName,
-  checkClassname,
+  checkClassname = 'ml-[0.4rem]',
   inputClassName,
   ...rest
 }: IProps) {
@@ -27,7 +27,8 @@ export function FormInputCheckbox({
         {...rest}
       />
       <div
-        className={`${checkClassname} absolute -mt-[0.2rem] ml-[0.4rem] h-2 w-4 -rotate-45 border-b-2 border-l-2 bg-transparent opacity-0 transition-all peer-checked:opacity-100`}
+        className={`${checkClassname} absolute -mt-[0.2rem] h-2 w-4 -rotate-45
+        border-b-2 border-l-2 bg-transparent opacity-0 transition-all peer-checked:opacity-100 peer-disabled:peer-checked:opacity-30`}
       />
       <text
         className={`text-${labelSize} ${

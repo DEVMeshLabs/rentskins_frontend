@@ -14,8 +14,17 @@ export default class SkinService {
     return Api.get<ISkins[]>(`/skins/weapon/${weapon}`)
   }
 
-  public static findBySkinsInventory(steamid: string) {
-    return Api.get(`/skins/inventory/${steamid}`)
+  public static findBySkinsInventory(
+    steamid: string,
+    filterType: string[],
+    page: number,
+    itemsPerPage: number,
+  ) {
+    return Api.post(`/skins/inventory/${steamid}`, {
+      filterType,
+      page,
+      itemsPerPage,
+    })
   }
 
   public static findAllSkinsByWeapon(weapon: string) {
