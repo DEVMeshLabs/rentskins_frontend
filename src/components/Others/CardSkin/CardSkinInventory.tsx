@@ -25,8 +25,7 @@ export function CardSkinInventory({ steamid }: Props) {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
-        // steamid,
-        '76561198355549311',
+        steamid,
         inventoryTypeFilter,
         Number(page),
         Number(itemsPerPage),
