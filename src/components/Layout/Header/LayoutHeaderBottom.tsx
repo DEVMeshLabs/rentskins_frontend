@@ -22,6 +22,7 @@ export function LayoutHeaderBottom({ className }: IProps) {
     <div
       className={`${className} z-0 flex w-full select-none items-center justify-center gap-10 border-y border-mesh-color-neutral-700`}
     >
+      {/*  */}
       <div className="flex w-10/12 select-none justify-between gap-10 p-4">
         <ContainerItem title="Faca" iconSeta={<IconSetaType />} isList={true}>
           <ItemLink
