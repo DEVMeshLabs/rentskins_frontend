@@ -14,7 +14,7 @@ export default function RootLayout({
   // eslint-disable-next-line no-undef
   children: React.ReactNode
 }) {
-  // 
+  //
   console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.')
   return (
     <QueryClientProvider client={queryClient}>
