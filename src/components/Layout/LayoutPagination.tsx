@@ -17,7 +17,7 @@ export default function LayoutPagination({
   setPageState,
 }: IProps) {
   return (
-    <div className="mt-12 flex items-end justify-center gap-2">
+    <div className="mb-12 flex items-end justify-center gap-2">
       {Number(pageState) - 4 >= 1 && (
         <>
           <button

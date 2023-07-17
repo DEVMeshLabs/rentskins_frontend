@@ -17,7 +17,9 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
             size="sm"
             className="flex w-fit flex-col items-start justify-start text-start align-baseline"
           >
-            {market_name}
+            {market_name.length <= 45
+              ? market_name
+              : market_name.slice(0, 40) + '...'}
           </Common.Title>
         </div>
         <span className="text-xs font-medium text-mesh-color-neutral-200">
