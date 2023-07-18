@@ -77,7 +77,7 @@ export default function Home() {
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
         {isLoading ? (
-          <AllSkeletonSkins quantitySkeletons={1} />
+          <AllSkeletonSkins quantitySkeletons={20} />
         ) : (
           <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
         )}
