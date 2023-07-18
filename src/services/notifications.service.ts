@@ -8,12 +8,12 @@ export default class NotificationServices {
   }
 
   public static getAllNotifsByUser(userId: string, time?: ITime) {
-    return Api.post<INotification[]>(`/notification/userAll/547777`, {
-      tempo: 'tudo',
+    return Api.post<INotification[]>(`/notification/userAll/${userId}`, {
+      tempo: time || 'tudo',
     })
   }
 
   public static readingAllNotifications(ownerId: string) {
-    return Api.put(`/notification/547777`)
+    return Api.put(`/notification/${ownerId}`)
   }
 }
