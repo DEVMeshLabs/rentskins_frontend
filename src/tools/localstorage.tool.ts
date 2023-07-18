@@ -6,7 +6,7 @@ export default class LocalStorage {
   public static get(key: string) {
     const response = localStorage.getItem(key)
 
-    if (response !== null || response !== undefined) {
+    if (response !== null && response !== undefined && response !== '') {
       return JSON.parse(response as string)
     }
 
