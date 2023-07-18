@@ -1,6 +1,7 @@
 'use client'
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons'
+import { ITime } from '@/services/interfaces/notification.interface'
 import useFilterStore from '@/stores/filters.store'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -36,26 +37,26 @@ export function ModalNotificationFilter() {
   }
 
   const handleOnChangeFilter = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedFilter(event.target.value)
+    setSelectedFilter(event.target.value as ITime)
   }
 
   const handleOnApplyFilter = (apply: boolean = true) => {
     if (apply) {
       setNotificationFilter(selectedFilter)
     } else {
-      setNotificationFilter('Tudo')
+      setNotificationFilter('tudo')
     }
     removeDomainQuery()
   }
 
   const filterLabels = [
-    'Tudo',
-    'Hoje',
-    '1-3 Dias',
-    '1 Semana',
-    '1 Mês',
-    '3 Meses',
-    '1 Ano',
+    { value: 'tudo', label: 'Tudo' },
+    { value: 'hoje', label: 'Hoje' },
+    { value: 'tresdias', label: '1-3 Dias' },
+    { value: 'umasemana', label: '1 Semana' },
+    { value: 'ummes', label: '1 Mês' },
+    { value: 'tresmes', label: '3 Meses' },
+    { value: 'umano', label: '1 Ano' },
   ]
 
   return (
@@ -84,15 +85,15 @@ export function ModalNotificationFilter() {
               </div>
 
               <div className="flex w-2/3 flex-wrap gap-2">
-                {filterLabels.map((item, index) => (
+                {filterLabels.map(({ label, value }, index) => (
                   <label
                     key={'filter-label' + index}
                     className="group cursor-pointer select-none"
                   >
                     <input
                       type="radio"
-                      value={item}
-                      defaultChecked={notificationFilter === item}
+                      value={value}
+                      defaultChecked={value === label}
                       name="notification-filter"
                       className="peer absolute"
                       onChange={(event) => handleOnChangeFilter(event)}
@@ -102,7 +103,7 @@ export function ModalNotificationFilter() {
                 text-white transition-all group-hover:bg-mesh-color-neutral-400/50 peer-checked:bg-mesh-color-primary-1200
                 peer-checked:font-semibold peer-checked:text-black"
                     >
-                      {item}
+                      {label}
                     </div>
                   </label>
                 ))}
