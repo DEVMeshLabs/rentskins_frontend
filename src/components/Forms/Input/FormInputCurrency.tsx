@@ -11,8 +11,9 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   currencyClassname?: string
   limit?: number
   inputClassName?: string
-  state: string | number
-  setState: Dispatch<SetStateAction<string>> | Dispatch<SetStateAction<number>>
+  state?: string | number
+  setState?: Dispatch<SetStateAction<string>> | Dispatch<SetStateAction<number>>
+  register?: object
 }
 
 export function FormInputCurrency({
@@ -27,6 +28,7 @@ export function FormInputCurrency({
   inputClassName,
   state,
   setState,
+  register,
   ...rest
 }: IProps) {
   const formatInput = (value: string | number): string => {
@@ -63,13 +65,14 @@ export function FormInputCurrency({
           type="text"
           step="any"
           onChange={({ target: { value } }) =>
+            setState &&
             setState(
               formatInput(value) as SetStateAction<string> &
                 SetStateAction<number>,
             )
           }
           value={state}
-          className={`${inputClassName} pl-12 ${
+          className={`${inputClassName} w-full pl-12 ${
             enableDefault && options.input.className
           }`}
           {...rest}

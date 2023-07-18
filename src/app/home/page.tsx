@@ -1,5 +1,6 @@
 'use client'
 import { CommonSteamButton } from '@/components/Common/CommonSteamButton'
+import Form from '@/components/Forms'
 import {
   IconDevolution,
   IconMagnifyingGlass,
@@ -13,9 +14,15 @@ import SkinService from '@/services/skin.service'
 import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { homeFormResolver } from './form.schema'
 
 export default function Home() {
+  const [form, setForm] = useState('')
+
   const { user } = useUserStore()
+
   const { data, isLoading } = useQuery({
     queryKey: ['allSkins'],
     queryFn: () => SkinService.findByAll(),
@@ -24,6 +31,12 @@ export default function Home() {
   const handleOnSteam = () => {
     SteamService.redirect()
   }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: homeFormResolver })
 
   return (
     <main className="h-full">
@@ -82,6 +95,37 @@ export default function Home() {
           <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
         )}
       </div>
+      <Form.Root
+        className="w-1/4 text-white"
+        onSubmit={handleSubmit((data) => setForm(JSON.stringify(data)))}
+      >
+        <Form.Input.CPF register={register('cpf')} placeholder="CPF" />
+        {errors?.cpf?.message}
+        {/* <Form.Input.Card register={register('Card')} placeholder="Card" />
+        <Form.Input.Checkbox
+          register={register('Checkbox')}
+          placeholder="Checkbox"
+        />
+        <Form.Input.Currency
+          register={register('Currency')}
+          placeholder="Currency"
+        />
+        <Form.Input.Date register={register('Date')} placeholder="Date" />
+        <Form.Input.Email register={register('Email')} placeholder="Email" />
+        <Form.Input.MonthYear
+          register={register('MonthYear')}
+          placeholder="MonthYear"
+        />
+        <Form.Input.Number register={register('Number')} placeholder="Number" />
+        <Form.Input.Phone register={register('Phone')} placeholder="Phone" />
+        <Form.Input.PostalCode
+          register={register('Postal Code')}
+          placeholder="Postal Code"
+        />
+        <Form.Input.Text register={register('Text')} placeholder="Text" /> */}
+        <Form.Button buttonStyle="full"> Completar </Form.Button>
+        {form}
+      </Form.Root>
     </main>
   )
 }

@@ -7,8 +7,9 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClassName?: string
   limit?: number
   inputClassName?: string
-  state: string
-  setState: React.Dispatch<React.SetStateAction<string>>
+  state?: string
+  setState?: React.Dispatch<React.SetStateAction<string>>
+  register?: object
 }
 
 export function FormInputNumber({
@@ -19,6 +20,7 @@ export function FormInputNumber({
   inputClassName,
   state,
   setState,
+  register,
   ...rest
 }: IProps) {
   const formatInput = (value: string): string => {
@@ -36,9 +38,12 @@ export function FormInputNumber({
       {label && labelSide === 'up' && label}
       <input
         type="text"
-        onChange={({ target }) => setState(formatInput(target.value))}
+        onChange={({ target }) =>
+          setState && setState(formatInput(target.value))
+        }
         value={state}
         className={`${inputClassName} ${options.input.className}`}
+        {...register}
         {...rest}
       />
       {label && labelSide === 'down' && label}

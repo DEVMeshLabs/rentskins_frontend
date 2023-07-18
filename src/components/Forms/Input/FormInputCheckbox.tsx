@@ -8,6 +8,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClassName?: string
   checkClassname?: string
   inputClassName?: string
+  register?: object
 }
 
 export function FormInputCheckbox({
@@ -17,6 +18,7 @@ export function FormInputCheckbox({
   labelClassName,
   checkClassname = 'ml-[0.4rem]',
   inputClassName,
+  register,
   ...rest
 }: IProps) {
   return (
@@ -24,6 +26,7 @@ export function FormInputCheckbox({
       <input
         type="checkbox"
         className={`${inputClassName || options.input.className} peer`}
+        {...register}
         {...rest}
       />
       <div

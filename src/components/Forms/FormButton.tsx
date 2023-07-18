@@ -4,16 +4,19 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   buttonStyle: 'opaque' | 'full'
   children: React.ReactNode
   className?: string
+  type?: 'submit' | 'button' | 'reset'
 }
 
 export function FormButton({
   buttonStyle,
   children,
   className,
+  type = 'submit',
   ...rest
 }: IProps) {
   return (
     <button
+      type={type}
       className={`${className} w-full rounded-md border-2 px-2 py-2 opacity-50 
       transition-all hover:opacity-100 disabled:opacity-50
       ${

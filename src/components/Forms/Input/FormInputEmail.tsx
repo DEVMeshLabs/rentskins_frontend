@@ -8,6 +8,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   inputClassName?: string
   state?: string
   setState?: React.Dispatch<React.SetStateAction<string>>
+  register?: object
 }
 
 export function FormInputEmail({
@@ -17,6 +18,7 @@ export function FormInputEmail({
   inputClassName,
   state,
   setState,
+  register,
   ...rest
 }: IProps) {
   const formatInput = (value: string): string => {
@@ -34,6 +36,7 @@ export function FormInputEmail({
         }
         value={state}
         className={`${inputClassName || options.input.className}`}
+        {...register}
         {...rest}
       />
       {label && labelSide === 'down' && label}
