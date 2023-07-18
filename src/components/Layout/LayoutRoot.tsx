@@ -1,7 +1,6 @@
 'use client'
 import useUserStore from '@/stores/user.store'
 import Authentication from '@/tools/authentication.tool'
-import LocalStorage from '@/tools/localstorage.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -28,9 +27,7 @@ export function LayoutRoot({ children }: IProps) {
 
   useEffect(() => {
     if (logout) {
-      LocalStorage.remove('token')
-      location.reload()
-      setLogout(false)
+      Authentication.logout(setLogout)
     }
   }, [logout, setLogout])
 
