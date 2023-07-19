@@ -16,9 +16,11 @@ import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import logo from '../../../assets/logo.svg'
 import { LayoutHeaderDropdown } from './LayoutHeaderDropdown'
+import { formResolver } from './form.schema'
 
 export function LayoutHeaderTop() {
   const router = useRouter()
@@ -26,7 +28,22 @@ export function LayoutHeaderTop() {
   const { user, setUser, setLogout } = useUserStore()
   const [walletValue, setWalletValue] = useState()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { isDirty, isValid },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      search: '12-12',
+    },
+  })
+
+  console.log()
+
+  console.log(isDirty)
 
   useEffect(() => {
     const token = LocalStorage.get('token')
@@ -72,9 +89,8 @@ export function LayoutHeaderTop() {
     setShowProfileDropdown((state) => !state)
   }
 
-  const handleOnSearch = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    router.push('/loja?search=' + searchQuery)
+  const onSearch = (data: any) => {
+    router.push(`/loja?search=${data.search}`)
   }
 
   const handleOnAdd = () => {
@@ -114,28 +130,26 @@ export function LayoutHeaderTop() {
         </Link>
 
         <div className="flex items-center rounded-[12px] bg-mesh-color-neutral-800">
-          <Form.Root
-            className="flex"
-            onSubmit={(event) => handleOnSearch(event)}
-          >
-            <Common.Button
-              disabled={searchQuery.length <= 0}
-              className={`border-none stroke-mesh-color-neutral-200 pl-3 transition-all ${
-                searchQuery.length > 0 ? 'opacity-100' : 'opacity-30'
-              }`}
+          <Form.Root className="flex" onSubmit={handleSubmit(onSearch)}>
+            <Form.Button
+              buttonStyle={undefined}
+              disabled={!isDirty}
+              // className={`border-none stroke-mesh-color-neutral-200 pl-3 transition-all ${
+              //   searchQuery.length > 0 ? 'opacity-100' : 'opacity-30'
+              // }`}
             >
               <IconSearch
                 classname="transition-all"
-                width={searchQuery.length > 0 ? 25 : 20}
-                height={searchQuery.length > 0 ? 25 : 20}
+                // width={searchQuery.length > 0 ? 25 : 20}
+                // height={searchQuery.length > 0 ? 25 : 20}
               />
-            </Common.Button>
-            <Form.Input.Text
-              state={searchQuery}
-              setState={setSearchQuery}
-              className="rounded-lg bg-mesh-color-neutral-800 py-2 pl-3 text-base text-mesh-color-neutral-200"
+            </Form.Button>
+            {/* <Form.Input.Text
+              name="search"
               placeholder="Pesquise o item..."
-            />
+              className="rounded-lg bg-mesh-color-neutral-800 py-2 pl-3 text-base text-mesh-color-neutral-200"
+              register={register('search')}
+            /> */}
           </Form.Root>
         </div>
       </div>

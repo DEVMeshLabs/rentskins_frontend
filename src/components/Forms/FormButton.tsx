@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes } from 'react'
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  buttonStyle: 'opaque' | 'full'
+  buttonStyle: 'opaque' | 'full' | undefined
   children: React.ReactNode
   className?: string
   type?: 'submit' | 'button' | 'reset'

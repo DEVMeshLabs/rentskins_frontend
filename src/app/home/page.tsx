@@ -103,40 +103,74 @@ export default function Home() {
         <Form.Input.CPF
           name="cpf"
           placeholder="CPF"
-          register={register}
-          setValue={setValue}
-          errors={errors}
+          register={register('cpf')}
+          errors={errors.cpf}
         />
-
         <Form.Input.Card
           name="card"
           placeholder="Card"
-          register={register}
-          setValue={setValue}
+          register={register('card')}
           errors={errors}
         />
         <Form.Input.Checkbox
           name="checkbox"
-          register={register}
           placeholder="Checkbox"
+          register={register('checkbox')}
+          errors={errors.checkbox}
         />
-        {/* <Form.Input.Currency
-          register={register('Currency')}
+        <Form.Input.Currency
+          name="currency"
           placeholder="Currency"
-        /> */}
-        {/* <Form.Input.Date register={register('Date')} placeholder="Date" /> */}
-        {/* <Form.Input.Email register={register('Email')} placeholder="Email" /> */}
-        {/* <Form.Input.MonthYear
-          register={register('MonthYear')}
-          placeholder="MonthYear"
-        /> */}
-        {/* <Form.Input.Number register={register('Number')} placeholder="Number" /> */}
-        {/* <Form.Input.Phone register={register('Phone')} placeholder="Phone" /> */}
-        {/* <Form.Input.PostalCode
-          register={register('Postal Code')}
+          register={register('currency')}
+          errors={errors.currency}
+        />
+        <Form.Input.Date
+          name="date"
+          placeholder="Date"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+        <Form.Input.Email
+          name="email"
+          placeholder="Email"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+        <Form.Input.MonthYear
+          name="monthyear"
+          placeholder="Month/Year"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+        <Form.Input.Number
+          name="number"
+          placeholder="Number"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+        <Form.Input.Phone
+          name="phone"
+          placeholder="Phone"
+          register={register('phone')}
+          errors={errors.phone}
+        />
+        <Form.Input.PostalCode
+          name="postalcode"
           placeholder="Postal Code"
-        /> */}
-        {/* <Form.Input.Text register={register('Text')} placeholder="Text" /> */}
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+        <Form.Input.Text
+          name="texts"
+          placeholder="Text"
+          register={register('texts')}
+          errors={errors.texts}
+        />
         <Form.Button buttonStyle="full"> Completar </Form.Button>
         {form}
       </Form.Root>

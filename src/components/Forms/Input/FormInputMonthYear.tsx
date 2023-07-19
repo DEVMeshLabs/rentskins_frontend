@@ -1,24 +1,27 @@
-import React, { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   label?: string
-  labelSide?: 'up' | 'down'
   labelClassName?: string
   inputClassName?: string
-  state?: string
-  setState?: React.Dispatch<React.SetStateAction<string>>
-  register?: object
+
+  register: any
+  setValue: any
+  errors?: any
+  errorsClassname?: string
 }
 
 export function FormInputMonthYear({
+  name,
   label,
-  labelSide = 'up',
   labelClassName,
   inputClassName,
-  state,
-  setState,
   register,
+  setValue,
+  errors,
+  errorsClassname,
   ...rest
 }: IProps) {
   const formatInput = (value: string): string => {
@@ -27,26 +30,37 @@ export function FormInputMonthYear({
     const month = numbers.slice(0, 2)
     const year = numbers.slice(2, 4)
 
+    let result
+
     if (value.length > 2) {
-      return `${month}/${year}`
+      setValue(name, `${month}/${year}`)
+      result = `${month}/${year}`
+    } else {
+      result = String(month)
     }
-    return String(month)
+
+    setValue(name, result)
+    return result
   }
 
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label && labelSide === 'up' && label}
+      {label}
       <input
         type="text"
-        onChange={({ target }) =>
-          setState && setState(formatInput(target.value))
+        inputMode="text"
+        ref={register(name)}
+        id={name}
+        name={name}
+        onChange={(event) =>
+          (event.target.value = formatInput(event.target.value))
         }
-        value={state}
         className={`${inputClassName} ${options.input.className}`}
-        {...register}
         {...rest}
       />
-      {label && labelSide === 'down' && label}
+      <text className={errorsClassname || options.input.errors}>
+        {errors && errors?.[name as string]?.message}
+      </text>
     </label>
   )
 }

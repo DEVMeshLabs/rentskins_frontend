@@ -10,8 +10,9 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   checkClassname?: string
   inputClassName?: string
 
-  register?: any
+  register: any
   errors?: any
+  errorsClassname?: string
 }
 
 export function FormInputCheckbox({
@@ -24,16 +25,17 @@ export function FormInputCheckbox({
   inputClassName,
   register,
   errors,
+  errorsClassname,
   ...rest
 }: IProps) {
   return (
     <label className={`${wrapperClassname} flex items-center gap-2 text-lg`}>
       <input
-        ref={register(name)}
         id={name}
         name={name}
         type="checkbox"
         className={`${inputClassName || options.input.className} peer`}
+        {...register}
         {...rest}
       />
       <div
@@ -47,8 +49,8 @@ export function FormInputCheckbox({
       >
         {label}
       </text>
-      <text className="text-sm">
-        {errors && errors?.[name as string]?.message}
+      <text className={errorsClassname || options.input.errors}>
+        {errors && errors?.message}
       </text>
     </label>
   )

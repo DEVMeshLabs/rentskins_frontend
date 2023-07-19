@@ -1,60 +1,50 @@
 import { InputHTMLAttributes } from 'react'
+import ReactInputMask from 'react-input-mask'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   label?: string
+  mask?: string
+  maskPlaceholder?: string
+  maskChar?: string | null | undefined
+  alwaysShowMask?: boolean
   labelClassName?: string
   inputClassName?: string
 
-  register?: any
-  setValue?: any
+  register: any
   errors?: any
+  errorsClassname?: string
 }
 
 export function FormInputCPF({
-  name,
   label,
+  name,
   labelClassName,
+  mask,
+  maskPlaceholder,
+  alwaysShowMask = false,
+  maskChar = null,
   inputClassName,
-  setValue,
   register,
   errors,
+  errorsClassname,
   ...rest
 }: IProps) {
-  const formatInput = (value: string): string => {
-    let numbers = value.replace(/\D/g, '')
-
-    if (numbers.length > 11) {
-      numbers = numbers.slice(0, 11)
-    }
-
-    const result = numbers.replace(
-      /(\d{3})(\d{3})(\d{3})(\d{2})/,
-      '$1.$2.$3-$4',
-    )
-
-    setValue(name, result)
-
-    return result
-  }
-
   return (
-    <label className={`${labelClassName} flex flex-col text-lg`} htmlFor={name}>
+    <label className={`${labelClassName} flex flex-col text-lg`}>
       {label}
-      <input
+      <ReactInputMask
+        mask={mask || '999.999.999-99'}
+        alwaysShowMask={alwaysShowMask}
+        maskChar={maskChar}
+        maskPlaceholder={maskPlaceholder}
+        className={`${inputClassName || options.input.className}`}
         type="text"
-        inputMode="text"
-        ref={register(name)}
-        id={name}
-        name={name}
-        onChange={(event) =>
-          (event.target.value = formatInput(event.target.value))
-        }
-        className={`${inputClassName} ${options.input.className}`}
-        {...rest}
+        placeholder={rest.placeholder}
+        {...register}
       />
-      <text className="text-sm">
+      <text className={errorsClassname || options.input.errors}>
         {errors && errors?.[name as string]?.message}
       </text>
     </label>
