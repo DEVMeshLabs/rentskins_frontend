@@ -15,18 +15,41 @@ import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import logo from '../../../assets/logo.svg'
 import { LayoutHeaderDropdown } from './LayoutHeaderDropdown'
+import NotificationServices from '@/services/notifications.service'
+import useFilterStore from '@/stores/filters.store'
+import { thereIsNotification } from '@/utils/notification'
 
 export function LayoutHeaderTop() {
   const router = useRouter()
+  const pathname = usePathname()
+  console.log(pathname)
   const refDropdown = useRef(null)
   const { user, setUser, setLogout } = useUserStore()
   const [walletValue, setWalletValue] = useState()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [hasNotifications, setHasNotifications] = useState(false)
+
+  const { notificationFilter } = useFilterStore()
+
+  const { data, refetch } = useQuery({
+    queryKey: ['thereIsNotifications', user.steamid],
+    queryFn: async () =>
+      NotificationServices.getAllNotifsByUser(user.steamid, notificationFilter),
+  })
+
+  useEffect(() => {
+    // const interval = setInterval(() => {
+    refetch() // Refaz a requisição a cada 1 segundo
+    // }, 10 * 60 * 1000)
+    setHasNotifications(thereIsNotification(data?.data))
+
+    // return () => clearInterval(interval)
+  }, [pathname])
 
   useEffect(() => {
     const token = LocalStorage.get('token')
@@ -207,8 +230,12 @@ export function LayoutHeaderTop() {
               className="h-11 w-11 rounded-xl border-none bg-mesh-color-others-eerie-black"
               onClick={() => router.push('/usuario/notificacoes?type=historic')}
             >
-              <div className="absolute top-8 ml-4 h-2 w-2 rounded-full bg-mesh-color-primary-1200" />
-              <div className="absolute top-8 ml-4 h-2 w-2 animate-ping rounded-full bg-mesh-color-primary-1200" />
+              {hasNotifications && (
+                <>
+                  <div className="absolute top-8 ml-4 h-2 w-2 rounded-full bg-mesh-color-primary-1200" />
+                  <div className="absolute top-8 ml-4 h-2 w-2 animate-ping rounded-full bg-mesh-color-primary-1200" />
+                </>
+              )}
               <IconNotifications />
             </Common.Button>
 
