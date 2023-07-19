@@ -1,12 +1,14 @@
-// import AllSkinsCart from '@/components/Others/Skins/AllSkinsCart'
-// import { PageSummaryCart } from '@/components/Pages/PageSummary/PageSummaryCart'
 import dynamic from 'next/dynamic'
 
 const AllSkinsCart = dynamic(() =>
-  require('@/components/Others/Skins/AllSkinsCart'),
+  import('@/components/Others/Skins/AllSkinsCart').then(
+    (module) => module.default,
+  ),
 )
 const PageSummaryCart = dynamic(() =>
-  require('@/components/Pages/PageSummary/PageSummaryCart'),
+  import('@/components/Pages/PageSummary/PageSummaryCart').then(
+    (module) => module.default,
+  ),
 )
 
 export default function Carrinho() {
