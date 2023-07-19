@@ -1,30 +1,28 @@
-import React, { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   label?: string
-  labelSide?: 'up' | 'down'
   labelClassName?: string
   inputClassName?: string
 
-  state?: string
-  setState?: React.Dispatch<React.SetStateAction<string>>
-
-  register?: object
+  register?: any
+  setValue?: any
+  errors?: any
 }
 
 export function FormInputCPF({
+  name,
   label,
-  labelSide = 'up',
   labelClassName,
   inputClassName,
-  state,
-  setState,
+  setValue,
   register,
+  errors,
   ...rest
 }: IProps) {
   const formatInput = (value: string): string => {
-    console.log('ok')
     let numbers = value.replace(/\D/g, '')
 
     if (numbers.length > 11) {
@@ -36,23 +34,29 @@ export function FormInputCPF({
       '$1.$2.$3-$4',
     )
 
+    setValue(name, result)
+
     return result
   }
 
   return (
-    <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label && labelSide === 'up' && label}
+    <label className={`${labelClassName} flex flex-col text-lg`} htmlFor={name}>
+      {label}
       <input
         type="text"
-        onChange={({ target }) =>
-          setState && setState(formatInput(target.value))
+        inputMode="text"
+        ref={register(name)}
+        id={name}
+        name={name}
+        onChange={(event) =>
+          (event.target.value = formatInput(event.target.value))
         }
-        value={state}
         className={`${inputClassName} ${options.input.className}`}
-        {...register}
         {...rest}
       />
-      {label && labelSide === 'down' && label}
+      <text className="text-sm">
+        {errors && errors?.[name as string]?.message}
+      </text>
     </label>
   )
 }

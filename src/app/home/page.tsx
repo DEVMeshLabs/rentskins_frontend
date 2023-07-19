@@ -35,6 +35,7 @@ export default function Home() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({ resolver: homeFormResolver })
 
@@ -99,30 +100,43 @@ export default function Home() {
         className="w-1/4 text-white"
         onSubmit={handleSubmit((data) => setForm(JSON.stringify(data)))}
       >
-        <Form.Input.CPF register={register('cpf')} placeholder="CPF" />
-        {errors?.cpf?.message}
-        {/* <Form.Input.Card register={register('Card')} placeholder="Card" />
+        <Form.Input.CPF
+          name="cpf"
+          placeholder="CPF"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+
+        <Form.Input.Card
+          name="card"
+          placeholder="Card"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
         <Form.Input.Checkbox
-          register={register('Checkbox')}
+          name="checkbox"
+          register={register}
           placeholder="Checkbox"
         />
-        <Form.Input.Currency
+        {/* <Form.Input.Currency
           register={register('Currency')}
           placeholder="Currency"
-        />
-        <Form.Input.Date register={register('Date')} placeholder="Date" />
-        <Form.Input.Email register={register('Email')} placeholder="Email" />
-        <Form.Input.MonthYear
+        /> */}
+        {/* <Form.Input.Date register={register('Date')} placeholder="Date" /> */}
+        {/* <Form.Input.Email register={register('Email')} placeholder="Email" /> */}
+        {/* <Form.Input.MonthYear
           register={register('MonthYear')}
           placeholder="MonthYear"
-        />
-        <Form.Input.Number register={register('Number')} placeholder="Number" />
-        <Form.Input.Phone register={register('Phone')} placeholder="Phone" />
-        <Form.Input.PostalCode
+        /> */}
+        {/* <Form.Input.Number register={register('Number')} placeholder="Number" /> */}
+        {/* <Form.Input.Phone register={register('Phone')} placeholder="Phone" /> */}
+        {/* <Form.Input.PostalCode
           register={register('Postal Code')}
           placeholder="Postal Code"
-        />
-        <Form.Input.Text register={register('Text')} placeholder="Text" /> */}
+        /> */}
+        {/* <Form.Input.Text register={register('Text')} placeholder="Text" /> */}
         <Form.Button buttonStyle="full"> Completar </Form.Button>
         {form}
       </Form.Root>

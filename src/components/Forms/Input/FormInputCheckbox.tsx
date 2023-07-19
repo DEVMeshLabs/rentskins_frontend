@@ -2,16 +2,20 @@ import React, { InputHTMLAttributes } from 'react'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   label?: string | React.ReactNode
   labelSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   wrapperClassname?: string
   labelClassName?: string
   checkClassname?: string
   inputClassName?: string
-  register?: object
+
+  register?: any
+  errors?: any
 }
 
 export function FormInputCheckbox({
+  name,
   label,
   labelSize = 'md',
   wrapperClassname,
@@ -19,14 +23,17 @@ export function FormInputCheckbox({
   checkClassname = 'ml-[0.4rem]',
   inputClassName,
   register,
+  errors,
   ...rest
 }: IProps) {
   return (
     <label className={`${wrapperClassname} flex items-center gap-2 text-lg`}>
       <input
+        ref={register(name)}
+        id={name}
+        name={name}
         type="checkbox"
         className={`${inputClassName || options.input.className} peer`}
-        {...register}
         {...rest}
       />
       <div
@@ -39,6 +46,9 @@ export function FormInputCheckbox({
         } select-none`}
       >
         {label}
+      </text>
+      <text className="text-sm">
+        {errors && errors?.[name as string]?.message}
       </text>
     </label>
   )
