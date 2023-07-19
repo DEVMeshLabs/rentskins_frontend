@@ -1,6 +1,6 @@
 import Common from '@/components/Common'
 
-export function PageInventorySummary() {
+export default function PageInventorySummary() {
   return (
     <div className="flex min-h-[400px] flex-col justify-between rounded-xl bg-mesh-color-others-eerie-black px-6 py-6">
       <div className="text-white">

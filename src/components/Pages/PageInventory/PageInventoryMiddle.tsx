@@ -7,7 +7,7 @@ import ConfigService from '@/services/config.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
 
-export function PageInventoryMiddle() {
+export default function PageInventoryMiddle() {
   const {
     user: { steamid },
   } = useUserStore()
