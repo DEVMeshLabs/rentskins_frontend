@@ -36,6 +36,7 @@ export default function Home() {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm({ resolver: homeFormResolver })
 
@@ -123,12 +124,12 @@ export default function Home() {
           placeholder="Currency"
           register={register('currency')}
           errors={errors.currency}
+          control={control}
         />
         <Form.Input.Date
           name="date"
           placeholder="Date"
           register={register}
-          setValue={setValue}
           errors={errors}
         />
         <Form.Input.Email

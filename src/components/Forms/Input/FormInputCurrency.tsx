@@ -1,5 +1,6 @@
 import { InputHTMLAttributes } from 'react'
-import ReactInputMask from 'react-input-mask'
+import { Controller } from 'react-hook-form'
+import { NumericFormat } from 'react-number-format'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,16 +9,13 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   enableDefault?: boolean
   currencySign?: string
   label?: string
-  mask?: string
-  maskPlaceholder?: string
-  maskChar?: string | null | undefined
-  alwaysShowMask?: boolean
   labelClassName?: string
   currencyClassname?: string
   limit?: number
   inputClassName?: string
 
   register: any
+  control: any
   errors?: any
   errorsClassname?: string
 }
@@ -29,14 +27,11 @@ export function FormInputCurrency({
   currencySign = 'R$',
   label,
   labelClassName = 'text-white',
-  mask,
-  maskPlaceholder,
-  alwaysShowMask = false,
-  maskChar = null,
   currencyClassname,
   limit = 0,
   inputClassName,
   register,
+  control,
   errors,
   errorsClassname,
   ...rest
@@ -44,16 +39,20 @@ export function FormInputCurrency({
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
       {label}
-      <ReactInputMask
-        mask={mask || 'R$ ?????????????????????????????????????????'}
-        formatChars={{ '?': '[0-9/,]' }}
-        alwaysShowMask={alwaysShowMask}
-        maskChar={maskChar}
-        maskPlaceholder={maskPlaceholder}
-        className={`${inputClassName || options.input.className}`}
-        type="text"
-        placeholder={rest.placeholder}
-        {...register}
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { ref, ...rest } }: any) => (
+          <NumericFormat
+            thousandSeparator="."
+            decimalSeparator=","
+            prefix="R$ "
+            decimalScale={2}
+            getInputRef={ref}
+            className={`${inputClassName || options.input.className}`}
+            {...rest}
+          />
+        )}
       />
       <text className={errorsClassname || options.input.errors}>
         {errors && errors?.[name as string]?.message}
