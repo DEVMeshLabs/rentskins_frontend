@@ -5,7 +5,7 @@ import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import { FormEvent } from 'react'
 
-export function PageInventoryFilters() {
+export default function PageInventoryFilters() {
   const { inventoryTypeFilter, setInventoryTypeFilter } = useFilterStore()
   const { isInventoryFetching } = useComponentStore()
 
