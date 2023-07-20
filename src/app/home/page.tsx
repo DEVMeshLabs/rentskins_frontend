@@ -35,7 +35,6 @@ export default function Home() {
   const {
     register,
     handleSubmit,
-    setValue,
     control,
     formState: { errors },
   } = useForm({ resolver: homeFormResolver })
@@ -115,13 +114,14 @@ export default function Home() {
         />
         <Form.Input.Checkbox
           name="checkbox"
+          label="TESTEEEEEEEE"
           placeholder="Checkbox"
           register={register('checkbox')}
           errors={errors.checkbox}
         />
         <Form.Input.Currency
           name="currency"
-          placeholder="Currency"
+          placeHolder="Currency"
           register={register('currency')}
           errors={errors.currency}
           control={control}
@@ -129,29 +129,26 @@ export default function Home() {
         <Form.Input.Date
           name="date"
           placeholder="Date"
-          register={register}
-          errors={errors}
+          register={register('date')}
+          errors={errors.date}
         />
         <Form.Input.Email
           name="email"
           placeholder="Email"
-          register={register}
-          setValue={setValue}
-          errors={errors}
+          register={register('email')}
+          errors={errors.email}
         />
         <Form.Input.MonthYear
           name="monthyear"
           placeholder="Month/Year"
-          register={register}
-          setValue={setValue}
-          errors={errors}
+          register={register('monthyear')}
+          errors={errors.monthyear}
         />
         <Form.Input.Number
           name="number"
           placeholder="Number"
-          register={register}
-          setValue={setValue}
-          errors={errors}
+          register={register('number')}
+          errors={errors.number}
         />
         <Form.Input.Phone
           name="phone"
@@ -162,9 +159,8 @@ export default function Home() {
         <Form.Input.PostalCode
           name="postalcode"
           placeholder="Postal Code"
-          register={register}
-          setValue={setValue}
-          errors={errors}
+          register={register('postalcode')}
+          errors={errors.postalcode}
         />
         <Form.Input.Text
           name="texts"

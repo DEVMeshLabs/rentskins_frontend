@@ -1,58 +1,48 @@
 import { InputHTMLAttributes } from 'react'
+import ReactInputMask from 'react-input-mask'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   label?: string
+  mask?: string
+  maskPlaceholder?: string
+  maskChar?: string | null | undefined
+  alwaysShowMask?: boolean
   labelClassName?: string
-  limit?: number
   inputClassName?: string
 
   register: any
-  setValue: any
   errors?: any
   errorsClassname?: string
 }
 
 export function FormInputNumber({
-  name,
   label,
+  name,
   labelClassName,
-  limit = 0,
+  mask,
+  maskPlaceholder,
+  alwaysShowMask = false,
+  maskChar = null,
   inputClassName,
   register,
-  setValue,
   errors,
   errorsClassname,
   ...rest
 }: IProps) {
-  const formatInput = (value: string): string => {
-    const numbers = value.replace(/\D/g, '')
-
-    if (limit > 0) {
-      return numbers.slice(0, limit)
-    }
-
-    setValue(name, numbers)
-
-    return numbers
-  }
-
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
       {label}
-      <input
+      <ReactInputMask
+        mask={mask || '9999999999999999999999999999999999999999999'}
+        alwaysShowMask={alwaysShowMask}
+        maskChar={maskChar}
+        maskPlaceholder={maskPlaceholder}
+        className={`${inputClassName || options.input.className}`}
         type="text"
-        inputMode="numeric"
-        ref={register(name)}
-        id={name}
-        name={name}
-        onChange={(event) =>
-          (event.target.value = formatInput(event.target.value))
-        }
-        className={`${inputClassName} ${options.input.className}`}
+        placeholder={rest.placeholder}
         {...register}
-        {...rest}
       />
       <text className={errorsClassname || options.input.errors}>
         {errors && errors?.[name as string]?.message}

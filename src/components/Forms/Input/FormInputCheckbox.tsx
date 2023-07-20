@@ -39,17 +39,17 @@ export function FormInputCheckbox({
         {...rest}
       />
       <div
-        className={`${checkClassname} absolute -mt-[0.2rem] h-2 w-4 -rotate-45
+        className={`${checkClassname} absolute -mt-[1.2rem] h-2 w-4 -rotate-45
         border-b-2 border-l-2 bg-transparent opacity-0 transition-all peer-checked:opacity-100 peer-disabled:peer-checked:opacity-30`}
       />
       <text
         className={`text-${labelSize} ${
           labelClassName || 'text-white'
-        } select-none`}
+        } -mt-[1.0rem] select-none`}
       >
         {label}
       </text>
-      <text className={errorsClassname || options.input.errors}>
+      <text className={`${errorsClassname || options.input.errors} mt-[2rem]`}>
         {errors && errors?.message}
       </text>
     </label>

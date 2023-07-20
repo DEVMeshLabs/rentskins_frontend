@@ -13,6 +13,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   currencyClassname?: string
   limit?: number
   inputClassName?: string
+  placeHolder?: string | number
 
   register: any
   control: any
@@ -28,6 +29,7 @@ export function FormInputCurrency({
   label,
   labelClassName = 'text-white',
   currencyClassname,
+  placeHolder,
   limit = 0,
   inputClassName,
   register,
@@ -48,6 +50,7 @@ export function FormInputCurrency({
             decimalSeparator=","
             prefix="R$ "
             decimalScale={2}
+            placeholder={placeHolder}
             getInputRef={ref}
             className={`${inputClassName || options.input.className}`}
             {...rest}

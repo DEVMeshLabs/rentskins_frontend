@@ -24,7 +24,7 @@ export function FormInputCard({
   mask,
   maskPlaceholder,
   alwaysShowMask = false,
-  maskChar = '_',
+  maskChar = null,
   inputClassName,
   register,
   errors,
