@@ -31,19 +31,15 @@ export function LayoutHeaderTop() {
   const {
     register,
     handleSubmit,
-    setValue,
-    getValues,
+    watch,
     formState: { isDirty, isValid },
   } = useForm({
     resolver: formResolver,
     defaultValues: {
-      search: '12-12',
+      search: undefined,
     },
   })
-
-  console.log()
-
-  console.log(isDirty)
+  const searchWatch = watch('search')
 
   useEffect(() => {
     const token = LocalStorage.get('token')
@@ -133,23 +129,25 @@ export function LayoutHeaderTop() {
           <Form.Root className="flex" onSubmit={handleSubmit(onSearch)}>
             <Form.Button
               buttonStyle={undefined}
-              disabled={!isDirty}
-              // className={`border-none stroke-mesh-color-neutral-200 pl-3 transition-all ${
-              //   searchQuery.length > 0 ? 'opacity-100' : 'opacity-30'
-              // }`}
+              disabled={!isDirty && !isValid}
+              className={`border-none stroke-mesh-color-neutral-200 pl-5 transition-all ${
+                searchWatch && searchWatch.length > 0
+                  ? 'opacity-100'
+                  : 'opacity-30'
+              }`}
             >
               <IconSearch
                 classname="transition-all"
-                // width={searchQuery.length > 0 ? 25 : 20}
-                // height={searchQuery.length > 0 ? 25 : 20}
+                width={searchWatch && searchWatch.length > 0 ? 25 : 20}
+                height={searchWatch && searchWatch.length > 0 ? 25 : 20}
               />
             </Form.Button>
-            {/* <Form.Input.Text
+            <Form.Input.Text
               name="search"
               placeholder="Pesquise o item..."
               className="rounded-lg bg-mesh-color-neutral-800 py-2 pl-3 text-base text-mesh-color-neutral-200"
               register={register('search')}
-            /> */}
+            />
           </Form.Root>
         </div>
       </div>
