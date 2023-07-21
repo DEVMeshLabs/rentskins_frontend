@@ -48,6 +48,7 @@ export function FormInputCurrency({
           <NumericFormat
             thousandSeparator="."
             decimalSeparator=","
+            autoComplete="off"
             prefix="R$ "
             decimalScale={2}
             placeholder={placeHolder}

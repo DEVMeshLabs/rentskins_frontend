@@ -1,6 +1,5 @@
 'use client'
 import { CommonSteamButton } from '@/components/Common/CommonSteamButton'
-import Form from '@/components/Forms'
 import {
   IconDevolution,
   IconMagnifyingGlass,
@@ -14,13 +13,8 @@ import SkinService from '@/services/skin.service'
 import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { homeFormResolver } from './form.schema'
 
 export default function Home() {
-  const [form, setForm] = useState('')
-
   const { user } = useUserStore()
 
   const { data, isLoading } = useQuery({
@@ -31,13 +25,6 @@ export default function Home() {
   const handleOnSteam = () => {
     SteamService.redirect()
   }
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({ resolver: homeFormResolver })
 
   return (
     <main className="h-full">
@@ -96,81 +83,6 @@ export default function Home() {
           <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
         )}
       </div>
-      <Form.Root
-        className="w-1/4 text-white"
-        onSubmit={handleSubmit((data) => setForm(JSON.stringify(data)))}
-      >
-        <Form.Input.CPF
-          name="cpf"
-          placeholder="CPF"
-          register={register('cpf')}
-          errors={errors.cpf}
-        />
-        <Form.Input.Card
-          name="card"
-          placeholder="Card"
-          register={register('card')}
-          errors={errors}
-        />
-        <Form.Input.Checkbox
-          name="checkbox"
-          label="TESTEEEEEEEE"
-          placeholder="Checkbox"
-          register={register('checkbox')}
-          errors={errors.checkbox}
-        />
-        <Form.Input.Currency
-          name="currency"
-          placeHolder="Currency"
-          register={register('currency')}
-          errors={errors.currency}
-          control={control}
-        />
-        <Form.Input.Date
-          name="date"
-          placeholder="Date"
-          register={register('date')}
-          errors={errors.date}
-        />
-        <Form.Input.Email
-          name="email"
-          placeholder="Email"
-          register={register('email')}
-          errors={errors.email}
-        />
-        <Form.Input.MonthYear
-          name="monthyear"
-          placeholder="Month/Year"
-          register={register('monthyear')}
-          errors={errors.monthyear}
-        />
-        <Form.Input.Number
-          name="number"
-          placeholder="Number"
-          register={register('number')}
-          errors={errors.number}
-        />
-        <Form.Input.Phone
-          name="phone"
-          placeholder="Phone"
-          register={register('phone')}
-          errors={errors.phone}
-        />
-        <Form.Input.PostalCode
-          name="postalcode"
-          placeholder="Postal Code"
-          register={register('postalcode')}
-          errors={errors.postalcode}
-        />
-        <Form.Input.Text
-          name="texts"
-          placeholder="Text"
-          register={register('texts')}
-          errors={errors.texts}
-        />
-        <Form.Button buttonStyle="full"> Completar </Form.Button>
-        {form}
-      </Form.Root>
     </main>
   )
 }

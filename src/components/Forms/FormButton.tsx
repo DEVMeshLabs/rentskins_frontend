@@ -17,7 +17,9 @@ export function FormButton({
   return (
     <button
       type={type}
-      className={`${className} w-full rounded-md border-2 px-2 py-2 opacity-50 
+      className={`${
+        className || 'w-full'
+      } rounded-md border-2 px-2 py-2 opacity-50 
       transition-all hover:opacity-100 disabled:opacity-50
       ${
         buttonStyle === 'opaque' &&
