@@ -54,7 +54,7 @@ export function PagePaymentRechargeTicket({
       <Form.Input.Email
         name="email"
         label="Email"
-        placeholder="example@email.com"
+        placeholder="exemplo@email.com"
         register={register('email')}
         errors={errors.email}
       />

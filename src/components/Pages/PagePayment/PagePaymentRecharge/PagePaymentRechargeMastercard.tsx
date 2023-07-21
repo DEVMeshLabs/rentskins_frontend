@@ -83,7 +83,7 @@ export function PagePaymentRechargeMastercard({
       <Form.Input.Text
         name="card-owner"
         label="Nome do Portador"
-        placeholder="Nome"
+        placeholder="Nome Completo"
         register={register('card-owner')}
         errors={errors['card-owner']}
       />

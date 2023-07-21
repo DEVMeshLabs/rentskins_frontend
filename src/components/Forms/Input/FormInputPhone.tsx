@@ -38,6 +38,7 @@ export function FormInputPhone({
         mask={mask || '(99) 99999-9999'}
         alwaysShowMask={alwaysShowMask}
         maskChar={maskChar}
+        autoComplete="off"
         maskPlaceholder={maskPlaceholder}
         className={`${inputClassName || options.input.className}`}
         type="text"
