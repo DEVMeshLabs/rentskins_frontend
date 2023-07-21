@@ -10,30 +10,24 @@ import { ModalPaymentCheck } from './ModalPaymentCheck'
 import { ModalPaymentRetrieveMain } from './ModalPaymentRetrieve/ModalPaymentRetrieveMain'
 
 export function ModalPaymentMain() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const [modalOpen, setModalOpen] = useState<string | undefined>('')
+  const [modalType, setModalType] = useState<string | undefined>('')
+
   useEffect(() => {
     Aos.init({
       duration: 1000,
     })
   }, [])
 
-  const [modalOpen, setModalOpen] = useState<string | undefined>('')
-  const [modalType, setModalType] = useState<string | undefined>('')
-
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
   const {
     paymentGeneralIndex,
     setPaymentGeneralIndex,
     setPaymentRetrieveIndex,
   } = useComponentStore()
-  //
-  useEffect(() => {
-    setDomainQuery()
-    handleModalOnClose()
-  }, [location.search])
 
-  const setDomainQuery = () => {
+  useEffect(() => {
     setModalOpen(
       searchParams.get('modalopen') as SetStateAction<string | undefined>,
     )
@@ -41,7 +35,7 @@ export function ModalPaymentMain() {
     setModalType(
       searchParams.get('modaltype') as SetStateAction<string | undefined>,
     )
-  }
+  }, [searchParams])
 
   const removeDomainQuery = () => {
     router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
