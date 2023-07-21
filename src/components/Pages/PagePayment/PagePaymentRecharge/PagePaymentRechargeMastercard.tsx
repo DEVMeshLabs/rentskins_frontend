@@ -3,7 +3,7 @@ import Form from '@/components/Forms'
 import usePaymentStore from '@/stores/payment.store'
 import { MouseEventHandler } from 'react'
 import { useForm } from 'react-hook-form'
-import { formResolver } from './mastercard.schema'
+import { formResolver } from './schemas/mastercard.schema'
 
 interface IProps {
   handleFormSubmit: any

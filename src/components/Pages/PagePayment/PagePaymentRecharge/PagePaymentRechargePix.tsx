@@ -7,7 +7,7 @@ import usePaymentStore from '@/stores/payment.store'
 import Image from 'next/image'
 import { MouseEventHandler, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { formResolver } from './pix.schema'
+import { formResolver } from './schemas/pix.schema'
 
 interface IProps {
   handleFormSubmit: any

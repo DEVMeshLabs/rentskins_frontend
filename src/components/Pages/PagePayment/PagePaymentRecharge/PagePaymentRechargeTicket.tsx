@@ -1,10 +1,12 @@
 'use client'
 import Form from '@/components/Forms'
 import usePaymentStore from '@/stores/payment.store'
-import React, { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './schemas/ticket.schema'
 
 interface IProps {
-  handleFormSubmit: React.FormEventHandler<HTMLFormElement>
+  handleFormSubmit: any
   handleFormCancel: MouseEventHandler
 }
 
@@ -12,51 +14,56 @@ export function PagePaymentRechargeTicket({
   handleFormSubmit,
   handleFormCancel,
 }: IProps) {
-  const [name, setName] = useState('')
-  const [identification, setIdentification] = useState('')
-  const [email, setEmail] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      name: undefined,
+      cpf: undefined,
+    },
+  })
+
+  const enableButton = dirtyFields.name && dirtyFields.cpf && dirtyFields.email
+
   const { paymentAdd } = usePaymentStore()
 
-  const validateForm = () => {
-    return !(
-      name.length >= 5 &&
-      identification.length === 14 &&
-      email.length >= 5 &&
-      email.includes('@')
-    )
-  }
-
   return (
-    <Form.Root className="my-8 flex flex-col gap-4" onSubmit={handleFormSubmit}>
+    <Form.Root
+      className="my-8 flex w-full flex-col gap-4"
+      onSubmit={handleSubmit(handleFormSubmit)}
+    >
       <Form.Input.Text
+        name="name"
         label="Nome"
         placeholder="Nome Completo"
-        setState={setName}
-        state={name}
-        required
+        register={register('name')}
+        errors={errors.name}
       />
 
       <Form.Input.CPF
+        name="cpf"
         label="CPF"
         placeholder="000.000.000-00"
-        state={identification}
-        setState={setIdentification}
-        required
+        register={register('cpf')}
+        errors={errors.cpf}
       />
 
       <Form.Input.Email
+        name="email"
         label="Email"
         placeholder="example@email.com"
-        state={email}
-        setState={setEmail}
-        required
+        register={register('email')}
+        errors={errors.email}
       />
 
       <div className="mt-4">
         <div className="flex justify-between text-xl font-semibold">
           <text>Total:</text>
           <span className="text-mesh-color-primary-800">
-            {paymentAdd.value?.toLocaleString('pt-br', {
+            {Number(paymentAdd.value)?.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
@@ -65,11 +72,7 @@ export function PagePaymentRechargeTicket({
         </div>
 
         <div className="flex flex-col gap-4 text-xl font-semibold">
-          <Form.Button
-            type="submit"
-            buttonStyle="full"
-            disabled={validateForm()}
-          >
+          <Form.Button buttonStyle="full" disabled={!enableButton}>
             Pagar
           </Form.Button>
           <Form.Button
