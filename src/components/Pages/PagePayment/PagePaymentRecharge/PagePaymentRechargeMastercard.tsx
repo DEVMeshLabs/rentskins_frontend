@@ -1,7 +1,7 @@
 'use client'
 import Form from '@/components/Forms'
 import usePaymentStore from '@/stores/payment.store'
-import { MouseEventHandler, useEffect } from 'react'
+import { MouseEventHandler } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './mastercard.schema'
 
@@ -17,7 +17,6 @@ export function PagePaymentRechargeMastercard({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, dirtyFields },
   } = useForm({
     resolver: formResolver,
@@ -29,31 +28,6 @@ export function PagePaymentRechargeMastercard({
       email: undefined,
     },
   })
-
-  const dayWatch = watch('card-validity')
-
-  useEffect(() => {
-    if (dayWatch) {
-      const day = dayWatch.slice(0, 2)
-      const month = dayWatch.slice(3, 5)
-
-      if (dayWatch.length === 5) {
-        if (
-          Number(day) <= 0 ||
-          Number(day) > 31 ||
-          Number(month) <= 0 ||
-          Number(month) > 12
-        ) {
-          console.log('Error')
-        } else {
-          console.log('Sem error')
-        }
-      }
-
-      console.log(day)
-      console.log(month)
-    }
-  }, [dayWatch])
 
   const enableButton =
     dirtyFields['card-cvc'] &&
@@ -127,11 +101,7 @@ export function PagePaymentRechargeMastercard({
         </div>
 
         <div className="flex flex-col gap-4 text-xl font-semibold">
-          <Form.Button
-            type="submit"
-            buttonStyle="full"
-            disabled={!enableButton}
-          >
+          <Form.Button buttonStyle="full" disabled={!enableButton}>
             Pagar
           </Form.Button>
           <Form.Button
