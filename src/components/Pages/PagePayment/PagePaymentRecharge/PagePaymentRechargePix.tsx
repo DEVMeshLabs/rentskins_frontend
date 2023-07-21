@@ -34,7 +34,6 @@ export function PagePaymentRechargePix({
   })
 
   const onSubmit = (data: any) => {
-    console.log(data)
     setPageIndex(1)
   }
 

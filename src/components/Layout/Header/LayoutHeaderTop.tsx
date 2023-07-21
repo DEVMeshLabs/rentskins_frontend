@@ -25,8 +25,7 @@ import { formResolver } from './form.schema'
 export function LayoutHeaderTop() {
   const router = useRouter()
   const refDropdown = useRef(null)
-  const { user, setUser, setLogout } = useUserStore()
-  const [walletValue, setWalletValue] = useState()
+  const { user, setUser, setLogout, setWallet, wallet } = useUserStore()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const {
     register,
@@ -71,9 +70,9 @@ export function LayoutHeaderTop() {
 
   useEffect(() => {
     if (walletRetrieved && walletRetrieved.data) {
-      setWalletValue(walletRetrieved.data.value)
+      setWallet(walletRetrieved.data.value)
     } else if (walletCreated && walletCreated.data) {
-      setWalletValue(walletCreated.data.value)
+      setWallet(walletCreated.data.value)
     }
   }, [walletRetrieved, walletCreated])
 
@@ -191,8 +190,8 @@ export function LayoutHeaderTop() {
             </nav>
             <div className="flex h-[44px] items-center gap-2 rounded-lg bg-mesh-color-others-eerie-black px-4 py-2">
               <Common.Title bold={500} color="white">
-                {walletValue !== undefined && walletValue !== null ? (
-                  Number(walletValue).toLocaleString('pt-br', {
+                {wallet.value !== undefined && wallet.value !== null ? (
+                  Number(wallet.value).toLocaleString('pt-br', {
                     currency: 'BRL',
                     style: 'currency',
                     minimumFractionDigits: 2,

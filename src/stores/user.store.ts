@@ -7,19 +7,9 @@ const useUserStore = create<IStates>((set) => ({
     set(() => ({ user }))
   },
 
-  wallet: { data: {} },
-  setWallet: (wallet) => {
-    const newWallet = {
-      data: {
-        ...wallet.data,
-        value: Number(wallet.data?.value).toLocaleString('pt-br', {
-          style: 'currency',
-          currency: 'BRL',
-          minimumFractionDigits: 2,
-        }),
-      },
-    }
-    set(() => ({ wallet: newWallet }))
+  wallet: { value: undefined },
+  setWallet: (wallet: any) => {
+    set(() => ({ wallet: { value: wallet } }))
   },
   logout: false,
   setLogout: (logout) => {

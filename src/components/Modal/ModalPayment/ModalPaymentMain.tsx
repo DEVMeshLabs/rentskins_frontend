@@ -35,7 +35,10 @@ export function ModalPaymentMain() {
     setModalType(
       searchParams.get('modaltype') as SetStateAction<string | undefined>,
     )
-  }, [searchParams])
+
+    setPaymentGeneralIndex(0)
+    setPaymentRetrieveIndex(0)
+  }, [searchParams, setPaymentGeneralIndex, setPaymentRetrieveIndex])
 
   const removeDomainQuery = () => {
     router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
