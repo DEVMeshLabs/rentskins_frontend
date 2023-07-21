@@ -33,7 +33,7 @@ export function FormInputCard({
 }: IProps) {
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label}
+      <text className="-mb-4"> {label} </text>
       <ReactInputMask
         mask={mask || '9999 9999 9999 9999'}
         alwaysShowMask={alwaysShowMask}
@@ -45,7 +45,7 @@ export function FormInputCard({
         {...register}
       />
       <text className={errorsClassname || options.input.errors}>
-        {errors && errors?.[name as string]?.message}
+        {errors && errors?.message}
       </text>
     </label>
   )

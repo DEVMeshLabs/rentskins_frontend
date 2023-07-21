@@ -145,7 +145,7 @@ export function LayoutHeaderTop() {
             <Form.Input.Text
               name="search"
               placeholder="Pesquise o item..."
-              className="rounded-lg bg-mesh-color-neutral-800 py-2 pl-3 text-base text-mesh-color-neutral-200"
+              className="mt-6 rounded-lg bg-mesh-color-neutral-800 pl-3 text-base text-mesh-color-neutral-200"
               register={register('search')}
             />
           </Form.Root>

@@ -24,7 +24,7 @@ export function FormInputEmail({
 }: IProps) {
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label}
+      <text className="-mb-4"> {label} </text>
       <input
         type="email"
         inputMode="email"

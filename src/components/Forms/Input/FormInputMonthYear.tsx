@@ -33,7 +33,7 @@ export function FormInputMonthYear({
 }: IProps) {
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label}
+      <text className="-mb-4"> {label} </text>
       <ReactInputMask
         mask={mask || '99/99'}
         alwaysShowMask={alwaysShowMask}
@@ -45,7 +45,7 @@ export function FormInputMonthYear({
         {...register}
       />
       <text className={errorsClassname || options.input.errors}>
-        {errors && errors?.[name as string]?.message}
+        {errors && errors?.message}
       </text>
     </label>
   )
