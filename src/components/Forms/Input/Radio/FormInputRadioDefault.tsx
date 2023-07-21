@@ -12,6 +12,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   containerClassname?: string
   wrapperClassname?: string
   inputClassName?: string
+  disabled?: boolean
   items: IItem[]
 
   register: any
@@ -25,6 +26,7 @@ export function FormInputRadioDefault({
   labelClassName,
   containerClassname,
   inputClassName,
+  disabled,
   wrapperClassname,
   register,
   errors,
@@ -37,6 +39,7 @@ export function FormInputRadioDefault({
       <input
         type="radio"
         id={item.value}
+        disabled={disabled}
         value={item.value}
         className={`peer absolute appearance-none ${inputClassName}`}
         {...register}
