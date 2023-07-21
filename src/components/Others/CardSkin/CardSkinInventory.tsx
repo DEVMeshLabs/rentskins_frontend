@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import { ModalSkinShowcaseMain } from '@/components/Modal/ModalSkinShowcase/ModalSkinShowcaseMain'
-import { ISkinInventory } from '@/interfaces/IInventorySkin'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
@@ -21,7 +20,7 @@ export function CardSkinInventory({ steamid }: Props) {
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
 
-  const { data, isLoading, refetch, isRefetching } = useQuery({
+  const { data, isLoading, isRefetching } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
@@ -33,6 +32,8 @@ export function CardSkinInventory({ steamid }: Props) {
     enabled: !!steamid,
   })
 
+  console.log(data?.data)
+
   const checkPageDimensions = () => {
     Dimensions.setStatePerResolution(setItemsPerPage, [24, 15, 12, 9, 6])
   }
@@ -43,9 +44,9 @@ export function CardSkinInventory({ steamid }: Props) {
     return () => window.removeEventListener('resize', checkPageDimensions)
   }, [])
 
-  useEffect(() => {
-    refetch()
-  }, [page, itemsPerPage, inventoryTypeFilter, refetch])
+  // useEffect(() => {
+  //   refetch()
+  // }, [page, itemsPerPage, inventoryTypeFilter, refetch])
 
   useEffect(() => {
     setIsInventoryFetching(isLoading || isRefetching)
@@ -90,32 +91,30 @@ export function CardSkinInventory({ steamid }: Props) {
           data.data.inventory.length > 0 ? (
           data.data.inventory.map(
             (
-              {
-                icon_url,
-                name,
-                name_color,
-                market_name,
-                ...rest
-              }: ISkinInventory,
+              { icon_url, name, name_color, market_name, tags, type },
               index: number,
             ) => {
               const primeiroName = name.split('|')[0]
               const statusFloatText = market_name.match(/\((.*?)\)/g)
-              const statusFloatTextMatch =
+              const statusFloat =
                 statusFloatText && statusFloatText[0].replace(/\(|\)/g, '')
 
               const itemIsAWeapon =
-                !rest.tags[0].name.includes('Sticker') &&
-                !rest.tags[0].name.includes('Agent')
+                !tags[0].name.includes('Sticker') &&
+                !tags[0].name.includes('Agent')
+
+              const category = type.split(' ').pop()!
+              const weapon = tags[1].name
 
               return (
                 <ModalSkinShowcaseMain
                   key={index}
-                  image={icon_url}
-                  weapon={primeiroName}
-                  name={name}
-                  preco="Undefined"
-                  statusFloatText={statusFloatTextMatch as string}
+                  skinImage={icon_url}
+                  skinName={name}
+                  skinCategory={category}
+                  skinWeapon={weapon}
+                  statusFloat={statusFloat as string}
+                  skinColor={name_color}
                   float={'0.2555'}
                   activator={
                     <div className="w-[206px] gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">

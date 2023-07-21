@@ -1,5 +1,6 @@
 import { ISkins } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
+import { IInventory } from './interfaces/inventoryy.interface'
 
 export default class SkinService {
   public static findByAll() {
@@ -20,7 +21,7 @@ export default class SkinService {
     page: number,
     itemsPerPage: number,
   ) {
-    return Api.post(`/skins/inventory/${steamid}`, {
+    return Api.post<IInventory>(`/skins/inventory/${steamid}`, {
       filterType,
       page,
       itemsPerPage,

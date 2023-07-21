@@ -10,23 +10,23 @@ import { ModalSkinShowcaseSkin } from './ModalSkinShowcaseSkin'
 interface IProps {
   activator: React.ReactNode
   isEdition?: boolean
-  image: string
-  name: string
-  statusFloatText: string
+  skinName: string
   float: string
-  weapon: string
-  preco: string
+  skinImage: string
+  skinWeapon: string
+  statusFloat: string
+  skinColor: string
+  skinCategory: string
 }
 
 export function ModalSkinShowcaseMain({
   activator,
   isEdition,
-  image,
-  weapon,
-  preco,
-  statusFloatText,
+  skinImage,
+  skinWeapon,
+  statusFloat,
   float,
-  name,
+  skinName,
 }: IProps) {
   return (
     <Dialog.Root>
@@ -55,15 +55,15 @@ export function ModalSkinShowcaseMain({
             </div>
             <div className="flex h-[90%] w-11/12 items-center justify-between">
               <ModalSkinShowcaseSkin
-                icon_url={image}
-                weapon={weapon}
+                icon_url={skinImage}
+                weapon={skinWeapon}
                 float={float}
               />
               <ModalSkinShowcaseInfo
-                name={name}
-                weapon={weapon}
-                preco={preco}
-                statusFloatText={statusFloatText}
+                name={skinName}
+                weapon={skinWeapon}
+                preco={''}
+                statusFloatText={statusFloat}
               />
             </div>
             <div />

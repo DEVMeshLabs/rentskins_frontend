@@ -1,6 +1,9 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
+import useSkinsStore from '@/stores/skins.store'
+import useUserStore from '@/stores/user.store'
+import { useEffect, useState } from 'react'
 
 type Props = {
   name: string
@@ -15,6 +18,41 @@ export function ModalSkinShowcaseInfo({
   statusFloatText,
   weapon,
 }: Props) {
+  const [disabled, setDisabled] = useState(true)
+  const [salePrice, setSalePrice] = useState('')
+  const [checked, setChecked] = useState(false)
+  const { setSkinsToAdvertise } = useSkinsStore()
+  const {
+    user: { steamid, username },
+  } = useUserStore()
+
+  console.log({ name, preco, statusFloatText, weapon })
+
+  useEffect(() => {
+    setDisabled(!(salePrice.length > 0 && checked))
+  }, [salePrice, checked])
+
+  const handleAddSkinsToAdvertise = () => {
+    if (salePrice.length > 0 && checked) {
+      setSkinsToAdvertise({
+        sale_type: '',
+        seller_id: steamid,
+        seller_name: username,
+        skin_category: '',
+        skin_color: '',
+        skin_float: '',
+        skin_image: '',
+        skin_link_game: '',
+        skin_link_steam: '',
+        skin_name: '',
+        skin_price: '',
+        skin_weapon: '',
+        status: '',
+        status_float: '',
+      })
+    }
+  }
+
   return (
     <div className="flex h-full w-[40%] flex-col">
       <div>
@@ -47,8 +85,8 @@ export function ModalSkinShowcaseInfo({
               Preço de venda
             </Common.Title>
             <Form.Input.Text
-              state={''}
-              setState={() => {}}
+              state={salePrice}
+              setState={setSalePrice}
               placeholder="R$ 2.000,00"
               className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
             />
@@ -69,12 +107,17 @@ export function ModalSkinShowcaseInfo({
         {/* ---------INPUT FIM -------------  */}
 
         <div className="space-y-6">
-          <Common.Button className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400">
+          <Common.Button
+            disabled={disabled}
+            className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
+            onClick={handleAddSkinsToAdvertise}
+          >
             <Common.Title bold={600} className="rounded-xl">
               Anunciar
             </Common.Title>
           </Common.Button>
           <Form.Input.Checkbox
+            onChange={({ target: { checked } }) => setChecked(checked)}
             label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
