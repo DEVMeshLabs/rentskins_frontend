@@ -1,11 +1,12 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import React, { MouseEventHandler, useEffect } from 'react'
+import usePaymentStore from '@/stores/payment.store'
+import { MouseEventHandler } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './schemas/personal.schema'
 
 interface IProps {
-  handleFormSubmit: React.FormEventHandler<HTMLFormElement>
+  handleFormSubmit: any
   handleFormCancel: MouseEventHandler
 }
 
@@ -16,7 +17,6 @@ export function PagePaymentWithdrawPersonal({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, dirtyFields },
   } = useForm({
     resolver: formResolver,
@@ -26,35 +26,19 @@ export function PagePaymentWithdrawPersonal({
     },
   })
 
-  const yearwatch = watch('birthday')
-
-  useEffect(() => {
-    if (yearwatch.length === 10) {
-      console.log(yearwatch.length)
-      console.log(yearwatch.slice(6, 10))
-
-      const birthYear = Number(yearwatch.slice(6, 10))
-      const currentYear = new Date().getFullYear()
-
-      console.log(currentYear)
-      console.log(birthYear)
-
-      if (birthYear >= currentYear - 12 || birthYear < currentYear - 100) {
-        console.log('error')
-      }
-    }
-  }, [yearwatch])
+  const { setPaymentWithdrawInfo, paymentWithdrawInfo } = usePaymentStore()
 
   const onSubmit = (data: any) => {
-    console.log(data)
-    // setPaymentWithdrawInfo({
-    //   personal: {
-    //     identification,
-    //     name,
-    //     birthday,
-    //     phone,
-    //   },
-    // })
+    setPaymentWithdrawInfo({
+      personal: {
+        identification: data.cpf,
+        name: data.name,
+        birthday: data.birthday,
+        phone: data.phone,
+      },
+    })
+
+    handleFormSubmit()
   }
 
   const enableButton =
@@ -113,11 +97,14 @@ export function PagePaymentWithdrawPersonal({
             <text>Levantamento:</text>
 
             <span className="text-mesh-color-primary-800">
-              {Number(0).toLocaleString('pt-br', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-              })}
+              {Number(paymentWithdrawInfo.selectedValue).toLocaleString(
+                'pt-br',
+                {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 2,
+                },
+              )}
             </span>
           </div>
 

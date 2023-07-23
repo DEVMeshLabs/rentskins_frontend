@@ -16,7 +16,7 @@ import { formResolver } from './selection.schema'
 export function ModalPaymentRetrieveSelection() {
   const { wallet } = useUserStore()
   const { setPaymentRetrieveIndex } = useComponentStore()
-  const { setPaymentRetrieve } = usePaymentStore()
+  const { setPaymentRetrieve, setPaymentWithdrawInfo } = usePaymentStore()
   const [showValueError, setShowValueError] = useState(false)
 
   const {
@@ -47,6 +47,7 @@ export function ModalPaymentRetrieveSelection() {
         value: Number(currencyToNumber),
       })
       setPaymentRetrieveIndex(1)
+      setPaymentWithdrawInfo({ selectedValue: Number(currencyToNumber) })
     }
   }
 
