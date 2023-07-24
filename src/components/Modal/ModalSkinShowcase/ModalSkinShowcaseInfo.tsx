@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
@@ -6,49 +7,68 @@ import useUserStore from '@/stores/user.store'
 import { useEffect, useState } from 'react'
 
 type Props = {
-  name: string
-  weapon: string
   statusFloatText: string
-  preco: string
+  recommendedPrice?: string
+  sale_type?: string
+  skin_category: string
+  skin_color: string
+  skin_float: string
+  skin_image: string
+  skin_link_game: string
+  skin_link_steam: string
+  skin_name: string
+  skin_weapon: string
+  status?: string
+  status_float: string
+  id: string
 }
 
 export function ModalSkinShowcaseInfo({
-  name,
-  preco,
+  sale_type = 'sale',
+  skin_category,
+  skin_color,
+  skin_float,
+  skin_image,
+  skin_link_game,
+  skin_link_steam,
+  skin_name,
+  skin_weapon,
+  status = 'Pending',
+  status_float,
   statusFloatText,
-  weapon,
+  recommendedPrice = '2.000,00',
+  id,
 }: Props) {
   const [disabled, setDisabled] = useState(true)
-  const [salePrice, setSalePrice] = useState('')
+  const [skin_price, setSkin_price] = useState('')
   const [checked, setChecked] = useState(false)
   const { setSkinsToAdvertise } = useSkinsStore()
   const {
     user: { steamid, username },
   } = useUserStore()
 
-  console.log({ name, preco, statusFloatText, weapon })
-
   useEffect(() => {
-    setDisabled(!(salePrice.length > 0 && checked))
-  }, [salePrice, checked])
+    setDisabled(!(skin_price.length > 0 && checked))
+  }, [skin_price, checked])
 
   const handleAddSkinsToAdvertise = () => {
-    if (salePrice.length > 0 && checked) {
+    if (skin_price.length > 0 && checked) {
       setSkinsToAdvertise({
-        sale_type: '',
+        id,
+        sale_type,
         seller_id: steamid,
         seller_name: username,
-        skin_category: '',
-        skin_color: '',
-        skin_float: '',
-        skin_image: '',
-        skin_link_game: '',
-        skin_link_steam: '',
-        skin_name: '',
-        skin_price: '',
-        skin_weapon: '',
-        status: '',
-        status_float: '',
+        skin_category,
+        skin_color,
+        skin_float,
+        skin_image,
+        skin_link_game,
+        skin_link_steam,
+        skin_name,
+        skin_weapon,
+        status,
+        status_float,
+        skin_price,
       })
     }
   }
@@ -57,10 +77,10 @@ export function ModalSkinShowcaseInfo({
     <div className="flex h-full w-[40%] flex-col">
       <div>
         <Common.Title color="white" className="text-[24px]">
-          {name}
+          {skin_name}
         </Common.Title>
         <p className="-mt-1 font-medium text-mesh-color-neutral-200">
-          {weapon} • {statusFloatText}
+          {skin_weapon} • {statusFloatText}
         </p>
       </div>
 
@@ -70,7 +90,9 @@ export function ModalSkinShowcaseInfo({
             <Common.Title size="md" bold={500} color="white">
               Preço recomendado
             </Common.Title>
-            <span className="text-mesh-color-accent-1000">R$: {preco}</span>
+            <span className="text-mesh-color-accent-1000">
+              R$: {recommendedPrice}
+            </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
             Preço que recomendamos com base no mercado do momento
@@ -85,8 +107,8 @@ export function ModalSkinShowcaseInfo({
               Preço de venda
             </Common.Title>
             <Form.Input.Text
-              state={salePrice}
-              setState={setSalePrice}
+              state={skin_price}
+              setState={setSkin_price}
               placeholder="R$ 2.000,00"
               className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
             />

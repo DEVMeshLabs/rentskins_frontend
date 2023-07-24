@@ -49,6 +49,10 @@ export interface ISkinInventory {
 }
 
 export interface IInventory {
-  inventory: ISkinInventory[]
-  maxPages: number
+  inventory: {
+    inventory: ISkinInventory[]
+    maxItems: number
+    maxPages: number
+  }
+  float: []
 }

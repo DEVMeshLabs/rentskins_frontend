@@ -32,8 +32,6 @@ export function CardSkinInventory({ steamid }: Props) {
     enabled: !!steamid,
   })
 
-  console.log(data?.data)
-
   const checkPageDimensions = () => {
     Dimensions.setStatePerResolution(setItemsPerPage, [24, 15, 12, 9, 6])
   }
@@ -88,10 +86,10 @@ export function CardSkinInventory({ steamid }: Props) {
           <CardSkin.Skeleton quantity={itemsPerPage} />
         ) : data?.data &&
           data.data.inventory &&
-          data.data.inventory.length > 0 ? (
-          data.data.inventory.map(
+          data.data.inventory.inventory.length > 0 ? (
+          data.data.inventory.inventory.map(
             (
-              { icon_url, name, name_color, market_name, tags, type },
+              { icon_url, name, name_color, market_name, tags, type, assetid },
               index: number,
             ) => {
               const primeiroName = name.split('|')[0]
@@ -108,7 +106,7 @@ export function CardSkinInventory({ steamid }: Props) {
 
               return (
                 <ModalSkinShowcaseMain
-                  key={index}
+                  key={assetid}
                   skinImage={icon_url}
                   skinName={name}
                   skinCategory={category}
@@ -116,6 +114,7 @@ export function CardSkinInventory({ steamid }: Props) {
                   statusFloat={statusFloat as string}
                   skinColor={name_color}
                   float={'0.2555'}
+                  id={assetid}
                   activator={
                     <div className="w-[206px] gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">
                       <CardSkin.Root classname="flex flex-col h-[245px] justify-between">
@@ -143,9 +142,9 @@ export function CardSkinInventory({ steamid }: Props) {
           renderEmptyMessage()
         )}
       </div>
-      {!isLoading && data?.data && data?.data.maxPages > 0 && (
+      {!isLoading && data?.data && data?.data.inventory.maxPages > 0 && (
         <LayoutPagination
-          maxPages={data.data.maxPages}
+          maxPages={data.data.inventory.maxPages}
           pageState={page}
           setPageState={setPage}
           disabled={isLoading || isRefetching}

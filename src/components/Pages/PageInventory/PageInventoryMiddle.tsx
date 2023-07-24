@@ -4,13 +4,21 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { CardSkinInventory } from '@/components/Others/CardSkin/CardSkinInventory'
 import ConfigService from '@/services/config.service'
+import useSkinsStore from '@/stores/skins.store'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
 export default function PageInventoryMiddle() {
   const {
     user: { steamid },
   } = useUserStore()
+
+  const { skinsToAdvertise } = useSkinsStore()
+
+  useEffect(() => {
+    console.log(skinsToAdvertise)
+  }, [skinsToAdvertise])
 
   const { data: userHasConfig, isLoading } = useQuery({
     queryKey: ['config'],

@@ -17,6 +17,7 @@ interface IProps {
   statusFloat: string
   skinColor: string
   skinCategory: string
+  id: string
 }
 
 export function ModalSkinShowcaseMain({
@@ -26,7 +27,10 @@ export function ModalSkinShowcaseMain({
   skinWeapon,
   statusFloat,
   float,
+  skinCategory,
+  skinColor,
   skinName,
+  id,
 }: IProps) {
   return (
     <Dialog.Root>
@@ -60,9 +64,18 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
-                name={skinName}
-                weapon={skinWeapon}
-                preco={''}
+                id={id}
+                skin_name={skinName}
+                skin_weapon={skinWeapon}
+                recommendedPrice={''}
+                sale_type={'sale'}
+                skin_category={skinCategory}
+                skin_color={skinColor}
+                skin_float={float}
+                skin_image={skinImage}
+                skin_link_game={''}
+                skin_link_steam={''}
+                status_float={statusFloat}
                 statusFloatText={statusFloat}
               />
             </div>

@@ -19,6 +19,7 @@ export interface ISkins {
 }
 
 export interface ISkinsToAdvertise {
+  id: string
   skin_image: string
   skin_name: string
   skin_category: string

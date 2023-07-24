@@ -6,9 +6,12 @@ import { ISkinsToAdvertise } from '@/interfaces/ISkins'
 const useSkinsStore = create<ISkinsStore>((set) => ({
   skinsToAdvertise: [],
   setSkinsToAdvertise: (skinToAdvertise: ISkinsToAdvertise) => {
-    set(({ skinsToAdvertise: oldSkinsToAdvertise }) => ({
-      skinsToAdvertise: [...oldSkinsToAdvertise, skinToAdvertise],
-    }))
+    set(({ skinsToAdvertise: oldSkinsToAdvertise }) => {
+      if (!oldSkinsToAdvertise.some(({ id }) => id === skinToAdvertise.id)) {
+        return { skinsToAdvertise: [...oldSkinsToAdvertise, skinToAdvertise] }
+      }
+      return {}
+    })
   },
 
   deleteSkinToAdvertise: (skinName: string) => {
