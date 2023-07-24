@@ -21,7 +21,6 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function FormInputRadioDefault({
-  name,
   label,
   labelClassName,
   containerClassname,

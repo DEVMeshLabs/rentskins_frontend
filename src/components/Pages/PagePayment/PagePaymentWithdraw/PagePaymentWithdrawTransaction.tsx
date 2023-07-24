@@ -1,77 +1,91 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { FormDropdown } from '@/components/Forms/FormDropdown'
-import usePaymentStore from '@/stores/payment.store'
-import React, { MouseEventHandler, useEffect, useState } from 'react'
+import { MouseEventHandler } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './schemas/transaction.schema'
 
 interface IProps {
-  handleFormSubmit: React.FormEventHandler<HTMLFormElement>
+  handleFormSubmit: any
   handleFormCancel: MouseEventHandler
 }
 export function PagePaymentWithdrawTransaction({
   handleFormSubmit,
   handleFormCancel,
 }: IProps) {
-  const { paymentWithdrawInfo, setPaymentWithdrawInfo } = usePaymentStore()
-  const [bank, setBank] = useState('Santander')
-  const [agency, setAgency] = useState('')
-  const [accountNumber, setAccountNumber] = useState('')
-  const [keyType, setKeyType] = useState('CPF')
-  const [keyValue, setKeyValue] = useState('')
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      'account-number': undefined,
+      'key-cpf': undefined,
+      'key-email': undefined,
+      'key-phone': undefined,
+      'key-type': 'CPF',
+      agency: undefined,
+      bank: 'Santander',
+    },
+  })
 
-  useEffect(() => {
-    setPaymentWithdrawInfo({
-      ...paymentWithdrawInfo,
-      transference: {
-        bank,
-        agency,
-        accountNumber,
-        keyType,
-        keyValue,
-      },
-    })
-  }, [bank, agency, accountNumber, keyType, keyValue, setPaymentWithdrawInfo])
+  const keyType = watch('key-type')
+
+  const onSubmit = (data: any) => {
+    console.log(data)
+    //    setPaymentWithdrawInfo({
+    //      ...paymentWithdrawInfo,
+    //      transference: {
+    //        bank,
+    //        agency,
+    //        accountNumber,
+    //        keyType,
+    //        keyValue,
+    //      },
+    //    })
+  }
+
+  const enableButton =
+    (dirtyFields['account-number'] &&
+      dirtyFields.agency &&
+      dirtyFields['key-cpf']) ||
+    dirtyFields['key-email'] ||
+    dirtyFields['key-phone']
 
   const selectKeyValueType = () => {
     const types = {
       CPF: (
         <Form.Input.CPF
+          name="key-cpf"
           label="Chave Pix"
           placeholder="000.000.000-00"
-          state={keyValue}
-          setState={setKeyValue}
-          required
+          register={register('key-cpf')}
+          errors={errors['key-cpf']}
         />
       ),
       Email: (
         <Form.Input.Email
+          name="key-email"
           label="Chave Pix"
           placeholder="example@mail.com"
-          state={keyValue}
-          setState={setKeyValue}
-          required
+          register={register('key-email')}
+          errors={errors['key-email']}
         />
       ),
-      Telefone: (
+      Phone: (
         <Form.Input.Phone
+          name="key-phone"
           label="Chave Pix"
           placeholder="(00) 00000-0000"
-          state={keyValue}
-          setState={setKeyValue}
-          required
+          register={register('key-phone')}
+          errors={errors['key-phone']}
         />
       ),
     }
 
-    return types[keyType as 'CPF' | 'Email' | 'Telefone']
-  }
-
-  const validateForm = () => {
-    return !(
-      agency.length === 4 &&
-      accountNumber.length === 7 &&
-      keyValue.length > 0
-    )
+    return types[keyType as 'CPF' | 'Email' | 'Phone']
   }
 
   return (
@@ -90,12 +104,11 @@ export function PagePaymentWithdrawTransaction({
 
       <Form.Root
         className="mt-6 flex flex-col gap-4"
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <FormDropdown
           label="Banco"
-          state={bank}
-          setState={setBank}
+          register={register('bank')}
           options={[
             { label: 'Santander', value: 'Santander' },
             { label: 'Banco do Brasil', value: 'Banco do Brasil' },
@@ -107,31 +120,32 @@ export function PagePaymentWithdrawTransaction({
 
         <div className="grid grid-cols-2 gap-2">
           <Form.Input.Number
+            name="agency"
             label="Agência"
-            limit={4}
+            mask="9999"
             placeholder="0000"
-            state={agency}
-            setState={setAgency}
-            required
+            register={register('agency')}
+            errors={errors.agency}
+            errorsClassname="w-5/6 text-sm text-red-500 -mt-[12px]"
           />
           <Form.Input.Number
-            label="Número da Conta"
-            limit={7}
+            name="account-number"
+            label="Agência"
+            mask="9999999"
             placeholder="0000000"
-            state={accountNumber}
-            setState={setAccountNumber}
-            required
+            register={register('account-number')}
+            errors={errors['account-number']}
+            errorsClassname="w-5/6 text-sm text-red-500 -mt-[12px]"
           />
         </div>
 
         <FormDropdown
           label="Tipo de Chave"
-          state={keyType}
-          setState={setKeyType}
+          register={register('key-type')}
           options={[
             { label: 'CPF/CNPJ', value: 'CPF' },
             { label: 'Email', value: 'Email' },
-            { label: 'Número de Telefone', value: 'Telefone' },
+            { label: 'Número de Telefone', value: 'Phone' },
           ]}
         />
 
@@ -153,9 +167,8 @@ export function PagePaymentWithdrawTransaction({
           <div className="flex flex-col gap-4 text-xl font-semibold">
             <Form.Button
               buttonStyle="full"
-              type="submit"
               className="h-12 w-full border-transparent"
-              disabled={validateForm()}
+              disabled={!enableButton}
             >
               Continuar
             </Form.Button>

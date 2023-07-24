@@ -2,22 +2,21 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 const formSchema = yup.object({
-  name: yup
+  bank: yup.string().required('Campo necessário.'),
+
+  agency: yup
     .string()
     .required('Campo necessário.')
-    .test(
-      'name-test',
-      'O campo não pode conter números ou caracteres especiais.',
-      (item) => {
-        if (!item) {
-          return false
-        }
-        const regex = /^[A-Za-z\s]+$/
-        return regex.test(item)
-      },
-    ),
+    .length(4, 'O campo deve conter um número de agência válido.'),
 
-  cpf: yup
+  'account-number': yup
+    .string()
+    .required('Campo necessário.')
+    .length(7, 'O campo deve conter um número de conta válido.'),
+
+  'key-type': yup.string().required('Campo necessário.'),
+
+  'key-cpf': yup
     .string()
     .required('Campo necessário.')
     .test('cpf-test', 'O campo deve ser um CPF válido.', (item) => {
@@ -50,10 +49,10 @@ const formSchema = yup.object({
       }
     }),
 
-  email: yup
+  'key-email': yup
     .string()
-    .email('O campo deve ser um email válido.')
     .required('Campo necessário.')
+    .email('O campo deve ser um email válido.')
     .test('email-test', 'O campo deve ser um email válido.', (item) => {
       if (!item) {
         return false
@@ -62,6 +61,11 @@ const formSchema = yup.object({
       const regex = /@.*\..+/
       return regex.test(item)
     }),
+
+  'key-phone': yup
+    .string()
+    .required('Campo necessário.')
+    .length(15, 'O campo deve conter um telefone válido.'),
 })
 
 export const formResolver = yupResolver(formSchema)

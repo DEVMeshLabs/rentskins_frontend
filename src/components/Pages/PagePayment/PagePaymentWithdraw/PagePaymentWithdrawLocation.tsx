@@ -1,12 +1,12 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import usePaymentStore from '@/stores/payment.store'
-import React, { MouseEventHandler } from 'react'
+import { MouseEventHandler } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './schemas/location.schema'
 
 interface IProps {
-  handleFormSubmit: React.FormEventHandler<HTMLFormElement>
+  handleFormSubmit: any
   handleFormCancel: MouseEventHandler
 }
 export function PagePaymentWithdrawLocation({
@@ -31,7 +31,6 @@ export function PagePaymentWithdrawLocation({
   })
 
   const onSubmit = (data: any) => {
-    console.log(data)
     setPaymentWithdrawInfo({
       ...paymentWithdrawInfo,
       location: {
@@ -43,6 +42,8 @@ export function PagePaymentWithdrawLocation({
         address: data.address,
       },
     })
+
+    handleFormSubmit()
   }
 
   const enableButton =
