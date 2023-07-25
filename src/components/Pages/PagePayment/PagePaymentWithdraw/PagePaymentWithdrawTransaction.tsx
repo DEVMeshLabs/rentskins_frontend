@@ -1,6 +1,7 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { FormDropdown } from '@/components/Forms/FormDropdown'
+import usePaymentStore from '@/stores/payment.store'
 import { MouseEventHandler } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './schemas/transaction.schema'
@@ -33,18 +34,33 @@ export function PagePaymentWithdrawTransaction({
 
   const keyType = watch('key-type')
 
+  const { setPaymentWithdrawInfo, paymentWithdrawInfo } = usePaymentStore()
+
   const onSubmit = (data: any) => {
-    console.log(data)
-    //    setPaymentWithdrawInfo({
-    //      ...paymentWithdrawInfo,
-    //      transference: {
-    //        bank,
-    //        agency,
-    //        accountNumber,
-    //        keyType,
-    //        keyValue,
-    //      },
-    //    })
+    let keyValue
+
+    if (data['key-type'] === 'Phone') {
+      keyValue = data['key-phone']
+    } else if (data['key-type'] === 'CPF') {
+      keyValue = data['key-cpf']
+    } else if (data['key-type'] === 'Email') {
+      keyValue = data['key-email']
+    } else {
+      keyValue = 'error'
+    }
+
+    setPaymentWithdrawInfo({
+      ...paymentWithdrawInfo,
+      transference: {
+        bank: data.bank,
+        agency: data.agency,
+        accountNumber: data['account-number'],
+        keyType: data['key-type'],
+        keyValue,
+      },
+    })
+
+    handleFormSubmit()
   }
 
   const enableButton =

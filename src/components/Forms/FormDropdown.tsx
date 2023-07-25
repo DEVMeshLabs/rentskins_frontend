@@ -27,11 +27,7 @@ export function FormDropdown({
   register,
 }: IProps) {
   const createOptions = options?.map((item, index) => (
-    <option
-      key={'form-dropdown-for' + label + '-' + index}
-      value={item.value}
-      {...register}
-    >
+    <option key={'form-dropdown-for' + label + '-' + index} value={item.value}>
       {item.label}
     </option>
   ))
@@ -42,7 +38,8 @@ export function FormDropdown({
         {label && labelSide === 'up' && label}
         <select
           className={`${inputClassName} appearance-none rounded-md border-[2px] border-mesh-color-primary-1100/50
-        bg-mesh-color-others-eerie-black py-3 pl-3 pr-12 placeholder:text-white/70`}
+          bg-mesh-color-others-eerie-black py-3 pl-3 pr-12 placeholder:text-white/70`}
+          {...register}
         >
           {options !== undefined && options.length > 0 && createOptions}
         </select>
