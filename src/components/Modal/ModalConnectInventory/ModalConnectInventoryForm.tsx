@@ -1,6 +1,8 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
+import ConfigService from '@/services/config.service'
 import useUserStore from '@/stores/user.store'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './form.schema'
@@ -8,7 +10,6 @@ import { formResolver } from './form.schema'
 export function ModalConnectInventoryForm() {
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors, dirtyFields },
   } = useForm({
@@ -22,30 +23,31 @@ export function ModalConnectInventoryForm() {
   })
 
   const [formSubmit, setFormSubmit] = useState(false)
+  const [formData, setFormData] = useState<any>(undefined)
 
   const {
     user: { steamid, username },
   } = useUserStore()
 
-  // useQuery({
-  //   queryKey: ['ConfigService.createConfig'],
-  //   queryFn: () => {
-  //     const sellLink = `https://rentskins/?sellerid=${steamid}`
-  //     const params = {
-  //       owner_id: steamid,
-  //       owner_name: username,
-  //       owner_email: formEmail,
-  //       steam_guard: false,
-  //       url_sell: sellLink,
-  //       url_trade: formURL,
-  //       agreed_with_emails: formPromotions,
-  //       agreed_with_terms: true,
-  //     }
-  //     ConfigService.createConfig(params)
-  //     return window.location.reload()
-  //   },
-  //   enabled: !!steamid && !!formSubmit,
-  // })
+  useQuery({
+    queryKey: ['ConfigService.createConfig'],
+    queryFn: () => {
+      const sellLink = `https://rentskins/?sellerid=${steamid}`
+      const params = {
+        owner_id: steamid,
+        owner_name: username,
+        owner_email: formData.email,
+        steam_guard: false,
+        url_sell: sellLink,
+        url_trade: formData['trade-link'],
+        agreed_with_emails: formData[''],
+        agreed_with_terms: true,
+      }
+      ConfigService.createConfig(params)
+      return window.location.reload()
+    },
+    enabled: !!steamid && !!formSubmit,
+  })
 
   const enableButton = dirtyFields.email && dirtyFields['trade-link']
 
@@ -58,8 +60,8 @@ export function ModalConnectInventoryForm() {
   }
 
   const onSubmit = (data: any) => {
-    console.log(data)
-    // setFormSubmit(true)
+    setFormData(data)
+    setFormSubmit(true)
   }
 
   return (
@@ -90,7 +92,7 @@ export function ModalConnectInventoryForm() {
       <Form.Input.Text
         name="email"
         label="Email de Contato"
-        placeholder="email@exemplo.com"
+        placeholder="exemplo@email.com"
         labelClassName="w-8/12 text-white"
         register={register('email')}
         errors={errors.email}
@@ -113,6 +115,7 @@ export function ModalConnectInventoryForm() {
               Eu concordo com os{' '}
               <a
                 href=""
+                tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
@@ -121,6 +124,7 @@ export function ModalConnectInventoryForm() {
               ,{' '}
               <a
                 href=""
+                tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
@@ -129,6 +133,7 @@ export function ModalConnectInventoryForm() {
               e{' '}
               <a
                 href=""
+                tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
