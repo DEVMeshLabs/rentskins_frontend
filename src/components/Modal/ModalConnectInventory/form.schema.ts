@@ -4,22 +4,24 @@ import * as yup from 'yup'
 const formSchema = yup.object({
   'trade-link': yup
     .string()
-    .test('form-value-test', 'O valor deve ser um número positivo.', (item) => {
-      if (item === '' || item === undefined) {
+    .test(
+      'trade-link-test',
+      'O campo deve ser um link válido da Steam.',
+      (item) => {
+        if (item === '' || item === undefined) {
+          return false
+        }
+
+        if (
+          !item.includes('https://steamcommunity.com/tradeoffer') &&
+          !item.includes('www.steamcommunity.com/tradeoffer')
+        ) {
+          return false
+        }
+
         return true
-      }
-
-      let currencyToNumber
-      currencyToNumber = item.replace(/\./g, '')
-      currencyToNumber = currencyToNumber.replace('R$ ', '')
-      currencyToNumber = currencyToNumber.replace(',', '.')
-
-      if (Number(currencyToNumber) <= 0) {
-        return false
-      }
-
-      return true
-    }),
+      },
+    ),
 
   email: yup
     .string()
@@ -36,7 +38,10 @@ const formSchema = yup.object({
 
   'receive-notifications': yup.bool(),
 
-  'accept-terms': yup.bool().required('O campo é necessário.'),
+  'accept-terms': yup
+    .bool()
+    .required('O campo é necessário.')
+    .isTrue('Você deve concordar com os termos antes de prosseguir.'),
 })
 
 export const formResolver = yupResolver(formSchema)

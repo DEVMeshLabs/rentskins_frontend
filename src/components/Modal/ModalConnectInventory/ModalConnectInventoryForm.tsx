@@ -1,17 +1,11 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import ConfigService from '@/services/config.service'
 import useUserStore from '@/stores/user.store'
-import { useQuery } from '@tanstack/react-query'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './form.schema'
 
 export function ModalConnectInventoryForm() {
-  const [formURL, setFormURL] = useState('')
-  const [formEmail, setFormEmail] = useState('')
-  const [formPromotions, setFormPromotions] = useState(false)
-  const [formTerms, setFormTerms] = useState(false)
   const {
     register,
     watch,
@@ -20,7 +14,7 @@ export function ModalConnectInventoryForm() {
   } = useForm({
     resolver: formResolver,
     defaultValues: {
-      'accept-terms': false,
+      'accept-terms': undefined,
       'receive-notifications': false,
       'trade-link': undefined,
       email: undefined,
@@ -33,37 +27,27 @@ export function ModalConnectInventoryForm() {
     user: { steamid, username },
   } = useUserStore()
 
-  useQuery({
-    queryKey: ['ConfigService.createConfig'],
-    queryFn: () => {
-      const sellLink = `https://rentskins/?sellerid=${steamid}`
-      const params = {
-        owner_id: steamid,
-        owner_name: username,
-        owner_email: formEmail,
-        steam_guard: false,
-        url_sell: sellLink,
-        url_trade: formURL,
-        agreed_with_emails: formPromotions,
-        agreed_with_terms: true,
-      }
-      ConfigService.createConfig(params)
-      return window.location.reload()
-    },
-    enabled: !!steamid && !!formSubmit,
-  })
+  // useQuery({
+  //   queryKey: ['ConfigService.createConfig'],
+  //   queryFn: () => {
+  //     const sellLink = `https://rentskins/?sellerid=${steamid}`
+  //     const params = {
+  //       owner_id: steamid,
+  //       owner_name: username,
+  //       owner_email: formEmail,
+  //       steam_guard: false,
+  //       url_sell: sellLink,
+  //       url_trade: formURL,
+  //       agreed_with_emails: formPromotions,
+  //       agreed_with_terms: true,
+  //     }
+  //     ConfigService.createConfig(params)
+  //     return window.location.reload()
+  //   },
+  //   enabled: !!steamid && !!formSubmit,
+  // })
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setFormSubmit(true)
-  }
-
-  const handleButtonDisabled = !(
-    formEmail.includes('@') &&
-    // formURL.includes('https://steamcommunity.com') &&
-    formURL.includes('') &&
-    formTerms
-  )
+  const enableButton = dirtyFields.email && dirtyFields['trade-link']
 
   const handleButtonGetTradeLink = () => {
     if (steamid) {
@@ -75,6 +59,7 @@ export function ModalConnectInventoryForm() {
 
   const onSubmit = (data: any) => {
     console.log(data)
+    // setFormSubmit(true)
   }
 
   return (
@@ -102,7 +87,7 @@ export function ModalConnectInventoryForm() {
         </div>
       </div>
 
-      <Form.Input.Email
+      <Form.Input.Text
         name="email"
         label="Email de Contato"
         placeholder="email@exemplo.com"
@@ -113,19 +98,18 @@ export function ModalConnectInventoryForm() {
 
       <div className="mt-4 flex flex-col gap-2">
         <Form.Input.Checkbox
-          checked={formPromotions}
-          onClick={() => setFormPromotions((state) => !state)}
+          name="receive-notifications"
           label="Deseja receber promoções em seu email?"
           checkClassname="ml-[0.2rem]"
           labelClassName="text-sm text-mesh-color-neutral-200"
           inputClassName="focus:border-mesh-color-primary-800 bg-transparent border-2 border-mesh-color-neutral-500 checked:border-mesh-color-primary-1200 h-6 w-6 rounded-md transition-all"
+          register={register('receive-notifications')}
         />
 
         <Form.Input.Checkbox
-          checked={formTerms}
-          onClick={() => setFormTerms((state) => !state)}
+          name="accept-terms"
           label={
-            <text>
+            <span>
               Eu concordo com os{' '}
               <a
                 href=""
@@ -151,22 +135,24 @@ export function ModalConnectInventoryForm() {
                 Política de Reembolso
               </a>{' '}
               da RentSkins.
-            </text>
+            </span>
           }
           checkClassname="ml-[0.2rem]"
           labelClassName="text-sm text-mesh-color-neutral-200"
           inputClassName="focus:border-mesh-color-primary-800 bg-transparent border-2 border-mesh-color-neutral-500 checked:border-mesh-color-primary-1200 h-6 w-6 rounded-md transition-all"
+          errorsClassname="text-sm text-red-500 absolute"
+          register={register('accept-terms')}
+          errors={errors['accept-terms']}
         />
       </div>
 
-      <Common.Button
-        disabled={handleButtonDisabled}
-        type="submit"
+      <Form.Button
+        buttonStyle={undefined}
+        disabled={!enableButton}
         className="mt-8 border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
-        required
       >
         Concluir
-      </Common.Button>
+      </Form.Button>
     </Form.Root>
   )
 }
