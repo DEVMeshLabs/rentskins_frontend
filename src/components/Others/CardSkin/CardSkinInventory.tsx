@@ -9,6 +9,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
+import useSkinsStore from '@/stores/skins.store'
+import classNames from 'classnames'
+import Common from '@/components/Common'
 
 interface Props {
   steamid: string
@@ -19,6 +22,7 @@ export function CardSkinInventory({ steamid }: Props) {
   const [itemsPerPage, setItemsPerPage] = useState(16)
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
+  const { skinsToAdvertise } = useSkinsStore()
 
   const { data, isLoading, isRefetching } = useQuery({
     queryKey: ['skinsInventory'],
@@ -96,13 +100,14 @@ export function CardSkinInventory({ steamid }: Props) {
               const statusFloatText = market_name.match(/\((.*?)\)/g)
               const statusFloat =
                 statusFloatText && statusFloatText[0].replace(/\(|\)/g, '')
-
               const itemIsAWeapon =
                 !tags[0].name.includes('Sticker') &&
                 !tags[0].name.includes('Agent')
-
               const category = type.split(' ').pop()!
               const weapon = tags[1].name
+              const isSelected = skinsToAdvertise.some(
+                ({ id }) => assetid === id,
+              )
 
               return (
                 <ModalSkinShowcaseMain
@@ -115,15 +120,41 @@ export function CardSkinInventory({ steamid }: Props) {
                   skinColor={name_color}
                   float={'0.2555'}
                   id={assetid}
+                  isSelected={isSelected}
                   activator={
-                    <div className="w-[206px] gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">
-                      <CardSkin.Root classname="flex flex-col h-[245px] justify-between">
+                    <div
+                      className={classNames(
+                        'group relative w-[206px] cursor-pointer gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white hover:bg-mesh-color-neutral-700',
+                        {
+                          'bg-mesh-color-neutral-700': isSelected,
+                        },
+                      )}
+                    >
+                      <div
+                        className={classNames(
+                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400',
+                          {
+                            'border-mesh-color-neutral-100 bg-mesh-color-accent-1100':
+                              isSelected,
+                          },
+                          {
+                            'group-hover:border-mesh-color-neutral-200 group-hover:bg-mesh-color-neutral-500':
+                              !isSelected,
+                          },
+                        )}
+                      />
+                      <CardSkin.Root classname="flex relative flex-col h-[245px] justify-between">
                         <div className="h-full">
                           <CardSkin.Image
                             icon_url={icon_url}
                             name_color={name_color}
                             primeiroName={primeiroName}
                           />
+                          {isSelected && (
+                            <Common.Button className="absolute left-11 top-[85px] w-1/2 border-none bg-mesh-color-neutral-500 opacity-100">
+                              <Common.Title bold={600}>Alterar</Common.Title>
+                            </Common.Button>
+                          )}
                           <CardSkin.Content
                             market_name={market_name}
                             primeiroName={primeiroName}

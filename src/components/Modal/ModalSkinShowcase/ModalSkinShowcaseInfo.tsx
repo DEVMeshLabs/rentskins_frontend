@@ -21,6 +21,7 @@ type Props = {
   status?: string
   status_float: string
   id: string
+  isSelected: boolean
 }
 
 export function ModalSkinShowcaseInfo({
@@ -37,12 +38,14 @@ export function ModalSkinShowcaseInfo({
   status_float,
   statusFloatText,
   recommendedPrice = '2.000,00',
+  isSelected,
   id,
 }: Props) {
   const [disabled, setDisabled] = useState(true)
   const [skin_price, setSkin_price] = useState('')
   const [checked, setChecked] = useState(false)
-  const { setSkinsToAdvertise } = useSkinsStore()
+  const { setSkinsToAdvertise, removeSkinToAdvertise, changeSkinToAdvertise } =
+    useSkinsStore()
   const {
     user: { steamid, username },
   } = useUserStore()
@@ -70,6 +73,12 @@ export function ModalSkinShowcaseInfo({
         status_float,
         skin_price,
       })
+    }
+  }
+
+  const handleChangeSkinToAdvertise = () => {
+    if (skin_price.length > 0 && checked) {
+      changeSkinToAdvertise(id, skin_price)
     }
   }
 
@@ -129,15 +138,37 @@ export function ModalSkinShowcaseInfo({
         {/* ---------INPUT FIM -------------  */}
 
         <div className="space-y-6">
-          <Common.Button
-            disabled={disabled}
-            className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
-            onClick={handleAddSkinsToAdvertise}
-          >
-            <Common.Title bold={600} className="rounded-xl">
-              Anunciar
-            </Common.Title>
-          </Common.Button>
+          {isSelected ? (
+            <div className="flex gap-4">
+              <Common.Button
+                disabled={disabled}
+                onClick={handleChangeSkinToAdvertise}
+                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
+              >
+                <Common.Title bold={600} className="rounded-xl">
+                  Alterar
+                </Common.Title>
+              </Common.Button>
+              <Common.Button
+                onClick={() => removeSkinToAdvertise(id)}
+                className="mt-4 h-11 w-3/5 border-mesh-color-neutral-200"
+              >
+                <Common.Title bold={600} color="white" className="rounded-xl">
+                  Remover
+                </Common.Title>
+              </Common.Button>
+            </div>
+          ) : (
+            <Common.Button
+              disabled={disabled}
+              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
+              onClick={handleAddSkinsToAdvertise}
+            >
+              <Common.Title bold={600} className="rounded-xl">
+                Anunciar
+              </Common.Title>
+            </Common.Button>
+          )}
           <Form.Input.Checkbox
             onChange={({ target: { checked } }) => setChecked(checked)}
             label="Estou ciente que esta plataforma possui a modalidade de locação, e

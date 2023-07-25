@@ -14,12 +14,25 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
     })
   },
 
-  deleteSkinToAdvertise: (skinName: string) => {
+  removeSkinToAdvertise: (skinId: string) => {
     set(({ skinsToAdvertise }) => {
       const newSkinsToAdvertise = skinsToAdvertise.filter(
-        ({ skin_name }) => skinName !== skin_name,
+        ({ id }) => id !== skinId,
       )
       return { skinsToAdvertise: newSkinsToAdvertise }
+    })
+  },
+
+  changeSkinToAdvertise: (skinId: string, price: string) => {
+    set(({ skinsToAdvertise: oldSkinsToAdvertise }) => {
+      const newChangedSkinsToAdvertise = oldSkinsToAdvertise.map((skin) => {
+        if (skin.id === skinId) {
+          return { ...skin, skin_price: price }
+        }
+        return skin
+      })
+
+      return { skinsToAdvertise: newChangedSkinsToAdvertise }
     })
   },
 }))

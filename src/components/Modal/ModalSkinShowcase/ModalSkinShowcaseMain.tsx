@@ -18,6 +18,7 @@ interface IProps {
   skinColor: string
   skinCategory: string
   id: string
+  isSelected: boolean
 }
 
 export function ModalSkinShowcaseMain({
@@ -30,6 +31,7 @@ export function ModalSkinShowcaseMain({
   skinCategory,
   skinColor,
   skinName,
+  isSelected,
   id,
 }: IProps) {
   return (
@@ -64,6 +66,7 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                isSelected={isSelected}
                 id={id}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
