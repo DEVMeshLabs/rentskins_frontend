@@ -4,12 +4,28 @@ import ConfigService from '@/services/config.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
 import { FormEvent, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './form.schema'
 
 export function ModalConnectInventoryForm() {
   const [formURL, setFormURL] = useState('')
   const [formEmail, setFormEmail] = useState('')
   const [formPromotions, setFormPromotions] = useState(false)
   const [formTerms, setFormTerms] = useState(false)
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      'accept-terms': false,
+      'receive-notifications': false,
+      'trade-link': undefined,
+      email: undefined,
+    },
+  })
 
   const [formSubmit, setFormSubmit] = useState(false)
 
@@ -57,28 +73,24 @@ export function ModalConnectInventoryForm() {
     }
   }
 
+  const onSubmit = (data: any) => {
+    console.log(data)
+  }
+
   return (
     <Form.Root
-      onSubmit={handleFormSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="mt-6 flex h-full w-11/12 flex-col items-start justify-between gap-4"
     >
       <div className="w-full">
-        <label
-          className="w-full text-lg text-mesh-color-neutral-200"
-          htmlFor="trade-link"
-        >
-          <text> Insira URL Trade Link do seu Perfil </text>
-        </label>
         <div className="flex w-full items-center justify-between">
           <Form.Input.Text
-            state={formURL}
-            setState={setFormURL}
+            label="Insira URL Trade Link do seu Perfil"
+            name="trade-link"
             placeholder="https://steamcommunity.com/tradeoffer/new/?partner=240416830&token=vzAomQ5n"
-            autoComplete="off"
-            labelClassName="w-10/12"
-            inputClassName="bg-mesh-color-neutral-500 py-2 px-4 rounded-md text-white border border-mesh-color-neutral-500 focus:border-mesh-color-primary-1200"
-            id="trade-link"
-            required
+            labelClassName="w-10/12 text-white"
+            register={register('trade-link')}
+            errors={errors['trade-link']}
           />
           <Common.Button
             tabIndex={-1}
@@ -91,14 +103,12 @@ export function ModalConnectInventoryForm() {
       </div>
 
       <Form.Input.Email
-        state={formEmail}
-        setState={setFormEmail}
-        placeholder="email@example.com"
-        autoComplete="off"
-        label="Seu email de contato"
-        labelClassName="w-5/12 text-lg text-mesh-color-neutral-200"
-        inputClassName="bg-mesh-color-neutral-500 py-2 px-4 rounded-md text-white border border-mesh-color-neutral-500 focus:border-mesh-color-primary-1200"
-        required
+        name="email"
+        label="Email de Contato"
+        placeholder="email@exemplo.com"
+        labelClassName="w-8/12 text-white"
+        register={register('email')}
+        errors={errors.email}
       />
 
       <div className="mt-4 flex flex-col gap-2">
