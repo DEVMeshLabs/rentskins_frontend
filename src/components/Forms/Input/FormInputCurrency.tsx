@@ -1,81 +1,68 @@
-import { Dispatch, InputHTMLAttributes, SetStateAction } from 'react'
+import { InputHTMLAttributes } from 'react'
+import { Controller } from 'react-hook-form'
+import { NumericFormat } from 'react-number-format'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   showCurrencySign?: boolean
   enableDefault?: boolean
   currencySign?: string
   label?: string
-  labelSide?: 'up' | 'down'
   labelClassName?: string
   currencyClassname?: string
   limit?: number
   inputClassName?: string
-  state: string | number
-  setState: Dispatch<SetStateAction<string>> | Dispatch<SetStateAction<number>>
+  placeHolder?: string | number
+
+  register: any
+  control: any
+  errors?: any
+  errorsClassname?: string
 }
 
 export function FormInputCurrency({
+  name,
   showCurrencySign = true,
   enableDefault = true,
   currencySign = 'R$',
   label,
-  labelSide = 'up',
   labelClassName = 'text-white',
   currencyClassname,
+  placeHolder,
   limit = 0,
   inputClassName,
-  state,
-  setState,
+  register,
+  control,
+  errors,
+  errorsClassname,
   ...rest
 }: IProps) {
-  const formatInput = (value: string | number): string => {
-    let numbers = String(value).replace(/[^0-9.,]/g, '')
-
-    numbers = numbers.replace('.', ',')
-
-    if (limit > 0) {
-      return numbers.slice(0, limit)
-    }
-
-    const sides = numbers.split(',')
-
-    if (sides.length > 1) {
-      const decimal = sides[1].slice(0, 2)
-      return `${sides[0]},${decimal}`
-    } else {
-      return numbers
-    }
-  }
-
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label && labelSide === 'up' && label}
-      <div className="flex items-center">
-        {showCurrencySign && (
-          <text
-            className={`${currencyClassname} absolute ml-4 select-none font-semibold text-mesh-color-neutral-400`}
-          >
-            {currencySign}
-          </text>
+      <text className="-mb-4"> {label} </text>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { ref, ...rest } }: any) => (
+          <NumericFormat
+            thousandSeparator="."
+            decimalSeparator=","
+            autoComplete="off"
+            prefix="R$ "
+            decimalScale={2}
+            placeholder={placeHolder}
+            getInputRef={ref}
+            className={`${inputClassName || options.input.className}`}
+            {...rest}
+          />
         )}
-        <input
-          type="text"
-          step="any"
-          onChange={({ target: { value } }) =>
-            setState(
-              formatInput(value) as SetStateAction<string> &
-                SetStateAction<number>,
-            )
-          }
-          value={state}
-          className={`${inputClassName} pl-12 ${
-            enableDefault && options.input.className
-          }`}
-          {...rest}
-        />
-      </div>
-      {label && labelSide === 'down' && label}
+      />
+      <text
+        className={errorsClassname || 'absolute mt-[85px] text-sm text-red-500'}
+      >
+        {errors?.message}
+      </text>
     </label>
   )
 }

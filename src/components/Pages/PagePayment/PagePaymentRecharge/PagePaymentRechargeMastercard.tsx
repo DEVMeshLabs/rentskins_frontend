@@ -1,10 +1,12 @@
 'use client'
 import Form from '@/components/Forms'
 import usePaymentStore from '@/stores/payment.store'
-import React, { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './schemas/mastercard.schema'
 
 interface IProps {
-  handleFormSubmit: React.FormEventHandler<HTMLFormElement>
+  handleFormSubmit: any
   handleFormCancel: MouseEventHandler
 }
 
@@ -12,77 +14,85 @@ export function PagePaymentRechargeMastercard({
   handleFormSubmit,
   handleFormCancel,
 }: IProps) {
-  const [email, setEmail] = useState('')
-  const [cardNumber, setCardNumber] = useState('')
-  const [cardValidity, setCardValidity] = useState('')
-  const [cardCVC, setCardCVC] = useState('')
-  const [cardOwner, setCardOwner] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      'card-cvc': undefined,
+      'card-number': undefined,
+      'card-owner': undefined,
+      'card-validity': undefined,
+      email: undefined,
+    },
+  })
+
+  const enableButton =
+    dirtyFields['card-cvc'] &&
+    dirtyFields.email &&
+    dirtyFields['card-number'] &&
+    dirtyFields['card-owner'] &&
+    dirtyFields['card-validity']
 
   const { paymentAdd } = usePaymentStore()
-
-  const validateForm = () => {
-    return !(
-      email.length > 5 &&
-      email.includes('@') &&
-      cardNumber.length >= 19 &&
-      cardValidity.length > 4 &&
-      cardCVC.length >= 3 &&
-      cardOwner.length >= 5
-    )
-  }
 
   return (
     <Form.Root
       className="my-8 flex w-full flex-col gap-4"
-      onSubmit={handleFormSubmit}
+      onSubmit={handleSubmit(handleFormSubmit)}
     >
       <Form.Input.Text
+        name="email"
         label="Email"
-        placeholder="email@exemplo.com"
-        state={email}
-        setState={setEmail}
-        required
+        placeholder="exemplo@email.com"
+        register={register('email')}
+        errors={errors.email}
       />
 
-      <div>
+      <div className="mb-2">
         <Form.Input.Card
+          name="card-number"
           label="Informações do Cartão"
           placeholder="0000 0000 0000 0000"
-          state={cardNumber}
-          setState={setCardNumber}
-          required
+          register={register('card-number')}
         />
 
-        <div className="grid w-full grid-cols-2 items-center">
+        <div className="-mt-[1.1rem] grid w-full grid-cols-2 items-center">
           <Form.Input.MonthYear
-            placeholder="MM / YY"
-            state={cardValidity}
-            setState={setCardValidity}
-            required
+            name="card-validity"
+            placeholder="MM/YY"
+            register={register('card-validity')}
           />
           <Form.Input.Number
+            name="card-cvc"
             placeholder="CVC"
-            state={cardCVC}
-            setState={setCardCVC}
-            limit={3}
-            required
+            mask="999"
+            register={register('card-cvc')}
           />
+        </div>
+
+        <div className="absolute -mt-3 text-sm text-red-500">
+          {errors['card-number']?.message ||
+            errors['card-validity']?.message ||
+            errors['card-cvc']?.message}
         </div>
       </div>
 
       <Form.Input.Text
+        name="card-owner"
         label="Nome do Portador"
-        placeholder="Nome"
-        state={cardOwner}
-        setState={setCardOwner}
-        required
+        placeholder="Nome Completo"
+        register={register('card-owner')}
+        errors={errors['card-owner']}
       />
 
       <div className="mt-4">
         <div className="flex justify-between text-xl font-semibold">
           <text>Total:</text>
           <span className="text-mesh-color-primary-800">
-            {paymentAdd.value?.toLocaleString('pt-br', {
+            {Number(paymentAdd.value)?.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
@@ -91,11 +101,7 @@ export function PagePaymentRechargeMastercard({
         </div>
 
         <div className="flex flex-col gap-4 text-xl font-semibold">
-          <Form.Button
-            type="submit"
-            buttonStyle="full"
-            disabled={validateForm()}
-          >
+          <Form.Button buttonStyle="full" disabled={!enableButton}>
             Pagar
           </Form.Button>
           <Form.Button

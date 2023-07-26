@@ -1,6 +1,8 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './info.schema'
 
 type Props = {
   name: string
@@ -15,6 +17,23 @@ export function ModalSkinShowcaseInfo({
   statusFloatText,
   weapon,
 }: Props) {
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      value: undefined,
+      warning: undefined,
+    },
+  })
+
+  const onSubmit = (data: any) => {
+    console.log(data)
+  }
+
   return (
     <div className="flex h-full w-[40%] flex-col">
       <div>
@@ -26,7 +45,10 @@ export function ModalSkinShowcaseInfo({
         </p>
       </div>
 
-      <div className="mt-4 h-full w-full rounded-lg bg-mesh-color-others-black p-4">
+      <Form.Root
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-4 h-full w-full rounded-lg bg-mesh-color-others-black p-4"
+      >
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
@@ -43,14 +65,14 @@ export function ModalSkinShowcaseInfo({
         {/* ---------INPUT -------------  */}
         <div className="mt-5 flex w-full gap-4">
           <div className="w-full space-y-2">
-            <Common.Title bold={500} color="white">
-              Preço de venda
-            </Common.Title>
-            <Form.Input.Text
-              state={''}
-              setState={() => {}}
+            <Form.Input.Currency
+              name="value"
+              control={control}
+              label="Preço de Venda"
               placeholder="R$ 2.000,00"
               className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
+              register={register('value')}
+              errors={errors.value}
             />
           </div>
 
@@ -58,30 +80,38 @@ export function ModalSkinShowcaseInfo({
             <Common.Title bold={500} color="white">
               Você irá receber
             </Common.Title>
-            <Form.Input.Text
-              state={''}
-              setState={() => {}}
-              placeholder="R$ 32,21"
-              className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
-            />
+            {
+              //  <Form.Input.Text
+              //    state={''}
+              //    setState={() => {}}
+              //    placeholder="R$ 32,21"
+              //    className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
+              //  />
+            }
           </div>
         </div>
         {/* ---------INPUT FIM -------------  */}
 
         <div className="space-y-6">
-          <Common.Button className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400">
+          <Form.Button
+            buttonStyle={undefined}
+            className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
+          >
             <Common.Title bold={600} className="rounded-xl">
               Anunciar
             </Common.Title>
-          </Common.Button>
+          </Form.Button>
           <Form.Input.Checkbox
+            name="warning"
             label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
             realizado no prazo final da transação."
+            register={register('warning')}
+            errors={errors.warning}
           />
         </div>
-      </div>
+      </Form.Root>
     </div>
   )
 }

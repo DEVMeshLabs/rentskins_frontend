@@ -17,7 +17,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   errorsClassname?: string
 }
 
-export function FormInputCard({
+export function FormInputString({
   label,
   name,
   labelClassName,
@@ -35,7 +35,10 @@ export function FormInputCard({
     <label className={`${labelClassName} flex flex-col text-lg`}>
       <text className="-mb-4"> {label} </text>
       <ReactInputMask
-        mask={mask || '9999 9999 9999 9999'}
+        mask={
+          mask ||
+          'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+        }
         alwaysShowMask={alwaysShowMask}
         maskChar={maskChar}
         maskPlaceholder={maskPlaceholder}

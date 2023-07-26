@@ -5,10 +5,12 @@ import Form from '@/components/Forms'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import usePaymentStore from '@/stores/payment.store'
 import Image from 'next/image'
-import React, { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './schemas/pix.schema'
 
 interface IProps {
-  handleFormSubmit: React.FormEventHandler<HTMLFormElement>
+  handleFormSubmit: any
   handleFormCancel: MouseEventHandler
 }
 
@@ -18,26 +20,29 @@ export function PagePaymentRechargePix({
 }: IProps) {
   const [isLoading] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-  const [name, setName] = useState('')
-  const [identification, setIdentification] = useState('')
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      name: undefined,
+      cpf: undefined,
+    },
+  })
+
+  const onSubmit = (data: any) => {
+    setPageIndex(1)
+  }
+
+  const enableButton = dirtyFields.name && dirtyFields.cpf
 
   const { paymentAdd } = usePaymentStore()
 
   const textAreaValue =
     '00020101021226860014br.gov.bcb.pix2564qrpix.bradesco.com.br/qr/v2/46477fb7-d638-46d4-9f4d-f154c3ab5d7b5204000053039865406700.735802BR5925PAGBRASIL PAGAMENTOS LTDA6012PORTO ALEGRE62090505131196304CA18'
-
-  const validateForm = () => {
-    return !(name.length >= 5 && identification.length === 14)
-  }
-
-  const handlePageIndex = (index: number, resetInputs: boolean) => {
-    setPageIndex(index)
-
-    if (resetInputs) {
-      setName('')
-      setIdentification('')
-    }
-  }
 
   const renderStepTwo = (
     <LayoutLoading
@@ -48,7 +53,7 @@ export function PagePaymentRechargePix({
       <Common.Title size="lg" bold={600} className="mt-8">
         Digitalize o código QR usando o aplicativo da carteira/banco.
       </Common.Title>
-      <div className="mt-4">
+      <Form.Root onSubmit={handleFormSubmit} className="mt-4">
         <Image src={QRCodeExample} alt="QRCode" width={150} />
         <div className="mt-8 h-1/3">
           <Common.Title bold={600} size="lg">
@@ -68,7 +73,7 @@ export function PagePaymentRechargePix({
           <text>Total:</text>
 
           <span className="text-mesh-color-primary-800">
-            {paymentAdd.value?.toLocaleString('pt-br', {
+            {Number(paymentAdd.value)?.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
@@ -77,51 +82,47 @@ export function PagePaymentRechargePix({
         </div>
 
         <div className="flex flex-col gap-4 text-xl font-semibold">
-          <Common.Button
-            type="submit"
-            className="h-12 w-full border-transparent"
-            color="green"
-          >
+          <Form.Button buttonStyle="full" disabled={!enableButton}>
             Pagar
-          </Common.Button>
-          <Common.Button
-            className="w-full border-2 py-2"
-            onClick={() => handlePageIndex(0, true)}
-            color="invisible"
+          </Form.Button>
+          <Form.Button
+            type="button"
+            buttonStyle="opaque"
+            onClick={handleFormCancel}
           >
-            Voltar
-          </Common.Button>
+            Cancelar
+          </Form.Button>
         </div>
-      </div>
+      </Form.Root>
     </LayoutLoading>
   )
 
   const renderStepOne = (
     <Form.Root
       className="my-8 flex w-full flex-col gap-4"
-      onSubmit={handleFormSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Form.Input.Text
+        name="name"
         label="Nome"
         placeholder="Nome Completo"
-        setState={setName}
-        state={name}
-        required
+        register={register('name')}
+        errors={errors.name}
       />
 
       <Form.Input.CPF
+        name="cpf"
         label="CPF"
         placeholder="000.000.000-00"
-        setState={setIdentification}
-        state={identification}
-        required
+        register={register('cpf')}
+        errors={errors.cpf}
       />
 
       <div className="mt-4">
         <div className="flex justify-between text-xl font-semibold">
           <text>Total:</text>
           <span className="text-mesh-color-primary-800">
-            {paymentAdd.value?.toLocaleString('pt-br', {
+            {Number(paymentAdd.value)?.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
@@ -133,10 +134,9 @@ export function PagePaymentRechargePix({
           <Form.Button
             type="submit"
             buttonStyle="full"
-            disabled={validateForm()}
-            onClick={() => handlePageIndex(1, false)}
+            disabled={!enableButton}
           >
-            Pagar
+            Continuar
           </Form.Button>
           <Form.Button
             type="button"

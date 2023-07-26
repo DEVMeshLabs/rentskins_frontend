@@ -2,10 +2,28 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './schemas/information.schema'
 
 export function PageSettingsInformation() {
-  const [exchangeUrl, setExchangeUrl] = useState('')
+  const {
+    handleSubmit,
+    setValue,
+    watch,
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      'trade-link': undefined,
+    },
+  })
+
+  const onSubmit = (data: any) => {
+    console.log(data)
+  }
+
+  const watchTradelink = watch('trade-link')
 
   return (
     <div className="flex w-2/3 flex-col gap-8">
@@ -22,44 +40,52 @@ export function PageSettingsInformation() {
           </span>
         </div>
 
-        <div className="mt-8 flex flex-col gap-2">
-          <Common.Title size={'lg'} color="white">
+        <Form.Root
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-8 flex flex-col gap-2"
+        >
+          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
             URL de Troca
           </Common.Title>
           <div className="flex gap-4">
             <div className="flex w-full items-center">
               <Form.Input.Text
-                state={exchangeUrl}
-                setState={setExchangeUrl}
+                name="trade-link"
+                register={register('trade-link')}
+                errors={errors['trade-link']}
                 placeholder="https://steamcommunity.com/tradeoffer/new/?partner=240416830&token=vzAomQ5n"
                 labelClassName="w-full"
                 className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3
                 transition-all ${
-                  exchangeUrl !== '' ? 'pr-14' : 'pr-3'
+                  watchTradelink !== '' ? 'pr-14' : 'pr-3'
                 } text-white
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-100 focus:ring-2`}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              {exchangeUrl !== '' && (
+              {watchTradelink !== '' && (
                 <Common.Button
-                  className={`relative -ml-10 border-none`}
-                  onClick={() => setExchangeUrl('')}
+                  className={`relative -ml-10 -mt-3 border-none`}
+                  onClick={() => setValue('trade-link', '')}
                 >
                   <IconClose />
                 </Common.Button>
               )}
             </div>
-            <div className="flex w-3/12 items-center justify-evenly">
+            <div className="-mt-3 flex w-3/12 items-center justify-evenly">
               <Common.Button className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100">
                 Obter URL
               </Common.Button>
-              <Common.Button className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100">
+              <Form.Button
+                buttonStyle={undefined}
+                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+              >
                 Aplicar
-              </Common.Button>
+              </Form.Button>
             </div>
           </div>
-        </div>
+        </Form.Root>
 
-        <div className="my-6 h-[1px] w-full bg-mesh-color-neutral-200" />
+        <div className="mb-6 mt-8 h-[1px] w-full bg-mesh-color-neutral-200" />
 
         <div className="flex flex-col">
           <Common.Title size={'lg'} color="white">

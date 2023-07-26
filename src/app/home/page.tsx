@@ -26,6 +26,7 @@ const AllSkins = dynamic<IAllSkinsProps>(
 
 export default function Home() {
   const { user } = useUserStore()
+
   const { data, isLoading } = useQuery({
     queryKey: ['allSkins'],
     queryFn: () => SkinService.findByAll(),
