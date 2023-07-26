@@ -11,7 +11,7 @@ export function PageInventoryFilters() {
   const { watch, register } = useForm({
     resolver: formResolver,
     defaultValues: {
-      'type-filter': [],
+      'type-filter': [''],
     },
   })
   const { inventoryTypeFilter, setInventoryTypeFilter } = useFilterStore()
@@ -21,22 +21,17 @@ export function PageInventoryFilters() {
 
   useEffect(() => {
     if (watchTypeFilter) {
-      const values = String(watchTypeFilter).split(',')
+      let values = String(watchTypeFilter).split(',')
 
-      if (!inventoryTypeFilter.includes(values[0])) {
-        setInventoryTypeFilter([...inventoryTypeFilter, ...values])
-      } else {
-        if (inventoryTypeFilter.includes(values[0])) {
-          setInventoryTypeFilter(
-            inventoryTypeFilter.filter(
-              (filter) =>
-                !filter.includes(values[0]) && !filter.includes(values[1]),
-            ),
-          )
-        }
+      if (values[0] === '') {
+        values = []
       }
+
+      setInventoryTypeFilter(values)
     }
   }, [watchTypeFilter])
+
+  useEffect(() => console.log(inventoryTypeFilter), [inventoryTypeFilter])
 
   return (
     <div>

@@ -86,9 +86,9 @@ export function CardSkinInventory({ steamid }: Props) {
         {isLoading || isRefetching ? (
           <CardSkin.Skeleton quantity={itemsPerPage} />
         ) : data?.data &&
-          data.data.inventory &&
-          data.data.inventory.length > 0 ? (
-          data.data.inventory.map(
+          data.data.inventory.inventory &&
+          data.data.inventory.inventory.length > 0 ? (
+          data.data.inventory.inventory.map(
             (
               {
                 icon_url,
