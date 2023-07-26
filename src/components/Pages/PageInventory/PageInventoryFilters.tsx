@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './schemas/filters.schema'
 
-export function PageInventoryFilters() {
+export default function PageInventoryFilters() {
   const { watch, register } = useForm({
     resolver: formResolver,
     defaultValues: {
