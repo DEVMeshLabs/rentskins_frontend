@@ -76,7 +76,7 @@ export function PageSettingsInformation() {
                 transition-all ${
                   watchTradelink !== '' ? 'pr-14' : 'pr-3'
                 } text-white
-                ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-100 focus:ring-2`}
+                ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
               {watchTradelink !== '' && (
