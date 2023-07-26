@@ -1,21 +1,55 @@
 'use client'
 import Common from '@/components/Common'
-import { PageNotificationHistoric } from '@/components/Pages/PageNotification/PageNotificationHistoric'
-import { PageNotificationTransaction } from '@/components/Pages/PageNotification/PageNotificationTransaction'
-import { historicMock } from '@/Mock/notification.historic.mock'
+import { INotificationHistoricProps } from '@/components/Pages/PageNotification/PageNotificationHistoric'
+import { INotificationTransactionProps } from '@/components/Pages/PageNotification/PageNotificationTransaction'
 import { transactionsMock } from '@/Mock/notification.transaction.mock'
+import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
+import useUserStore from '@/stores/user.store'
 import URLQuery from '@/tools/urlquery.tool'
+import { useQuery } from '@tanstack/react-query'
 import Aos from 'aos'
+import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect } from 'react'
+const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
+  import('@/components/Pages/PageNotification/PageNotificationHistoric').then(
+    (module) => module.default,
+  ),
+)
+const PageNotificationTransaction = dynamic<INotificationTransactionProps>(() =>
+  import(
+    '@/components/Pages/PageNotification/PageNotificationTransaction'
+  ).then((module) => module.default),
+)
 
 export default function NotificationPage() {
   const { notificationFilter } = useFilterStore()
-  const [isLoading] = useState(false)
 
   const searchParams = useSearchParams()
   const router = useRouter()
+
+  const {
+    user: { steamid },
+  } = useUserStore()
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['allNotificationsUser', steamid],
+    queryFn: async () => {
+      const allNotifications = NotificationServices.getAllNotifsByUser(
+        steamid,
+        notificationFilter,
+      )
+      if ((await allNotifications).data.length > 0) {
+        NotificationServices.readingAllNotifications(steamid)
+      }
+      return allNotifications
+    },
+  })
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   useEffect(() => {
     Aos.init({
@@ -93,7 +127,7 @@ export default function NotificationPage() {
         )}
       </div>
       {searchParams.get('type') === 'historic' && (
-        <PageNotificationHistoric data={historicMock} loading={isLoading} />
+        <PageNotificationHistoric data={data?.data} loading={isLoading} />
       )}
       {searchParams.get('type') === 'transactions' && (
         <PageNotificationTransaction

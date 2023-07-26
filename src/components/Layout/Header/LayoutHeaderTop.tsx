@@ -6,16 +6,19 @@ import { IconCruz } from '@/components/Icons/IconCruz'
 import { IconMira } from '@/components/Icons/IconMira'
 import { IconNotifications } from '@/components/Icons/IconNotifications'
 import { IUser } from '@/interfaces/user.interface'
+import NotificationServices from '@/services/notifications.service'
 import SteamService from '@/services/steam.service'
 import WalletService from '@/services/wallet.service'
+import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
 import LocalStorage from '@/tools/localstorage.tool'
 import URLQuery from '@/tools/urlquery.tool'
+import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import logo from '../../../assets/logo.svg'
@@ -24,6 +27,8 @@ import { formResolver } from './form.schema'
 
 export function LayoutHeaderTop() {
   const router = useRouter()
+  const pathname = usePathname()
+  console.log(pathname)
   const refDropdown = useRef(null)
   const { user, setUser, setLogout, setWallet, wallet } = useUserStore()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
@@ -39,6 +44,24 @@ export function LayoutHeaderTop() {
     },
   })
   const searchWatch = watch('search')
+  const [hasNotifications, setHasNotifications] = useState(false)
+
+  const { notificationFilter } = useFilterStore()
+
+  const { data, refetch } = useQuery({
+    queryKey: ['thereIsNotifications', user.steamid],
+    queryFn: async () =>
+      NotificationServices.getAllNotifsByUser(user.steamid, notificationFilter),
+  })
+
+  useEffect(() => {
+    // const interval = setInterval(() => {
+    refetch() // Refaz a requisição a cada 1 segundo
+    // }, 10 * 60 * 1000)
+    setHasNotifications(thereIsNotification(data?.data))
+
+    // return () => clearInterval(interval)
+  }, [pathname])
 
   useEffect(() => {
     const token = LocalStorage.get('token')
@@ -218,8 +241,12 @@ export function LayoutHeaderTop() {
               className="h-11 w-11 rounded-xl border-none bg-mesh-color-others-eerie-black"
               onClick={() => router.push('/usuario/notificacoes?type=historic')}
             >
-              <div className="absolute top-8 ml-4 h-2 w-2 rounded-full bg-mesh-color-primary-1200" />
-              <div className="absolute top-8 ml-4 h-2 w-2 animate-ping rounded-full bg-mesh-color-primary-1200" />
+              {hasNotifications && (
+                <>
+                  <div className="absolute top-8 ml-4 h-2 w-2 rounded-full bg-mesh-color-primary-1200" />
+                  <div className="absolute top-8 ml-4 h-2 w-2 animate-ping rounded-full bg-mesh-color-primary-1200" />
+                </>
+              )}
               <IconNotifications />
             </Common.Button>
 

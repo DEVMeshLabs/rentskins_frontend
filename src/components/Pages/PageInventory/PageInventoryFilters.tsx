@@ -14,7 +14,7 @@ export function PageInventoryFilters() {
       'type-filter': [''],
     },
   })
-  const { inventoryTypeFilter, setInventoryTypeFilter } = useFilterStore()
+  const { setInventoryTypeFilter } = useFilterStore()
   const { isInventoryFetching } = useComponentStore()
 
   const watchTypeFilter = watch('type-filter')
@@ -30,8 +30,6 @@ export function PageInventoryFilters() {
       setInventoryTypeFilter(values)
     }
   }, [watchTypeFilter])
-
-  useEffect(() => console.log(inventoryTypeFilter), [inventoryTypeFilter])
 
   return (
     <div>

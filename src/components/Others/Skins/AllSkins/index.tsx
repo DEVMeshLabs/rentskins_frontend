@@ -11,7 +11,7 @@ import Link from 'next/link'
 // import { OtherCard } from '../../OtherCard/OtherCard'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
-interface IProps {
+export interface IAllSkinsProps {
   skinsCategories: ISkins[] | undefined
   center?: boolean
   itemsPerPage: number
@@ -21,7 +21,7 @@ export default function AllSkins({
   skinsCategories,
   center = false,
   itemsPerPage = 10,
-}: IProps) {
+}: IAllSkinsProps) {
   // const { setPageSelectorIndex, pageSelectorIndex } = useComponentStore()
 
   // const allSkins = skinsCategories || skins
@@ -63,7 +63,7 @@ export default function AllSkins({
               <>
                 <Link
                   key={`${id}-${index}`}
-                  href={`/details/${id}`}
+                  href={`/detalhes/${id}`}
                   className="flex w-[17.5rem]"
                 >
                   <OtherCard
