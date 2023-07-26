@@ -10,6 +10,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   register: any
   errors?: any
   errorsClassname?: string
+  complete?: 'on' | 'off'
 }
 
 export function FormInputText({
@@ -19,6 +20,7 @@ export function FormInputText({
   inputClassName,
   register,
   errors,
+  complete = 'off',
   errorsClassname,
   ...rest
 }: IProps) {
@@ -30,6 +32,7 @@ export function FormInputText({
         inputMode="text"
         id={name}
         name={name}
+        autoComplete={complete}
         className={`${inputClassName || options.input.className}`}
         {...register}
         {...rest}
