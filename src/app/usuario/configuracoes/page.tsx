@@ -62,7 +62,7 @@ export default function Settings() {
   }
 
   return (
-    <main className="flex h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pt-8">
+    <main className="flex min-h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pb-16 pt-8">
       <div className="flex h-min w-max flex-col items-end gap-2">
         <div className="flex flex-col items-start gap-6">
           <Common.Title bold={900} size="2xl" color="white">
