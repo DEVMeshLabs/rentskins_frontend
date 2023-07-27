@@ -54,7 +54,7 @@ export function ModalSkinShowcaseInfo({
     setDisabled(!(skin_price.length > 0 && checked))
   }, [skin_price, checked])
 
-  const handleAddSkinsToAdvertise = () => {
+  const handleAddSkinsToAdvertise = async () => {
     if (skin_price.length > 0 && checked) {
       setSkinsToAdvertise({
         id,

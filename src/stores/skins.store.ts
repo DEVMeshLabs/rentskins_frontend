@@ -35,6 +35,10 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
       return { skinsToAdvertise: newChangedSkinsToAdvertise }
     })
   },
+
+  cleanSkinsToAdvertise: () => {
+    set(() => ({ skinsToAdvertise: [] }))
+  },
 }))
 
 export default useSkinsStore

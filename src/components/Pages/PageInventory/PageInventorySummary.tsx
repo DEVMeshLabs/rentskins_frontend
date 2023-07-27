@@ -1,13 +1,35 @@
 /* eslint-disable camelcase */
 'use client'
 import Common from '@/components/Common'
+import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { ColorRing } from 'react-loader-spinner'
 
 export default function PageInventorySummary() {
-  const { skinsToAdvertise, changeSkinToAdvertise } = useSkinsStore()
+  const { skinsToAdvertise, changeSkinToAdvertise, cleanSkinsToAdvertise } =
+    useSkinsStore()
   const [subtotal, setSubtotal] = useState(0)
   const [disabled, setDisabled] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { data, refetch } = useQuery({
+    queryKey: ['createdSkins'],
+    queryFn: async () => {
+      setIsLoading(true)
+      cleanSkinsToAdvertise()
+      const announcedSkins = await SkinService.postAllSkinsToAdvertise(
+        skinsToAdvertise,
+      )
+      setIsLoading(false)
+      return announcedSkins
+    },
+    enabled: false,
+  })
+
+  useEffect(() => {
+    console.log(data?.status)
+  }, [data])
 
   useEffect(() => {
     const subtotal = skinsToAdvertise.reduce(
@@ -51,8 +73,20 @@ export default function PageInventorySummary() {
           <Common.Title>Total</Common.Title>
           <span>R$ {(subtotal - 0.05 * subtotal).toFixed(2)}</span>
         </div>
-        <Common.Button disabled={disabled} className="h-[53px]">
-          Vender
+        <Common.Button
+          onClick={() => refetch()}
+          disabled={disabled}
+          className="h-[53px]"
+        >
+          {isLoading ? (
+            <ColorRing
+              width={50}
+              height={50}
+              colors={['#A6CF2B', '#A6CF2B', '#A6CF2B', '#A6CF2B', '#A6CF2B']}
+            />
+          ) : (
+            <Common.Title>Vender</Common.Title>
+          )}
         </Common.Button>
       </div>
     </div>

@@ -5,4 +5,5 @@ export interface ISkinsStore {
   setSkinsToAdvertise: (skins: ISkinsToAdvertise) => void
   removeSkinToAdvertise: (skinId: string) => void
   changeSkinToAdvertise: (skinId: string, price: string) => void
+  cleanSkinsToAdvertise: () => void
 }
