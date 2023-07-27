@@ -1,15 +1,7 @@
 import { IUser } from '@/interfaces/user.interface'
 
 export interface IWalletUser {
-  data?: {
-    id?: string
-    owner_name?: string
-    owner_id?: string
-    value?: string
-    createdAt?: string
-    updatedAt?: string | null
-    deletedAt?: string | null
-  }
+  value: number | undefined | null
 }
 
 export interface IStates {
@@ -17,7 +9,7 @@ export interface IStates {
   setUser: (user: IUser) => void
 
   wallet: IWalletUser
-  setWallet: (wallet: IWalletUser) => void
+  setWallet: (wallet: string | number) => void
 
   logout: boolean
   setLogout: (logout: boolean) => void

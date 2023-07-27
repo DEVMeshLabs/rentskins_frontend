@@ -3,15 +3,27 @@ import Form from '@/components/Forms'
 import ConfigService from '@/services/config.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './form.schema'
 
 export function ModalConnectInventoryForm() {
-  const [formURL, setFormURL] = useState('')
-  const [formEmail, setFormEmail] = useState('')
-  const [formPromotions, setFormPromotions] = useState(false)
-  const [formTerms, setFormTerms] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      'accept-terms': undefined,
+      'receive-notifications': false,
+      'trade-link': undefined,
+      email: undefined,
+    },
+  })
 
   const [formSubmit, setFormSubmit] = useState(false)
+  const [formData, setFormData] = useState<any>(undefined)
 
   const {
     user: { steamid, username },
@@ -24,11 +36,11 @@ export function ModalConnectInventoryForm() {
       const params = {
         owner_id: steamid,
         owner_name: username,
-        owner_email: formEmail,
+        owner_email: formData.email,
         steam_guard: false,
         url_sell: sellLink,
-        url_trade: formURL,
-        agreed_with_emails: formPromotions,
+        url_trade: formData['trade-link'],
+        agreed_with_emails: formData[''],
         agreed_with_terms: true,
       }
       ConfigService.createConfig(params)
@@ -37,17 +49,7 @@ export function ModalConnectInventoryForm() {
     enabled: !!steamid && !!formSubmit,
   })
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setFormSubmit(true)
-  }
-
-  const handleButtonDisabled = !(
-    formEmail.includes('@') &&
-    // formURL.includes('https://steamcommunity.com') &&
-    formURL.includes('') &&
-    formTerms
-  )
+  const enableButton = dirtyFields.email && dirtyFields['trade-link']
 
   const handleButtonGetTradeLink = () => {
     if (steamid) {
@@ -57,28 +59,25 @@ export function ModalConnectInventoryForm() {
     }
   }
 
+  const onSubmit = (data: any) => {
+    setFormData(data)
+    setFormSubmit(true)
+  }
+
   return (
     <Form.Root
-      onSubmit={handleFormSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="mt-6 flex h-full w-11/12 flex-col items-start justify-between gap-4"
     >
       <div className="w-full">
-        <label
-          className="w-full text-lg text-mesh-color-neutral-200"
-          htmlFor="trade-link"
-        >
-          <text> Insira URL Trade Link do seu Perfil </text>
-        </label>
         <div className="flex w-full items-center justify-between">
           <Form.Input.Text
-            state={formURL}
-            setState={setFormURL}
+            label="Insira URL Trade Link do seu Perfil"
+            name="trade-link"
             placeholder="https://steamcommunity.com/tradeoffer/new/?partner=240416830&token=vzAomQ5n"
-            autoComplete="off"
-            labelClassName="w-10/12"
-            inputClassName="bg-mesh-color-neutral-500 py-2 px-4 rounded-md text-white border border-mesh-color-neutral-500 focus:border-mesh-color-primary-1200"
-            id="trade-link"
-            required
+            labelClassName="w-10/12 text-white"
+            register={register('trade-link')}
+            errors={errors['trade-link']}
           />
           <Common.Button
             tabIndex={-1}
@@ -90,35 +89,33 @@ export function ModalConnectInventoryForm() {
         </div>
       </div>
 
-      <Form.Input.Email
-        state={formEmail}
-        setState={setFormEmail}
-        placeholder="email@example.com"
-        autoComplete="off"
-        label="Seu email de contato"
-        labelClassName="w-5/12 text-lg text-mesh-color-neutral-200"
-        inputClassName="bg-mesh-color-neutral-500 py-2 px-4 rounded-md text-white border border-mesh-color-neutral-500 focus:border-mesh-color-primary-1200"
-        required
+      <Form.Input.Text
+        name="email"
+        label="Email de Contato"
+        placeholder="exemplo@email.com"
+        labelClassName="w-8/12 text-white"
+        register={register('email')}
+        errors={errors.email}
       />
 
       <div className="mt-4 flex flex-col gap-2">
         <Form.Input.Checkbox
-          checked={formPromotions}
-          onClick={() => setFormPromotions((state) => !state)}
+          name="receive-notifications"
           label="Deseja receber promoções em seu email?"
           checkClassname="ml-[0.2rem]"
           labelClassName="text-sm text-mesh-color-neutral-200"
           inputClassName="focus:border-mesh-color-primary-800 bg-transparent border-2 border-mesh-color-neutral-500 checked:border-mesh-color-primary-1200 h-6 w-6 rounded-md transition-all"
+          register={register('receive-notifications')}
         />
 
         <Form.Input.Checkbox
-          checked={formTerms}
-          onClick={() => setFormTerms((state) => !state)}
+          name="accept-terms"
           label={
-            <text>
+            <span>
               Eu concordo com os{' '}
               <a
                 href=""
+                tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
@@ -127,6 +124,7 @@ export function ModalConnectInventoryForm() {
               ,{' '}
               <a
                 href=""
+                tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
@@ -135,28 +133,31 @@ export function ModalConnectInventoryForm() {
               e{' '}
               <a
                 href=""
+                tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
                 Política de Reembolso
               </a>{' '}
               da RentSkins.
-            </text>
+            </span>
           }
           checkClassname="ml-[0.2rem]"
           labelClassName="text-sm text-mesh-color-neutral-200"
           inputClassName="focus:border-mesh-color-primary-800 bg-transparent border-2 border-mesh-color-neutral-500 checked:border-mesh-color-primary-1200 h-6 w-6 rounded-md transition-all"
+          errorsClassname="text-sm text-red-500 absolute"
+          register={register('accept-terms')}
+          errors={errors['accept-terms']}
         />
       </div>
 
-      <Common.Button
-        disabled={handleButtonDisabled}
-        type="submit"
+      <Form.Button
+        buttonStyle={undefined}
+        disabled={!enableButton}
         className="mt-8 border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
-        required
       >
         Concluir
-      </Common.Button>
+      </Form.Button>
     </Form.Root>
   )
 }

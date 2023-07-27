@@ -11,14 +11,16 @@ import { PagePaymentWithdrawLocation } from '@/components/Pages/PagePayment/Page
 import { PagePaymentWithdrawPersonal } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawPersonal'
 import { PagePaymentWithdrawTransaction } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawTransaction'
 import useComponentStore from '@/stores/components.store'
+import usePaymentStore from '@/stores/payment.store'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function PaymentWithdrawPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const { paymentWithdrawIndex, setPaymentWithdrawIndex } = useComponentStore()
+  const { paymentWithdrawInfo } = usePaymentStore()
 
   useEffect(() => setPaymentWithdrawIndex(0), [setPaymentWithdrawIndex])
 
@@ -26,13 +28,12 @@ export default function PaymentWithdrawPage() {
     router.push('/')
   }
 
-  const handleOnNext = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
+  const handleOnNext = () => {
     if (paymentWithdrawIndex !== 3) {
       setPaymentWithdrawIndex((paymentWithdrawIndex + 1) as 0 | 1 | 2 | 3)
     } else {
       setIsLoading(true)
+      console.log(paymentWithdrawInfo)
       router.push('/pagamento/saque/sucesso')
     }
   }

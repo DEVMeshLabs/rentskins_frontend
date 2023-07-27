@@ -28,8 +28,8 @@ export function PageSettingsSecurity() {
 
           <span className="text-base leading-5 text-mesh-color-neutral-200">
             O Steam Guard é um nível extra de segurança para a sua conta Steam.
-            Ele evita que pessoal mal intencionadas roubem seus itens e é um
-            requisito para que você possa trocar no SkinsMonkey.
+            Ele evita que pessoas mal intencionadas roubem seus itens, e é um
+            requisito para que você possa trocar no RentSkins.
           </span>
         </div>
       </div>
