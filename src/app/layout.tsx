@@ -4,6 +4,7 @@ import { queryClient } from '@/services/queryClient'
 import { QueryClientProvider } from '@tanstack/react-query'
 import 'aos/dist/aos.css'
 import { Inter } from 'next/font/google'
+import { useEffect } from 'react'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -14,7 +15,11 @@ export default function RootLayout({
   // eslint-disable-next-line no-undef
   children: React.ReactNode
 }) {
-  console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.')
+  useEffect(
+    () =>
+      console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.'),
+    [],
+  )
   return (
     <QueryClientProvider client={queryClient}>
       <html lang="en">

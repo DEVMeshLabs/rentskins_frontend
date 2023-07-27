@@ -8,7 +8,6 @@ import {
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
 import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
-import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
 import SkinService from '@/services/skin.service'
 import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
@@ -87,11 +86,13 @@ export default function Home() {
         </div>
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
-        {isLoading ? (
-          <AllSkeletonSkins quantitySkeletons={20} />
-        ) : (
-          <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
-        )}
+        {
+          // isLoading ? (
+          // <AllSkeletonSkins quantitySkeletons={20} />
+          // ) : (
+          // <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
+          // )
+        }
       </div>
     </main>
   )
