@@ -57,6 +57,7 @@ export function ModalSkinShowcaseInfo({
   } = useUserStore()
 
   useEffect(() => {
+    console.log(steamid)
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
     )
