@@ -5,5 +5,3 @@ const baseURL =
   'https://api-rentskin-backend-on.onrender.com/v1'
 
 export const Api = axios.create({ baseURL })
-
-export const Shortener = axios.create({ baseURL: 'https://api.encurtador.dev' })

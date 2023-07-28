@@ -21,16 +21,14 @@ export function ModalConnectInventoryForm() {
       email: undefined,
     },
   })
-
-  const [formSubmit, setFormSubmit] = useState(false)
   const [formData, setFormData] = useState<any>(undefined)
 
   const {
     user: { steamid, username },
   } = useUserStore()
 
-  useQuery({
-    queryKey: ['ConfigService.createConfig'],
+  const { refetch } = useQuery({
+    queryKey: ['ConfigService.createConfig', steamid],
     queryFn: () => {
       const sellLink = `https://rentskins/?sellerid=${steamid}`
       const params = {
@@ -40,13 +38,13 @@ export function ModalConnectInventoryForm() {
         steam_guard: false,
         url_sell: sellLink,
         url_trade: formData['trade-link'],
-        agreed_with_emails: formData[''],
+        agreed_with_emails: formData['receive-notifications'],
         agreed_with_terms: true,
       }
       ConfigService.createConfig(params)
       return window.location.reload()
     },
-    enabled: !!steamid && !!formSubmit,
+    enabled: false,
   })
 
   const enableButton = dirtyFields.email && dirtyFields['trade-link']
@@ -61,7 +59,8 @@ export function ModalConnectInventoryForm() {
 
   const onSubmit = (data: any) => {
     setFormData(data)
-    setFormSubmit(true)
+    refetch()
+    console.log(data)
   }
 
   return (

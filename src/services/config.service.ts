@@ -7,7 +7,7 @@ export default class ConfigService {
     return Api.get<IConfig>(`/configuration/user/${id}`)
   }
 
-  public static createConfig({
+  public static async createConfig({
     owner_id,
     owner_name,
     owner_email,
@@ -17,7 +17,8 @@ export default class ConfigService {
     agreed_with_emails,
     agreed_with_terms,
   }: IConfig) {
-    return Api.post(`/configuration`, {
+    console.log('aqui foi')
+    const test = Api.post(`/configuration`, {
       owner_id,
       owner_name,
       owner_email,
@@ -27,5 +28,8 @@ export default class ConfigService {
       agreed_with_emails,
       agreed_with_terms,
     })
+    console.log('aqui foi 2')
+    console.log(await test)
+    return test
   }
 }

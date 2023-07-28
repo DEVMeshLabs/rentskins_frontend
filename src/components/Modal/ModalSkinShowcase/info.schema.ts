@@ -23,6 +23,7 @@ const formSchema = yup.object({
   warning: yup
     .bool()
     .isTrue('Você deve concordar com os termos para prosseguir.'),
+  terms: yup.bool(),
 })
 
 export const formResolver = yupResolver(formSchema)

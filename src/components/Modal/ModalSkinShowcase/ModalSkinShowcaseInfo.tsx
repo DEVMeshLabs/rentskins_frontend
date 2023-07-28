@@ -45,20 +45,59 @@ export function ModalSkinShowcaseInfo({
   id,
 }: Props) {
   const [disabled, setDisabled] = useState(true)
-  const [skin_price, setSkin_price] = useState('')
-  const [checked, setChecked] = useState(false)
-  const { setSkinsToAdvertise, removeSkinToAdvertise, changeSkinToAdvertise } =
-    useSkinsStore()
+  const [savePrice, setSavePrice] = useState('')
+  const {
+    setSkinsToAdvertise,
+    removeSkinToAdvertise,
+    changeSkinToAdvertise,
+    skinsToAdvertise,
+  } = useSkinsStore()
   const {
     user: { steamid, username },
   } = useUserStore()
 
   useEffect(() => {
-    setDisabled(!(skin_price.length > 0 && checked))
-  }, [skin_price, checked])
+    const savedSkin = skinsToAdvertise.filter(
+      ({ id: skinId }) => skinId && id === skinId,
+    )
+    console.log(savedSkin)
+    if (savedSkin.length) {
+      setSavePrice(savedSkin[0].skin_price)
+      console.log(savePrice)
+    }
+  }, [])
 
-  const handleAddSkinsToAdvertise = async () => {
-    if (skin_price.length > 0 && checked) {
+  const {
+    register,
+    watch,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      value: undefined,
+      warning: undefined,
+      terms: false,
+    },
+  })
+  const watchValue = watch('value')
+  const watchTerms = watch('terms')
+
+  const formattedValue = (value: string): number => {
+    let newFormattedValue
+    newFormattedValue = value.replace(/\./g, '')
+    newFormattedValue = newFormattedValue.replace('R$ ', '')
+    newFormattedValue = newFormattedValue.replace(',', '.')
+    return Number(newFormattedValue)
+  }
+
+  useEffect(() => {
+    setDisabled(!(watchValue && watchValue?.length > 0 && watchTerms))
+  }, [watchValue, watchTerms])
+
+  const handleAddSkinsToAdvertise = () => {
+    if (watchValue && watchValue?.length > 0 && watchTerms) {
       setSkinsToAdvertise({
         id,
         sale_type,
@@ -74,30 +113,20 @@ export function ModalSkinShowcaseInfo({
         skin_weapon,
         status,
         status_float,
-        skin_price,
+        skin_price: String(formattedValue(watchValue)),
       })
     }
   }
 
   const handleChangeSkinToAdvertise = () => {
-    if (skin_price.length > 0 && checked) {
-      changeSkinToAdvertise(id, skin_price)
+    if (watchValue && watchValue?.length > 0 && watchTerms) {
+      changeSkinToAdvertise(id, watchValue)
     }
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: formResolver,
-    defaultValues: {
-      value: undefined,
-      warning: undefined,
-    },
-  })
+  }
 
   const onSubmit = (data: any) => {
     console.log(data)
+    handleAddSkinsToAdvertise()
   }
 
   return (
@@ -132,36 +161,41 @@ export function ModalSkinShowcaseInfo({
 
         {/* ---------INPUT -------------  */}
         <div className="mt-5 flex w-full gap-4">
-          <div className="w-full space-y-2">
-            <Common.Title bold={500} color="white">
-              Preço de venda
-            </Common.Title>
-            <Form.Input.Text
-              state={skin_price}
-              setState={setSkin_price}
+          <div className="">
             <Form.Input.Currency
               name="value"
               control={control}
               label="Preço de Venda"
-              placeholder="R$ 2.000,00"
-              className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
+              placeHolder={savePrice ? `R$ ${savePrice}` : 'R$ 2.000,00'}
               register={register('value')}
               errors={errors.value}
             />
           </div>
 
-          <div className="w-full space-y-2">
-            <Common.Title bold={500} color="white">
+          <div className="flex w-full flex-col">
+            <Common.Title bold={500} color="white" size="lg">
               Você irá receber
             </Common.Title>
-            {
-              //  <Form.Input.Text
-              //    state={''}
-              //    setState={() => {}}
-              //    placeholder="R$ 32,21"
-              //    className="h-8 w-full rounded-md bg-mesh-color-neutral-600 text-mesh-color-neutral-200"
-              //  />
-            }
+            <div
+              className="transitions-all rounded-md border-[2px]
+    border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-3 py-3 ring-mesh-color-primary-1900
+    duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
+            >
+              <Common.Title
+                className="ml-2 opacity-60"
+                bold={500}
+                color="white"
+                size="lg"
+              >
+                {(
+                  (formattedValue(watchValue || '') || Number(savePrice)) * 0.05
+                ).toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 2,
+                })}
+              </Common.Title>
+            </div>
           </div>
         </div>
         {/* ---------INPUT FIM -------------  */}
@@ -188,33 +222,24 @@ export function ModalSkinShowcaseInfo({
               </Common.Button>
             </div>
           ) : (
-            <Common.Button
+            <Form.Button
               disabled={disabled}
+              buttonStyle={undefined}
               className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
               onClick={handleAddSkinsToAdvertise}
             >
               <Common.Title bold={600} className="rounded-xl">
                 Anunciar
               </Common.Title>
-            </Common.Button>
+            </Form.Button>
           )}
           <Form.Input.Checkbox
-            onChange={({ target: { checked } }) => setChecked(checked)}
-          <Form.Button
-            buttonStyle={undefined}
-            className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
-          >
-            <Common.Title bold={600} className="rounded-xl">
-              Anunciar
-            </Common.Title>
-          </Form.Button>
-          <Form.Input.Checkbox
-            name="warning"
+            name="terms"
             label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
             realizado no prazo final da transação."
-            register={register('warning')}
+            register={register('terms')}
             errors={errors.warning}
           />
         </div>
