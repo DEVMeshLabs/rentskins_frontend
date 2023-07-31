@@ -1,5 +1,6 @@
-import { ISkins } from '@/interfaces/ISkins'
+import { ISkins, ISkinsToAdvertise } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
+import { IInventory } from './interfaces/inventoryy.interface'
 
 export default class SkinService {
   public static findByAll() {
@@ -20,7 +21,7 @@ export default class SkinService {
     page: number,
     itemsPerPage: number,
   ) {
-    return Api.post(`/skins/inventory/${steamid}`, {
+    return Api.post<IInventory>(`/skins/inventory/${steamid}`, {
       filterType,
       page,
       itemsPerPage,
@@ -33,5 +34,15 @@ export default class SkinService {
 
   public static findBySearchParameter(param: string) {
     return Api.get<ISkins[]>(`/skins/search/${param}`)
+  }
+
+  public static postAllSkinsToAdvertise(
+    allSkinsAdvertise: ISkinsToAdvertise[],
+  ) {
+    const skinsWithoudId = allSkinsAdvertise.filter((skin) => {
+      delete skin.id
+      return skin
+    })
+    return Api.post<{ status: number }>('/skins', skinsWithoudId)
   }
 }

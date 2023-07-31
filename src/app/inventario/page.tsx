@@ -1,3 +1,5 @@
+'use client'
+import useUserStore from '@/stores/user.store'
 import dynamic from 'next/dynamic'
 
 const PageInventoryFilters = dynamic(() =>
@@ -17,6 +19,10 @@ const PageInventorySummary = dynamic(() =>
 )
 
 export default function Inventory() {
+  const {
+    user: { steamid },
+  } = useUserStore()
+  console.log(steamid)
   return (
     <main className="w-full bg-mesh-color-others-black pt-[32px]">
       <div className="mx-auto grid w-10/12 grid-cols-10">

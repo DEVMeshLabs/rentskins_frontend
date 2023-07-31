@@ -60,11 +60,11 @@ const renderTypeCheckboxes = (register: any, isInventoryFetching: boolean) => {
     { value: 'Agent', label: 'Agentes' },
   ]
 
-  return types.map((type) => (
+  return types.map((type, index) => (
     <Form.Input.Checkbox
+      key={'filter-' + type.value[0].toLowerCase() + index}
       name="type-filter"
       register={register('type-filter')}
-      key={'filter-' + type.value[0].toLowerCase()}
       wrapperClassname="justify-start"
       checkClassname="ml-[0.23rem] peer-disabled:opacity-0"
       disabled={isInventoryFetching}
