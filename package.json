@@ -29,7 +29,7 @@
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "fastify": "4.18.0",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "next": "13.4.4",
     "node-steam-openid": "1.1.0",
     "passport": "0.6.0",
