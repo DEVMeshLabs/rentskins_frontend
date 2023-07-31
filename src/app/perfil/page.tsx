@@ -7,8 +7,6 @@ import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import SkinService from '@/services/skin.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
-// import AllSkins from '@/components/Skins/AllSkins'
-// import RentedSkins from '@/components/Skins/RentedSkins'
 
 export default function Perfil() {
   const {
