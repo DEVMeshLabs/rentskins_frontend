@@ -154,7 +154,7 @@ export const ContainerItem = ({
         </div>
       ) : (
         <Common.Title color="white">
-          <a href={`/categorias/${title}`}>{title}</a>
+          <a href={`/loja?search=${title}`}>{title}</a>
         </Common.Title>
       )}
 

@@ -8,7 +8,7 @@ export function ItemLink({ items }: IProps) {
   const renderComponent = () => {
     return items.map((item, index) => (
       <Link
-        href={`/categorias/${item}`}
+        href={`/loja?search=${item}`}
         key={'itemlink-' + item + '-' + index}
         rel="noopener noreferrer"
       >
