@@ -27,6 +27,10 @@ export function LayoutHeaderTop() {
   const [walletValue, setWalletValue] = useState()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  useQuery({
+    queryKey: ['Profile'],
+    queryFn: () => {},
+  })
 
   useEffect(() => {
     const token = LocalStorage.get('token')

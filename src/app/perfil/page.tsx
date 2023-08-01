@@ -7,15 +7,29 @@ import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import SkinService from '@/services/skin.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function Perfil() {
+  const router = useRouter()
   const {
     user: { picture, username, steamid },
   } = useUserStore()
 
+  useEffect(() => {
+    if (!steamid) {
+      router.push('/')
+    }
+  }, [steamid])
+
   const { data, isLoading } = useQuery({
     queryKey: ['profileSkins', steamid],
     queryFn: () => SkinService.findAllSkinsByIdSeller(steamid),
+  })
+
+  useQuery({
+    queryKey: ['profile'],
+    queryFn: () => {},
   })
 
   return (
