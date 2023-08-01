@@ -12,7 +12,12 @@ export default class JsonWebToken {
         process.env.NEXT_PUBLIC_SECRET_KEY as string,
       ) as object
     } catch (err) {
-      return { message: 'Error verifying token' }
+      return {
+        error: 'Token de autorização não fornecido',
+        message:
+          'Por favor, forneça um token de autorização válido na solicitação.',
+        status_code: 401,
+      }
     }
   }
 }
