@@ -4,6 +4,7 @@ import Common from '@/components/Common'
 import { IconSend } from '@/components/Icons/IconSend'
 import Image from 'next/image'
 import ProfileInfo from '../ProfileInfo'
+import { useRouter } from 'next/navigation'
 
 interface Props {
   isSeller?: boolean
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function PerfilPerson({ isSeller, picture, name }: Props) {
+  const router = useRouter()
   return (
     <section className="flex w-full justify-between font-inter">
       <div className="flex gap-6">
@@ -42,7 +44,11 @@ export default function PerfilPerson({ isSeller, picture, name }: Props) {
               <strong>195</strong>
             </h1>
             {isSeller ?? (
-              <Common.Button color="green" className="border-transparent">
+              <Common.Button
+                onClick={() => router.push('/inventario')}
+                color="green"
+                className="border-transparent"
+              >
                 <IconSend />
                 Anuncie Agora
               </Common.Button>
