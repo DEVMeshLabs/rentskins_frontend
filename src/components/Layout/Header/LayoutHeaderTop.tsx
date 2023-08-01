@@ -28,7 +28,6 @@ import { formResolver } from './form.schema'
 export function LayoutHeaderTop() {
   const router = useRouter()
   const pathname = usePathname()
-  console.log(pathname)
   const refDropdown = useRef(null)
   const { user, setUser, setLogout, setWallet, wallet } = useUserStore()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
