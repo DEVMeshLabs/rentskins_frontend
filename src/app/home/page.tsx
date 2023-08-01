@@ -7,30 +7,27 @@ import {
   IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
-import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
-import SkinService from '@/services/skin.service'
+// import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
 import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
-import { useQuery } from '@tanstack/react-query'
-import dynamic from 'next/dynamic'
-const AllSkins = dynamic<IAllSkinsProps>(
-  () =>
-    import('@/components/Others/Skins/AllSkins').then(
-      (module) => module.default,
-    ),
-  {
-    ssr: false,
-  },
-)
+// import dynamic from 'next/dynamic'
+// const AllSkins = dynamic<IAllSkinsProps>(
+//   () =>
+//     import('@/components/Others/Skins/AllSkins').then(
+//       (module) => module.default,
+//     ),
+//   {
+//     ssr: false,
+//   },
+// )
 
 export default function Home() {
   const { user } = useUserStore()
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['allSkins'],
-    queryFn: () => SkinService.findByAll(),
-  })
+  // const { data, isLoading } = useQuery({
+  // queryKey: ['allSkins'],
+  // queryFn: () => SkinService.findByAll(),
+  // })
 
   const handleOnSteam = () => {
     SteamService.redirect()
@@ -87,11 +84,13 @@ export default function Home() {
         </div>
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
-        {isLoading ? (
-          <AllSkeletonSkins quantitySkeletons={20} />
-        ) : (
-          <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
-        )}
+        {
+          // isLoading ? (
+          // <AllSkeletonSkins quantitySkeletons={20} />
+          // ) : (
+          // <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
+          // )
+        }
       </div>
     </main>
   )
