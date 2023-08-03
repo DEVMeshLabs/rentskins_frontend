@@ -238,10 +238,8 @@ export function LayoutHeaderTop() {
 
             <div className="flex items-end justify-center">
               <div
-                className={`${
-                  user !== null &&
-                  user?.picture &&
-                  'flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-full bg-[#e4e6e7]'
+                className={`flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-full opacity-70 transition-all hover:opacity-100 ${
+                  user !== null && user?.picture ? '' : 'bg-[#e4e6e7]'
                 }`}
               >
                 <Image
