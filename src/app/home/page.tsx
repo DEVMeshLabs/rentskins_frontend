@@ -14,6 +14,7 @@ import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
 const AllSkins = dynamic<IAllSkinsProps>(
   () =>
     import('@/components/Others/Skins/AllSkins').then(
@@ -26,6 +27,12 @@ const AllSkins = dynamic<IAllSkinsProps>(
 
 export default function Home() {
   const { user } = useUserStore()
+
+  useEffect(
+    () =>
+      console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.'),
+    [],
+  )
 
   const { data, isLoading } = useQuery({
     queryKey: ['allSkins'],

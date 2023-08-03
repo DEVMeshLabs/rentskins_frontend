@@ -29,7 +29,8 @@ export function LayoutHeaderDropdown({ refDropdown }: IProps) {
       <Link
         className="border-none py-1 font-semibold text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
         onClick={() => setLogout(true)}
-        href={'/'}
+        // href={'/'}
+        href={''}
       >
         Sair
       </Link>

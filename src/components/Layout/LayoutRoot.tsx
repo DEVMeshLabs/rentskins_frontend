@@ -39,7 +39,7 @@ export function LayoutRoot({ children }: IProps) {
   }
 
   return (
-    <main className="min-h-screen bg-mesh-color-others-black">
+    <main className="flex min-h-screen flex-col justify-between bg-mesh-color-others-black">
       <ModalPaymentMain />
 
       <meta property="og:title" content="My page title" key="title" />

@@ -219,12 +219,16 @@ export function LayoutHeaderTop() {
                   </div>
                 )}
               </Common.Title>
-              <Common.Button
-                className="h-5 w-5 border-transparent bg-mesh-color-primary-1400"
+              <Link
+                className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400"
+                href={URLQuery.addQuery([
+                  { key: 'modalopen', value: true },
+                  { key: 'modaltype', value: 'payment' },
+                ])}
                 onClick={() => handleOnAdd()}
               >
                 <IconCruz />
-              </Common.Button>
+              </Link>
             </div>
           </div>
 
