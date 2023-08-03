@@ -1,14 +1,8 @@
 'use client'
 import Common from '@/components/Common'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function PaymentWithdrawSuccessPage() {
-  const router = useRouter()
-
-  const handleOnContinue = () => {
-    router.push('/')
-  }
-
   return (
     <main className="flex h-screen flex-col items-center justify-start bg-mesh-color-others-black text-white">
       <div className="gap- flex h-1/3 flex-col items-center justify-center gap-10">
@@ -16,12 +10,12 @@ export default function PaymentWithdrawSuccessPage() {
           Pagamento concluído! Seu saldo foi recarregado com sucesso!
         </Common.Title>
 
-        <Common.Button
-          className="w-2/3 border-transparent bg-mesh-color-primary-1200 py-3 text-xl font-bold text-black"
-          onClick={() => handleOnContinue()}
+        <Link
+          className="flex w-2/3 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1200 py-3 text-xl font-bold text-black opacity-70 hover:opacity-100"
+          href={'/'}
         >
           Continuar
-        </Common.Button>
+        </Link>
       </div>
     </main>
   )

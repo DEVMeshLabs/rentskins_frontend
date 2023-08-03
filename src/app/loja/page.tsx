@@ -4,14 +4,14 @@
 import Common from '@/components/Common'
 import IconArrowLeft from '@/components/Icons/IconArrowLeft'
 import SkinFilters from '@/components/Others/SkinFilters'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
 import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
+import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import dynamic from 'next/dynamic'
 
 const AllSkins = dynamic<IAllSkinsProps>(
   () =>
@@ -68,7 +68,7 @@ export default function Categorias() {
               bold={600}
               className="text-2xl text-mesh-color-neutral-200"
             >
-              Não foi encontrado nenhuma skin relacionado à{' '}
+              Não foi encontrado nada relacionado a{' '}
               <span className="text-mesh-color-primary-1200">
                 {nameCorrection}
                 <span className="text-mesh-color-neutral-200">.</span>

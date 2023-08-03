@@ -110,15 +110,6 @@ export function LayoutHeaderTop() {
     router.push(`/loja?search=${data.search}`)
   }
 
-  const handleOnAdd = () => {
-    router.push(
-      URLQuery.addQuery([
-        { key: 'modalopen', value: true },
-        { key: 'modaltype', value: 'payment' },
-      ]),
-    )
-  }
-
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (refDropdown.current) {
@@ -185,7 +176,7 @@ export function LayoutHeaderTop() {
           </Common.Button>
         </div>
       ) : (
-        <div className="flex items-center gap-x-6">
+        <div className="flex items-center gap-x-4">
           <div className="flex items-center gap-6">
             <nav className="flex items-center gap-4">
               <Link
@@ -225,7 +216,6 @@ export function LayoutHeaderTop() {
                   { key: 'modalopen', value: true },
                   { key: 'modaltype', value: 'payment' },
                 ])}
-                onClick={() => handleOnAdd()}
               >
                 <IconCruz />
               </Link>
@@ -233,9 +223,9 @@ export function LayoutHeaderTop() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Common.Button
-              className="h-11 w-11 rounded-xl border-none bg-mesh-color-others-eerie-black"
-              onClick={() => router.push('/usuario/notificacoes?type=historic')}
+            <Link
+              href={'/usuario/notificacoes?type=historic'}
+              className="flex h-11 w-11 items-center justify-center rounded-xl border-none bg-mesh-color-others-eerie-black opacity-70 transition-all hover:opacity-100"
             >
               {hasNotifications && (
                 <>
@@ -244,7 +234,7 @@ export function LayoutHeaderTop() {
                 </>
               )}
               <IconNotifications />
-            </Common.Button>
+            </Link>
 
             <div className="flex items-end justify-center">
               <div

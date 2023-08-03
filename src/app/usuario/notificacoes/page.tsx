@@ -10,6 +10,7 @@ import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
 import Aos from 'aos'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect } from 'react'
 const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
@@ -71,15 +72,6 @@ export default function NotificationPage() {
     router.push(URLQuery.addQuery([{ key: 'type', value }]))
   }
 
-  const handleOnFilter = () => {
-    router.push(
-      URLQuery.addQuery([
-        { key: 'modalopen', value: true },
-        { key: 'modaltype', value: 'filter' },
-      ]),
-    )
-  }
-
   return (
     <main className="mx-auto mt-6 flex w-8/12 flex-col">
       <Common.Title size="3xl" bold={700} color="white">
@@ -117,13 +109,16 @@ export default function NotificationPage() {
           </label>
         </div>
         {searchParams.get('type') === 'historic' && (
-          <Common.Button
-            className="border-none bg-mesh-color-primary-1200 px-3 py-1 font-semibold"
-            onClick={() => handleOnFilter()}
+          <Link
+            href={URLQuery.addQuery([
+              { key: 'modalopen', value: true },
+              { key: 'modaltype', value: 'filter' },
+            ])}
+            className="rounded-md border-none bg-mesh-color-primary-1200 px-3 py-1 font-semibold"
             data-aos="zoom-in"
           >
             {notificationFilter}
-          </Common.Button>
+          </Link>
         )}
       </div>
       {searchParams.get('type') === 'historic' && (
