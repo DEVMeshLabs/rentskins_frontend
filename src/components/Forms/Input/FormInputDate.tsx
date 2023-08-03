@@ -33,7 +33,7 @@ export function FormInputDate({
 }: IProps) {
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      <text className="-mb-4"> {label} </text>
+      <span className="-mb-4"> {label} </span>
       <ReactInputMask
         mask={mask || '99/99/9999'}
         alwaysShowMask={alwaysShowMask}
@@ -44,9 +44,9 @@ export function FormInputDate({
         placeholder={rest.placeholder}
         {...register}
       />
-      <text className={errorsClassname || options.input.errors}>
+      <span className={errorsClassname || options.input.errors}>
         {errors && errors?.message}
-      </text>
+      </span>
     </label>
   )
 }

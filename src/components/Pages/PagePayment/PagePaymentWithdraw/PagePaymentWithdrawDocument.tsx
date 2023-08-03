@@ -13,15 +13,15 @@ export function PagePaymentWithdrawDocument({
 }: IProps) {
   return (
     <div className="">
-      <text className="text-sm text-mesh-color-neutral-200">Quarta etapa</text>
+      <span className="text-sm text-mesh-color-neutral-200">Quarta etapa</span>
       <Common.Title size={'lg'} bold={600}>
         Documentos
       </Common.Title>
-      <text className="text-sm">
+      <span className="text-sm">
         Por favor, envie a foto frente e verso da sua identidade, CNH ou PDF
         para que possamos verificar suas informações pessoais. Essa etapa é
         importante para garantir a segurança da plataforma e dos usuários.
-      </text>
+      </span>
 
       <Form.Root
         className="mt-6 flex flex-col gap-4"
@@ -38,7 +38,7 @@ export function PagePaymentWithdrawDocument({
 
         <div className="mt-4">
           <div className="flex justify-between text-xl font-semibold">
-            <text>Levantamento:</text>
+            <span>Levantamento:</span>
 
             <span className="text-mesh-color-primary-800">
               {Number(0).toLocaleString('pt-br', {

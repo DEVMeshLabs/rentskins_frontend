@@ -52,7 +52,7 @@ export function FormInputRadioDefault({
   return (
     <div className={containerClassname}>
       {renderItems}
-      <text className={errorsClassname}>{errors && errors?.message}</text>
+      <span className={errorsClassname}>{errors && errors?.message}</span>
     </div>
   )
 }

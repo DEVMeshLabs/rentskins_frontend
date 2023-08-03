@@ -1,13 +1,20 @@
 import { Api } from '@/providers'
+import LocalStorage from '@/tools/localstorage.tool'
 import { IWalletUser } from './interfaces/wallet.interface'
 
 export default class WalletService {
+  public static generateToken() {
+    return 'Bearer ' + LocalStorage.get('token')
+  }
+
   public static getAllWallets() {
     return Api.get<IWalletUser[]>('/wallet')
   }
 
   public static async getWalletBySteamID(steamid: string) {
-    return Api.get<IWalletUser | boolean>(`/wallet/user/${steamid}`)
+    return Api.get<IWalletUser | boolean>(`/wallet/user/${steamid}`, {
+      headers: { Authorization: WalletService.generateToken() },
+    })
       .then((response) => response)
       .catch((e) => e)
   }
@@ -16,10 +23,14 @@ export default class WalletService {
     const user = await this.getWalletBySteamID(steamid)
 
     if (!user.data) {
-      return Api.post('/wallet', {
-        owner_name: username,
-        owner_id: steamid,
-      })
+      return Api.post(
+        '/wallet',
+        {
+          owner_name: username,
+          owner_id: steamid,
+        },
+        { headers: { Authorization: WalletService.generateToken() } },
+      )
         .then(() => this.getWalletBySteamID(steamid))
         .catch((e) => e)
     } else {

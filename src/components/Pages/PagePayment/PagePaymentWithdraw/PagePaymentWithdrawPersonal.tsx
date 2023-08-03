@@ -49,9 +49,9 @@ export function PagePaymentWithdrawPersonal({
 
   return (
     <div>
-      <text className="text-sm text-mesh-color-neutral-200">
+      <span className="text-sm text-mesh-color-neutral-200">
         Primeira etapa
-      </text>
+      </span>
       <Common.Title size={'lg'} bold={600}>
         Informações Pessoais
       </Common.Title>
@@ -94,7 +94,7 @@ export function PagePaymentWithdrawPersonal({
 
         <div className="mt-4">
           <div className="flex justify-between text-xl font-semibold">
-            <text>Levantamento:</text>
+            <span>Levantamento:</span>
 
             <span className="text-mesh-color-primary-800">
               {Number(paymentWithdrawInfo.selectedValue).toLocaleString(

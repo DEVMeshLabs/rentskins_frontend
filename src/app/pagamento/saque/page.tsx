@@ -86,12 +86,12 @@ export default function PaymentWithdrawPage() {
             </Common.Button>
 
             <span className="ml-2 text-mesh-color-neutral-200">
-              <text>Saldo </text>
-              <text>• </text>
+              <span>Saldo </span>
+              <span>• </span>
 
-              <text className="text-mesh-color-accent-900">
+              <span className="text-mesh-color-accent-900">
                 Retirar Levantamento
-              </text>
+              </span>
             </span>
           </div>
           <div className="flex h-full w-full flex-col items-start justify-center">

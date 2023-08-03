@@ -61,7 +61,7 @@ export function PagePaymentRechargeTicket({
 
       <div className="mt-4">
         <div className="flex justify-between text-xl font-semibold">
-          <text>Total:</text>
+          <span>Total:</span>
           <span className="text-mesh-color-primary-800">
             {Number(paymentAdd.value)?.toLocaleString('pt-br', {
               style: 'currency',

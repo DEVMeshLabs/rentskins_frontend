@@ -56,7 +56,7 @@ export function PagePaymentWithdrawLocation({
 
   return (
     <div>
-      <text className="text-sm text-mesh-color-neutral-200">Segunda Etapa</text>
+      <span className="text-sm text-mesh-color-neutral-200">Segunda Etapa</span>
       <Common.Title size={'lg'} bold={600}>
         Informações de Localização
       </Common.Title>
@@ -111,7 +111,7 @@ export function PagePaymentWithdrawLocation({
 
         <div className="mt-4">
           <div className="flex justify-between text-xl font-semibold">
-            <text>Levantamento:</text>
+            <span>Levantamento:</span>
 
             <span className="text-mesh-color-primary-800">
               {Number(paymentWithdrawInfo.selectedValue).toLocaleString(

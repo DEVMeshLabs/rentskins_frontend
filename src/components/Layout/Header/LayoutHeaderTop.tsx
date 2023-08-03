@@ -98,6 +98,9 @@ export function LayoutHeaderTop() {
     }
   }, [walletRetrieved, walletCreated])
 
+  console.log(walletCreated)
+  console.log(walletRetrieved)
+
   const handleOnSteam = () => {
     SteamService.redirect()
   }

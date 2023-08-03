@@ -1,9 +1,15 @@
 import { IUser } from '@/interfaces/user.interface'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'
+import { ReadonlyURLSearchParams } from 'next/navigation'
 import JsonWebToken from './jsonwebtoken.tool'
 import LocalStorage from './localstorage.tool'
 
 export default class Authentication {
-  public static login(params: any, router: any, URLQuery: any) {
+  public static login(
+    params: ReadonlyURLSearchParams,
+    router: AppRouterInstance,
+    URLQuery: any,
+  ) {
     const tokenOnURL = params.get('token')
 
     if (tokenOnURL) {

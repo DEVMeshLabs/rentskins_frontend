@@ -1,17 +1,17 @@
 /* eslint-disable camelcase */
+import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import { ModalSkinShowcaseMain } from '@/components/Modal/ModalSkinShowcase/ModalSkinShowcaseMain'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
+import useSkinsStore from '@/stores/skins.store'
 import Dimensions from '@/tools/dimensions.tool'
 import { useQuery } from '@tanstack/react-query'
+import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
-import useSkinsStore from '@/stores/skins.store'
-import classNames from 'classnames'
-import Common from '@/components/Common'
 
 interface Props {
   steamid: string
@@ -71,13 +71,13 @@ export function CardSkinInventory({ steamid }: Props) {
     return (
       <div className="flex h-[50vh] items-center justify-center font-semibold text-white">
         {inventoryTypeFilter.length ? (
-          <text>
+          <span>
             {selectedType !== undefined
               ? selectedType
               : 'Não existem armas desse tipo no seu inventário.'}
-          </text>
+          </span>
         ) : (
-          <text> Inventário vazio. </text>
+          <span> Inventário vazio. </span>
         )}
       </div>
     )
