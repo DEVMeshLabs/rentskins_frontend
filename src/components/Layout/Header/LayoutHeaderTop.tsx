@@ -29,7 +29,7 @@ export function LayoutHeaderTop() {
   const router = useRouter()
   const pathname = usePathname()
   const refDropdown = useRef(null)
-  const { user, setUser, setLogout, setWallet, wallet } = useUserStore()
+  const { user, setUser, setWallet, wallet } = useUserStore()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const {
     register,
@@ -98,9 +98,6 @@ export function LayoutHeaderTop() {
     }
   }, [walletRetrieved, walletCreated])
 
-  console.log(walletCreated)
-  console.log(walletRetrieved)
-
   const handleOnSteam = () => {
     SteamService.redirect()
   }
@@ -121,13 +118,6 @@ export function LayoutHeaderTop() {
       ]),
     )
   }
-
-  const handleDropdownButton = (index: 'config' | 'profile' | 'logout') =>
-    ({
-      config: () => router.push('usuario/configuracoes'),
-      profile: () => router.push('perfil'),
-      logout: () => setLogout(true),
-    }[index]())
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -271,10 +261,7 @@ export function LayoutHeaderTop() {
                 />
               </div>
               {showProfileDropdown && (
-                <LayoutHeaderDropdown
-                  refDropdown={refDropdown}
-                  handleDropdownButton={handleDropdownButton}
-                />
+                <LayoutHeaderDropdown refDropdown={refDropdown} />
               )}
             </div>
           </div>
