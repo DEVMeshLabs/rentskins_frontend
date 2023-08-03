@@ -17,10 +17,11 @@ import { useEffect, useState } from 'react'
 
 export default function Settings() {
   const [selectedSetting, setSelectedSetting] = useState('personal')
+  // const [auth, setAuth] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  useEffect(() => Authentication.authenticate(), [])
+  useEffect(() => Authentication.authenticate(router), [router])
 
   useEffect(() => {
     const titleQuery = searchParams.get('type') as

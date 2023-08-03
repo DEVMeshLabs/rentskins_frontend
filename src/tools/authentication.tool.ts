@@ -6,9 +6,9 @@ import JsonWebToken from './jsonwebtoken.tool'
 import LocalStorage from './localstorage.tool'
 
 export default class Authentication {
-  public static authenticate() {
+  public static authenticate(router: AppRouterInstance) {
     const token = LocalStorage.get('token')
-    AuthenticationService.verifyToken(token)
+    AuthenticationService.verifyToken(token, router)
   }
 
   public static login(
@@ -55,7 +55,7 @@ export default class Authentication {
 
   public static logout(setLogoutStore: (boolean: boolean) => void) {
     LocalStorage.remove('token')
-    location.reload()
+    window.location.href = '/'
     setLogoutStore(false)
   }
 }

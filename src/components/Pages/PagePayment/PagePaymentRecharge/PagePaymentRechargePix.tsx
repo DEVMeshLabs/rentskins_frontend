@@ -61,13 +61,13 @@ export function PagePaymentRechargePix({
             pagamento.
           </Common.Title>
 
-          <spanarea
+          <textarea
             readOnly={true}
             className="focus:outline-pink-500n h-36 max-h-36 w-full resize-none overflow-hidden rounded-md
               border-2 border-mesh-color-primary-1100/50 bg-mesh-color-others-eerie-black px-3 py-3 text-black text-white/70"
           >
             {textAreaValue}
-          </spanarea>
+          </textarea>
         </div>
         <div className="mt-8 flex justify-between text-xl font-semibold">
           <span>Total:</span>
