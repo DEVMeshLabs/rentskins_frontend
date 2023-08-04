@@ -1,13 +1,17 @@
+'use client'
 import Common from '@/components/Common'
 
 interface Props {
   title: string
-  value: string
+  value?: string
+  isPercent?: boolean
 }
 
-export default function ProfileInfo({ title, value }: Props) {
-  const isPercent = value.includes('%') ? 'green' : 'white'
-
+export default function ProfileInfo({
+  title,
+  value,
+  isPercent = false,
+}: Props) {
   return (
     <div
       className="flex w-56 flex-col items-center justify-center gap-1 rounded-xl border
@@ -16,7 +20,7 @@ export default function ProfileInfo({ title, value }: Props) {
       <Common.Title className="text-mesh-color-neutral-100">
         {title}
       </Common.Title>
-      <Common.Title color={isPercent}>{value}</Common.Title>
+      <Common.Title color={isPercent ? 'green' : 'white'}>{value}</Common.Title>
     </div>
   )
 }

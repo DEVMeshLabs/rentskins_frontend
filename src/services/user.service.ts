@@ -2,7 +2,7 @@ import { Api } from '@/providers'
 import { ICreateUser, IGetUser } from './interfaces/user.interface'
 
 export default class UserService {
-  public static getUser(userSteamId: string, token?: string) {
+  public static getUser(userSteamId: string, token: string) {
     return Api.get<IGetUser>(`/perfil/user/${userSteamId}`, {
       headers: {
         Authorization: `Bearer ${token}`,

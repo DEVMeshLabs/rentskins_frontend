@@ -4,7 +4,8 @@ import Common from '@/components/Common'
 import { IconSend } from '@/components/Icons/IconSend'
 import Image from 'next/image'
 import ProfileInfo from '../ProfileInfo'
-import { useRouter } from 'next/navigation'
+import classNames from 'classnames'
+import Link from 'next/link'
 
 interface Props {
   isSeller?: boolean
@@ -12,6 +13,11 @@ interface Props {
   name?: string
   accountDate?: string
   steamLevel?: string
+  isLoading?: boolean
+  userState?: string
+  totalExchanges?: string
+  deliveryTime?: string
+  deliveryFee?: string
 }
 
 export default function PerfilPerson({
@@ -20,8 +26,12 @@ export default function PerfilPerson({
   name,
   accountDate,
   steamLevel,
+  isLoading,
+  userState,
+  totalExchanges,
+  deliveryTime,
+  deliveryFee,
 }: Props) {
-  const router = useRouter()
   return (
     <section className="flex w-full justify-between font-inter">
       <div className="flex gap-6">
@@ -42,36 +52,48 @@ export default function PerfilPerson({
             >
               {name || 'Coldzera'}
             </Common.Title>
-            <div className="w-32 rounded-3xl bg-mesh-color-primary-1400 p-1 text-center text-base font-normal text-white">
-              Membro novo
+            <div
+              className={classNames(
+                'w-32 rounded-3xl bg-mesh-color-primary-1400 p-1 text-center text-base font-normal text-white',
+                {
+                  'h-8': isLoading === true,
+                },
+              )}
+            >
+              {!isLoading && userState}
             </div>
           </div>
           <div className="flex flex-col gap-6">
             <h1 className="flex gap-1 text-lg text-white">
               <span className="opacity-60">Steam Level:</span>
-              <strong>{steamLevel}</strong>
+              <strong>{!isLoading && steamLevel}</strong>
             </h1>
             {isSeller ?? (
-              <Common.Button
-                onClick={() => router.push('/inventario')}
-                color="green"
-                className="border-transparent"
-              >
-                <IconSend />
-                Anuncie Agora
-              </Common.Button>
+              <Link href={'/inventario'}>
+                <Common.Button color="green" className="border-transparent">
+                  <IconSend />
+                  Anuncie Agora
+                </Common.Button>
+              </Link>
             )}
           </div>
         </div>
       </div>
       <div className="flex w-[500px] flex-wrap gap-5">
-        <ProfileInfo title="Tempo de entrega" value="20 Minutos" />
-        <ProfileInfo title="Total de trocas" value="242" />
-        <ProfileInfo title="Taxa de entrega" value="92%" />
         <ProfileInfo
-          title="Membro da Steam desde"
-          value={accountDate || 'Não temos essa informarção'}
+          title="Tempo de entrega"
+          value={deliveryTime && deliveryTime.replace(' no momento', '')}
         />
+        <ProfileInfo
+          title="Total de trocas"
+          value={totalExchanges && totalExchanges.replace(' no momento', '')}
+        />
+        <ProfileInfo
+          title="Taxa de entrega"
+          isPercent
+          value={deliveryFee && deliveryFee.replace(' no momento', '')}
+        />
+        <ProfileInfo title="Membro da Steam desde" value={accountDate} />
       </div>
     </section>
   )

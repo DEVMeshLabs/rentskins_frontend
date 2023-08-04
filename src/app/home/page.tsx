@@ -55,6 +55,8 @@ export default function Home() {
       return UserService.createUser(
         {
           owner_id: user.steamid,
+          owner_name: user.username,
+          picture: user.picture,
         },
         LocalStorage.get('token'),
       )
@@ -63,6 +65,7 @@ export default function Home() {
   })
 
   useEffect(() => {
+    console.log(dataGetted)
     if (!dataGetted && user.steamid) {
       refetch()
     }

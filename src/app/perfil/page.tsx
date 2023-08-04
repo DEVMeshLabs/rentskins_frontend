@@ -14,7 +14,11 @@ import LocalStorage from '@/tools/localstorage.tool'
 
 export default function Perfil() {
   const [accountDate, setAccountDate] = useState('Data não obtida')
-  const [steamLevel, setSteamLevel] = useState('5')
+  const [steamLevel, setSteamLevel] = useState('Não obtido')
+  const [userState, setUserState] = useState('Não obtido')
+  const [totalExchanges, setTotalExchanges] = useState('')
+  const [deliveryTime, setDeliveryTime] = useState('')
+  const [deliveryFee, setDeliveryFee] = useState('')
   const router = useRouter()
   const {
     user: { picture, username, steamid },
@@ -31,28 +35,38 @@ export default function Perfil() {
     queryFn: () => SkinService.findAllSkinsByIdSeller(steamid),
   })
 
-  const { data: dataGettedUser } = useQuery({
-    queryKey: ['Profile', steamid],
+  const { data: dataGettedUser, isLoading: isLoadingGetUser } = useQuery({
+    queryKey: ['myProfile', steamid],
     queryFn: () => UserService.getUser(steamid, LocalStorage.get('token')),
   })
 
   useEffect(() => {
-    const accountDate = new Date(dataGettedUser?.data.account_date!)
-    console.log(accountDate)
-    setAccountDate(
-      `${accountDate.getDate().toString().padStart(2, '0')}/${(
-        accountDate.getMonth() + 1
+    if (dataGettedUser?.data) {
+      const accountDate = new Date(dataGettedUser?.data.account_date)
+      setAccountDate(
+        `${accountDate.getDate().toString().padStart(2, '0')}/${(
+          accountDate.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
-        .toString()
-        .padStart(2, '0')}/${accountDate.getFullYear()}`,
-    )
-    setSteamLevel(dataGettedUser?.data.steam_level!)
-    console.log(steamid)
+      setSteamLevel(dataGettedUser?.data.steam_level)
+      setUserState(dataGettedUser.data.status_member)
+      setUserState(dataGettedUser?.data.status_member)
+      setTotalExchanges(dataGettedUser.data.total_exchanges)
+      setDeliveryTime(dataGettedUser.data.delivery_time)
+      setDeliveryFee(dataGettedUser.data.delivery_fee)
+    }
   }, [dataGettedUser])
 
   return (
     <main className="mx-auto flex w-4/5 flex-col items-center py-7">
       <PerfilPerson
+        totalExchanges={totalExchanges}
+        deliveryTime={deliveryTime}
+        deliveryFee={deliveryFee}
+        isLoading={isLoadingGetUser}
+        userState={userState}
         steamLevel={steamLevel}
         accountDate={accountDate}
         picture={picture}

@@ -7,10 +7,12 @@ export interface IGetUser {
   total_exchanges: string
   account_date: string
   steam_level: string
-  name: string
+  owner_name: string
   picture: string
 }
 
 export interface ICreateUser {
   owner_id: string
+  owner_name: string
+  picture: string
 }
