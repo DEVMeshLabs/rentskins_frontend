@@ -22,6 +22,7 @@ async function handler(
     ],
     pages: {
       signIn: '/',
+      error: '/oops',
     },
     callbacks: {
       jwt({ token, account, profile }) {
