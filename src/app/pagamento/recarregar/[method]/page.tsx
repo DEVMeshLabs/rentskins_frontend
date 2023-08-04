@@ -97,7 +97,14 @@ export default function PaymentAddPage() {
 
   return (
     <main className="flex h-screen w-full flex-col items-center justify-start bg-mesh-color-others-black text-white">
-      {methodComponent !== undefined && renderContent}
+      {/* {methodComponent !== undefined ? renderContent : <LayoutLoading />} */}
+      <LayoutLoading
+        label="Carregando..."
+        className="h-[70vh]"
+        enabled={methodComponent === undefined}
+      >
+        {renderContent}
+      </LayoutLoading>
     </main>
   )
 }
