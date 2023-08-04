@@ -7,7 +7,11 @@ import { useRouter } from 'next/navigation'
 import { ModalPaymentRetrieveSelection } from './ModalPaymentRetrieveSelection'
 import { ModalPaymentRetrieveWarning } from './ModalPaymentRetrieveWarning'
 
-export function ModalPaymentRetrieveMain() {
+interface IProps {
+  afterFormSubmit: () => void
+}
+
+export function ModalPaymentRetrieveMain({ afterFormSubmit }: IProps) {
   const router = useRouter()
   const { paymentRetrieveIndex } = useComponentStore()
 
@@ -36,7 +40,9 @@ export function ModalPaymentRetrieveMain() {
         </div>
         <div className="flex h-full w-11/12 items-start justify-between">
           {paymentRetrieveIndex === 0 && <ModalPaymentRetrieveSelection />}
-          {paymentRetrieveIndex === 1 && <ModalPaymentRetrieveWarning />}
+          {paymentRetrieveIndex === 1 && (
+            <ModalPaymentRetrieveWarning afterFormSubmit={afterFormSubmit} />
+          )}
         </div>
         <div />
       </div>

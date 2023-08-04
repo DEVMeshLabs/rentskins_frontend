@@ -1,8 +1,8 @@
 import Common from '@/components/Common'
 import { headers } from 'next/headers'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 export default function PaymentAddSuccessPage() {
-  console.log(headers().get('referer'))
   const referer = headers().get('referer')
 
   const validURLs = [
@@ -13,9 +13,9 @@ export default function PaymentAddSuccessPage() {
 
   const urlIsValid = validURLs.some((url) => url === referer)
 
-  console.log(validURLs[0])
-  console.log(urlIsValid)
-  console.log(referer)
+  if (!urlIsValid) {
+    notFound()
+  }
 
   return (
     <main className="flex h-screen flex-col items-center justify-start bg-mesh-color-others-black text-white">

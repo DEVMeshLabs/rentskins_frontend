@@ -5,11 +5,12 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import { PagePaymentRechargeMastercard } from '@/components/Pages/PagePayment/PagePaymentRecharge/PagePaymentRechargeMastercard'
 import { PagePaymentRechargePix } from '@/components/Pages/PagePayment/PagePaymentRecharge/PagePaymentRechargePix'
 import { PagePaymentRechargeTicket } from '@/components/Pages/PagePayment/PagePaymentRecharge/PagePaymentRechargeTicket'
-import { useParams, useRouter } from 'next/navigation'
+import { notFound, useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-export default function PaymentAddMastercardPage() {
+export default function PaymentAddPage() {
   const { method } = useParams()
+
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [methodComponent, setMethodComponent] = useState<
@@ -17,7 +18,7 @@ export default function PaymentAddMastercardPage() {
   >(undefined)
 
   useEffect(() => {
-    const handleOnSubmit = (data: any, route: 'success') => {
+    const handleOnSubmit = (data: any) => {
       console.log(data)
       setIsLoading(true)
       router.push('/pagamento/recarregar/sucesso')
@@ -49,7 +50,7 @@ export default function PaymentAddMastercardPage() {
     }
 
     setMethodComponent(
-      methodComponents[method as 'mastercard' | 'pix' | 'boleto'],
+      methodComponents[method as 'mastercard' | 'pix' | 'boleto'] || null,
     )
   }, [method, router])
 
@@ -90,24 +91,13 @@ export default function PaymentAddMastercardPage() {
     </>
   )
 
-  const renderFailed = (
-    <div className="flex h-3/5 flex-col items-center justify-center gap-4">
-      <Common.Title bold={800} size="3xl">
-        Página não encontrada.
-      </Common.Title>
-      <Common.Button
-        onClick={() => router.push('/')}
-        className="border-mesh-color-primary-1400 
-      bg-mesh-color-primary-1400 px-4 text-lg font-semibold text-mesh-color-others-black"
-      >
-        Voltar
-      </Common.Button>
-    </div>
-  )
+  if (methodComponent === null) {
+    notFound()
+  }
 
   return (
     <main className="flex h-screen w-full flex-col items-center justify-start bg-mesh-color-others-black text-white">
-      {methodComponent !== undefined ? renderContent : renderFailed}
+      {methodComponent !== undefined && renderContent}
     </main>
   )
 }

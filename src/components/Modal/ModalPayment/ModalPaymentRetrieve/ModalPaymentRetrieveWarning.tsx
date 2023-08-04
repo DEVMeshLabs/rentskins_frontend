@@ -3,13 +3,18 @@ import KYCMessage from '@/components/Others/KYCMessage'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export function ModalPaymentRetrieveWarning() {
+interface IProps {
+  afterFormSubmit: () => void
+}
+
+export function ModalPaymentRetrieveWarning({ afterFormSubmit }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const handleOnProceed = () => {
     router.push('/pagamento/saque')
     setIsLoading(true)
+    afterFormSubmit()
   }
 
   return (

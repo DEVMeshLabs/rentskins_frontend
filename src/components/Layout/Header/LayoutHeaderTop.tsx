@@ -58,6 +58,10 @@ export function LayoutHeaderTop() {
       ),
   })
 
+  console.log(pathname)
+
+  const disableAddButton = pathname.includes('/pagamento' || '/oops')
+
   useEffect(() => {
     // const interval = setInterval(() => {
     refetch() // Refaz a requisição a cada 1 segundo
@@ -214,7 +218,10 @@ export function LayoutHeaderTop() {
                 )}
               </Common.Title>
               <ModalPaymentMain>
-                <button className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400">
+                <button
+                  disabled={disableAddButton}
+                  className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400 transition-all disabled:opacity-20"
+                >
                   <IconCruz />
                 </button>
               </ModalPaymentMain>

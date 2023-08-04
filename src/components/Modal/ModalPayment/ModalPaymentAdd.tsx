@@ -15,12 +15,15 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './add.schema'
 
-export function ModalPaymentAdd() {
+interface IProps {
+  afterFormSubmit: () => void
+}
+
+export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   const router = useRouter()
   const { setPaymentAdd } = usePaymentStore()
   const [isLoading, setIsLoading] = useState(false)
-  // const [selectedValue, setSelectedValue] = useState(5)
-  // const [selectedMethod, setSelectedMethod] = useState('mastercard')
+
   const {
     register,
     control,
@@ -58,6 +61,7 @@ export function ModalPaymentAdd() {
     }
 
     router.push(`/pagamento/recarregar/${data.method}`)
+    afterFormSubmit()
   }
 
   return (
