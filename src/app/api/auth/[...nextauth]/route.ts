@@ -26,7 +26,6 @@ async function handler(
 ) {
   // @ts-ignore
   return NextAuth(req, ctx, {
-    debug: true,
     providers: [
       SteamProvider(req, {
         clientSecret: process.env.STEAM_SECRET!,
