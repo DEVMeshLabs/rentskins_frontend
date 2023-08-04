@@ -9,7 +9,7 @@ export function CardSkinSkeleton({ quantity = 1 }: IProps) {
         return (
           <div
             key={'inventory-skeleton-' + index}
-            className="mb-2 w-[206px] gap-3 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white"
+            className="h-[275px] w-[206px] gap-3 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white"
           >
             <div className="h-32 w-full animate-pulse rounded-lg bg-mesh-color-neutral-600 px-4" />
             <div className="my-4 flex animate-pulse flex-col gap-2">

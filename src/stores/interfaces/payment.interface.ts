@@ -35,6 +35,7 @@ export interface ITransference {
 }
 
 export interface IWithdrawInfo {
+  selectedValue?: number | string
   personal?: IPersonal
   location?: ILocation
   transference?: ITransference

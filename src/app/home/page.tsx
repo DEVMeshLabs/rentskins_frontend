@@ -7,15 +7,26 @@ import {
   IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
-import AllSkins from '@/components/Others/Skins/AllSkins'
-import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
+import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
 import SkinService from '@/services/skin.service'
 import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import dynamic from 'next/dynamic'
+const AllSkins = dynamic<IAllSkinsProps>(
+  () =>
+    import('@/components/Others/Skins/AllSkins').then(
+      (module) => module.default,
+    ),
+  {
+    ssr: false,
+  },
+)
 
 export default function Home() {
   const { user } = useUserStore()
+
   const { data, isLoading } = useQuery({
     queryKey: ['allSkins'],
     queryFn: () => SkinService.findByAll(),
@@ -77,7 +88,7 @@ export default function Home() {
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
         {isLoading ? (
-          <AllSkeletonSkins quantitySkeletons={15} />
+          <AllSkeletonSkins quantitySkeletons={20} />
         ) : (
           <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
         )}

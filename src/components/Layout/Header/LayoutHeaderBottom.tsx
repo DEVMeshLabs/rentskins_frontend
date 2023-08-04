@@ -22,28 +22,30 @@ export function LayoutHeaderBottom({ className }: IProps) {
     <div
       className={`${className} z-0 flex w-full select-none items-center justify-center gap-10 border-y border-mesh-color-neutral-700`}
     >
+      {/*  */}
       <div className="flex w-10/12 select-none justify-between gap-10 p-4">
         <ContainerItem title="Faca" iconSeta={<IconSetaType />} isList={true}>
           <ItemLink
             items={[
               'Adagas das Sombras',
-              'Baioneta M9',
               'Baioneta',
+              'Baioneta M9',
+              'Canivete Flip',
               'Canivete Borboleta',
+              'Canivete Falchion',
               'Faca Bowie',
               'Faca Clássica',
-              'Faca de Caçador',
-              'Faca de Esqueleto',
-              'Faca de Guerra',
+              'Faca de Cordame',
               'Faca de Sobrevivência',
-              'Faca de Ursus',
-              'Faca Estilete',
-              'Faca Falchion',
-              'Faca Gut',
+              'Faca do Caçador',
+              'Faca Esqueleto',
+              'Faca Gut Hook',
               'Faca Navaja',
               'Faca Nômade',
-              'Faca Paracord',
-              'Faca Virar',
+              'Faca Stiletto',
+              'Faca Talon',
+              'Faca Ursus',
+              'Karambit',
             ]}
           />
         </ContainerItem>

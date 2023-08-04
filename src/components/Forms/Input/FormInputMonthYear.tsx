@@ -1,47 +1,52 @@
-import React, { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
+import ReactInputMask from 'react-input-mask'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   label?: string
-  labelSide?: 'up' | 'down'
+  mask?: string
+  maskPlaceholder?: string
+  maskChar?: string | null | undefined
+  alwaysShowMask?: boolean
   labelClassName?: string
   inputClassName?: string
-  state: string
-  setState: React.Dispatch<React.SetStateAction<string>>
+
+  register: any
+  errors?: any
+  errorsClassname?: string
 }
 
 export function FormInputMonthYear({
   label,
-  labelSide = 'up',
+  name,
   labelClassName,
+  mask,
+  maskPlaceholder,
+  alwaysShowMask = false,
+  maskChar = null,
   inputClassName,
-  state,
-  setState,
+  register,
+  errors,
+  errorsClassname,
   ...rest
 }: IProps) {
-  const formatInput = (value: string): string => {
-    const numbers = value.replace(/\D/g, '')
-
-    const month = numbers.slice(0, 2)
-    const year = numbers.slice(2, 4)
-
-    if (value.length > 2) {
-      return `${month}/${year}`
-    }
-    return String(month)
-  }
-
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label && labelSide === 'up' && label}
-      <input
+      <text className="-mb-4"> {label} </text>
+      <ReactInputMask
+        mask={mask || '99/99'}
+        alwaysShowMask={alwaysShowMask}
+        maskChar={maskChar}
+        maskPlaceholder={maskPlaceholder}
+        className={`${inputClassName || options.input.className}`}
         type="text"
-        onChange={({ target }) => setState(formatInput(target.value))}
-        value={state}
-        className={`${inputClassName} ${options.input.className}`}
-        {...rest}
+        placeholder={rest.placeholder}
+        {...register}
       />
-      {label && labelSide === 'down' && label}
+      <text className={errorsClassname || options.input.errors}>
+        {errors && errors?.message}
+      </text>
     </label>
   )
 }

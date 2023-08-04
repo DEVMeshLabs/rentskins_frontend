@@ -6,6 +6,7 @@ import {
   IStates,
   TTypeSort,
 } from './interfaces/filters.interface'
+import { ITime } from '@/services/interfaces/notification.interface'
 
 const useFilterStore = create<IStates>((set) => ({
   selectedFilters: {
@@ -59,8 +60,8 @@ const useFilterStore = create<IStates>((set) => ({
     }))
   },
 
-  notificationFilter: 'Tudo',
-  setNotificationFilter: (notificationFilter: string) => {
+  notificationFilter: 'tudo',
+  setNotificationFilter: (notificationFilter: ITime) => {
     set(() => ({ notificationFilter }))
   },
 

@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
+import { ISkins } from '@/interfaces/ISkins'
 import create from 'zustand'
 import {
   IPaymentRefound,
   PaymentMethodRefound,
 } from './interfaces/components.interface'
-import { ISkins } from '@/interfaces/ISkins'
 
 interface IStates {
   paymentGeneralIndex: 0 | 1 | 2
@@ -25,6 +25,9 @@ interface IStates {
   setFilterType: (type: 0 | 1 | 2) => void
   allSkinsCategory: ISkins[] | undefined
   setAllSkinsCategory: (skins: ISkins[]) => void
+
+  isInventoryFetching: boolean
+  setIsInventoryFetching: (isInventoryFetching: boolean) => void
 }
 
 const useComponentStore = create<IStates>((set) => ({
@@ -71,6 +74,11 @@ const useComponentStore = create<IStates>((set) => ({
   allSkinsCategory: [],
   setAllSkinsCategory: (skins: ISkins[]) => {
     set(() => ({ allSkinsCategory: skins }))
+  },
+
+  isInventoryFetching: false,
+  setIsInventoryFetching: (isInventoryFetching: boolean) => {
+    set(() => ({ isInventoryFetching }))
   },
 }))
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import Image, { StaticImageData } from 'next/image'
+import Image from 'next/image'
 
 interface IProps {
-  image: string | StaticImageData
+  image: string
 }
 
 export function NotificationImage({ image }: IProps) {
@@ -10,8 +10,10 @@ export function NotificationImage({ image }: IProps) {
     <div className="flex items-center gap-4">
       <Image
         className="w-20 rounded-lg bg-mesh-color-neutral-1000 p-2"
-        src={image}
+        src={`https://steamcommunity-a.akamaihd.net/economy/image/${image}`}
         alt={String(image)}
+        width={20}
+        height={20}
       />
     </div>
   )

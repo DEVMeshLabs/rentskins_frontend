@@ -1,59 +1,54 @@
+import Common from '@/components/Common'
 import NotificationCard from '@/components/Others/NotificationCard'
-import useFilterStore from '@/stores/filters.store'
-import { StaticImageData } from 'next/image'
+import { INotification } from '@/services/interfaces/notification.interface'
+// import useFilterStore from '@/stores/filters.store'
 
-interface IData {
-  content: string
-  icon: string | StaticImageData
-  timestamp: number
-  new: boolean
-}
-
-interface IProps {
-  data: IData[]
+export interface INotificationHistoricProps {
+  data: INotification[] | undefined
   loading: boolean
 }
 
-export function PageNotificationHistoric({ data, loading }: IProps) {
-  const { notificationFilter } = useFilterStore()
-
-  const timeFilter = () => {
-    switch (notificationFilter) {
-      case 'Tudo':
-        return [0, 0]
-      case 'Hoje':
-        return [0, 86400]
-      case '1-3 Dias':
-        return [86400, 259200]
-      case '1 Semana':
-        return [259200, 604800]
-      default:
-        return [0, 0]
-    }
-  }
-
-  const renderContent = data.map((item, index) => {
-    if (
-      (timeFilter()[0] === 0 && timeFilter()[1] === 0) ||
-      (item.timestamp >= timeFilter()[0] && item.timestamp <= timeFilter()[1])
-    ) {
-      return (
-        <NotificationCard.Root key={'notification-' + index} newCard={item.new}>
-          <div className="flex items-center gap-4">
-            <NotificationCard.Image image={item.icon} />
-            <NotificationCard.Content>{item.content}</NotificationCard.Content>
-          </div>
-          <NotificationCard.Time timestamp={item.timestamp} />
-        </NotificationCard.Root>
-      )
-    }
-    return null
-  })
-
+export default function PageNotificationHistoric({
+  data,
+  loading,
+}: INotificationHistoricProps) {
   return (
     <div className="mb-12 mt-4 h-screen gap-4 overflow-y-scroll pr-4">
       <div className="flex flex-col gap-4" data-aos="fade-up">
-        {data ? renderContent : <NotificationCard.Skeleton quantity={8} />}
+        {!loading ? (
+          data?.length ? (
+            data!.map((notifs, index) => {
+              const timestamp = new Date(notifs.createdAt)
+              const currentTimestamp = Date.now()
+
+              const diffMilliseconds = currentTimestamp - timestamp.getTime()
+              const diffMinutes = Math.floor(diffMilliseconds / (1000 * 60))
+              return (
+                <NotificationCard.Root
+                  key={'notification-' + index}
+                  newCard={notifs.new}
+                >
+                  <div className="flex items-center gap-4">
+                    <NotificationCard.Image
+                      image={notifs.skin?.skin_image || ''}
+                    />
+                    <NotificationCard.Content>
+                      {notifs.description}
+                    </NotificationCard.Content>
+                  </div>
+                  <NotificationCard.Time timestamp={diffMinutes} />
+                </NotificationCard.Root>
+              )
+            })
+          ) : (
+            <Common.Title className="mt-16 self-center text-2xl text-mesh-color-neutral-100">
+              Não encontramos nenhuma notificação referente ao período que você
+              escolheu.
+            </Common.Title>
+          )
+        ) : (
+          <NotificationCard.Skeleton quantity={8} />
+        )}
       </div>
     </div>
   )

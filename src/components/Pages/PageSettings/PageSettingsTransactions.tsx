@@ -4,7 +4,7 @@ import { TransactionsTable } from '@/components/Others/TransactionsTable'
 
 export function PageSettingsTransactions() {
   return (
-    <div className="flex w-2/3 flex-col gap-8 overflow-hidden">
+    <div className="-mb-64 flex w-2/3 flex-col gap-8 overflow-hidden">
       <div className="flex h-4/6 flex-col gap-10 rounded-2xl bg-mesh-color-neutral-800 py-6">
         <Common.Title bold={700} size={'2xl'} color="white" className="px-4">
           Transações

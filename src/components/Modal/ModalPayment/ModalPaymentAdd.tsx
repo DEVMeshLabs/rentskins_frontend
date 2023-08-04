@@ -1,6 +1,6 @@
-import Mastercard from '@/../public/payment/mastercard.png'
-import PIX from '@/../public/payment/pix.png'
-import Ticket from '@/../public/payment/ticket.png'
+import ImageMastercard from '@/../public/payment/mastercard.png'
+import ImagePIX from '@/../public/payment/pix.png'
+import ImageTicket from '@/../public/payment/ticket.png'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons/IconClose'
@@ -9,41 +9,55 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import usePaymentStore from '@/stores/payment.store'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
+import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { formResolver } from './add.schema'
 
 export function ModalPaymentAdd() {
   const router = useRouter()
-  const { paymentAdd, setPaymentAdd } = usePaymentStore()
+  const { setPaymentAdd } = usePaymentStore()
   const [isLoading, setIsLoading] = useState(false)
-  const [selectedValue, setSelectedValue] = useState(5)
-  const [selectedMethod, setSelectedMethod] = useState('mastercard')
+  // const [selectedValue, setSelectedValue] = useState(5)
+  // const [selectedMethod, setSelectedMethod] = useState('mastercard')
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      method: 'mastercard',
+      value: '',
+      valueButtons: 'R$ 5,00',
+    },
+  })
 
-  // const handleMethodChange = (event: any) => {
-  //   setPaymentAdd({ method: event.target.value, value: paymentAdd.value })
-  // }
+  const watchValue = watch('value')
 
-  // const handleValueChange = (event: any) => {
-  //   setPaymentAdd({
-  //     method: paymentAdd.method,
-  //     value: Number(event.target.value),
-  //   })
-  // }
-
-  useEffect(() => {
-    setPaymentAdd({ ...paymentAdd, method: 'mastercard' })
-  }, [])
-
-  const handleOnDeposit = () => {
+  const onSubmit = (data: any) => {
     setIsLoading(true)
 
-    if (selectedValue !== undefined) {
-      if (Number(selectedValue) > 0) {
-        setPaymentAdd({ ...paymentAdd, value: Number(selectedValue) })
-      }
+    if (data.value === '') {
+      let currencyToNumber
+      currencyToNumber = data?.valueButtons.replace(/\./g, '')
+      currencyToNumber = currencyToNumber.replace('R$ ', '')
+      currencyToNumber = currencyToNumber.replace(',', '.')
+
+      setPaymentAdd({ method: data.method, value: currencyToNumber })
+    } else {
+      let currencyToNumber
+      currencyToNumber = data?.value.replace(/\./g, '')
+      currencyToNumber = currencyToNumber.replace('R$ ', '')
+      currencyToNumber = currencyToNumber.replace(',', '.')
+
+      setPaymentAdd({ method: data.method, value: currencyToNumber })
     }
 
-    router.push(`/pagamento/recarregar/${paymentAdd.method}`)
+    router.push(`/pagamento/recarregar/${data.method}`)
   }
 
   return (
@@ -61,19 +75,14 @@ rounded-2xl bg-mesh-color-neutral-700"
           >
             Selecione a forma de pagamento
           </Common.Title>
-
-          <Form.Input.Radio.Block
-            state={selectedMethod}
-            setState={setSelectedMethod}
-            name="payment-add-method"
-            labelClassname="h-24"
-            containerClassname="mt-8 grid grid-cols-2 gap-2"
-            imageClassname="w-20"
-            options={[
-              { label: Mastercard, value: 'mastercard', labelType: 'image' },
-              { label: PIX, value: 'pix', labelType: 'image' },
-              { label: Ticket, value: 'ticket', labelType: 'image' },
-            ]}
+          <Form.Input.Radio.Default
+            name="method"
+            wrapperClassname="h-24 w-full"
+            labelClassName="transition-all bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
+          hover:cursor-pointer hover:border-mesh-color-primary-600/50 peer-checked:border-mesh-color-primary-600 text-white"
+            containerClassname="mt-4 grid grid-cols-2 items-center justify-start gap-1 w-full"
+            items={renderRadioMethodOptions()}
+            register={register('method')}
           />
         </div>
         <LayoutLoading label="Processando..." enabled={isLoading}>
@@ -95,56 +104,30 @@ rounded-2xl bg-mesh-color-neutral-700"
                 </Common.Button>
               </Dialog.Close>
             </div>
-            <div className="mt-3 flex h-full w-full flex-col justify-between">
+            <Form.Root
+              className="mt-3 flex h-full w-full flex-col justify-between"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className="flex h-min w-full justify-around">
                 <div className="flex w-1/2 flex-col">
-                  <label className="flex w-full flex-col text-mesh-color-neutral-200">
-                    Valor do Pagamento
-                    <div className="-mt-8 w-full">
-                      <span
-                        className={`relative left-3 top-1/2 text-lg font-semibold transition-all ${
-                          selectedValue !== undefined ? '' : 'text-transparent'
-                        }`}
-                      >
-                        R$
-                      </span>
-                      <input
-                        type="number"
-                        min={0}
-                        value={Number(selectedValue)?.toFixed(2)}
-                        onChange={(event) =>
-                          setSelectedValue(Number(event.target.value))
-                        }
-                        className={`my-2 w-full rounded-md bg-mesh-color-neutral-500
-                        px-3 py-4 outline-mesh-color-primary-600 transition-all ${
-                          selectedValue !== undefined ? 'pl-10' : 'pl-4'
-                        } text-white
-                        placeholder:text-mesh-color-neutral-100 focus:placeholder:text-transparent`}
-                        placeholder="R$ 0,00"
-                      />
-                    </div>
-                  </label>
-                  <Form.Input.Radio.Block
-                    state={selectedValue}
-                    setState={setSelectedValue}
-                    name="payment-add-value"
-                    labelClassname="h-16"
-                    containerClassname="mt-8 grid grid-cols-2 gap-2"
-                    imageClassname="w-20"
-                    options={[
-                      { label: 'R$ 5,00', value: 5, labelType: 'string' },
-                      { label: 'R$ 10,00', value: 10, labelType: 'string' },
-                      { label: 'R$ 25,00', value: 25, labelType: 'string' },
-                      { label: 'R$ 50,00', value: 50, labelType: 'string' },
-                      { label: 'R$ 100,00', value: 100, labelType: 'string' },
-                      { label: 'R$ 200,00', value: 200, labelType: 'string' },
-                      { label: 'R$ 500,00', value: 500, labelType: 'string' },
-                      {
-                        label: 'R$ 1.000,00',
-                        value: 1000,
-                        labelType: 'string',
-                      },
-                    ]}
+                  <Form.Input.Currency
+                    name="value"
+                    register={register('value')}
+                    control={control}
+                    label="Valor do Pagamento"
+                    placeHolder="R$ 0,00"
+                    errors={errors.value}
+                  />
+                  <Form.Input.Radio.Default
+                    name="value"
+                    wrapperClassname="h-16 w-full"
+                    disabled={watchValue !== ''}
+                    labelClassName="transition-all bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
+                    hover:cursor-pointer hover:border-mesh-color-primary-600/50 peer-checked:border-mesh-color-primary-600 text-white peer-disabled:border-transparent
+                    peer-disabled:bg-mesh-color-neutral-800 peer-disabled:text-mesh-color-neutral-500 peer-disabled:cursor-default "
+                    containerClassname="grid grid-cols-2 items-center justify-start gap-1 w-full mt-2"
+                    items={renderRadioValueOptions()}
+                    register={register('valueButtons')}
                   />
                 </div>
                 <div className="w-1/3 self-center">
@@ -180,18 +163,55 @@ rounded-2xl bg-mesh-color-neutral-700"
                   </a>
                   .
                 </span>
-                <Common.Button
-                  onClick={() => handleOnDeposit()}
-                  disabled={Number(selectedValue) <= 0}
+                <Form.Button
+                  buttonStyle={undefined}
                   className="h-16 w-1/2 border-transparent bg-mesh-color-primary-1200 text-xl font-extrabold transition-all disabled:bg-mesh-color-neutral-500 disabled:text-mesh-color-neutral-400"
                 >
                   Depositar
-                </Common.Button>
+                </Form.Button>
               </div>
-            </div>
+            </Form.Root>
           </div>
         </LayoutLoading>
       </div>
     </Dialog.Content>
   )
+}
+
+const renderRadioMethodOptions = () => {
+  const renderImage = (image: StaticImageData, alt: string) => (
+    <div className="flex items-center justify-center gap-4">
+      <Image src={image} alt={alt} width={64} />
+    </div>
+  )
+
+  return [
+    {
+      label: renderImage(ImageMastercard, 'mastercard'),
+      value: 'mastercard',
+    },
+    {
+      label: renderImage(ImagePIX, 'pix'),
+      value: 'pix',
+    },
+    {
+      label: renderImage(ImageTicket, 'boleto'),
+      value: 'boleto',
+    },
+  ] as any
+}
+
+const renderRadioValueOptions = () => {
+  const elements = [
+    { label: <text>R$ 5,00</text>, value: 'R$ 5,00' },
+    { label: <text>R$ 10,00</text>, value: 'R$ 10,00' },
+    { label: <text>R$ 25,00</text>, value: 'R$ 25,00' },
+    { label: <text>R$ 50,00</text>, value: 'R$ 50,00' },
+    { label: <text>R$ 100,00</text>, value: 'R$ 100,00' },
+    { label: <text>R$ 200,00</text>, value: 'R$ 200,00' },
+    { label: <text>R$ 500,00</text>, value: 'R$ 500,00' },
+    { label: <text>R$ 1.000,00</text>, value: 'R$ 1000,00' },
+  ]
+
+  return elements
 }

@@ -11,12 +11,15 @@ interface IData {
   value: number
 }
 
-interface IProps {
+export interface INotificationTransactionProps {
   data: IData[]
   loading: boolean
 }
 
-export function PageNotificationTransaction({ data, loading }: IProps) {
+export default function PageNotificationTransaction({
+  data,
+  loading,
+}: INotificationTransactionProps) {
   const renderPending = data.map((item, index) => (
     <TransactionCard.Root key={'transactions-' + index}>
       <div className="flex items-center gap-4">

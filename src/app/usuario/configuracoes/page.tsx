@@ -62,7 +62,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="flex h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pt-8">
+    <main className="flex min-h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pb-16 pt-8">
       <div className="flex h-min w-max flex-col items-end gap-2">
         <div className="flex flex-col items-start gap-6">
           <Common.Title bold={900} size="2xl" color="white">
@@ -74,9 +74,13 @@ export default function Settings() {
               name="settings"
               state={selectedSetting}
               setState={setSelectedSetting}
-              compareChecked={searchParams.get('type') as string}
               onChange={({ target }) => handleOnRadio(target.value)}
-              labelClassname="bg-transparent border-none peer-checked:text-mesh-color-primary-1200 peer-checked:bg-mesh-color-neutral-600"
+              labelClassname="
+              flex h-full w-full rounded-md
+              px-4 py-3 text-lg text-mesh-color-neutral-200
+              duration-500 hover:bg-mesh-color-neutral-500/50
+              cursor-pointer select-none items-center justify-center transition-all
+              bg-transparent border-none peer-checked:text-mesh-color-primary-1200 peer-checked:bg-mesh-color-neutral-600"
               wrapperClassname="flex flex-col justify-start gap-2"
               containerClassname="w-full"
               options={renderRadioButtonOptions(searchParams)}
@@ -86,7 +90,7 @@ export default function Settings() {
       </div>
 
       {renderPageContent()}
-    </div>
+    </main>
   )
 }
 
@@ -113,6 +117,7 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
         </div>
       ),
       value: 'personal',
+      checked: searchParams.get('type') === 'personal',
     },
     {
       icon: (
@@ -137,6 +142,7 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
         </div>
       ),
       value: 'transactions',
+      checked: searchParams.get('type') === 'transactions',
     },
     {
       icon: (
@@ -159,6 +165,7 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
         </div>
       ),
       value: 'security',
+      checked: searchParams.get('type') === 'security',
     },
   ]
 

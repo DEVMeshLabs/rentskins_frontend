@@ -12,9 +12,11 @@ import { FormInputMonthYear } from './Input/FormInputMonthYear'
 import { FormInputNumber } from './Input/FormInputNumber'
 import { FormInputPhone } from './Input/FormInputPhone'
 import { FormInputPostalCode } from './Input/FormInputPostalCode'
+import { FormInputString } from './Input/FormInputString'
 import { FormInputText } from './Input/FormInputText'
 import { FormInputRadioBlock } from './Input/Radio/FormInputRadioBlock'
 import { FormInputRadioChoice } from './Input/Radio/FormInputRadioChoice'
+import { FormInputRadioDefault } from './Input/Radio/FormInputRadioDefault'
 import { FormInputRadioInline } from './Input/Radio/FormInputRadioInline'
 
 const Form = {
@@ -37,7 +39,9 @@ const Form = {
       Block: FormInputRadioBlock,
       Inline: FormInputRadioInline,
       Choice: FormInputRadioChoice,
+      Default: FormInputRadioDefault,
     },
+    String: FormInputString,
     Text: FormInputText,
   },
 }
