@@ -22,6 +22,7 @@ async function handler(
     ],
     pages: {
       signIn: '/',
+      signOut: '/',
       error: '/oops',
     },
     callbacks: {
