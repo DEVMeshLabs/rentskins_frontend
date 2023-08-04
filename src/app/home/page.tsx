@@ -7,14 +7,17 @@ import {
 import { HeroInformation } from '@/components/Others/HeroInformation'
 import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'
 import PageHomeSkins from '@/components/Pages/PageHome/PageHomeSkins'
-import Head from 'next/head'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Página Inicial - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function Home() {
   return (
     <main className="h-full">
-      <Head>
-        <title>Teste</title>
-      </Head>
       <div className="h-screen">
         <div className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat">
           <PageHomeHero />
