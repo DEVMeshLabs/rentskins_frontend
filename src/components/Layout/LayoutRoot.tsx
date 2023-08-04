@@ -1,7 +1,7 @@
 'use client'
 import { SessionProvider } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ModalNotificationFilter } from '../Modal/ModalNotification/ModalNotificationFilter'
 import { ModalPaymentMain } from '../Modal/ModalPayment/ModalPaymentMain'
 import { LayoutHeaderBottom } from './Header/LayoutHeaderBottom'
@@ -17,6 +17,12 @@ type IProps = {
 
 export function LayoutRoot({ children, session }: IProps) {
   const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname === '/' || pathname === '/home') {
+      console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.')
+    }
+  }, [pathname])
 
   const modalRender = () => {
     switch (pathname) {

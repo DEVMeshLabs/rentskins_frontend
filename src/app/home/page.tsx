@@ -1,5 +1,3 @@
-'use client'
-import { CommonSteamButton } from '@/components/Common/CommonSteamButton'
 import {
   IconDevolution,
   IconMagnifyingGlass,
@@ -7,38 +5,11 @@ import {
   IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
-import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
-import SkinService from '@/services/skin.service'
-import { useQuery } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
+import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'
+import PageHomeSkins from '@/components/Pages/PageHome/PageHomeSkins'
 import Head from 'next/head'
-import { useEffect } from 'react'
-const AllSkins = dynamic<IAllSkinsProps>(
-  () =>
-    import('@/components/Others/Skins/AllSkins').then(
-      (module) => module.default,
-    ),
-  {
-    ssr: false,
-  },
-)
 
 export default function Home() {
-  const { status } = useSession()
-
-  useEffect(
-    () =>
-      console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.'),
-    [],
-  )
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['allSkins'],
-    queryFn: () => SkinService.findByAll(),
-  })
-
   return (
     <main className="h-full">
       <Head>
@@ -46,29 +17,7 @@ export default function Home() {
       </Head>
       <div className="h-screen">
         <div className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat">
-          <div className="flex flex-col items-center space-y-8 text-center text-white">
-            <p className="max-w-2xl text-[3.5rem] font-bold leading-none">
-              <span>
-                Descubra o mundo das skins{' '}
-                <strong className="bg-mesh-gradient-green-pattern bg-clip-text text-transparent">
-                  CS:GO
-                </strong>
-              </span>
-            </p>
-            <p className="max-w-3xl text-2xl">
-              Personalize seu arsenal com as skins mais incríveis, encontrando
-              as skins perfeitas para dominar o jogo!
-            </p>
-            <CommonSteamButton
-              className={`${
-                status === 'unauthenticated'
-                  ? 'h-[60px] opacity-100'
-                  : 'h-0 opacity-0'
-              } font-Roboto flex w-[330px] 
-              items-center justify-center gap-4 rounded-md bg-mesh-color-primary-1200 no-underline 
-              transition-all duration-300 ease-in-out hover:bg-mesh-gradient-steam-button`}
-            />
-          </div>
+          <PageHomeHero />
         </div>
         <div className="h-1/5 w-full bg-mesh-color-neutral-800">
           <hr className="-mt-0.5 h-2 w-full bg-mesh-gradient-green-pattern" />
@@ -99,11 +48,7 @@ export default function Home() {
         </div>
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
-        {isLoading ? (
-          <AllSkeletonSkins quantitySkeletons={20} />
-        ) : (
-          <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
-        )}
+        <PageHomeSkins />
       </div>
     </main>
   )
