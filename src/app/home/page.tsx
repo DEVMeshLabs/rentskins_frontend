@@ -11,7 +11,7 @@ import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
 import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 const AllSkins = dynamic<IAllSkinsProps>(
@@ -55,9 +55,15 @@ export default function Home() {
               Personalize seu arsenal com as skins mais incríveis, encontrando
               as skins perfeitas para dominar o jogo!
             </p>
-            {status !== 'authenticated' && (
-              <CommonSteamButton onClick={() => signIn()} />
-            )}
+            <CommonSteamButton
+              className={`${
+                status === 'unauthenticated'
+                  ? 'h-[60px] opacity-100'
+                  : 'h-0 opacity-0'
+              } font-Roboto flex w-[330px] 
+              items-center justify-center gap-4 rounded-md bg-mesh-color-primary-1200 no-underline 
+              transition-all duration-300 ease-in-out hover:bg-mesh-gradient-steam-button`}
+            />
           </div>
         </div>
         <div className="h-1/5 w-full bg-mesh-color-neutral-800">

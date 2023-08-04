@@ -4,18 +4,6 @@ import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
 import { NextRequest } from 'next/server'
 
-// export const authOptions: NextAuthOptions = {
-//   // your configs
-//   providers: [SteamProvider(req, {})],
-//   secret: process.env.NEXTAUTH_SECRET,
-//   // pages: {
-//   //   signIn: '/',
-//   //   signOut: '/',
-//   //   error: '/', // Error code passed in query string as ?error=
-//   //   verifyRequest: '/', // (used for check email message)
-//   //   newUser: '/', // New users will be directed here on first sign in (leave the property out if not of interest)
-//   // },
-// }
 async function handler(
   req: NextRequest,
   ctx: {

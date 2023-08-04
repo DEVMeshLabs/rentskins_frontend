@@ -25,14 +25,13 @@ export function LayoutHeaderDropdown({ refDropdown }: IProps) {
       >
         Perfil
       </Link>
-      <Link
+      <button
         className="border-none py-1 font-semibold text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
         onClick={() => signOut()}
         // href={'/'}
-        href={''}
       >
         Sair
-      </Link>
+      </button>
     </div>
   )
 }
