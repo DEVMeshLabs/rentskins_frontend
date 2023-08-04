@@ -1,4 +1,4 @@
-import useUserStore from '@/stores/user.store'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { MutableRefObject } from 'react'
 
@@ -7,7 +7,6 @@ interface IProps {
 }
 
 export function LayoutHeaderDropdown({ refDropdown }: IProps) {
-  const { setLogout } = useUserStore()
   return (
     <div
       className="absolute top-20 z-30 flex h-28 w-48 select-none flex-col items-start justify-center gap-0 overflow-hidden
@@ -28,7 +27,7 @@ export function LayoutHeaderDropdown({ refDropdown }: IProps) {
       </Link>
       <Link
         className="border-none py-1 font-semibold text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
-        onClick={() => setLogout(true)}
+        onClick={() => signOut()}
         // href={'/'}
         href={''}
       >

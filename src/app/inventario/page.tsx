@@ -1,8 +1,4 @@
-'use client'
-import Authentication from '@/tools/authentication.tool'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 
 const PageInventoryFilters = dynamic(() =>
   import('@/components/Pages/PageInventory/PageInventoryFilters').then(
@@ -21,8 +17,8 @@ const PageInventorySummary = dynamic(() =>
 )
 
 export default function Inventory() {
-  const router = useRouter()
-  useEffect(() => Authentication.authenticate(router), [router])
+  // const router = useRouter()
+  // useEffect(() => Authentication.authenticate(router), [router])
 
   return (
     <main className="w-full bg-mesh-color-others-black pt-[32px]">

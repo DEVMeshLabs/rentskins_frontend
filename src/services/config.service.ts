@@ -3,8 +3,10 @@ import { IConfig } from '@/interfaces/IConfig'
 import { Api } from '@/providers'
 
 export default class ConfigService {
-  public static findByConfigUserId(id: string) {
-    return Api.get<IConfig>(`/configuration/user/${id}`)
+  public static findByConfigUserId(id: string, token: string) {
+    return Api.get<IConfig>(`/configuration/user/${id}`, {
+      headers: { Authorization: 'Bearer ' + token },
+    })
   }
 
   public static async createConfig({

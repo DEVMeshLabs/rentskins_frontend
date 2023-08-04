@@ -1,4 +1,5 @@
-import React, { MouseEventHandler } from 'react'
+import { signIn } from 'next-auth/react'
+import { MouseEventHandler } from 'react'
 import { IconSteam } from '../Icons'
 
 type Props = {
@@ -15,7 +16,7 @@ export function CommonSteamButton({
 }: Props) {
   return (
     <button
-      onClick={onClick}
+      onClick={() => signIn()}
       type="button"
       className={`font-Roboto rounded-md bg-mesh-color-primary-1200 no-underline 
       transition-all duration-300 ease-in-out ${width} ${height} flex 

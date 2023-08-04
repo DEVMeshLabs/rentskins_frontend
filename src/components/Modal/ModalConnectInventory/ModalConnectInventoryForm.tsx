@@ -1,13 +1,17 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
+import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
-import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './form.schema'
 
 export function ModalConnectInventoryForm() {
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
+
   const {
     register,
     handleSubmit,
@@ -23,17 +27,13 @@ export function ModalConnectInventoryForm() {
   })
   const [formData, setFormData] = useState<any>(undefined)
 
-  const {
-    user: { steamid, username },
-  } = useUserStore()
-
   const { refetch } = useQuery({
-    queryKey: ['ConfigService.createConfig', steamid],
+    queryKey: ['ConfigService.createConfig', trueSession.user?.steam?.steamid],
     queryFn: () => {
-      const sellLink = `https://rentskins/?sellerid=${steamid}`
+      const sellLink = `https://rentskins/?sellerid=${trueSession.user?.steam?.steamid}`
       const params = {
-        owner_id: steamid,
-        owner_name: username,
+        owner_id: trueSession.user?.steam?.steamid as string,
+        owner_name: trueSession.user?.name as string,
         owner_email: formData.email,
         steam_guard: false,
         url_sell: sellLink,
@@ -50,9 +50,9 @@ export function ModalConnectInventoryForm() {
   const enableButton = dirtyFields.email && dirtyFields['trade-link']
 
   const handleButtonGetTradeLink = () => {
-    if (steamid) {
+    if (status === 'authenticated') {
       window.location.assign(
-        `https://steamcommunity.com/id/${steamid}/tradeoffers/privacy`,
+        `https://steamcommunity.com/id/${trueSession.user?.steam?.steamid}/tradeoffers/privacy`,
       )
     }
   }

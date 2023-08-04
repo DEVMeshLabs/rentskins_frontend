@@ -20,12 +20,17 @@ export default class SkinService {
     filterType: string[],
     page: number,
     itemsPerPage: number,
+    token: string,
   ) {
-    return Api.post<IInventory>(`/skins/inventory/${steamid}`, {
-      filterType,
-      page,
-      itemsPerPage,
-    })
+    return Api.post<IInventory>(
+      `/skins/inventory/${steamid}`,
+      {
+        filterType,
+        page,
+        itemsPerPage,
+      },
+      { headers: { Authorization: 'Bearer ' + token } },
+    )
   }
 
   public static findAllSkinsByWeapon(weapon: string) {

@@ -1,13 +1,13 @@
 'use client'
-import useUserStore from '@/stores/user.store'
-import Authentication from '@/tools/authentication.tool'
-import URLQuery from '@/tools/urlquery.tool'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
+import React from 'react'
 import { ModalNotificationFilter } from '../Modal/ModalNotification/ModalNotificationFilter'
 import { ModalPaymentMain } from '../Modal/ModalPayment/ModalPaymentMain'
 import { LayoutHeaderBottom } from './Header/LayoutHeaderBottom'
 import { LayoutHeaderRoot } from './Header/LayoutHeaderRoot'
+// import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
+import ISteamUser from '@/interfaces/steam.interface'
 import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
 import { LayoutFooter } from './LayoutFooter'
 
@@ -16,20 +16,10 @@ type IProps = {
 }
 
 export function LayoutRoot({ children }: IProps) {
-  const params = useSearchParams()
+  const { data: session } = useSession()
   const pathname = usePathname()
-  const router = useRouter()
-  const { logout, setLogout } = useUserStore()
-
-  useEffect(() => {
-    Authentication.login(params, router, URLQuery)
-  }, [params, router])
-
-  useEffect(() => {
-    if (logout) {
-      Authentication.logout(setLogout)
-    }
-  }, [logout, setLogout])
+  const trueSession = session as ISteamUser
+  console.log(trueSession)
 
   const modalRender = () => {
     switch (pathname) {

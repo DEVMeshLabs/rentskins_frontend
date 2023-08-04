@@ -1,21 +1,19 @@
-import BlankUser from '@/../public/blank-profile.png'
+import BlankUser from '@/assets/perfil.png'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconCarrinho, IconSearch, IconSteam } from '@/components/Icons'
 import { IconCruz } from '@/components/Icons/IconCruz'
 import { IconMira } from '@/components/Icons/IconMira'
 import { IconNotifications } from '@/components/Icons/IconNotifications'
-import { IUser } from '@/interfaces/user.interface'
+import ISteamUser from '@/interfaces/steam.interface'
 import NotificationServices from '@/services/notifications.service'
-import SteamService from '@/services/steam.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
-import JsonWebToken from '@/tools/jsonwebtoken.tool'
-import LocalStorage from '@/tools/localstorage.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
+import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -23,13 +21,17 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import logo from '../../../assets/logo.svg'
 import { LayoutHeaderDropdown } from './LayoutHeaderDropdown'
+import LayoutHeaderSkeleton from './LayoutHeaderSkeleton'
 import { formResolver } from './form.schema'
 
 export function LayoutHeaderTop() {
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
+
   const router = useRouter()
   const pathname = usePathname()
   const refDropdown = useRef(null)
-  const { user, setUser, setWallet, wallet } = useUserStore()
+  const { setWallet, wallet } = useUserStore()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const {
     register,
@@ -48,9 +50,12 @@ export function LayoutHeaderTop() {
   const { notificationFilter } = useFilterStore()
 
   const { data, refetch } = useQuery({
-    queryKey: ['thereIsNotifications', user.steamid],
+    queryKey: ['thereIsNotifications', session?.user as ISteamUser],
     queryFn: async () =>
-      NotificationServices.getAllNotifsByUser(user.steamid, notificationFilter),
+      NotificationServices.getAllNotifsByUser(
+        trueSession.user?.steam?.steamid!,
+        notificationFilter,
+      ),
   })
 
   useEffect(() => {
@@ -62,33 +67,33 @@ export function LayoutHeaderTop() {
     // return () => clearInterval(interval)
   }, [pathname])
 
-  useEffect(() => {
-    const token = LocalStorage.get('token')
-
-    if (token) {
-      const userObject = JsonWebToken.verify(token) as IUser
-      setUser(userObject)
-    }
-  }, [LocalStorage.get('token')])
-
+  console.log(trueSession.user?.token)
   const { data: walletRetrieved } = useQuery({
     queryKey: ['WalletService.getWalletById'],
-    queryFn: () => WalletService.getWalletBySteamID(user?.steamid as string),
-    enabled: !!user?.steamid,
+    queryFn: () =>
+      WalletService.getWalletBySteamID(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+    enabled: status === 'authenticated',
   })
 
   const { data: walletCreated } = useQuery({
     queryKey: ['WalletService.createEmptyWallet'],
     queryFn: () =>
       WalletService.createEmptyWallet(
-        user?.username as string,
-        user?.steamid as string,
+        trueSession.user?.name!,
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
       ),
     enabled:
       walletRetrieved !== undefined &&
       walletRetrieved.response &&
       walletRetrieved.response.status === 404,
   })
+
+  console.log(walletRetrieved)
+  console.log(walletCreated)
 
   useEffect(() => {
     if (walletRetrieved && walletRetrieved.data) {
@@ -97,10 +102,6 @@ export function LayoutHeaderTop() {
       setWallet(walletCreated.data.value)
     }
   }, [walletRetrieved, walletCreated])
-
-  const handleOnSteam = () => {
-    SteamService.redirect()
-  }
 
   const handleOnProfileClick = () => {
     setShowProfileDropdown((state) => !state)
@@ -157,7 +158,7 @@ export function LayoutHeaderTop() {
         </div>
       </div>
       {/* ---------------- RIGHT ----------------------- */}
-      {user === null || !user?.steamid ? (
+      {status === 'unauthenticated' && (
         <div className="flex space-x-4">
           <Link
             href={'/carrinho'}
@@ -169,13 +170,15 @@ export function LayoutHeaderTop() {
           </Link>
           <Common.Button
             className="flex h-[44px] w-[220px] gap-2 rounded-[14px] border-transparent bg-mesh-color-primary-1400 opacity-100"
-            onClick={() => handleOnSteam()}
+            onClick={() => signIn()}
           >
             <IconSteam />
             <span className="font-semibold">Entre com sua Steam</span>
           </Common.Button>
         </div>
-      ) : (
+      )}
+
+      {status === 'authenticated' && (
         <div className="flex items-center gap-x-4">
           <div className="flex items-center gap-6">
             <nav className="flex items-center gap-4">
@@ -239,15 +242,15 @@ export function LayoutHeaderTop() {
             <div className="flex items-end justify-center">
               <div
                 className={`flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-full opacity-70 transition-all hover:opacity-100 ${
-                  user !== null && user?.picture ? '' : 'bg-[#e4e6e7]'
+                  status === 'authenticated' ? '' : 'bg-[#e4e6e7]'
                 }`}
               >
                 <Image
-                  src={user?.picture || BlankUser}
-                  alt={user?.username || 'Profile'}
+                  src={trueSession.user?.image! || BlankUser}
+                  alt={trueSession.user?.name! || 'Profile'}
                   className="cursor-pointer rounded-full"
-                  width={user?.picture ? 44 : 32}
-                  height={user?.picture ? 44 : 32}
+                  width={trueSession.user?.image! ? 44 : 32}
+                  height={trueSession.user?.image! ? 44 : 32}
                   draggable={false}
                   onClick={handleOnProfileClick}
                 />
@@ -259,6 +262,8 @@ export function LayoutHeaderTop() {
           </div>
         </div>
       )}
+
+      {status === 'loading' && <LayoutHeaderSkeleton />}
     </div>
   )
 }

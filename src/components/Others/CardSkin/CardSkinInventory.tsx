@@ -2,6 +2,7 @@
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import { ModalSkinShowcaseMain } from '@/components/Modal/ModalSkinShowcase/ModalSkinShowcaseMain'
+import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
@@ -9,15 +10,14 @@ import useSkinsStore from '@/stores/skins.store'
 import Dimensions from '@/tools/dimensions.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
 
-interface Props {
-  steamid: string
-}
-
-export function CardSkinInventory({ steamid }: Props) {
+export function CardSkinInventory() {
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
   const [page, setPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(16)
   const { inventoryTypeFilter } = useFilterStore()
@@ -28,12 +28,13 @@ export function CardSkinInventory({ steamid }: Props) {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
-        steamid,
+        trueSession.user?.steam?.steamid!,
         inventoryTypeFilter,
         Number(page),
         Number(itemsPerPage),
+        trueSession.user?.token!,
       ),
-    enabled: !!steamid,
+    enabled: status === 'authenticated',
   })
 
   const checkPageDimensions = () => {

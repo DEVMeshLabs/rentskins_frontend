@@ -7,13 +7,23 @@ export default class NotificationServices {
     return Api.get<INotification>('/notifications')
   }
 
-  public static getAllNotifsByUser(userId: string, time?: ITime) {
-    return Api.post<INotification[]>(`/notification/userAll/${userId}`, {
-      tempo: time || 'tudo',
-    })
+  public static getAllNotifsByUser(
+    userId: string,
+    token: string,
+    time?: ITime,
+  ) {
+    return Api.post<INotification[]>(
+      `/notification/userAll/${userId}`,
+      {
+        tempo: time || 'tudo',
+      },
+      { headers: { Authorization: 'Bearer ' + token } },
+    )
   }
 
-  public static readingAllNotifications(ownerId: string) {
-    return Api.put(`/notification/${ownerId}`)
+  public static readingAllNotifications(ownerId: string, token: string) {
+    return Api.put(`/notification/${ownerId}`, {
+      headers: { Authorization: 'Bearer ' + token },
+    })
   }
 }

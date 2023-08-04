@@ -3,9 +3,10 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import useSkinsStore from '@/stores/skins.store'
-import useUserStore from '@/stores/user.store'
 import { useEffect, useState } from 'react'
 
+import ISteamUser from '@/interfaces/steam.interface'
+import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
 
@@ -44,6 +45,8 @@ export function ModalSkinShowcaseInfo({
   isSelected,
   id,
 }: Props) {
+  const { data: session } = useSession()
+  const trueSession = (session as ISteamUser) || {}
   const [disabled, setDisabled] = useState(true)
   const [savePrice, setSavePrice] = useState('')
   const {
@@ -52,12 +55,8 @@ export function ModalSkinShowcaseInfo({
     changeSkinToAdvertise,
     skinsToAdvertise,
   } = useSkinsStore()
-  const {
-    user: { steamid, username },
-  } = useUserStore()
 
   useEffect(() => {
-    console.log(steamid)
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
     )
@@ -102,8 +101,8 @@ export function ModalSkinShowcaseInfo({
       setSkinsToAdvertise({
         id,
         sale_type,
-        seller_id: steamid,
-        seller_name: username,
+        seller_id: trueSession.user?.steam?.steamid as string,
+        seller_name: trueSession.user?.name as string,
         skin_category,
         skin_color,
         skin_float,

@@ -2,13 +2,14 @@
 import Common from '@/components/Common'
 import { INotificationHistoricProps } from '@/components/Pages/PageNotification/PageNotificationHistoric'
 import { INotificationTransactionProps } from '@/components/Pages/PageNotification/PageNotificationTransaction'
+import ISteamUser from '@/interfaces/steam.interface'
 import { transactionsMock } from '@/Mock/notification.transaction.mock'
 import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
-import useUserStore from '@/stores/user.store'
 import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
 import Aos from 'aos'
+import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -25,27 +26,30 @@ const PageNotificationTransaction = dynamic<INotificationTransactionProps>(() =>
 )
 
 export default function NotificationPage() {
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
   const { notificationFilter } = useFilterStore()
 
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const {
-    user: { steamid },
-  } = useUserStore()
-
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['allNotificationsUser', steamid],
+    queryKey: ['allNotificationsUser', trueSession.user?.steam?.steamid!],
     queryFn: async () => {
       const allNotifications = NotificationServices.getAllNotifsByUser(
-        steamid,
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
         notificationFilter,
       )
       if ((await allNotifications).data.length > 0) {
-        NotificationServices.readingAllNotifications(steamid)
+        NotificationServices.readingAllNotifications(
+          trueSession.user?.steam?.steamid!,
+          trueSession.user?.token!,
+        )
       }
       return allNotifications
     },
+    enabled: status === 'authenticated',
   })
 
   useEffect(() => {

@@ -10,9 +10,8 @@ import { HeroInformation } from '@/components/Others/HeroInformation'
 import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
 import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
-import SteamService from '@/services/steam.service'
-import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import { signIn, useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 const AllSkins = dynamic<IAllSkinsProps>(
@@ -26,7 +25,7 @@ const AllSkins = dynamic<IAllSkinsProps>(
 )
 
 export default function Home() {
-  const { user } = useUserStore()
+  const { status } = useSession()
 
   useEffect(
     () =>
@@ -38,10 +37,6 @@ export default function Home() {
     queryKey: ['allSkins'],
     queryFn: () => SkinService.findByAll(),
   })
-
-  const handleOnSteam = () => {
-    SteamService.redirect()
-  }
 
   return (
     <main className="h-full">
@@ -60,8 +55,8 @@ export default function Home() {
               Personalize seu arsenal com as skins mais incríveis, encontrando
               as skins perfeitas para dominar o jogo!
             </p>
-            {!user.steamid && (
-              <CommonSteamButton onClick={() => handleOnSteam()} />
+            {status !== 'authenticated' && (
+              <CommonSteamButton onClick={() => signIn()} />
             )}
           </div>
         </div>
