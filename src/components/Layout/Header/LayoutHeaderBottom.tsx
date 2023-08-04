@@ -148,7 +148,7 @@ export const ContainerItem = ({
       {isList ? (
         <div className="flex items-center">
           <Common.Title color="white">{title}</Common.Title>
-          <span className="ml-2 transition duration-300 ease-in-out  group-hover:rotate-180">
+          <span className="ml-2 transition duration-300 ease-in-out group-hover:rotate-180">
             {iconSeta}
           </span>
         </div>
@@ -160,7 +160,7 @@ export const ContainerItem = ({
 
       {isList && (
         <div
-          className={`invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white delay-75 group-hover:visible`}
+          className={`invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white shadow-md delay-75 group-hover:visible`}
         >
           <ul className="flex flex-col">{children}</ul>
         </div>
