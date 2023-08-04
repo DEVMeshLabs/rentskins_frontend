@@ -117,14 +117,14 @@ export function LayoutHeaderBottom({ className }: IProps) {
         <ContainerItem title="Luvas" iconSeta={<IconSetaType />} isList={true}>
           <ItemLink
             items={[
-              'Envoltórios de Mão',
-              'Luvas de Moto',
-              'Luvas Especializadas',
-              'Luvas Esportivas',
-              'Luvas de Cão de Caça',
-              'Luvas de Hidra',
-              'Luvas de Motorista',
-              'Luvas de Presas Quebradas',
+              'Bloodhoud Gloves',
+              'Broken Fang Gloves',
+              'Driver Gloves',
+              'Hand Wraps',
+              'Hydra Gloves',
+              'Moto Gloves',
+              'Specialist Gloves',
+              'Sport Gloves',
             ]}
           />
         </ContainerItem>

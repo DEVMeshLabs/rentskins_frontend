@@ -2,7 +2,7 @@
 import useComponentStore from '@/stores/components.store'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
-import Aos from 'aos'
+import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SetStateAction, useEffect, useState } from 'react'
 import { ModalPaymentAdd } from './ModalPaymentAdd'
@@ -10,16 +10,11 @@ import { ModalPaymentCheck } from './ModalPaymentCheck'
 import { ModalPaymentRetrieveMain } from './ModalPaymentRetrieve/ModalPaymentRetrieveMain'
 
 export function ModalPaymentMain() {
+  const { status } = useSession()
   const searchParams = useSearchParams()
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState<string | undefined>('')
   const [modalType, setModalType] = useState<string | undefined>('')
-
-  useEffect(() => {
-    Aos.init({
-      duration: 1000,
-    })
-  }, [])
 
   const {
     paymentGeneralIndex,
@@ -28,17 +23,29 @@ export function ModalPaymentMain() {
   } = useComponentStore()
 
   useEffect(() => {
-    setModalOpen(
-      searchParams.get('modalopen') as SetStateAction<string | undefined>,
-    )
+    const open = searchParams.get('modalopen') as SetStateAction<
+      string | undefined
+    >
+    const type = searchParams.get('modaltype') as SetStateAction<
+      string | undefined
+    >
 
-    setModalType(
-      searchParams.get('modaltype') as SetStateAction<string | undefined>,
-    )
+    setModalOpen(open)
+    setModalType(type)
+
+    if (status !== 'authenticated') {
+      router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
+    }
 
     setPaymentGeneralIndex(0)
     setPaymentRetrieveIndex(0)
-  }, [searchParams, setPaymentGeneralIndex, setPaymentRetrieveIndex])
+  }, [
+    searchParams,
+    setPaymentGeneralIndex,
+    setPaymentRetrieveIndex,
+    status,
+    router,
+  ])
 
   const removeDomainQuery = () => {
     router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
@@ -52,7 +59,11 @@ export function ModalPaymentMain() {
   return (
     <Dialog.Root
       modal
-      open={modalOpen === 'true' && modalType === 'payment'}
+      open={
+        modalOpen === 'true' &&
+        modalType === 'payment' &&
+        status === 'authenticated'
+      }
       defaultOpen={false}
       onOpenChange={() => handleModalOnClose()}
     >
