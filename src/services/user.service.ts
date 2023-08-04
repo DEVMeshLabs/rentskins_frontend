@@ -1,13 +1,20 @@
-import { IUser } from '@/interfaces/user.interface'
 import { Api } from '@/providers'
-import { ICreateUser } from './interfaces/user.interface'
+import { ICreateUser, IGetUser } from './interfaces/user.interface'
 
-export default class SkinService {
-  public static getUser(userSteamId: string) {
-    return Api.get<IUser>(`/perfil/${userSteamId}`)
+export default class UserService {
+  public static getUser(userSteamId: string, token?: string) {
+    return Api.get<IGetUser>(`/perfil/user/${userSteamId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   }
 
-  public static createUser(userSteamId: ICreateUser) {
-    return Api.post(`/perfil/${userSteamId}`)
+  public static createUser(userCreate: ICreateUser, token: string) {
+    return Api.post(`/perfil`, userCreate, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   }
 }

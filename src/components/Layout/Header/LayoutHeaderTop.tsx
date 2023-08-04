@@ -62,10 +62,6 @@ export function LayoutHeaderTop() {
 
     // return () => clearInterval(interval)
   }, [pathname])
-  useQuery({
-    queryKey: ['Profile'],
-    queryFn: () => {},
-  })
 
   useEffect(() => {
     const token = LocalStorage.get('token')

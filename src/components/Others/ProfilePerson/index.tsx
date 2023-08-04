@@ -10,9 +10,17 @@ interface Props {
   isSeller?: boolean
   picture?: string
   name?: string
+  accountDate?: string
+  steamLevel?: string
 }
 
-export default function PerfilPerson({ isSeller, picture, name }: Props) {
+export default function PerfilPerson({
+  isSeller,
+  picture,
+  name,
+  accountDate,
+  steamLevel,
+}: Props) {
   const router = useRouter()
   return (
     <section className="flex w-full justify-between font-inter">
@@ -41,7 +49,7 @@ export default function PerfilPerson({ isSeller, picture, name }: Props) {
           <div className="flex flex-col gap-6">
             <h1 className="flex gap-1 text-lg text-white">
               <span className="opacity-60">Steam Level:</span>
-              <strong>195</strong>
+              <strong>{steamLevel}</strong>
             </h1>
             {isSeller ?? (
               <Common.Button
@@ -60,7 +68,10 @@ export default function PerfilPerson({ isSeller, picture, name }: Props) {
         <ProfileInfo title="Tempo de entrega" value="20 Minutos" />
         <ProfileInfo title="Total de trocas" value="242" />
         <ProfileInfo title="Taxa de entrega" value="92%" />
-        <ProfileInfo title="Membro da Steam desde" value="02/05/2004" />
+        <ProfileInfo
+          title="Membro da Steam desde"
+          value={accountDate || 'Não temos essa informarção'}
+        />
       </div>
     </section>
   )

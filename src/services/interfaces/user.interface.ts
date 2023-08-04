@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IGetUser {
   id: string
   owner_id: string
   status_member: string
@@ -7,9 +7,10 @@ export interface IUser {
   total_exchanges: string
   account_date: string
   steam_level: string
+  name: string
+  picture: string
 }
 
 export interface ICreateUser {
   owner_id: string
-  steam_level: string
 }

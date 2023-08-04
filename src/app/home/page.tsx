@@ -14,6 +14,9 @@ import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
+import LocalStorage from '@/tools/localstorage.tool'
+import { useEffect } from 'react'
+import UserService from '@/services/user.service'
 const AllSkins = dynamic<IAllSkinsProps>(
   () =>
     import('@/components/Others/Skins/AllSkins').then(
@@ -35,6 +38,35 @@ export default function Home() {
   const handleOnSteam = () => {
     SteamService.redirect()
   }
+
+  const { data: dataGetted, refetch: refetchGetUser } = useQuery({
+    queryKey: ['ifProfile', user],
+    queryFn: () => UserService.getUser(user.steamid, LocalStorage.get('token')),
+    enabled: false,
+  })
+
+  useEffect(() => {
+    refetchGetUser()
+  }, [user.steamid])
+
+  const { refetch } = useQuery({
+    queryKey: ['CreateProfile', user],
+    queryFn: async () => {
+      return UserService.createUser(
+        {
+          owner_id: user.steamid,
+        },
+        LocalStorage.get('token'),
+      )
+    },
+    enabled: false,
+  })
+
+  useEffect(() => {
+    if (!dataGetted && user.steamid) {
+      refetch()
+    }
+  }, [dataGetted])
 
   return (
     <main className="h-full">
