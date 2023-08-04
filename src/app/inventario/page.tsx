@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 
 const PageInventoryFilters = dynamic(() =>
@@ -15,6 +16,12 @@ const PageInventorySummary = dynamic(() =>
     (module) => module.default,
   ),
 )
+
+export const metadata: Metadata = {
+  title: 'Inventário - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function Inventory() {
   // const router = useRouter()

@@ -20,6 +20,9 @@ async function handler(
         callbackUrl: 'http://localhost:3000/api/auth/callback',
       }),
     ],
+    pages: {
+      signIn: '/',
+    },
     callbacks: {
       jwt({ token, account, profile }) {
         if (account?.provider === PROVIDER_ID) {

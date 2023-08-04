@@ -13,6 +13,7 @@ import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
+import Head from 'next/head'
 import { useEffect } from 'react'
 const AllSkins = dynamic<IAllSkinsProps>(
   () =>
@@ -40,6 +41,9 @@ export default function Home() {
 
   return (
     <main className="h-full">
+      <Head>
+        <title>Teste</title>
+      </Head>
       <div className="h-screen">
         <div className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat">
           <div className="flex flex-col items-center space-y-8 text-center text-white">
