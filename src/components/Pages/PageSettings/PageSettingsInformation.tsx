@@ -89,9 +89,14 @@ export function PageSettingsInformation() {
               )}
             </div>
             <div className="-mt-3 flex w-3/12 items-center justify-evenly">
-              <Common.Button className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://steamcommunity.com/my/tradeoffers/privacy"
+                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+              >
                 Obter URL
-              </Common.Button>
+              </a>
               <Form.Button
                 buttonStyle={undefined}
                 className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
