@@ -13,7 +13,6 @@ import useUserStore from '@/stores/user.store'
 import URLQuery from '@/tools/urlquery.tool'
 import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
-import { PROVIDER_ID } from 'next-auth-steam'
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -171,7 +170,7 @@ export function LayoutHeaderTop() {
           </Link>
           <Common.Button
             className="flex h-[44px] w-[220px] gap-2 rounded-[14px] border-transparent bg-mesh-color-primary-1400 opacity-100"
-            onClick={() => signIn(PROVIDER_ID)}
+            onClick={() => signIn('steam')}
           >
             <IconSteam />
             <span className="font-semibold">Entre com sua Steam</span>

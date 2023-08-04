@@ -1,4 +1,3 @@
-import { PROVIDER_ID } from 'next-auth-steam'
 import { signIn } from 'next-auth/react'
 import { IconSteam } from '../Icons'
 
@@ -15,7 +14,7 @@ export function CommonSteamButton({
 }: Props) {
   return (
     <button
-      onClick={() => signIn(PROVIDER_ID)}
+      onClick={() => signIn('steam')}
       type="button"
       className={
         className ||
