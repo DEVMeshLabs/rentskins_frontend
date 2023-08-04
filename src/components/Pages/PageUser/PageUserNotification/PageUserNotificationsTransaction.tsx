@@ -1,3 +1,4 @@
+import Common from '@/components/Common'
 import TransactionCard from '@/components/Others/TransactionCard'
 import { StaticImageData } from 'next/image'
 // import TransactionsTable from '../Settings/Transactions/table'
@@ -76,6 +77,13 @@ export default function PageNotificationTransaction({
           <span className="text-center">Tipo</span>
         </div>
         <div className="mb-16 mt-4 w-full text-center">
+          <Common.Title
+            bold={600}
+            size="xl"
+            className="flex h-32 w-full items-center justify-center rounded-md bg-mesh-color-neutral-800 text-white"
+          >
+            Vazio.
+          </Common.Title>
           {/* {<TransactionsTable data={transactionsMock.finished} />} */}
         </div>
       </div>
