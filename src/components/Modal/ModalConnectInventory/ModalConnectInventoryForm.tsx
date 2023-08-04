@@ -1,4 +1,3 @@
-import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
@@ -6,10 +5,15 @@ import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { ColorRing } from 'react-loader-spinner'
 import { formResolver } from './form.schema'
 
-export function ModalConnectInventoryForm() {
-  const { data: session, status } = useSession()
+interface IProps {
+  onFormSubmit: () => void
+}
+
+export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
+  const { data: session } = useSession()
   const trueSession = (session as ISteamUser) || {}
 
   const {
@@ -27,7 +31,7 @@ export function ModalConnectInventoryForm() {
   })
   const [formData, setFormData] = useState<any>(undefined)
 
-  const { refetch } = useQuery({
+  useQuery({
     queryKey: ['ConfigService.createConfig', trueSession.user?.steam?.steamid],
     queryFn: () => {
       const sellLink = `https://rentskins/?sellerid=${trueSession.user?.steam?.steamid}`
@@ -40,27 +44,19 @@ export function ModalConnectInventoryForm() {
         url_trade: formData['trade-link'],
         agreed_with_emails: formData['receive-notifications'],
         agreed_with_terms: true,
+        token: trueSession.user?.token!,
       }
       ConfigService.createConfig(params)
       return window.location.reload()
     },
-    enabled: false,
+    enabled: !!formData,
   })
 
   const enableButton = dirtyFields.email && dirtyFields['trade-link']
 
-  const handleButtonGetTradeLink = () => {
-    if (status === 'authenticated') {
-      window.location.assign(
-        `https://steamcommunity.com/id/${trueSession.user?.steam?.steamid}/tradeoffers/privacy`,
-      )
-    }
-  }
-
   const onSubmit = (data: any) => {
     setFormData(data)
-    refetch()
-    console.log(data)
+    onFormSubmit()
   }
 
   return (
@@ -73,18 +69,20 @@ export function ModalConnectInventoryForm() {
           <Form.Input.Text
             label="Insira URL Trade Link do seu Perfil"
             name="trade-link"
-            placeholder="https://steamcommunity.com/tradeoffer/new/?partner=240416830&token=vzAomQ5n"
+            placeholder="https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef"
             labelClassName="w-10/12 text-white"
             register={register('trade-link')}
             errors={errors['trade-link']}
           />
-          <Common.Button
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://steamcommunity.com/my/tradeoffers/privacy"
             tabIndex={-1}
-            onClick={handleButtonGetTradeLink}
             className="h-full w-min whitespace-nowrap border-none text-mesh-color-primary-1200"
           >
             Obter URL
-          </Common.Button>
+          </a>
         </div>
       </div>
 
@@ -152,11 +150,19 @@ export function ModalConnectInventoryForm() {
 
       <Form.Button
         buttonStyle={undefined}
-        disabled={!enableButton}
-        className="mt-8 border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
+        disabled={!enableButton || formData}
+        className="mt-8 flex w-48 items-center justify-center border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
       >
-        Concluir
+        {formData ? buttonLoading : 'Concluir'}
       </Form.Button>
     </Form.Root>
   )
 }
+
+const buttonLoading = (
+  <ColorRing
+    width={48}
+    height={'100%'}
+    colors={['#141517', '#141517', '#141517', '#141517', '#141517']}
+  />
+)

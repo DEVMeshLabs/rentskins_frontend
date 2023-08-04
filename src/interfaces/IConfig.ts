@@ -7,4 +7,5 @@ export interface IConfig {
   steam_guard: boolean
   agreed_with_emails: boolean
   agreed_with_terms: boolean
+  token: string
 }

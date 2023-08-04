@@ -13,7 +13,10 @@ const formSchema = yup.object({
           return false
         }
 
-        if (!item.includes('steamcommunity.com/tradeoffer/')) {
+        if (
+          !item.includes('steamcommunity.com/tradeoffer/new/?partner=') ||
+          !item.includes('&token=')
+        ) {
           return false
         }
 

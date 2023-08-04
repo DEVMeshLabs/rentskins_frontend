@@ -29,7 +29,7 @@ export default function PageInventoryMiddle() {
         label="Carregando..."
         enabled={isLoading}
       >
-        {!userHasConfig || userHasConfig.status !== 200 ? (
+        {!isLoading && userHasConfig?.request?.status !== 200 ? (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">
             <Common.Title
               bold={700}

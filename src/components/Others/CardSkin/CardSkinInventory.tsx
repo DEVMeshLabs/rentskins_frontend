@@ -125,7 +125,7 @@ export function CardSkinInventory() {
                   activator={
                     <div
                       className={classNames(
-                        'group relative w-[206px] cursor-pointer gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white hover:bg-mesh-color-neutral-700',
+                        'group relative w-[206px] cursor-pointer gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white transition-all hover:bg-mesh-color-neutral-700',
                         {
                           'bg-mesh-color-neutral-700': isSelected,
                         },
@@ -133,7 +133,7 @@ export function CardSkinInventory() {
                     >
                       <div
                         className={classNames(
-                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400',
+                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400 bg-mesh-color-neutral-400/40 transition-all',
                           {
                             'border-mesh-color-neutral-100 bg-mesh-color-accent-1100':
                               isSelected,

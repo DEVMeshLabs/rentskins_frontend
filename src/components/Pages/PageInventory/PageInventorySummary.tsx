@@ -60,18 +60,36 @@ export default function PageInventorySummary() {
 
         <div className="mt-5 flex justify-between ">
           <Common.Title>Subtotal</Common.Title>
-          <span>R$ {subtotal.toFixed(2)}</span>
+          <span>
+            {subtotal.toLocaleString('pt-br', {
+              currency: 'BRL',
+              style: 'currency',
+              minimumFractionDigits: 2,
+            })}
+          </span>
         </div>
 
         <div className="mt-5 flex justify-between ">
           <Common.Title>Taxa</Common.Title>
-          <span>R$ {(0.05 * subtotal).toFixed(2)}</span>
+          <span>
+            {(0.05 * subtotal).toLocaleString('pt-br', {
+              currency: 'BRL',
+              style: 'currency',
+              minimumFractionDigits: 2,
+            })}
+          </span>
         </div>
       </div>
       <div className="flex flex-col justify-between space-y-4 text-white">
         <div className="flex justify-between">
           <Common.Title>Total</Common.Title>
-          <span>R$ {(subtotal - 0.05 * subtotal).toFixed(2)}</span>
+          <span>
+            {(subtotal - 0.05 * subtotal).toLocaleString('pt-br', {
+              currency: 'BRL',
+              style: 'currency',
+              minimumFractionDigits: 2,
+            })}
+          </span>
         </div>
         <Common.Button
           onClick={() => refetch()}

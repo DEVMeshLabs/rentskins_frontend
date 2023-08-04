@@ -4,6 +4,7 @@ import { INotification, ITime } from './interfaces/notification.interface'
 
 export default class NotificationServices {
   public static async getAllHistorics() {
+    console.log('ok')
     return Api.get<INotification>('/notifications')
   }
 
@@ -22,6 +23,7 @@ export default class NotificationServices {
   }
 
   public static readingAllNotifications(ownerId: string, token: string) {
+    console.log('ok')
     return Api.put(`/notification/${ownerId}`, {
       headers: { Authorization: 'Bearer ' + token },
     })

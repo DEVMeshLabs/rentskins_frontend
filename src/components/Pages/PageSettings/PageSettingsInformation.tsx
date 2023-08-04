@@ -70,7 +70,7 @@ export function PageSettingsInformation() {
                 name="trade-link"
                 register={register('trade-link')}
                 errors={errors['trade-link']}
-                placeholder="https://steamcommunity.com/tradeoffer/new/?partner=240416830&token=vzAomQ5n"
+                placeholder="https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef"
                 labelClassName="w-full"
                 className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3
                 transition-all ${
