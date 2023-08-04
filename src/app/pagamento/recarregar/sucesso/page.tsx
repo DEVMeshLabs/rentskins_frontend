@@ -1,8 +1,22 @@
-'use client'
 import Common from '@/components/Common'
+import { headers } from 'next/headers'
 import Link from 'next/link'
-
 export default function PaymentAddSuccessPage() {
+  console.log(headers().get('referer'))
+  const referer = headers().get('referer')
+
+  const validURLs = [
+    `${process.env.NEXT_PUBLIC_URL}/pagamento/recarregar/mastercard`,
+    `${process.env.NEXT_PUBLIC_URL}/pagamento/recarregar/pix`,
+    `${process.env.NEXT_PUBLIC_URL}/pagamento/recarregar/boleto`,
+  ]
+
+  const urlIsValid = validURLs.some((url) => url === referer)
+
+  console.log(validURLs[0])
+  console.log(urlIsValid)
+  console.log(referer)
+
   return (
     <main className="flex h-screen flex-col items-center justify-start bg-mesh-color-others-black text-white">
       <div className="gap- flex h-1/3 flex-col items-center justify-center gap-10">

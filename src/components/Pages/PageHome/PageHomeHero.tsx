@@ -20,11 +20,12 @@ export default function PageHomeHero() {
         Personalize seu arsenal com as skins mais incríveis, encontrando as
         skins perfeitas para dominar o jogo!
       </p>
+      <a href={'/pagamento/recarregar/sucesso'} referrerPolicy="origin">
+        TESTE
+      </a>
       <CommonSteamButton
         className={`${
-          status === 'unauthenticated'
-            ? 'h-[60px] opacity-100'
-            : 'h-0 opacity-0'
+          status === 'unauthenticated' ? 'visible h-[60px]' : 'invisible h-0'
         } font-Roboto flex w-[330px] 
               items-center justify-center gap-4 rounded-md bg-mesh-color-primary-1200 no-underline 
               transition-all duration-300 ease-in-out hover:bg-mesh-gradient-steam-button`}

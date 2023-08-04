@@ -5,12 +5,12 @@ import { IconCarrinho, IconSearch, IconSteam } from '@/components/Icons'
 import { IconCruz } from '@/components/Icons/IconCruz'
 import { IconMira } from '@/components/Icons/IconMira'
 import { IconNotifications } from '@/components/Icons/IconNotifications'
+import { ModalPaymentMain } from '@/components/Modal/ModalPayment/ModalPaymentMain'
 import ISteamUser from '@/interfaces/steam.interface'
 import NotificationServices from '@/services/notifications.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
-import URLQuery from '@/tools/urlquery.tool'
 import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
 import { signIn, useSession } from 'next-auth/react'
@@ -213,15 +213,11 @@ export function LayoutHeaderTop() {
                   </div>
                 )}
               </Common.Title>
-              <Link
-                className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400"
-                href={URLQuery.addQuery([
-                  { key: 'modalopen', value: true },
-                  { key: 'modaltype', value: 'payment' },
-                ])}
-              >
-                <IconCruz />
-              </Link>
+              <ModalPaymentMain>
+                <button className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400">
+                  <IconCruz />
+                </button>
+              </ModalPaymentMain>
             </div>
           </div>
 
