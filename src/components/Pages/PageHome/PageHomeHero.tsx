@@ -20,9 +20,6 @@ export default function PageHomeHero() {
         Personalize seu arsenal com as skins mais incríveis, encontrando as
         skins perfeitas para dominar o jogo!
       </p>
-      <a href={'/pagamento/recarregar/sucesso'} referrerPolicy="origin">
-        TESTE
-      </a>
       <CommonSteamButton
         className={`${
           status === 'unauthenticated' ? 'visible h-[60px]' : 'invisible h-0'
