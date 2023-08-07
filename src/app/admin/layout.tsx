@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: IProps) {
 
   return (
     <div className="flex h-screen flex-col bg-mesh-color-neutral-900">
-      <div className="flex h-16 w-full items-center border-b border-mesh-color-neutral-600 bg-mesh-color-neutral-1000">
+      <div className="flex h-16 w-full items-center border-b border-mesh-color-neutral-600 bg-mesh-color-neutral-1000 py-2">
         <Image src={logo} alt="RentSkins" className="ml-8" />
       </div>
       <div className="flex h-full w-full">
