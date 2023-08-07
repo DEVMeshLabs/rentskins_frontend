@@ -10,19 +10,27 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import { PageSettingsInformation } from '../PageSettings/PageSettingsInformation'
 import { PageSettingsSecurity } from '../PageSettings/PageSettingsSecurity'
 import { PageSettingsTransactions } from '../PageSettings/PageSettingsTransactions'
+import { formResolver } from './configuration.schema'
 
 export default function PageUserConfigurations() {
-  const [selectedSetting, setSelectedSetting] = useState('personal')
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const handleOnRadio = (value: string) => {
-    router.push(URLQuery.addQuery([{ key: 'type', value }]))
-  }
+  const { register, watch } = useForm({
+    resolver: formResolver,
+    defaultValues: { tab: searchParams.get('type')! },
+  })
+
+  const watchTab = watch('tab')
+
+  useEffect(() => {
+    router.push(URLQuery.addQuery([{ key: 'type', value: watchTab! }]))
+  }, [watchTab, router])
 
   useEffect(() => {
     const titleQuery = searchParams.get('type') as
@@ -70,20 +78,15 @@ export default function PageUserConfigurations() {
           </Common.Title>
 
           <div className="">
-            <Form.Input.Radio.Block
-              name="settings"
-              state={selectedSetting}
-              setState={setSelectedSetting}
-              onChange={({ target }) => handleOnRadio(target.value)}
-              labelClassname="
-              flex h-full w-full rounded-md
-              px-4 py-3 text-lg text-mesh-color-neutral-200
-              duration-500 hover:bg-mesh-color-neutral-500/50
-              cursor-pointer select-none items-center justify-center transition-all
-              bg-transparent border-none peer-checked:text-mesh-color-primary-1200 peer-checked:bg-mesh-color-neutral-600"
-              wrapperClassname="flex flex-col justify-start gap-2"
-              containerClassname="w-full"
-              options={renderRadioButtonOptions(searchParams)}
+            <Form.Input.Radio.Default
+              name="settings-tab"
+              containerClassname="flex flex-col gap-2 select-none"
+              labelClassName="hover:cursor-pointer w-full pr-6 pl-4 py-4 rounded-md
+              bg-mesh-color-neutral-800 hover:bg-mesh-color-neutral-700 peer-checked:bg-mesh-color-neutral-500 delay-0 transition-all"
+              inputClassName="transition-all"
+              wrapperClassname="flex rounded-md hover:cursor-pointer"
+              items={renderRadioButtonOptions(searchParams)}
+              register={register('tab')}
             />
           </div>
         </div>
