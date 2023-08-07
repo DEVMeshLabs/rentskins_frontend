@@ -151,7 +151,7 @@ export function PageSettingsInformation() {
               onClick={() =>
                 navigator.clipboard.writeText(
                   `https://rentskins/?sellerid=${trueSession.user?.steam
-                    ?.steamid!}`,
+                    ?.steamid!}` || 'Problema ao copiar o link...',
                 )
               }
             >
