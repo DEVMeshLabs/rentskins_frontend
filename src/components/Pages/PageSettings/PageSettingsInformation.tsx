@@ -2,6 +2,10 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons'
+import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { formResolver as contactResolver } from './schemas/information.contact.schema'
 import { formResolver as personalResolver } from './schemas/information.personal.schema'
@@ -31,6 +35,22 @@ export function PageSettingsInformation() {
       phone: undefined,
     },
   })
+
+  const { data: session, status } = useSession()
+  const trueSession = session as ISteamUser
+
+  const { data: userConfig, isLoading } = useQuery({
+    queryKey: ['ConfigService.getUserConfig'],
+    queryFn: async () => {
+      return ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      )
+    },
+    enabled: status === 'authenticated',
+  })
+
+  console.log(userConfig)
 
   const onSubmitPersonal = (data: any) => {
     console.log(data)
@@ -69,13 +89,16 @@ export function PageSettingsInformation() {
               <Form.Input.Text
                 name="trade-link"
                 register={register('trade-link')}
+                disabled={isLoading}
                 errors={errors['trade-link']}
-                placeholder="https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef"
+                placeholder={
+                  isLoading
+                    ? 'Verificando...'
+                    : 'https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef'
+                }
                 labelClassName="w-full"
-                className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3
-                transition-all ${
-                  watchTradelink !== '' ? 'pr-14' : 'pr-3'
-                } text-white
+                className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-mesh-color-neutral-700
+                 ${watchTradelink !== '' ? 'pr-14' : 'pr-3'} text-white
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
@@ -99,7 +122,8 @@ export function PageSettingsInformation() {
               </a>
               <Form.Button
                 buttonStyle={undefined}
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+                disabled={isLoading}
+                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
               >
                 Aplicar
               </Form.Button>
@@ -115,9 +139,22 @@ export function PageSettingsInformation() {
           </Common.Title>
           <div className="flex items-center justify-between ">
             <span className="text-mesh-color-neutral-200">
-              https://rentskins/?sellerid=10902554 (MAKE IT FUNCTIONAL)
+              {status === 'authenticated'
+                ? `
+              https://rentskins/?sellerid=${trueSession.user?.steam?.steamid!}
+              `
+                : 'Verificando...'}
             </span>
-            <Common.Button className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100">
+            <Common.Button
+              disabled={isLoading}
+              className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `https://rentskins/?sellerid=${trueSession.user?.steam
+                    ?.steamid!}`,
+                )
+              }
+            >
               Copiar Link
             </Common.Button>
           </div>
@@ -139,29 +176,25 @@ export function PageSettingsInformation() {
           <div className="flex w-full items-center justify-between">
             <Form.Input.Text
               labelClassName="w-7/12 text-white mb-4"
-              placeholder="exemplo@email.com"
+              placeholder={isLoading ? 'Verificando...' : 'exemplo@email.com'}
               name="email"
+              disabled={isLoading}
               register={register2('email')}
               className={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
-            transition-all`}
+            ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-mesh-color-neutral-700`}
               errors={errors2.email}
               errorsClassname="text-red-500 text-sm mt-8 absolute"
             />
 
-            <div className="flex w-3/12 justify-evenly">
+            <div className="flex w-1/12">
               <Form.Button
                 buttonStyle={undefined}
+                disabled={isLoading}
                 onSubmit={handleSubmit2(onSubmitContact)}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
               >
                 Editar
               </Form.Button>
-              <Common.Button
-                tabIndex={-1}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
-              >
-                Copiar Link
-              </Common.Button>
             </div>
           </div>
         </div>
@@ -172,28 +205,24 @@ export function PageSettingsInformation() {
           <div className="flex w-full items-center justify-between">
             <Form.Input.Phone
               labelClassName="w-7/12 text-white mb-4"
-              placeholder="(00) 00000-0000"
+              placeholder={isLoading ? 'Verificando...' : '(00) 00000-0000'}
+              disabled={isLoading}
               name="email"
               register={register2('phone')}
-              inputClassName={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
-              transition-all`}
+              inputClassName={`rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-mesh-color-neutral-700
+              transition-all ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
               errors={errors2.phone}
               errorsClassname="text-red-500 text-sm mt-8 absolute"
             />
-            <div className="flex w-3/12 justify-evenly">
+            <div className="flex w-1/12">
               <Form.Button
                 buttonStyle={undefined}
+                disabled={isLoading}
                 onSubmit={handleSubmit2(onSubmitContact)}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
               >
                 Editar
               </Form.Button>
-              <Common.Button
-                tabIndex={-1}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
-              >
-                Copiar Link
-              </Common.Button>
             </div>
           </div>
         </div>

@@ -44,6 +44,7 @@ export function FormInputPhone({
         type="text"
         placeholder={rest.placeholder}
         {...register}
+        {...rest}
       />
       <span className={errorsClassname || options.input.errors}>
         {errors && errors?.message}

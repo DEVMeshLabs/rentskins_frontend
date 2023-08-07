@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 
-export default function Configurations() {
+export default async function Configurations() {
   return (
     <main className="flex min-h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pb-16 pt-8">
       <PageUserConfigurations />
