@@ -1,5 +1,9 @@
 'use client'
 import BlankUser from '@/../public/blank-profile.png'
+import IconDashboard from '@/components/Icons/admin/IconDashboard'
+import IconFinancial from '@/components/Icons/admin/IconFinancial'
+import IconStatistics from '@/components/Icons/admin/IconStatistics'
+import IconUsers from '@/components/Icons/admin/IconUsers'
 import ISteamUser from '@/interfaces/steam.interface'
 import { useSession } from 'next-auth/react'
 import Image, { StaticImageData } from 'next/image'
@@ -10,8 +14,6 @@ export default function LayoutAdminSidebar() {
   const pathname = usePathname()
   const { data: session, status } = useSession()
   const trueSession = session as ISteamUser
-
-  console.log(pathname)
 
   return (
     <>
@@ -42,43 +44,47 @@ export default function LayoutAdminSidebar() {
       <div className="flex w-full flex-col items-center gap-2 text-white">
         <Link
           href={'/admin/dashboard'}
-          className={`flex w-5/6 rounded-2xl transition-all ${
+          className={`flex w-5/6 gap-2 rounded-2xl transition-all ${
             pathname.includes('dashboard')
               ? 'bg-mesh-color-others-green'
               : 'bg-transparent hover:bg-mesh-color-others-green/30'
           } px-4 py-3`}
         >
-          Dashboard
+          <IconDashboard />
+          <span>Dashboard</span>
         </Link>
         <Link
           href={'/admin/estatisticas'}
-          className={`flex w-5/6 rounded-2xl transition-all ${
+          className={`flex w-5/6 gap-2 rounded-2xl transition-all ${
             pathname.includes('estatisticas')
               ? 'bg-mesh-color-others-green'
               : 'bg-transparent hover:bg-mesh-color-others-green/30'
           } px-4 py-3`}
         >
-          Estatísticas
+          <IconStatistics />
+          <span>Estatísticas</span>
         </Link>
         <Link
           href={'/admin/financeiro'}
-          className={`flex w-5/6 rounded-2xl transition-all ${
+          className={`flex w-5/6 gap-2 rounded-2xl transition-all ${
             pathname.includes('financeiro')
               ? 'bg-mesh-color-others-green'
               : 'bg-transparent hover:bg-mesh-color-others-green/30'
           } px-4 py-3`}
         >
-          Financeiro
+          <IconFinancial />
+          <span>Financeiro</span>
         </Link>
         <Link
           href={'/admin/usuarios'}
-          className={`flex w-5/6 rounded-2xl transition-all ${
+          className={`flex w-5/6 gap-2 rounded-2xl transition-all ${
             pathname.includes('usuarios')
               ? 'bg-mesh-color-others-green'
               : 'bg-transparent hover:bg-mesh-color-others-green/30'
           } px-4 py-3`}
         >
-          Usuários
+          <IconUsers />
+          <span>Usuários</span>
         </Link>
       </div>
     </>

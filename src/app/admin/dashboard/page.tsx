@@ -11,18 +11,18 @@ export default function AdminDashboardPage() {
       <div className="flex h-1/2 w-full gap-8 overflow-hidden rounded-lg bg-purple-500">
         <div className="w-8/12 rounded-lg bg-purple-600 p-2">
           <Common.Title bold={600} size="lg">
-            Faturamento total da plataforma
+            Faturamento Total da Plataforma
           </Common.Title>
         </div>
         <div className="flex w-4/12 flex-col justify-between gap-8 rounded-lg bg-purple-600">
           <div className="h-full rounded-lg bg-purple-800 p-2">
             <Common.Title bold={600} size="lg">
-              Novos usuários
+              Novos Usuários
             </Common.Title>
           </div>
           <div className="h-full rounded-lg bg-purple-800 p-2">
             <Common.Title bold={600} size="lg">
-              Perda de usuários
+              Perda de Usuários
             </Common.Title>
           </div>
         </div>
