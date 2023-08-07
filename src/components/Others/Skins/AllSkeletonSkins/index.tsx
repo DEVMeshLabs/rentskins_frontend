@@ -1,4 +1,4 @@
-import SkeletonCardSkin from '@/components/SkeletonCardSkin'
+import SkeletonCardSkin from '@/components/Others/Skins/SkeletonCardSkin'
 
 interface IProps {
   quantitySkeletons?: number

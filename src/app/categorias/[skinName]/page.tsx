@@ -4,8 +4,8 @@
 import Common from '@/components/Common'
 import IconArrowLeft from '@/components/Icons/IconArrowLeft'
 import SkinFilters from '@/components/Others/SkinFilters'
-import AllSkins from '@/components/Others/Skins/AllSkins'
-import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
+import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
 import { ISkins } from '@/interfaces/ISkins'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
@@ -14,6 +14,16 @@ import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+const AllSkins = dynamic<IAllSkinsProps>(
+  () =>
+    import('@/components/Others/Skins/AllSkins').then(
+      (module) => module.default,
+    ),
+  {
+    ssr: false,
+  },
+)
 
 export default function Categorias() {
   const { skinName } = useParams()
@@ -84,7 +94,18 @@ export default function Categorias() {
             itemsPerPage={15}
           />
         ) : (
-          <Common.SearchFeedback title={nameCorrection} />
+          <div className="mb-16 flex h-[50vh] items-center justify-center">
+            <Common.Title
+              bold={600}
+              className="text-2xl text-mesh-color-neutral-200"
+            >
+              Não foi encontrado nenhuma skin relacionado à{' '}
+              <span className="text-mesh-color-primary-1200">
+                {nameCorrection}
+                <span className="text-mesh-color-neutral-200">.</span>
+              </span>
+            </Common.Title>
+          </div>
         )}
       </div>
     </div>

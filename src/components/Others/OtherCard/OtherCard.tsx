@@ -39,7 +39,7 @@ export function OtherCard({
         />
         <div className="flex h-[154px] w-[206px] items-center justify-center">
           <Image
-            src={skinImage}
+            src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
             alt={sellerName}
             width={206}
             height={154}

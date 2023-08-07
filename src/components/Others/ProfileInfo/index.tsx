@@ -1,4 +1,3 @@
-'use client'
 import Common from '@/components/Common'
 
 interface Props {

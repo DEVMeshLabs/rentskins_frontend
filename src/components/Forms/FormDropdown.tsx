@@ -1,4 +1,4 @@
-import React, { SelectHTMLAttributes } from 'react'
+import { SelectHTMLAttributes } from 'react'
 import { IconDropdownArrow } from '../Icons/IconDropdownArrow'
 
 type TypeItem = {
@@ -10,25 +10,21 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
   labelSide?: 'up' | 'down'
   labelClassName?: string
-  icon?: boolean
   iconColor?: string
   inputClassName?: string
   options: TypeItem[]
-  state: string
-  setState: React.Dispatch<React.SetStateAction<string>>
+
+  register: any
 }
 
 export function FormDropdown({
   label,
   labelSide = 'up',
   labelClassName,
-  icon = true,
   iconColor,
   inputClassName,
   options,
-  state,
-  setState,
-  ...rest
+  register,
 }: IProps) {
   const createOptions = options?.map((item, index) => (
     <option key={'form-dropdown-for' + label + '-' + index} value={item.value}>
@@ -41,11 +37,9 @@ export function FormDropdown({
       <div className="flex w-full flex-1 flex-col">
         {label && labelSide === 'up' && label}
         <select
-          value={state}
-          onChange={({ target }) => setState(target.value)}
           className={`${inputClassName} appearance-none rounded-md border-[2px] border-mesh-color-primary-1100/50
-        bg-mesh-color-others-eerie-black py-3 pl-3 pr-12 placeholder:text-white/70`}
-          {...rest}
+          bg-mesh-color-others-eerie-black py-3 pl-3 pr-12 placeholder:text-white/70`}
+          {...register}
         >
           {options !== undefined && options.length > 0 && createOptions}
         </select>

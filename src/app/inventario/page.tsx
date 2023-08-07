@@ -1,8 +1,28 @@
-import { PageInventoryFilters } from '@/components/Pages/PageInventory/PageInventoryFilters'
-import { PageInventoryMiddle } from '@/components/Pages/PageInventory/PageInventoryMiddle'
-import { PageInventorySummary } from '@/components/Pages/PageInventory/PageInventorySummary'
+'use client'
+import useUserStore from '@/stores/user.store'
+import dynamic from 'next/dynamic'
+
+const PageInventoryFilters = dynamic(() =>
+  import('@/components/Pages/PageInventory/PageInventoryFilters').then(
+    (module) => module.default,
+  ),
+)
+const PageInventoryMiddle = dynamic(() =>
+  import('@/components/Pages/PageInventory/PageInventoryMiddle').then(
+    (module) => module.default,
+  ),
+)
+const PageInventorySummary = dynamic(() =>
+  import('@/components/Pages/PageInventory/PageInventorySummary').then(
+    (module) => module.default,
+  ),
+)
 
 export default function Inventory() {
+  const {
+    user: { steamid },
+  } = useUserStore()
+  console.log(steamid)
   return (
     <main className="w-full bg-mesh-color-others-black pt-[32px]">
       <div className="mx-auto grid w-10/12 grid-cols-10">

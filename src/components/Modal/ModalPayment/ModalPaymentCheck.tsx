@@ -52,7 +52,11 @@ export function ModalPaymentCheck() {
                 Saldo Atual
               </Common.Title>
               <Common.Title bold={800} color="white" size="2xl">
-                {wallet.data?.value || 'R$ 0,00'}
+                {Number(wallet.value).toLocaleString('pt-br', {
+                  currency: 'BRL',
+                  style: 'currency',
+                  minimumFractionDigits: 2,
+                }) || 'R$ 0,00'}
               </Common.Title>
             </div>
             <div>
@@ -64,7 +68,7 @@ export function ModalPaymentCheck() {
                 Levantamento dentro da plataforma
               </Common.Title>
               <Common.Title bold={700} color="white" size="2xl">
-                R$0,00
+                R$ 0,00
               </Common.Title>
             </div>
           </div>

@@ -13,7 +13,7 @@ export default function PageNotificationHistoric({
   loading,
 }: INotificationHistoricProps) {
   return (
-    <div className="mt-4 h-fit gap-4 overflow-y-scroll pr-4">
+    <div className="mb-12 mt-4 h-screen gap-4 overflow-y-scroll pr-4">
       <div className="flex flex-col gap-4" data-aos="fade-up">
         {!loading ? (
           data?.length ? (
@@ -41,8 +41,9 @@ export default function PageNotificationHistoric({
               )
             })
           ) : (
-            <Common.Title className="h-[40vh] self-center text-2xl text-mesh-color-neutral-100">
-              Histórico de notificações vazio.
+            <Common.Title className="mt-16 self-center text-2xl text-mesh-color-neutral-100">
+              Não encontramos nenhuma notificação referente ao período que você
+              escolheu.
             </Common.Title>
           )
         ) : (

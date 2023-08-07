@@ -1,42 +1,42 @@
-import React, { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   label?: string
-  labelSide?: 'up' | 'down'
   labelClassName?: string
   inputClassName?: string
-  state?: string
-  setState?: React.Dispatch<React.SetStateAction<string>>
+
+  register: any
+  errors?: any
+  errorsClassname?: string
 }
 
 export function FormInputEmail({
   label,
-  labelSide = 'up',
+  name,
   labelClassName,
   inputClassName,
-  state,
-  setState,
+  register,
+  errors,
+  errorsClassname,
   ...rest
 }: IProps) {
-  const formatInput = (value: string): string => {
-    const email = value.replace(/[^\w.@+-]/g, '')
-    return email
-  }
-
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label && labelSide === 'up' && label}
+      <text className="-mb-4"> {label} </text>
       <input
         type="email"
-        onChange={({ target }) =>
-          setState && setState(formatInput(target.value))
-        }
-        value={state}
+        inputMode="email"
+        id={name}
+        name={name}
         className={`${inputClassName || options.input.className}`}
+        {...register}
         {...rest}
       />
-      {label && labelSide === 'down' && label}
+      <text className={errorsClassname || options.input.errors}>
+        {errors && errors?.message}
+      </text>
     </label>
   )
 }

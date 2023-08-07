@@ -40,4 +40,10 @@ export default class Authentication {
       router.push(URLQuery.removeQuery(['token']))
     }
   }
+
+  public static logout(setLogoutStore: (boolean: boolean) => void) {
+    LocalStorage.remove('token')
+    location.reload()
+    setLogoutStore(false)
+  }
 }

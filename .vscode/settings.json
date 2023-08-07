@@ -5,5 +5,35 @@
     "Header"
   ],
   "prettier.jsxSingleQuote": true,
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "favorites.resources": [
+    {
+      "filePath": "src\\components\\Common",
+      "group": "Default"
+    },
+    {
+      "filePath": "src\\components\\Forms",
+      "group": "Default"
+    },
+    {
+      "filePath": "src\\components\\Modal",
+      "group": "Default"
+    },
+    {
+      "filePath": "src\\components\\Pages",
+      "group": "Default"
+    },
+    {
+      "filePath": "src\\components\\Icons",
+      "group": "Default"
+    },
+    {
+      "filePath": "src\\components\\Layout",
+      "group": "Default"
+    },
+    {
+      "filePath": "src\\components\\Others",
+      "group": "Default"
+    }
+  ]
 }

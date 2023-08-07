@@ -1,41 +1,45 @@
-import React, { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { options } from '../options'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string
   label?: string
-  labelSide?: 'up' | 'down'
   labelClassName?: string
   inputClassName?: string
-  state?: string
-  setState?: React.Dispatch<React.SetStateAction<string>>
+
+  register: any
+  errors?: any
+  errorsClassname?: string
+  complete?: 'on' | 'off'
 }
 
 export function FormInputText({
   label,
-  labelSide = 'up',
+  name,
   labelClassName,
   inputClassName,
-  state,
-  setState,
+  register,
+  errors,
+  complete = 'off',
+  errorsClassname,
   ...rest
 }: IProps) {
-  const formatInput = (value: string): string => {
-    return value
-  }
-
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      {label && labelSide === 'up' && label}
+      <text className="-mb-4"> {label} </text>
       <input
         type="text"
-        onChange={({ target }) =>
-          setState && setState(formatInput(target.value))
-        }
-        value={state}
+        inputMode="text"
+        id={name}
+        name={name}
+        autoComplete={complete}
         className={`${inputClassName || options.input.className}`}
+        {...register}
         {...rest}
       />
-      {label && labelSide === 'down' && label}
+      <text className={errorsClassname || options.input.errors}>
+        {errors && errors?.message}
+      </text>
     </label>
   )
 }

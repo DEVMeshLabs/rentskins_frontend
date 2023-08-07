@@ -3,24 +3,31 @@ import Common from '@/components/Common'
 import { ISkins } from '@/interfaces/ISkins'
 import Link from 'next/link'
 import { OtherCard } from '../OtherCard/OtherCard'
+import { useQuery } from '@tanstack/react-query'
+import SkinService from '@/services/skin.service'
 
-type PropsTypes = {
+export interface ISkinsSemelhantesProps {
   isLoading: boolean
   data: {
-    data: {
-      [index: number]: ISkins
-    }
+    data: ISkins
   }
-  data2: {
-    data: ISkins[]
-  }
+  weaponName: string
 }
 
-export function SkinsSemelhantes({ isLoading, data2, data }: PropsTypes) {
+export default function SkinsSemelhantes({
+  isLoading,
+  weaponName,
+  data,
+}: ISkinsSemelhantesProps) {
+  const { data: data2 } = useQuery({
+    queryKey: ['weapon', weaponName],
+    queryFn: async () => await SkinService.findByWeapon(weaponName),
+  })
+
   const find = data2?.data.filter(
     ({ skin_weapon, seller_id }: ISkins) =>
-      skin_weapon === data!.data[0].skin_weapon &&
-      seller_id !== data!.data[0].seller_id,
+      skin_weapon === data!.data.skin_weapon &&
+      seller_id !== data!.data.seller_id,
   )
 
   return (
@@ -30,7 +37,7 @@ export function SkinsSemelhantes({ isLoading, data2, data }: PropsTypes) {
       </Common.Title>
       <div className="w-full pb-16">
         <div className="flex gap-4">
-          {!isLoading && find?.length > 0 ? (
+          {!isLoading && find && find?.length > 0 ? (
             find.map(
               (
                 {

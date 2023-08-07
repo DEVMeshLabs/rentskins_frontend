@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Api } from '@/providers'
 import { INotification, ITime } from './interfaces/notification.interface'
 
@@ -6,9 +7,13 @@ export default class NotificationServices {
     return Api.get<INotification>('/notifications')
   }
 
-  public static async getAllNotifsByUser(userId: string, time?: ITime) {
+  public static getAllNotifsByUser(userId: string, time?: ITime) {
     return Api.post<INotification[]>(`/notification/userAll/${userId}`, {
       tempo: time || 'tudo',
     })
+  }
+
+  public static readingAllNotifications(ownerId: string) {
+    return Api.put(`/notification/${ownerId}`)
   }
 }

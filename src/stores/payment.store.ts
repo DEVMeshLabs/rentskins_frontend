@@ -16,7 +16,7 @@ const usePaymentStore = create<IStates>((set) => ({
     set(() => ({ paymentRetrieve }))
   },
 
-  paymentWithdrawInfo: {},
+  paymentWithdrawInfo: { selectedValue: 0 },
   setPaymentWithdrawInfo: (paymentWithdrawInfo: IWithdrawInfo) => {
     set(() => ({ paymentWithdrawInfo }))
   },

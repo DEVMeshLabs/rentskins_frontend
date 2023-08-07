@@ -6,27 +6,62 @@ import { IconCruz } from '@/components/Icons/IconCruz'
 import { IconMira } from '@/components/Icons/IconMira'
 import { IconNotifications } from '@/components/Icons/IconNotifications'
 import { IUser } from '@/interfaces/user.interface'
+import NotificationServices from '@/services/notifications.service'
 import SteamService from '@/services/steam.service'
 import WalletService from '@/services/wallet.service'
+import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
 import LocalStorage from '@/tools/localstorage.tool'
 import URLQuery from '@/tools/urlquery.tool'
+import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import logo from '../../../assets/logo.svg'
 import { LayoutHeaderDropdown } from './LayoutHeaderDropdown'
+import { formResolver } from './form.schema'
 
 export function LayoutHeaderTop() {
   const router = useRouter()
+  const pathname = usePathname()
+  console.log(pathname)
   const refDropdown = useRef(null)
-  const { user, setUser, setLogout } = useUserStore()
-  const [walletValue, setWalletValue] = useState()
+  const { user, setUser, setLogout, setWallet, wallet } = useUserStore()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isDirty, isValid },
+  } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      search: undefined,
+    },
+  })
+  const searchWatch = watch('search')
+  const [hasNotifications, setHasNotifications] = useState(false)
+
+  const { notificationFilter } = useFilterStore()
+
+  const { data, refetch } = useQuery({
+    queryKey: ['thereIsNotifications', user.steamid],
+    queryFn: async () =>
+      NotificationServices.getAllNotifsByUser(user.steamid, notificationFilter),
+  })
+
+  useEffect(() => {
+    // const interval = setInterval(() => {
+    refetch() // Refaz a requisição a cada 1 segundo
+    // }, 10 * 60 * 1000)
+    setHasNotifications(thereIsNotification(data?.data))
+
+    // return () => clearInterval(interval)
+  }, [pathname])
 
   useEffect(() => {
     const token = LocalStorage.get('token')
@@ -58,9 +93,9 @@ export function LayoutHeaderTop() {
 
   useEffect(() => {
     if (walletRetrieved && walletRetrieved.data) {
-      setWalletValue(walletRetrieved.data.value)
+      setWallet(walletRetrieved.data.value)
     } else if (walletCreated && walletCreated.data) {
-      setWalletValue(walletCreated.data.value)
+      setWallet(walletCreated.data.value)
     }
   }, [walletRetrieved, walletCreated])
 
@@ -72,9 +107,8 @@ export function LayoutHeaderTop() {
     setShowProfileDropdown((state) => !state)
   }
 
-  const handleOnSearch = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    router.push('/loja?search=' + searchQuery)
+  const onSearch = (data: any) => {
+    router.push(`/loja?search=${data.search}`)
   }
 
   const handleOnAdd = () => {
@@ -114,27 +148,27 @@ export function LayoutHeaderTop() {
         </Link>
 
         <div className="flex items-center rounded-[12px] bg-mesh-color-neutral-800">
-          <Form.Root
-            className="flex"
-            onSubmit={(event) => handleOnSearch(event)}
-          >
-            <Common.Button
-              disabled={searchQuery.length <= 0}
-              className={`border-none stroke-mesh-color-neutral-200 pl-3 transition-all ${
-                searchQuery.length > 0 ? 'opacity-100' : 'opacity-30'
+          <Form.Root className="flex" onSubmit={handleSubmit(onSearch)}>
+            <Form.Button
+              buttonStyle={undefined}
+              disabled={!isDirty && !isValid}
+              className={`border-none stroke-mesh-color-neutral-200 pl-5 transition-all ${
+                searchWatch && searchWatch.length > 0
+                  ? 'opacity-100'
+                  : 'opacity-30'
               }`}
             >
               <IconSearch
                 classname="transition-all"
-                width={searchQuery.length > 0 ? 25 : 20}
-                height={searchQuery.length > 0 ? 25 : 20}
+                width={searchWatch && searchWatch.length > 0 ? 25 : 20}
+                height={searchWatch && searchWatch.length > 0 ? 25 : 20}
               />
-            </Common.Button>
+            </Form.Button>
             <Form.Input.Text
-              state={searchQuery}
-              setState={setSearchQuery}
-              className="rounded-lg bg-mesh-color-neutral-800 py-2 pl-3 text-base text-mesh-color-neutral-200"
+              name="search"
               placeholder="Pesquise o item..."
+              className="mt-6 rounded-lg bg-mesh-color-neutral-800 pl-3 text-base text-mesh-color-neutral-200"
+              register={register('search')}
             />
           </Form.Root>
         </div>
@@ -179,8 +213,8 @@ export function LayoutHeaderTop() {
             </nav>
             <div className="flex h-[44px] items-center gap-2 rounded-lg bg-mesh-color-others-eerie-black px-4 py-2">
               <Common.Title bold={500} color="white">
-                {walletValue !== undefined && walletValue !== null ? (
-                  Number(walletValue).toLocaleString('pt-br', {
+                {wallet.value !== undefined && wallet.value !== null ? (
+                  Number(wallet.value).toLocaleString('pt-br', {
                     currency: 'BRL',
                     style: 'currency',
                     minimumFractionDigits: 2,
@@ -207,8 +241,12 @@ export function LayoutHeaderTop() {
               className="h-11 w-11 rounded-xl border-none bg-mesh-color-others-eerie-black"
               onClick={() => router.push('/usuario/notificacoes?type=historic')}
             >
-              <div className="absolute top-8 ml-4 h-2 w-2 rounded-full bg-mesh-color-primary-1200" />
-              <div className="absolute top-8 ml-4 h-2 w-2 animate-ping rounded-full bg-mesh-color-primary-1200" />
+              {hasNotifications && (
+                <>
+                  <div className="absolute top-8 ml-4 h-2 w-2 rounded-full bg-mesh-color-primary-1200" />
+                  <div className="absolute top-8 ml-4 h-2 w-2 animate-ping rounded-full bg-mesh-color-primary-1200" />
+                </>
+              )}
               <IconNotifications />
             </Common.Button>
 
