@@ -7,7 +7,6 @@ import AllSkins from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
 import useUserStore from '@/stores/user.store'
-import LocalStorage from '@/tools/localstorage.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -34,7 +33,7 @@ export default function PerfilUsuario() {
 
   const { data, isLoading: isLoadingGetUser } = useQuery({
     queryKey: ['OtherProfile', userSteamId],
-    queryFn: () => UserService.getUser(userSteamId, LocalStorage.get('token')),
+    queryFn: () => UserService.getUser(userSteamId),
     enabled: false,
   })
 

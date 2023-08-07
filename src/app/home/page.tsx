@@ -41,7 +41,7 @@ export default function Home() {
 
   const { data: dataGetted, refetch: refetchGetUser } = useQuery({
     queryKey: ['ifProfile', user],
-    queryFn: () => UserService.getUser(user.steamid, LocalStorage.get('token')),
+    queryFn: () => UserService.getUser(user.steamid),
     enabled: false,
   })
 

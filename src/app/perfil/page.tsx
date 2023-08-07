@@ -37,7 +37,7 @@ export default function Perfil() {
 
   const { data: dataGettedUser, isLoading: isLoadingGetUser } = useQuery({
     queryKey: ['myProfile', steamid],
-    queryFn: () => UserService.getUser(steamid, LocalStorage.get('token')),
+    queryFn: () => UserService.getUser(steamid),
   })
 
   useEffect(() => {
