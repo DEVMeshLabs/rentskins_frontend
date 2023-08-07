@@ -1,4 +1,4 @@
-import BlankUser from '@/assets/perfil.png'
+import BlankUser from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconCarrinho, IconSearch, IconSteam } from '@/components/Icons'
@@ -58,8 +58,6 @@ export function LayoutHeaderTop() {
       ),
   })
 
-  console.log(pathname)
-
   const disableAddButton = pathname.includes('/pagamento' || '/oops')
 
   useEffect(() => {
@@ -71,7 +69,6 @@ export function LayoutHeaderTop() {
     // return () => clearInterval(interval)
   }, [pathname])
 
-  console.log(trueSession.user?.token)
   const { data: walletRetrieved } = useQuery({
     queryKey: ['WalletService.getWalletById'],
     queryFn: () =>
@@ -95,9 +92,6 @@ export function LayoutHeaderTop() {
       walletRetrieved.response &&
       walletRetrieved.response.status === 404,
   })
-
-  console.log(walletRetrieved)
-  console.log(walletCreated)
 
   useEffect(() => {
     if (walletRetrieved && walletRetrieved.data) {
