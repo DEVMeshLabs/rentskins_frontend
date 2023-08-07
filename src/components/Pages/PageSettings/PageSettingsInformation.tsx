@@ -81,17 +81,29 @@ export function PageSettingsInformation() {
 
   const onSubmitPersonal = (data: any) => {
     setEditTradeLink(false)
-    console.log(data)
+    ConfigService.updateConfig({
+      token: trueSession.user?.token!,
+      owner_id: trueSession.user?.steam?.steamid!,
+      url_trade: data['trade-link'],
+    })
   }
 
   const onSubmitEmail = (data: any) => {
     setEditEmail(false)
-    console.log(data)
+    ConfigService.updateConfig({
+      token: trueSession.user?.token!,
+      owner_id: trueSession.user?.steam?.steamid!,
+      owner_email: data.email,
+    })
   }
 
   const onSubmitPhone = (data: any) => {
     setEditPhone(false)
-    console.log(data)
+    ConfigService.updateConfig({
+      token: trueSession.user?.token!,
+      owner_id: trueSession.user?.steam?.steamid!,
+      owner_phone: data.phone,
+    })
   }
 
   useEffect(() => console.log(editEmail), [editEmail])
@@ -117,7 +129,7 @@ export function PageSettingsInformation() {
           onSubmit={handleSubmit(onSubmitPersonal)}
           className="mt-8 flex flex-col gap-2"
         >
-          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+          <Common.Title size={'lg'} color="white" className="-mt-4 mb-2">
             URL de Troca
           </Common.Title>
           <div className="flex gap-4">
@@ -133,8 +145,10 @@ export function PageSettingsInformation() {
                     : 'https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef'
                 }
                 labelClassName="w-full"
-                className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent
-                 ${watchTradelink !== '' ? 'pr-14' : 'pr-3'} text-white
+                className={`${
+                  editTradeLink ? 'text-white' : 'text-mesh-color-neutral-200'
+                } w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent
+                 ${watchTradelink !== '' ? 'pr-14' : 'pr-3'}
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
@@ -229,7 +243,9 @@ export function PageSettingsInformation() {
                 name="email"
                 disabled={isLoading || !editEmail}
                 register={registerEmail('email')}
-                className={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
+                className={`${
+                  editEmail ? 'text-white' : 'text-mesh-color-neutral-200'
+                } rounded-md bg-mesh-color-neutral-600 px-3 py-2
             ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-transparent`}
                 errors={errorsEmail.email}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
@@ -269,7 +285,9 @@ export function PageSettingsInformation() {
                 disabled={isLoading || !editPhone}
                 name="phone"
                 register={registerPhone('phone')}
-                inputClassName={`rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-transparent
+                inputClassName={`${
+                  editPhone ? 'text-white' : 'text-mesh-color-neutral-200'
+                } rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-transparent
               transition-all ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errors={errorsPhone.phone}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { IConfig } from '@/interfaces/IConfig'
+import { IConfig, IOptionalConfig } from '@/interfaces/IConfig'
 import { Api } from '@/providers'
 
 export default class ConfigService {
@@ -35,6 +35,37 @@ export default class ConfigService {
         url_trade,
         agreed_with_emails,
         agreed_with_terms,
+      },
+      {
+        headers: { Authorization: 'Bearer ' + token },
+      },
+    )
+  }
+
+  public static async updateConfig({
+    token,
+    agreed_with_emails,
+    agreed_with_terms,
+    owner_email,
+    owner_id,
+    owner_name,
+    owner_phone,
+    steam_guard,
+    url_sell,
+    url_trade,
+  }: IOptionalConfig) {
+    await Api.put(
+      `/configuration/${owner_id}`,
+      {
+        agreed_with_emails,
+        agreed_with_terms,
+        owner_email,
+        owner_id,
+        owner_name,
+        owner_phone,
+        steam_guard,
+        url_sell,
+        url_trade,
       },
       {
         headers: { Authorization: 'Bearer ' + token },
