@@ -3,7 +3,7 @@ import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ColorRing } from 'react-loader-spinner'
 import { formResolver } from './form.schema'
@@ -31,14 +31,15 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
   })
   const [formData, setFormData] = useState<any>(undefined)
 
-  useQuery({
+  const { data } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession.user?.steam?.steamid],
-    queryFn: () => {
+    queryFn: async () => {
       const sellLink = `https://rentskins/?sellerid=${trueSession.user?.steam?.steamid}`
       const params = {
         owner_id: trueSession.user?.steam?.steamid as string,
         owner_name: trueSession.user?.name as string,
         owner_email: formData.email,
+        owner_phone: formData.phone,
         steam_guard: false,
         url_sell: sellLink,
         url_trade: formData['trade-link'],
@@ -46,13 +47,20 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
         agreed_with_terms: true,
         token: trueSession.user?.token!,
       }
-      ConfigService.createConfig(params)
-      return window.location.reload()
+      return ConfigService.createConfig(params)
+      // window.location.reload()
     },
     enabled: !!formData,
   })
 
-  const enableButton = dirtyFields.email && dirtyFields['trade-link']
+  useEffect(() => {
+    if (data?.request.status) {
+      return window.location.reload()
+    }
+  }, [data])
+
+  const enableButton =
+    dirtyFields.email && dirtyFields.phone && dirtyFields['trade-link']
 
   const onSubmit = (data: any) => {
     setFormData(data)
@@ -93,6 +101,15 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
         labelClassName="w-8/12 text-white"
         register={register('email')}
         errors={errors.email}
+      />
+
+      <Form.Input.Phone
+        name="phone"
+        label="Telefone de Contato"
+        placeholder="(00) 00000-0000"
+        labelClassName="w-8/12 text-white"
+        register={register('phone')}
+        errors={errors.phone}
       />
 
       <div className="mt-4 flex flex-col gap-2">

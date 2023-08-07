@@ -24,9 +24,6 @@ export const metadata: Metadata = {
 }
 
 export default function Inventory() {
-  // const router = useRouter()
-  // useEffect(() => Authentication.authenticate(router), [router])
-
   return (
     <main className="w-full bg-mesh-color-others-black pt-[32px]">
       <div className="mx-auto grid w-10/12 grid-cols-10">

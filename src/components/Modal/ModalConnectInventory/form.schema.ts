@@ -37,6 +37,16 @@ const formSchema = yup.object({
       return regex.test(item)
     }),
 
+  phone: yup
+    .string()
+    .test('phone-test', 'O campo deve conter um telefone válido.', (item) => {
+      if (item) {
+        return item.length === 15
+      }
+
+      return true
+    }),
+
   'receive-notifications': yup.bool(),
 
   'accept-terms': yup

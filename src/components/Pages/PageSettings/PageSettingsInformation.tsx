@@ -6,11 +6,16 @@ import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { formResolver as contactResolver } from './schemas/information.contact.schema'
+import { formResolver as emailResolver } from './schemas/information-email.contact.schema'
+import { formResolver as phoneResolver } from './schemas/information-phone.contact.schema'
 import { formResolver as personalResolver } from './schemas/information.personal.schema'
 
 export function PageSettingsInformation() {
+  const [editEmail, setEditEmail] = useState(false)
+  const [editPhone, setEditPhone] = useState(false)
+
   const {
     handleSubmit,
     setValue,
@@ -25,13 +30,23 @@ export function PageSettingsInformation() {
   })
 
   const {
-    handleSubmit: handleSubmit2,
-    register: register2,
-    formState: { errors: errors2 },
+    handleSubmit: handleSubmitEmail,
+    register: registerEmail,
+    formState: { errors: errorsEmail },
   } = useForm({
-    resolver: contactResolver,
+    resolver: emailResolver,
     defaultValues: {
       email: undefined,
+    },
+  })
+
+  const {
+    handleSubmit: handleSubmitPhone,
+    register: registerPhone,
+    formState: { errors: errorsPhone },
+  } = useForm({
+    resolver: phoneResolver,
+    defaultValues: {
       phone: undefined,
     },
   })
@@ -56,9 +71,17 @@ export function PageSettingsInformation() {
     console.log(data)
   }
 
-  const onSubmitContact = (data: any) => {
+  const onSubmitEmail = (data: any) => {
+    setEditEmail(false)
     console.log(data)
   }
+
+  const onSubmitPhone = (data: any) => {
+    setEditPhone(false)
+    console.log(data)
+  }
+
+  useEffect(() => console.log(editEmail), [editEmail])
 
   const watchTradelink = watch('trade-link')
 
@@ -116,14 +139,14 @@ export function PageSettingsInformation() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href="http://steamcommunity.com/my/tradeoffers/privacy"
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:opacity-70"
               >
                 Obter URL
               </a>
               <Form.Button
                 buttonStyle={undefined}
                 disabled={isLoading}
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
+                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
               >
                 Aplicar
               </Form.Button>
@@ -141,13 +164,15 @@ export function PageSettingsInformation() {
             <span className="text-mesh-color-neutral-200">
               {status === 'authenticated'
                 ? `
-              https://rentskins/?sellerid=${trueSession.user?.steam?.steamid!}
+              https://rentskins/?sellerid=${
+                trueSession.user?.steam?.steamid! || 'ERROR'
+              }
               `
                 : 'Verificando...'}
             </span>
             <Common.Button
-              disabled={isLoading}
-              className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
+              disabled={status !== 'authenticated'}
+              className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
               onClick={() =>
                 navigator.clipboard.writeText(
                   `https://rentskins/?sellerid=${trueSession.user?.steam
@@ -162,71 +187,90 @@ export function PageSettingsInformation() {
       </div>
 
       {/* Bottom */}
-      <Form.Root
-        onSubmit={handleSubmit2(onSubmitContact)}
-        className="rounded-2xl bg-mesh-color-neutral-800 px-4 py-6"
-      >
-        <Common.Title bold={700} size={'2xl'} color="white">
-          Informações de Contato
-        </Common.Title>
-        <div className="mt-8 flex flex-col items-start justify-center">
-          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
-            Email
+      <div className="rounded-2xl bg-mesh-color-neutral-800 px-4 py-6">
+        <Form.Root onSubmit={handleSubmitEmail(onSubmitEmail)}>
+          <Common.Title bold={700} size={'2xl'} color="white">
+            Informações de Contato
           </Common.Title>
-          <div className="flex w-full items-center justify-between">
-            <Form.Input.Text
-              labelClassName="w-7/12 text-white mb-4"
-              placeholder={isLoading ? 'Verificando...' : 'exemplo@email.com'}
-              name="email"
-              disabled={isLoading}
-              register={register2('email')}
-              className={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
-            ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-mesh-color-neutral-700`}
-              errors={errors2.email}
-              errorsClassname="text-red-500 text-sm mt-8 absolute"
-            />
+          <div className="mt-8 flex flex-col items-start justify-center">
+            <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+              Email
+            </Common.Title>
+            <div className="flex w-full items-center justify-between">
+              <Form.Input.Text
+                labelClassName="w-7/12 text-white mb-4"
+                placeholder={isLoading ? 'Verificando...' : 'exemplo@email.com'}
+                name="email"
+                disabled={isLoading || !editEmail}
+                register={registerEmail('email')}
+                className={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
+            ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-transparent`}
+                errors={errorsEmail.email}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
+              />
 
-            <div className="flex w-1/12">
-              <Form.Button
-                buttonStyle={undefined}
-                disabled={isLoading}
-                onSubmit={handleSubmit2(onSubmitContact)}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
-              >
-                Editar
-              </Form.Button>
+              <div className="flex w-1/12">
+                {editEmail ? (
+                  <Form.Button
+                    buttonStyle={undefined}
+                    disabled={isLoading}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Salvar
+                  </Form.Button>
+                ) : (
+                  <button
+                    disabled={isLoading}
+                    onClick={() => setEditEmail(true)}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mt-8 flex flex-col items-start justify-center">
-          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
-            Telefone
-          </Common.Title>
-          <div className="flex w-full items-center justify-between">
-            <Form.Input.Phone
-              labelClassName="w-7/12 text-white mb-4"
-              placeholder={isLoading ? 'Verificando...' : '(00) 00000-0000'}
-              disabled={isLoading}
-              name="email"
-              register={register2('phone')}
-              inputClassName={`rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-mesh-color-neutral-700
+        </Form.Root>
+        <Form.Root onSubmit={handleSubmitPhone(onSubmitPhone)}>
+          <div className="mt-8 flex flex-col items-start justify-center">
+            <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+              Telefone
+            </Common.Title>
+            <div className="flex w-full items-center justify-between">
+              <Form.Input.Phone
+                labelClassName="w-7/12 text-white mb-4"
+                placeholder={isLoading ? 'Verificando...' : '(00) 00000-0000'}
+                disabled={isLoading || !editPhone}
+                name="phone"
+                register={registerPhone('phone')}
+                inputClassName={`rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-transparent
               transition-all ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
-              errors={errors2.phone}
-              errorsClassname="text-red-500 text-sm mt-8 absolute"
-            />
-            <div className="flex w-1/12">
-              <Form.Button
-                buttonStyle={undefined}
-                disabled={isLoading}
-                onSubmit={handleSubmit2(onSubmitContact)}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900"
-              >
-                Editar
-              </Form.Button>
+                errors={errorsPhone.phone}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
+              />
+              <div className="flex w-1/12">
+                {editPhone ? (
+                  <Form.Button
+                    buttonStyle={undefined}
+                    disabled={isLoading}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Salvar
+                  </Form.Button>
+                ) : (
+                  <button
+                    disabled={isLoading}
+                    onClick={() => setEditPhone(true)}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </Form.Root>
+        </Form.Root>
+      </div>
     </div>
   )
 }
