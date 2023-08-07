@@ -15,7 +15,18 @@ export const metadata: Metadata = {
   Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 
-export default function Home() {
+interface ISearchParams {
+  sellerid: string
+}
+interface IProps {
+  searchParams: ISearchParams
+}
+
+export default function Home({ searchParams }: IProps) {
+  if (searchParams.sellerid) {
+    console.log('')
+  }
+
   return (
     <main className="h-full">
       <div className="h-screen">

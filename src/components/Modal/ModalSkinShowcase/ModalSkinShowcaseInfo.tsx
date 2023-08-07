@@ -188,7 +188,11 @@ export function ModalSkinShowcaseInfo({
                 size="lg"
               >
                 {(
-                  (formattedValue(watchValue || '') || Number(savePrice)) * 0.05
+                  (formattedValue(watchValue || '') ||
+                    formattedValue(savePrice)) -
+                  (formattedValue(watchValue || '') ||
+                    formattedValue(savePrice)) *
+                    0.05
                 ).toLocaleString('pt-br', {
                   style: 'currency',
                   currency: 'BRL',

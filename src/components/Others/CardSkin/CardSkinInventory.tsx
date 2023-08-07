@@ -24,7 +24,7 @@ export function CardSkinInventory() {
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
 
-  const { data, isLoading, isRefetching } = useQuery({
+  const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
@@ -47,9 +47,11 @@ export function CardSkinInventory() {
     return () => window.removeEventListener('resize', checkPageDimensions)
   }, [])
 
-  // useEffect(() => {
-  //   refetch()
-  // }, [page, itemsPerPage, inventoryTypeFilter, refetch])
+  useEffect(() => console.log(inventoryTypeFilter), [inventoryTypeFilter])
+
+  useEffect(() => {
+    refetch()
+  }, [page, itemsPerPage, inventoryTypeFilter, refetch])
 
   useEffect(() => {
     setIsInventoryFetching(isLoading || isRefetching)
@@ -91,6 +93,7 @@ export function CardSkinInventory() {
           <CardSkin.Skeleton quantity={itemsPerPage} />
         ) : data?.data &&
           data.data.inventory &&
+          data.data.inventory.inventory &&
           data.data.inventory.inventory.length > 0 ? (
           data.data.inventory.inventory.map(
             (
@@ -133,7 +136,7 @@ export function CardSkinInventory() {
                     >
                       <div
                         className={classNames(
-                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400 bg-mesh-color-neutral-400/40 transition-all',
+                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400 transition-all',
                           {
                             'border-mesh-color-neutral-100 bg-mesh-color-accent-1100':
                               isSelected,
