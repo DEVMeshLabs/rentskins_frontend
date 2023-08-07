@@ -23,12 +23,12 @@ export default async function AdminLayout({ children }: IProps) {
   checkValidAdmin()
 
   return (
-    <div className="flex h-screen flex-col bg-red-500">
-      <div className="flex h-16 w-full items-center border-b-2 border-mesh-color-neutral-400 bg-green-500">
+    <div className="flex h-screen flex-col bg-mesh-color-neutral-900">
+      <div className="flex h-16 w-full items-center border-b border-mesh-color-neutral-600 bg-mesh-color-neutral-1000">
         <Image src={logo} alt="RentSkins" className="ml-8" />
       </div>
       <div className="flex h-full w-full">
-        <aside className="h-full w-2/12 border-r-2 border-mesh-color-neutral-400 bg-blue-500">
+        <aside className="h-full w-2/12 border-r border-mesh-color-neutral-600 bg-mesh-color-neutral-1000">
           <LayoutAdminSidebar />
         </aside>
         <main className="w-full p-8">{children}</main>
