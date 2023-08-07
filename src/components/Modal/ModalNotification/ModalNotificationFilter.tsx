@@ -19,10 +19,6 @@ export function ModalNotificationFilter() {
   const router = useRouter()
 
   useEffect(() => {
-    setDomainQuery()
-  }, [location.search])
-
-  const setDomainQuery = () => {
     setModalOpen(
       searchParams.get('modalopen') as SetStateAction<string | undefined>,
     )
@@ -30,7 +26,7 @@ export function ModalNotificationFilter() {
     setModalType(
       searchParams.get('modaltype') as SetStateAction<string | undefined>,
     )
-  }
+  }, [searchParams])
 
   const removeDomainQuery = () => {
     router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
@@ -58,6 +54,9 @@ export function ModalNotificationFilter() {
     { value: 'tresmes', label: '3 Meses' },
     { value: 'umano', label: '1 Ano' },
   ]
+
+  console.log(modalOpen)
+  console.log(modalType)
 
   return (
     <Dialog.Root

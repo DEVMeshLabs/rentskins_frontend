@@ -2,6 +2,7 @@ import { CommonAlert } from './CommonAlert'
 import { CommonAvatar } from './CommonAvatar'
 import { CommonButton } from './CommonButton'
 import { CommonPagination } from './CommonPagination'
+import { CommonSearchFeedback } from './CommonSearchFeedback'
 import { CommonSteamButton } from './CommonSteamButton'
 import { CommonSubtitle } from './CommonSubtitle'
 import { CommonTitle } from './CommonTitle'
@@ -16,6 +17,7 @@ const Common = {
   Subtitle: CommonSubtitle,
   Tooltip: CommonTooltip,
   SteamButton: CommonSteamButton,
+  SearchFeedback: CommonSearchFeedback,
 }
 
 export default Common

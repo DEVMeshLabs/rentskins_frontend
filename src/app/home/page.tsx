@@ -7,31 +7,70 @@ import {
   IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
-// import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
+import SkinService from '@/services/skin.service'
 import SteamService from '@/services/steam.service'
 import useUserStore from '@/stores/user.store'
-// import dynamic from 'next/dynamic'
-// const AllSkins = dynamic<IAllSkinsProps>(
-//   () =>
-//     import('@/components/Others/Skins/AllSkins').then(
-//       (module) => module.default,
-//     ),
-//   {
-//     ssr: false,
-//   },
-// )
+import { useQuery } from '@tanstack/react-query'
+import dynamic from 'next/dynamic'
+import LocalStorage from '@/tools/localstorage.tool'
+import { useEffect } from 'react'
+import UserService from '@/services/user.service'
+const AllSkins = dynamic<IAllSkinsProps>(
+  () =>
+    import('@/components/Others/Skins/AllSkins').then(
+      (module) => module.default,
+    ),
+  {
+    ssr: false,
+  },
+)
 
 export default function Home() {
   const { user } = useUserStore()
 
-  // const { data, isLoading } = useQuery({
-  // queryKey: ['allSkins'],
-  // queryFn: () => SkinService.findByAll(),
-  // })
+  const { data, isLoading } = useQuery({
+    queryKey: ['allSkins'],
+    queryFn: () => SkinService.findByAll(),
+  })
 
   const handleOnSteam = () => {
     SteamService.redirect()
   }
+
+  const { data: dataGetted, refetch: refetchGetUser } = useQuery({
+    queryKey: ['ifProfile', user],
+    queryFn: () => UserService.getUser(user.steamid),
+    enabled: false,
+  })
+
+  useEffect(() => {
+    refetchGetUser()
+  }, [user.steamid])
+
+  const { refetch } = useQuery({
+    queryKey: ['CreateProfile', user],
+    queryFn: async () => {
+      return UserService.createUser(
+        {
+          owner_id: user.steamid,
+          owner_name: user.username,
+          picture: user.picture,
+        },
+        LocalStorage.get('token'),
+      )
+    },
+    enabled: false,
+  })
+
+  useEffect(() => {
+    console.log(dataGetted)
+    console.log(user.steamid)
+    if (!dataGetted && user.steamid) {
+      refetch()
+    }
+  }, [dataGetted])
 
   return (
     <main className="h-full">
@@ -84,13 +123,11 @@ export default function Home() {
         </div>
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
-        {
-          // isLoading ? (
-          // <AllSkeletonSkins quantitySkeletons={20} />
-          // ) : (
-          // <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
-          // )
-        }
+        {isLoading ? (
+          <AllSkeletonSkins quantitySkeletons={20} />
+        ) : (
+          <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
+        )}
       </div>
     </main>
   )

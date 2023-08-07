@@ -74,8 +74,8 @@ export default function CartSkinCard({
       </div>
       <Common.Button
         onClick={handleOnClick}
-        className="group flex h-full w-0 items-center
-        justify-center rounded-r-xl border-none
+        className="group flex h-full w-0 items-center justify-center
+        rounded-l-none rounded-r-xl border-none
         stroke-white transition-[width/color] hover:cursor-pointer
         hover:stroke-mesh-color-rarity-lowest group-hover:w-20 group-hover:bg-mesh-color-others-eerie-black"
       >

@@ -20,6 +20,7 @@ export default function RootLayout({
       console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.'),
     [],
   )
+
   return (
     <QueryClientProvider client={queryClient}>
       <html lang="en">
