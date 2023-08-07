@@ -8,6 +8,7 @@ import { HeroInformation } from '@/components/Others/HeroInformation'
 import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'
 import PageHomeSkins from '@/components/Pages/PageHome/PageHomeSkins'
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Página Inicial - RentSkins',
@@ -18,13 +19,14 @@ export const metadata: Metadata = {
 interface ISearchParams {
   sellerid: string
 }
+
 interface IProps {
   searchParams: ISearchParams
 }
 
 export default function Home({ searchParams }: IProps) {
   if (searchParams.sellerid) {
-    console.log('')
+    redirect(`/perfil/${searchParams.sellerid}`)
   }
 
   return (
