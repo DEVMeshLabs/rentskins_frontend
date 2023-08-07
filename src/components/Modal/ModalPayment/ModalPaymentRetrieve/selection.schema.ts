@@ -5,22 +5,26 @@ const formSchema = yup.object({
   value: yup
     .string()
     .required('Campo necessário!')
-    .test('form-value-test', 'O valor deve ser um número positivo.', (item) => {
-      if (!item) {
-        return false
-      }
+    .test(
+      'form-value-test',
+      'O campo deve conter um número positivo.',
+      (item) => {
+        if (!item) {
+          return false
+        }
 
-      let currencyToNumber
-      currencyToNumber = item.replace(/\./g, '')
-      currencyToNumber = currencyToNumber.replace('R$ ', '')
-      currencyToNumber = currencyToNumber.replace(',', '.')
+        let currencyToNumber
+        currencyToNumber = item.replace(/\./g, '')
+        currencyToNumber = currencyToNumber.replace('R$ ', '')
+        currencyToNumber = currencyToNumber.replace(',', '.')
 
-      if (Number(currencyToNumber) <= 0) {
-        return false
-      }
+        if (Number(currencyToNumber) <= 0) {
+          return false
+        }
 
-      return true
-    }),
+        return true
+      },
+    ),
   method: yup.string().required(),
 })
 
