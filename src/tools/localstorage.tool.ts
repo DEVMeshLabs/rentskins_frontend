@@ -1,9 +1,3 @@
-export interface IUser {
-  steamid: string
-  picture: string
-  username: string
-}
-
 export default class LocalStorage {
   public static create(key: string, value: object | string) {
     localStorage.setItem(key, JSON.stringify(value))
@@ -15,6 +9,8 @@ export default class LocalStorage {
     if (response !== null || response !== undefined) {
       return JSON.parse(response as string)
     }
+
+    return ''
   }
 
   public static remove(key: string) {

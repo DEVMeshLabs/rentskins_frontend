@@ -1,8 +1,4 @@
-export interface IUser {
-  steamid: string | number
-  username: string
-  picture: string
-}
+import { IUser } from '@/interfaces/user.interface'
 
 export interface IWalletUser {
   data?: {

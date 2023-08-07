@@ -6,15 +6,19 @@ type Props = {
   name?: string
   placeholder?: string
   className?: string
-  onChange?: (value?: string) => void
+  onChange?: (value: number) => void
   errors?: any
+  value: number | undefined
+  defaultValue?: number | string
 }
 
 export function InputCurrency({
   onChange,
   name,
   className,
+  value,
   errors,
+  defaultValue,
   ...props
 }: Props) {
   return (
@@ -24,7 +28,11 @@ export function InputCurrency({
         groupSeparator="."
         decimalSeparator=","
         decimalsLimit={2}
-        onValueChange={(value) => (onChange ? onChange(value) : () => {})}
+        value={value}
+        defaultValue={defaultValue}
+        onValueChange={(value) =>
+          onChange ? onChange(Number(value)) : () => {}
+        }
         className={classNames(className)}
       />
     </div>

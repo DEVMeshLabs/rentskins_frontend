@@ -1,13 +1,20 @@
 interface IProps {
   stroke?: string
   fill?: string
+  width?: number
+  height?: number
 }
 
-export function IconPaper({ stroke = '#151714', fill = '#A7B0A0' }: IProps) {
+export function IconPaper({
+  stroke = '#151714',
+  fill = '#A7B0A0',
+  width = 19,
+  height = 19,
+}: IProps) {
   return (
     <svg
-      width="19"
-      height="19"
+      width={width}
+      height={height}
       viewBox="0 0 19 19"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,9 @@
-export type TypeMethod = 'mastercard' | 'pix' | 'ticket'
+export type TypeMethod =
+  | 'mastercard'
+  | 'pix'
+  | 'ticket'
+  | 'paypal'
+  | 'banktransfer'
 
 export interface IPayment {
   value?: number
@@ -15,7 +20,7 @@ export interface IPersonal {
 export interface ILocation {
   city: string | undefined
   state: string | undefined
-  cep: string | undefined
+  postalCode: string | undefined
   neighborhood: string | undefined
   complementNumber: string | undefined
   address: string | undefined
@@ -26,7 +31,7 @@ export interface ITransference {
   agency: string | undefined
   accountNumber: string | undefined
   keyType: string | undefined
-  keyNumber: string | undefined
+  keyValue: string | undefined
 }
 
 export interface IWithdrawInfo {
@@ -38,8 +43,8 @@ export interface IWithdrawInfo {
 export interface IStates {
   paymentAdd: IPayment
   setPaymentAdd: (paymentAdd: IPayment) => void
-  paymentRetrieve: { method: TypeMethod }
-  setPaymentRetrieve: (paymentRetrieve: { method: TypeMethod }) => void
+  paymentRetrieve: IPayment
+  setPaymentRetrieve: (paymentRetrieve: IPayment) => void
   paymentWithdrawInfo: IWithdrawInfo
   setPaymentWithdrawInfo: (paymentWithdrawInfo: IWithdrawInfo) => void
 }

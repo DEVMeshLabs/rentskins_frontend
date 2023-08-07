@@ -1,32 +1,24 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/Button'
-import { IconLeftArrow } from '@/components/Icons/iconLeftArrow'
-import { Title } from '@/components/Title'
-import { useRouter } from 'next/navigation'
-import CircleLoading from '@/components/CircleLoading'
-import { IconPerson } from '@/components/Icons/IconPerson'
-import { IconLocation } from '@/components/Icons/IconLocation'
+import Common from '@/components/Common'
 import { IconBank } from '@/components/Icons/IconBank'
 import { IconCard } from '@/components/Icons/IconCard'
+import { IconLeftArrow } from '@/components/Icons/IconLeftArrow'
+import { IconLocation } from '@/components/Icons/IconLocation'
+import { IconPerson } from '@/components/Icons/IconPerson'
+import { LayoutLoading } from '@/components/Layout/LayoutLoading'
+import { PagePaymentWithdrawDocument } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawDocument'
+import { PagePaymentWithdrawLocation } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawLocation'
+import { PagePaymentWithdrawPersonal } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawPersonal'
+import { PagePaymentWithdrawTransaction } from '@/components/Pages/PagePayment/PagePaymentWithdraw/PagePaymentWithdrawTransaction'
 import useComponentStore from '@/stores/components.store'
-import {
-  PaymentWithdrawStepPersonal,
-  PaymentWithdrawStepDocument,
-  PaymentWithdrawStepLocation,
-  PaymentWithdrawStepTransaction,
-} from '@/components/Payment/Form/Withdraw/'
-import usePaymentStore from '@/stores/payment.store'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 export default function PaymentWithdrawPage() {
   const [isLoading, setIsLoading] = useState(false)
-  const [stepLabel, setStepLabel] = useState('Primeira etapa')
-  const [stepSubLabel, setStepSubLabel] = useState('')
-  const [stepSubtitle, setStepSubtitle] = useState('Informações Pessoais')
   const router = useRouter()
 
   const { paymentWithdrawIndex, setPaymentWithdrawIndex } = useComponentStore()
-  const { paymentWithdrawInfo } = usePaymentStore()
 
   useEffect(() => setPaymentWithdrawIndex(0), [setPaymentWithdrawIndex])
 
@@ -34,55 +26,63 @@ export default function PaymentWithdrawPage() {
     router.push('/')
   }
 
-  useEffect(() => console.log(paymentWithdrawInfo), [paymentWithdrawInfo])
-
-  const handleOnNext = (event: any) => {
+  const handleOnNext = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    switch (paymentWithdrawIndex) {
-      case 0:
-        setPaymentWithdrawIndex(1)
-        setStepLabel('Segunda Etapa')
-        setStepSubtitle('Informações da Localização')
-        setStepSubLabel('')
-        break
-      case 1:
-        setPaymentWithdrawIndex(2)
-        setStepLabel('Terceira Etapa')
-        setStepSubtitle('Informações Bancárias')
-        setStepSubLabel(
-          'Para receber seus ganhos da plataforma, por favor, preencha as informações bancárias abaixo. A conta bancária deve estar registrada em seu CPF.',
-        )
-        break
-      case 2:
-        setPaymentWithdrawIndex(3)
-        setStepLabel('Quarta Etapa')
-        setStepSubtitle('Documentos')
-        setStepSubLabel(
-          'Por favor, envie a foto frente e verso da sua identidade, CNH ou PDF para que possamos verificar suas informações pessoais. Essa etapa é importante para garantir a segurança da plataforma e dos usuários.',
-        )
-        break
-      case 3:
-        setIsLoading(true)
-        router.push('/pagamento/saque/sucesso')
+    if (paymentWithdrawIndex !== 3) {
+      setPaymentWithdrawIndex((paymentWithdrawIndex + 1) as 0 | 1 | 2 | 3)
+    } else {
+      setIsLoading(true)
+      router.push('/pagamento/saque/sucesso')
     }
+  }
+
+  const renderFormContent = () => {
+    const forms = {
+      0: (
+        <PagePaymentWithdrawPersonal
+          handleFormSubmit={handleOnNext}
+          handleFormCancel={handleOnCancel}
+        />
+      ),
+      1: (
+        <PagePaymentWithdrawLocation
+          handleFormSubmit={handleOnNext}
+          handleFormCancel={handleOnCancel}
+        />
+      ),
+      2: (
+        <PagePaymentWithdrawTransaction
+          handleFormSubmit={handleOnNext}
+          handleFormCancel={handleOnCancel}
+        />
+      ),
+      3: (
+        <PagePaymentWithdrawDocument
+          handleFormSubmit={handleOnNext}
+          handleFormCancel={handleOnCancel}
+        />
+      ),
+    }
+
+    return forms[paymentWithdrawIndex]
   }
 
   return (
     <main className="flex h-fit flex-col items-center justify-start bg-mesh-color-others-black pb-64 text-white">
-      <CircleLoading
+      <LayoutLoading
         label="Processando..."
         enabled={isLoading}
         className="mb-64 mt-32 flex h-full items-center justify-center"
       >
         <div className="mt-8 flex w-min flex-col">
           <div className="mb-8 flex w-full items-center justify-start">
-            <Button
+            <Common.Button
               className="border-transparent"
               onClick={() => handleOnCancel()}
             >
               <IconLeftArrow />
-            </Button>
+            </Common.Button>
 
             <span className="ml-2 text-mesh-color-neutral-200">
               <text>Saldo </text>
@@ -94,7 +94,7 @@ export default function PaymentWithdrawPage() {
             </span>
           </div>
           <div className="flex h-full w-full flex-col items-start justify-center">
-            <Title size="2xl"> Retirar levantamento </Title>
+            <Common.Title size="2xl"> Retirar levantamento </Common.Title>
             <div className="mt-4 flex w-[546px] items-center justify-center">
               <div className="flex h-10 w-12 items-center justify-center rounded-full bg-mesh-color-primary-1200 p-2">
                 <IconPerson />
@@ -172,58 +172,12 @@ export default function PaymentWithdrawPage() {
                 />
               </div>
             </div>
-            <div className="mt-4 w-full max-w-xl">
-              <div className="text-sm text-mesh-color-neutral-200">
-                {stepLabel}
-              </div>
-              <Title size={'lg'} bold={600}>
-                {stepSubtitle}
-              </Title>
-
-              <div className="w-11/12 leading-tight">
-                <text className="h-2  text-sm leading-none tracking-tighter text-mesh-color-neutral-0">
-                  {stepSubLabel}
-                </text>
-              </div>
+            <div className="mt-4 w-full transition-all ease-in-out">
+              {renderFormContent()}
             </div>
-            <form
-              onSubmit={(event) => handleOnNext(event)}
-              className="mt-4 w-full transition-all ease-in-out"
-            >
-              {paymentWithdrawIndex === 0 && <PaymentWithdrawStepPersonal />}
-              {paymentWithdrawIndex === 1 && <PaymentWithdrawStepLocation />}
-              {paymentWithdrawIndex === 2 && <PaymentWithdrawStepTransaction />}
-              {paymentWithdrawIndex === 3 && <PaymentWithdrawStepDocument />}
-
-              <br />
-
-              <div className="flex justify-between text-xl font-semibold">
-                <text>Levantamento:</text>
-
-                <span className="text-mesh-color-primary-800">R$0,00</span>
-              </div>
-
-              <div className="flex flex-col gap-4 text-xl font-semibold">
-                <Button
-                  type="submit"
-                  color="green"
-                  className="h-12 w-full border-transparent"
-                >
-                  Continuar
-                </Button>
-                {/* COLOR NOT WORKING */}
-                <Button
-                  className="h-12 w-full border-neutral-600"
-                  color="invisible"
-                  onClick={() => handleOnCancel()}
-                >
-                  Cancelar
-                </Button>
-              </div>
-            </form>
           </div>
         </div>
-      </CircleLoading>
+      </LayoutLoading>
     </main>
   )
 }

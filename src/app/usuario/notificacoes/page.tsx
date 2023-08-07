@@ -1,22 +1,34 @@
 'use client'
-import Aos from 'aos'
-import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '@/components/Button'
-import NotificationsHistoric from '@/components/Notifications/index.historic'
-import NotificationsTransactions from '@/components/Notifications/index.transactions'
-import { Title } from '@/components/Title'
-import { historicMock } from '@/Mock/notification.historic.mock'
+import Common from '@/components/Common'
+import PageNotificationHistoric from '@/components/Pages/PageNotification/PageNotificationHistoric'
+import { PageNotificationTransaction } from '@/components/Pages/PageNotification/PageNotificationTransaction'
+// import { historicMock } from '@/Mock/notification.historic.mock'
 import { transactionsMock } from '@/Mock/notification.transaction.mock'
-import URLQuery from '@/tools/urlquery.tool'
+import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
+import useUserStore from '@/stores/user.store'
+import URLQuery from '@/tools/urlquery.tool'
+import { useQuery } from '@tanstack/react-query'
+import Aos from 'aos'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { ChangeEvent, useEffect } from 'react'
 
 export default function NotificationPage() {
   const { notificationFilter } = useFilterStore()
-  const [isLoading] = useState(false)
 
   const searchParams = useSearchParams()
   const router = useRouter()
+
+  const {
+    user: { steamid },
+  } = useUserStore()
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['allNotificationsUser', steamid],
+    queryFn: () => NotificationServices.getAllNotifsByUser(steamid),
+  })
+
+  console.log(data?.data)
 
   useEffect(() => {
     Aos.init({
@@ -31,10 +43,11 @@ export default function NotificationPage() {
         router.push(URLQuery.addQuery([{ key: 'type', value: 'historic' }]))
       }
     }
-  }, [])
+  }, [searchParams, router])
 
-  const handleOnRadio = ({ target }: any) => {
-    router.push(URLQuery.addQuery([{ key: 'type', value: target.value }]))
+  const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    router.push(URLQuery.addQuery([{ key: 'type', value }]))
   }
 
   const handleOnFilter = () => {
@@ -48,9 +61,9 @@ export default function NotificationPage() {
 
   return (
     <main className="mx-auto mt-6 flex w-8/12 flex-col">
-      <Title size="3xl" bold={700} color="white">
+      <Common.Title size="3xl" bold={700} color="white">
         Notificação
-      </Title>
+      </Common.Title>
       <div className="mt-5 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <label className="flex cursor-pointer flex-col">
@@ -60,7 +73,7 @@ export default function NotificationPage() {
               className="peer appearance-none"
               defaultChecked={searchParams.get('type') === 'transactions'}
               value={'transactions'}
-              onClick={(event) => handleOnRadio(event)}
+              onChange={(event) => handleOnRadio(event)}
             />
             <span className="text-xl font-semibold text-white/50 transition-all peer-checked:text-white">
               Transações
@@ -74,7 +87,7 @@ export default function NotificationPage() {
               className="peer"
               defaultChecked={searchParams.get('type') === 'historic'}
               value={'historic'}
-              onClick={(event) => handleOnRadio(event)}
+              onChange={(event) => handleOnRadio(event)}
             />
             <span className="text-xl font-semibold text-white/50 transition-all peer-checked:text-white">
               Histórico
@@ -82,18 +95,21 @@ export default function NotificationPage() {
             <div className="mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all peer-checked:pl-16" />
           </label>
         </div>
-        <Button
-          className="border-none bg-mesh-color-primary-1200 px-3 py-1 font-semibold"
-          onClick={() => handleOnFilter()}
-        >
-          {notificationFilter}
-        </Button>
+        {searchParams.get('type') === 'historic' && (
+          <Common.Button
+            className="border-none bg-mesh-color-primary-1200 px-3 py-1 font-semibold"
+            onClick={() => handleOnFilter()}
+            data-aos="zoom-in"
+          >
+            {notificationFilter}
+          </Common.Button>
+        )}
       </div>
       {searchParams.get('type') === 'historic' && (
-        <NotificationsHistoric data={historicMock} loading={isLoading} />
+        <PageNotificationHistoric data={data?.data} loading={isLoading} />
       )}
       {searchParams.get('type') === 'transactions' && (
-        <NotificationsTransactions
+        <PageNotificationTransaction
           data={transactionsMock.pending}
           loading={isLoading}
         />

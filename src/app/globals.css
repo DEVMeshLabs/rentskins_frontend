@@ -11,7 +11,7 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: #151714;
+  background: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -29,6 +29,10 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+input:focus {
+  outline: none
 }
 
 input[type='radio'] {

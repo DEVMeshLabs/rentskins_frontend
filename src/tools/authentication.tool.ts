@@ -1,18 +1,10 @@
-import { IUser } from '@/stores/interfaces/user.interface'
+import { IUser } from '@/interfaces/user.interface'
 import JsonWebToken from './jsonwebtoken.tool'
 import LocalStorage from './localstorage.tool'
 
 export default class Authentication {
-  public static login(params: any, setUser: any, router: any, URLQuery: any) {
+  public static login(params: any, router: any, URLQuery: any) {
     const tokenOnURL = params.get('token')
-
-    const createUserInStore = (verification: IUser) => {
-      setUser({
-        username: verification.username,
-        picture: verification.picture,
-        steamid: verification.steamid,
-      })
-    }
 
     if (tokenOnURL) {
       const verification = JsonWebToken.verify(tokenOnURL) as IUser
@@ -23,7 +15,6 @@ export default class Authentication {
         verification.steamid
       ) {
         LocalStorage.create('token', tokenOnURL)
-        createUserInStore(verification)
         console.log('User first login')
       }
     } else {
@@ -37,7 +28,6 @@ export default class Authentication {
           verification !== undefined &&
           verification.steamid
         ) {
-          createUserInStore(verification)
           console.log('User returning login')
         } else {
           console.log('User not logged in.')

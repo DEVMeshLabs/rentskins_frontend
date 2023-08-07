@@ -4,7 +4,7 @@ export interface IConfig {
   owner_email: string
   url_trade: string
   url_sell: string
-  steam_guard: false
-  agreed_with_emails: true | false
-  agreed_with_terms: true | false
+  steam_guard: boolean
+  agreed_with_emails: boolean
+  agreed_with_terms: boolean
 }
