@@ -13,12 +13,30 @@ import { formResolver as phoneResolver } from './schemas/information-phone.conta
 import { formResolver as personalResolver } from './schemas/information.personal.schema'
 
 export function PageSettingsInformation() {
+  const { data: session, status } = useSession()
+  const trueSession = session as ISteamUser
   const [editEmail, setEditEmail] = useState(false)
   const [editPhone, setEditPhone] = useState(false)
+  const [editTradeLink, setEditTradeLink] = useState(false)
+
+  const { data: userConfig, isLoading } = useQuery({
+    queryKey: ['ConfigService.getUserConfig'],
+    queryFn: async () => {
+      return ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      )
+    },
+    enabled: status === 'authenticated',
+  })
+
+  if (!isLoading) {
+    console.log(userConfig.data)
+  }
 
   const {
     handleSubmit,
-    setValue,
+    setValue: setValueTrade,
     watch,
     register,
     formState: { errors },
@@ -32,6 +50,7 @@ export function PageSettingsInformation() {
   const {
     handleSubmit: handleSubmitEmail,
     register: registerEmail,
+    setValue: setValueEmail,
     formState: { errors: errorsEmail },
   } = useForm({
     resolver: emailResolver,
@@ -43,31 +62,25 @@ export function PageSettingsInformation() {
   const {
     handleSubmit: handleSubmitPhone,
     register: registerPhone,
+    setValue: setValuePhone,
     formState: { errors: errorsPhone },
   } = useForm({
     resolver: phoneResolver,
     defaultValues: {
-      phone: undefined,
+      phone: userConfig,
     },
   })
 
-  const { data: session, status } = useSession()
-  const trueSession = session as ISteamUser
-
-  const { data: userConfig, isLoading } = useQuery({
-    queryKey: ['ConfigService.getUserConfig'],
-    queryFn: async () => {
-      return ConfigService.findByConfigUserId(
-        trueSession.user?.steam?.steamid!,
-        trueSession.user?.token!,
-      )
-    },
-    enabled: status === 'authenticated',
-  })
-
-  console.log(userConfig)
+  useEffect(() => {
+    if (!isLoading && userConfig.request.status === 200) {
+      setValueEmail('email', userConfig.data.owner_email)
+      setValuePhone('phone', userConfig.data.owner_phone)
+      setValueTrade('trade-link', userConfig.data.url_trade)
+    }
+  }, [userConfig, isLoading, setValueEmail, setValuePhone, setValueTrade])
 
   const onSubmitPersonal = (data: any) => {
+    setEditTradeLink(false)
     console.log(data)
   }
 
@@ -112,7 +125,7 @@ export function PageSettingsInformation() {
               <Form.Input.Text
                 name="trade-link"
                 register={register('trade-link')}
-                disabled={isLoading}
+                disabled={isLoading || !editTradeLink}
                 errors={errors['trade-link']}
                 placeholder={
                   isLoading
@@ -120,19 +133,22 @@ export function PageSettingsInformation() {
                     : 'https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef'
                 }
                 labelClassName="w-full"
-                className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-mesh-color-neutral-700
+                className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent
                  ${watchTradelink !== '' ? 'pr-14' : 'pr-3'} text-white
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              {watchTradelink !== '' && (
-                <Common.Button
-                  className={`relative -ml-10 -mt-3 border-none`}
-                  onClick={() => setValue('trade-link', '')}
-                >
-                  <IconClose />
-                </Common.Button>
-              )}
+              {!isLoading &&
+                editTradeLink &&
+                watchTradelink !== '' &&
+                watchTradelink !== undefined && (
+                  <Common.Button
+                    className={`relative -ml-10 -mt-3 border-none`}
+                    onClick={() => setValueTrade('trade-link', '')}
+                  >
+                    <IconClose />
+                  </Common.Button>
+                )}
             </div>
             <div className="-mt-3 flex w-3/12 items-center justify-evenly">
               <a
@@ -143,13 +159,23 @@ export function PageSettingsInformation() {
               >
                 Obter URL
               </a>
-              <Form.Button
-                buttonStyle={undefined}
-                disabled={isLoading}
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
-              >
-                Aplicar
-              </Form.Button>
+              {editTradeLink ? (
+                <Form.Button
+                  buttonStyle={undefined}
+                  disabled={isLoading}
+                  className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                >
+                  Aplicar
+                </Form.Button>
+              ) : (
+                <button
+                  disabled={isLoading}
+                  onClick={() => setEditTradeLink(true)}
+                  className="border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                >
+                  Editar
+                </button>
+              )}
             </div>
           </div>
         </Form.Root>
@@ -161,7 +187,7 @@ export function PageSettingsInformation() {
             Link de Venda
           </Common.Title>
           <div className="flex items-center justify-between ">
-            <span className="text-mesh-color-neutral-200">
+            <span className="pl-3 text-mesh-color-neutral-200">
               {status === 'authenticated'
                 ? `
               https://rentskins/?sellerid=${
@@ -222,7 +248,7 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditEmail(true)}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
                   </button>
@@ -261,7 +287,7 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditPhone(true)}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
                   </button>
