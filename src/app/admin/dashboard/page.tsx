@@ -1,5 +1,5 @@
 import Common from '@/components/Common'
-import { faturamentoTotal } from './dashboard.mock'
+import { faturamentoTotal } from './../dashboard.mock'
 
 export default function AdminDashboardPage() {
   return (
@@ -11,12 +11,12 @@ export default function AdminDashboardPage() {
       {/* TOP */}
       <div className="flex h-2/3 w-full gap-8 overflow-hidden rounded-lg">
         {/* MAIN TAB */}
-        <div className="flex w-8/12 flex-col gap-4 rounded-lg bg-mesh-color-neutral-700 p-4">
-          <div>
+        <div className="flex w-8/12 flex-col justify-between gap-8 rounded-lg bg-mesh-color-neutral-700 p-4">
+          <div className="flex flex-col gap-2">
             <Common.Title bold={600} size="xl">
               Faturamento Total da Plataforma
             </Common.Title>
-            <span className="text-5xl font-semibold">R$ 24.000,00</span>
+            <span className="text-5xl font-bold">R$ 24.000,00</span>
           </div>
           <div className="flex h-2/4 w-full items-center justify-center self-center rounded-lg bg-mesh-color-primary-1200">
             <span className="text-5xl font-bold text-black">

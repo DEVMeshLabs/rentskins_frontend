@@ -1,6 +1,6 @@
 import Common from '@/components/Common'
 import PageAdminUsersTable from '@/components/Pages/PageAdmin/PageAdminUsers/PageAdminUsersTable'
-import usersMock from './users.mock'
+import usersMock from './../users.mock'
 
 export default function AdminUsersPage() {
   return (
