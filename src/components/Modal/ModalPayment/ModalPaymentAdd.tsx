@@ -15,12 +15,15 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './add.schema'
 
-export function ModalPaymentAdd() {
+interface IProps {
+  afterFormSubmit: () => void
+}
+
+export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   const router = useRouter()
   const { setPaymentAdd } = usePaymentStore()
   const [isLoading, setIsLoading] = useState(false)
-  // const [selectedValue, setSelectedValue] = useState(5)
-  // const [selectedMethod, setSelectedMethod] = useState('mastercard')
+
   const {
     register,
     control,
@@ -58,6 +61,7 @@ export function ModalPaymentAdd() {
     }
 
     router.push(`/pagamento/recarregar/${data.method}`)
+    afterFormSubmit()
   }
 
   return (
@@ -203,14 +207,14 @@ const renderRadioMethodOptions = () => {
 
 const renderRadioValueOptions = () => {
   const elements = [
-    { label: <text>R$ 5,00</text>, value: 'R$ 5,00' },
-    { label: <text>R$ 10,00</text>, value: 'R$ 10,00' },
-    { label: <text>R$ 25,00</text>, value: 'R$ 25,00' },
-    { label: <text>R$ 50,00</text>, value: 'R$ 50,00' },
-    { label: <text>R$ 100,00</text>, value: 'R$ 100,00' },
-    { label: <text>R$ 200,00</text>, value: 'R$ 200,00' },
-    { label: <text>R$ 500,00</text>, value: 'R$ 500,00' },
-    { label: <text>R$ 1.000,00</text>, value: 'R$ 1000,00' },
+    { label: <span>R$ 5,00</span>, value: 'R$ 5,00' },
+    { label: <span>R$ 10,00</span>, value: 'R$ 10,00' },
+    { label: <span>R$ 25,00</span>, value: 'R$ 25,00' },
+    { label: <span>R$ 50,00</span>, value: 'R$ 50,00' },
+    { label: <span>R$ 100,00</span>, value: 'R$ 100,00' },
+    { label: <span>R$ 200,00</span>, value: 'R$ 200,00' },
+    { label: <span>R$ 500,00</span>, value: 'R$ 500,00' },
+    { label: <span>R$ 1.000,00</span>, value: 'R$ 1000,00' },
   ]
 
   return elements

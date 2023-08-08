@@ -33,7 +33,7 @@ export function FormInputPhone({
 }: IProps) {
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      <text className="-mb-4"> {label} </text>
+      <span className="-mb-4"> {label} </span>
       <ReactInputMask
         mask={mask || '(99) 99999-9999'}
         alwaysShowMask={alwaysShowMask}
@@ -44,10 +44,11 @@ export function FormInputPhone({
         type="text"
         placeholder={rest.placeholder}
         {...register}
+        {...rest}
       />
-      <text className={errorsClassname || options.input.errors}>
+      <span className={errorsClassname || options.input.errors}>
         {errors && errors?.message}
-      </text>
+      </span>
     </label>
   )
 }

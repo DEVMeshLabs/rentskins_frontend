@@ -40,7 +40,7 @@ export function FormInputCurrency({
 }: IProps) {
   return (
     <label className={`${labelClassName} flex flex-col text-lg`}>
-      <text className="-mb-4"> {label} </text>
+      <span className="-mb-4"> {label} </span>
       <Controller
         name={name}
         control={control}
@@ -58,11 +58,11 @@ export function FormInputCurrency({
           />
         )}
       />
-      <text
+      <span
         className={errorsClassname || 'absolute mt-[85px] text-sm text-red-500'}
       >
         {errors?.message}
-      </text>
+      </span>
     </label>
   )
 }

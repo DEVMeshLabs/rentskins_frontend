@@ -1,11 +1,9 @@
 'use client'
-import useUserStore from '@/stores/user.store'
-import Authentication from '@/tools/authentication.tool'
-import URLQuery from '@/tools/urlquery.tool'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { SessionProvider } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { ModalNotificationFilter } from '../Modal/ModalNotification/ModalNotificationFilter'
-import { ModalPaymentMain } from '../Modal/ModalPayment/ModalPaymentMain'
+// import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
 import { LayoutHeaderBottom } from './Header/LayoutHeaderBottom'
 import { LayoutHeaderRoot } from './Header/LayoutHeaderRoot'
 import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
@@ -13,23 +11,17 @@ import { LayoutFooter } from './LayoutFooter'
 
 type IProps = {
   children: React.ReactNode
+  session: any
 }
 
-export function LayoutRoot({ children }: IProps) {
-  const params = useSearchParams()
+export function LayoutRoot({ children, session }: IProps) {
   const pathname = usePathname()
-  const router = useRouter()
-  const { logout, setLogout } = useUserStore()
 
   useEffect(() => {
-    Authentication.login(params, router, URLQuery)
-  }, [params, router])
-
-  useEffect(() => {
-    if (logout) {
-      Authentication.logout(setLogout)
+    if (pathname === '/' || pathname === '/home') {
+      console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.')
     }
-  }, [logout, setLogout])
+  }, [pathname])
 
   const modalRender = () => {
     switch (pathname) {
@@ -39,20 +31,19 @@ export function LayoutRoot({ children }: IProps) {
   }
 
   return (
-    <main className="min-h-screen bg-mesh-color-others-black">
-      <ModalPaymentMain />
+    <SessionProvider session={session}>
+      <main className="flex min-h-screen flex-col justify-between bg-mesh-color-others-black">
+        {modalRender()}
 
-      <meta property="og:title" content="My page title" key="title" />
-      {modalRender()}
+        <LayoutHeaderRoot>
+          <LayoutHeaderTop />
+          <LayoutHeaderBottom />
+        </LayoutHeaderRoot>
 
-      <LayoutHeaderRoot>
-        <LayoutHeaderTop />
-        <LayoutHeaderBottom />
-      </LayoutHeaderRoot>
+        {children}
 
-      {children}
-
-      <LayoutFooter />
-    </main>
+        <LayoutFooter />
+      </main>
+    </SessionProvider>
   )
 }

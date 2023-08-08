@@ -1,12 +1,28 @@
-'use client'
 import Common from '@/components/Common'
-import { useRouter } from 'next/navigation'
+import { Metadata } from 'next'
+import { headers } from 'next/headers'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+
+export const metadata: Metadata = {
+  title: 'Recarga - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function PaymentAddSuccessPage() {
-  const router = useRouter()
+  const referer = headers().get('referer')
 
-  const handleOnContinue = () => {
-    router.push('/')
+  const validURLs = [
+    `${process.env.NEXT_PUBLIC_URL}/pagamento/recarregar/mastercard`,
+    `${process.env.NEXT_PUBLIC_URL}/pagamento/recarregar/pix`,
+    `${process.env.NEXT_PUBLIC_URL}/pagamento/recarregar/boleto`,
+  ]
+
+  const urlIsValid = validURLs.some((url) => url === referer)
+
+  if (!urlIsValid) {
+    notFound()
   }
 
   return (
@@ -16,12 +32,12 @@ export default function PaymentAddSuccessPage() {
           Pagamento concluído! Seu saldo foi recarregado com sucesso!
         </Common.Title>
 
-        <Common.Button
-          className="w-2/3 border-transparent bg-mesh-color-primary-1200 py-3 text-xl font-bold text-black"
-          onClick={() => handleOnContinue()}
+        <Link
+          className="flex w-2/3 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1200 py-3 text-xl font-bold text-black opacity-70 hover:opacity-100"
+          href={'/'}
         >
           Continuar
-        </Common.Button>
+        </Link>
       </div>
     </main>
   )

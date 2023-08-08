@@ -1,39 +1,40 @@
 /* eslint-disable camelcase */
+import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import { ModalSkinShowcaseMain } from '@/components/Modal/ModalSkinShowcase/ModalSkinShowcaseMain'
+import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
+import useSkinsStore from '@/stores/skins.store'
 import Dimensions from '@/tools/dimensions.tool'
 import { useQuery } from '@tanstack/react-query'
+import classNames from 'classnames'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
-import useSkinsStore from '@/stores/skins.store'
-import classNames from 'classnames'
-import Common from '@/components/Common'
 
-interface Props {
-  steamid: string
-}
-
-export function CardSkinInventory({ steamid }: Props) {
+export function CardSkinInventory() {
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
   const [page, setPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(16)
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
 
-  const { data, isLoading, isRefetching } = useQuery({
+  const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
-        steamid,
+        trueSession.user?.steam?.steamid!,
         inventoryTypeFilter,
         Number(page),
         Number(itemsPerPage),
+        trueSession.user?.token!,
       ),
-    enabled: !!steamid,
+    enabled: status === 'authenticated',
   })
 
   const checkPageDimensions = () => {
@@ -46,9 +47,11 @@ export function CardSkinInventory({ steamid }: Props) {
     return () => window.removeEventListener('resize', checkPageDimensions)
   }, [])
 
-  // useEffect(() => {
-  //   refetch()
-  // }, [page, itemsPerPage, inventoryTypeFilter, refetch])
+  useEffect(() => console.log(inventoryTypeFilter), [inventoryTypeFilter])
+
+  useEffect(() => {
+    refetch()
+  }, [page, itemsPerPage, inventoryTypeFilter, refetch])
 
   useEffect(() => {
     setIsInventoryFetching(isLoading || isRefetching)
@@ -71,13 +74,13 @@ export function CardSkinInventory({ steamid }: Props) {
     return (
       <div className="flex h-[50vh] items-center justify-center font-semibold text-white">
         {inventoryTypeFilter.length ? (
-          <text>
+          <span>
             {selectedType !== undefined
               ? selectedType
               : 'Não existem armas desse tipo no seu inventário.'}
-          </text>
+          </span>
         ) : (
-          <text> Inventário vazio. </text>
+          <span> Inventário vazio. </span>
         )}
       </div>
     )
@@ -90,6 +93,7 @@ export function CardSkinInventory({ steamid }: Props) {
           <CardSkin.Skeleton quantity={itemsPerPage} />
         ) : data?.data &&
           data.data.inventory &&
+          data.data.inventory.inventory &&
           data.data.inventory.inventory.length > 0 ? (
           data.data.inventory.inventory.map(
             (
@@ -124,7 +128,7 @@ export function CardSkinInventory({ steamid }: Props) {
                   activator={
                     <div
                       className={classNames(
-                        'group relative w-[206px] cursor-pointer gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white hover:bg-mesh-color-neutral-700',
+                        'group relative w-[206px] cursor-pointer gap-2 rounded-lg border-[1px] border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white transition-all hover:bg-mesh-color-neutral-700',
                         {
                           'bg-mesh-color-neutral-700': isSelected,
                         },
@@ -132,7 +136,7 @@ export function CardSkinInventory({ steamid }: Props) {
                     >
                       <div
                         className={classNames(
-                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400',
+                          'absolute left-1 top-1 z-10 h-6 w-6 rounded-full border-[1px] border-mesh-color-neutral-400 transition-all',
                           {
                             'border-mesh-color-neutral-100 bg-mesh-color-accent-1100':
                               isSelected,

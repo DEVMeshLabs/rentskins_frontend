@@ -34,7 +34,7 @@ export function FormInputRadioDefault({
   ...rest
 }: IProps) {
   const renderItems = items.map((item, index) => (
-    <div key={item.value + index} className={wrapperClassname}>
+    <div key={item.value + index} className={`${wrapperClassname} flex`}>
       <input
         type="radio"
         id={item.value}
@@ -52,7 +52,7 @@ export function FormInputRadioDefault({
   return (
     <div className={containerClassname}>
       {renderItems}
-      <text className={errorsClassname}>{errors && errors?.message}</text>
+      <span className={errorsClassname}>{errors && errors?.message}</span>
     </div>
   )
 }

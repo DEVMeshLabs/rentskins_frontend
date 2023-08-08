@@ -2,14 +2,41 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons'
+import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { formResolver as contactResolver } from './schemas/information.contact.schema'
+import { formResolver as emailResolver } from './schemas/information-email.contact.schema'
+import { formResolver as phoneResolver } from './schemas/information-phone.contact.schema'
 import { formResolver as personalResolver } from './schemas/information.personal.schema'
 
 export function PageSettingsInformation() {
+  const { data: session, status } = useSession()
+  const trueSession = session as ISteamUser
+  const [editEmail, setEditEmail] = useState(false)
+  const [editPhone, setEditPhone] = useState(false)
+  const [editTradeLink, setEditTradeLink] = useState(false)
+
+  const { data: userConfig, isLoading } = useQuery({
+    queryKey: ['ConfigService.getUserConfig'],
+    queryFn: async () => {
+      return ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      )
+    },
+    enabled: status === 'authenticated',
+  })
+
+  if (!isLoading) {
+    console.log(userConfig.data)
+  }
+
   const {
     handleSubmit,
-    setValue,
+    setValue: setValueTrade,
     watch,
     register,
     formState: { errors },
@@ -21,24 +48,65 @@ export function PageSettingsInformation() {
   })
 
   const {
-    handleSubmit: handleSubmit2,
-    register: register2,
-    formState: { errors: errors2 },
+    handleSubmit: handleSubmitEmail,
+    register: registerEmail,
+    setValue: setValueEmail,
+    formState: { errors: errorsEmail },
   } = useForm({
-    resolver: contactResolver,
+    resolver: emailResolver,
     defaultValues: {
       email: undefined,
-      phone: undefined,
     },
   })
 
+  const {
+    handleSubmit: handleSubmitPhone,
+    register: registerPhone,
+    setValue: setValuePhone,
+    formState: { errors: errorsPhone },
+  } = useForm({
+    resolver: phoneResolver,
+    defaultValues: {
+      phone: userConfig,
+    },
+  })
+
+  useEffect(() => {
+    if (!isLoading && userConfig.request.status === 200) {
+      setValueEmail('email', userConfig.data.owner_email)
+      setValuePhone('phone', userConfig.data.owner_phone)
+      setValueTrade('trade-link', userConfig.data.url_trade)
+    }
+  }, [userConfig, isLoading, setValueEmail, setValuePhone, setValueTrade])
+
   const onSubmitPersonal = (data: any) => {
-    console.log(data)
+    setEditTradeLink(false)
+    ConfigService.updateConfig({
+      token: trueSession.user?.token!,
+      owner_id: trueSession.user?.steam?.steamid!,
+      url_trade: data['trade-link'],
+    })
   }
 
-  const onSubmitContact = (data: any) => {
-    console.log(data)
+  const onSubmitEmail = (data: any) => {
+    setEditEmail(false)
+    ConfigService.updateConfig({
+      token: trueSession.user?.token!,
+      owner_id: trueSession.user?.steam?.steamid!,
+      owner_email: data.email,
+    })
   }
+
+  const onSubmitPhone = (data: any) => {
+    setEditPhone(false)
+    ConfigService.updateConfig({
+      token: trueSession.user?.token!,
+      owner_id: trueSession.user?.steam?.steamid!,
+      owner_phone: data.phone,
+    })
+  }
+
+  useEffect(() => console.log(editEmail), [editEmail])
 
   const watchTradelink = watch('trade-link')
 
@@ -61,7 +129,7 @@ export function PageSettingsInformation() {
           onSubmit={handleSubmit(onSubmitPersonal)}
           className="mt-8 flex flex-col gap-2"
         >
-          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+          <Common.Title size={'lg'} color="white" className="-mt-4 mb-2">
             URL de Troca
           </Common.Title>
           <div className="flex gap-4">
@@ -69,35 +137,59 @@ export function PageSettingsInformation() {
               <Form.Input.Text
                 name="trade-link"
                 register={register('trade-link')}
+                disabled={isLoading || !editTradeLink}
                 errors={errors['trade-link']}
-                placeholder="https://steamcommunity.com/tradeoffer/new/?partner=240416830&token=vzAomQ5n"
+                placeholder={
+                  isLoading
+                    ? 'Verificando...'
+                    : 'https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef'
+                }
                 labelClassName="w-full"
-                className={`w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3
-                transition-all ${
-                  watchTradelink !== '' ? 'pr-14' : 'pr-3'
-                } text-white
+                className={`${
+                  editTradeLink ? 'text-white' : 'text-mesh-color-neutral-200'
+                } w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent
+                 ${watchTradelink !== '' ? 'pr-14' : 'pr-3'}
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              {watchTradelink !== '' && (
-                <Common.Button
-                  className={`relative -ml-10 -mt-3 border-none`}
-                  onClick={() => setValue('trade-link', '')}
-                >
-                  <IconClose />
-                </Common.Button>
-              )}
+              {!isLoading &&
+                editTradeLink &&
+                watchTradelink !== '' &&
+                watchTradelink !== undefined && (
+                  <Common.Button
+                    className={`relative -ml-10 -mt-3 border-none`}
+                    onClick={() => setValueTrade('trade-link', '')}
+                  >
+                    <IconClose />
+                  </Common.Button>
+                )}
             </div>
             <div className="-mt-3 flex w-3/12 items-center justify-evenly">
-              <Common.Button className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100">
-                Obter URL
-              </Common.Button>
-              <Form.Button
-                buttonStyle={undefined}
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://steamcommunity.com/my/tradeoffers/privacy"
+                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:opacity-70"
               >
-                Aplicar
-              </Form.Button>
+                Obter URL
+              </a>
+              {editTradeLink ? (
+                <Form.Button
+                  buttonStyle={undefined}
+                  disabled={isLoading}
+                  className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                >
+                  Aplicar
+                </Form.Button>
+              ) : (
+                <button
+                  disabled={isLoading}
+                  onClick={() => setEditTradeLink(true)}
+                  className="border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                >
+                  Editar
+                </button>
+              )}
             </div>
           </div>
         </Form.Root>
@@ -109,10 +201,25 @@ export function PageSettingsInformation() {
             Link de Venda
           </Common.Title>
           <div className="flex items-center justify-between ">
-            <span className="text-mesh-color-neutral-200">
-              https://rentskins/?sellerid=10902554 (MAKE IT FUNCTIONAL)
+            <span className="pl-3 text-mesh-color-neutral-200">
+              {status === 'authenticated'
+                ? `
+              https://rentskins/?sellerid=${
+                trueSession.user?.steam?.steamid! || 'ERROR'
+              }
+              `
+                : 'Verificando...'}
             </span>
-            <Common.Button className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100">
+            <Common.Button
+              disabled={status !== 'authenticated'}
+              className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `https://rentskins/?sellerid=${trueSession.user?.steam
+                    ?.steamid!}` || 'Problema ao copiar o link...',
+                )
+              }
+            >
               Copiar Link
             </Common.Button>
           </div>
@@ -120,79 +227,94 @@ export function PageSettingsInformation() {
       </div>
 
       {/* Bottom */}
-      <Form.Root
-        onSubmit={handleSubmit2(onSubmitContact)}
-        className="rounded-2xl bg-mesh-color-neutral-800 px-4 py-6"
-      >
-        <Common.Title bold={700} size={'2xl'} color="white">
-          Informações de Contato
-        </Common.Title>
-        <div className="mt-8 flex flex-col items-start justify-center">
-          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
-            Email
+      <div className="rounded-2xl bg-mesh-color-neutral-800 px-4 py-6">
+        <Form.Root onSubmit={handleSubmitEmail(onSubmitEmail)}>
+          <Common.Title bold={700} size={'2xl'} color="white">
+            Informações de Contato
           </Common.Title>
-          <div className="flex w-full items-center justify-between">
-            <Form.Input.Text
-              labelClassName="w-7/12 text-white mb-4"
-              placeholder="exemplo@email.com"
-              name="email"
-              register={register2('email')}
-              className={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
-            transition-all`}
-              errors={errors2.email}
-              errorsClassname="text-red-500 text-sm mt-8 absolute"
-            />
+          <div className="mt-8 flex flex-col items-start justify-center">
+            <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+              Email
+            </Common.Title>
+            <div className="flex w-full items-center justify-between">
+              <Form.Input.Text
+                labelClassName="w-7/12 text-white mb-4"
+                placeholder={isLoading ? 'Verificando...' : 'exemplo@email.com'}
+                name="email"
+                disabled={isLoading || !editEmail}
+                register={registerEmail('email')}
+                className={`${
+                  editEmail ? 'text-white' : 'text-mesh-color-neutral-200'
+                } rounded-md bg-mesh-color-neutral-600 px-3 py-2
+            ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-transparent`}
+                errors={errorsEmail.email}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
+              />
 
-            <div className="flex w-3/12 justify-evenly">
-              <Form.Button
-                buttonStyle={undefined}
-                onSubmit={handleSubmit2(onSubmitContact)}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
-              >
-                Editar
-              </Form.Button>
-              <Common.Button
-                tabIndex={-1}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
-              >
-                Copiar Link
-              </Common.Button>
+              <div className="flex w-1/12">
+                {editEmail ? (
+                  <Form.Button
+                    buttonStyle={undefined}
+                    disabled={isLoading}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Salvar
+                  </Form.Button>
+                ) : (
+                  <button
+                    disabled={isLoading}
+                    onClick={() => setEditEmail(true)}
+                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mt-8 flex flex-col items-start justify-center">
-          <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
-            Telefone
-          </Common.Title>
-          <div className="flex w-full items-center justify-between">
-            <Form.Input.Phone
-              labelClassName="w-7/12 text-white mb-4"
-              placeholder="(00) 00000-0000"
-              name="email"
-              register={register2('phone')}
-              inputClassName={`rounded-md bg-mesh-color-neutral-600 px-3 py-2
-              transition-all`}
-              errors={errors2.phone}
-              errorsClassname="text-red-500 text-sm mt-8 absolute"
-            />
-            <div className="flex w-3/12 justify-evenly">
-              <Form.Button
-                buttonStyle={undefined}
-                onSubmit={handleSubmit2(onSubmitContact)}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
-              >
-                Editar
-              </Form.Button>
-              <Common.Button
-                tabIndex={-1}
-                className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100"
-              >
-                Copiar Link
-              </Common.Button>
+        </Form.Root>
+        <Form.Root onSubmit={handleSubmitPhone(onSubmitPhone)}>
+          <div className="mt-8 flex flex-col items-start justify-center">
+            <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+              Telefone
+            </Common.Title>
+            <div className="flex w-full items-center justify-between">
+              <Form.Input.Phone
+                labelClassName="w-7/12 text-white mb-4"
+                placeholder={isLoading ? 'Verificando...' : '(00) 00000-0000'}
+                disabled={isLoading || !editPhone}
+                name="phone"
+                register={registerPhone('phone')}
+                inputClassName={`${
+                  editPhone ? 'text-white' : 'text-mesh-color-neutral-200'
+                } rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-transparent
+              transition-all ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
+                errors={errorsPhone.phone}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
+              />
+              <div className="flex w-1/12">
+                {editPhone ? (
+                  <Form.Button
+                    buttonStyle={undefined}
+                    disabled={isLoading}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Salvar
+                  </Form.Button>
+                ) : (
+                  <button
+                    disabled={isLoading}
+                    onClick={() => setEditPhone(true)}
+                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </Form.Root>
+        </Form.Root>
+      </div>
     </div>
   )
 }

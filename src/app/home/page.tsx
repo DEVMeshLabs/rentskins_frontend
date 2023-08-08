@@ -1,5 +1,3 @@
-'use client'
-import { CommonSteamButton } from '@/components/Common/CommonSteamButton'
 import {
   IconDevolution,
   IconMagnifyingGlass,
@@ -7,92 +5,35 @@ import {
   IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
-import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
-import SkinService from '@/services/skin.service'
-import SteamService from '@/services/steam.service'
-import useUserStore from '@/stores/user.store'
-import { useQuery } from '@tanstack/react-query'
-import dynamic from 'next/dynamic'
-import LocalStorage from '@/tools/localstorage.tool'
-import { useEffect } from 'react'
-import UserService from '@/services/user.service'
-const AllSkins = dynamic<IAllSkinsProps>(
-  () =>
-    import('@/components/Others/Skins/AllSkins').then(
-      (module) => module.default,
-    ),
-  {
-    ssr: false,
-  },
-)
+import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'
+import PageHomeSkins from '@/components/Pages/PageHome/PageHomeSkins'
+import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
-  const { user } = useUserStore()
+export const metadata: Metadata = {
+  title: 'Página Inicial - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['allSkins'],
-    queryFn: () => SkinService.findByAll(),
-  })
+interface ISearchParams {
+  sellerid: string
+}
 
-  const handleOnSteam = () => {
-    SteamService.redirect()
+interface IProps {
+  searchParams: ISearchParams
+}
+
+export default function Home({ searchParams }: IProps) {
+  if (searchParams.sellerid) {
+    redirect(`/perfil/${searchParams.sellerid}`)
   }
-
-  const { data: dataGetted, refetch: refetchGetUser } = useQuery({
-    queryKey: ['ifProfile', user],
-    queryFn: () => UserService.getUser(user.steamid),
-    enabled: false,
-  })
-
-  useEffect(() => {
-    refetchGetUser()
-  }, [user.steamid])
-
-  const { refetch } = useQuery({
-    queryKey: ['CreateProfile', user],
-    queryFn: async () => {
-      return UserService.createUser(
-        {
-          owner_id: user.steamid,
-          owner_name: user.username,
-          picture: user.picture,
-        },
-        LocalStorage.get('token'),
-      )
-    },
-    enabled: false,
-  })
-
-  useEffect(() => {
-    console.log(dataGetted)
-    console.log(user.steamid)
-    if (!dataGetted && user.steamid) {
-      refetch()
-    }
-  }, [dataGetted])
 
   return (
     <main className="h-full">
       <div className="h-screen">
         <div className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat">
-          <div className="flex flex-col items-center space-y-8 text-center text-white">
-            <p className="max-w-2xl text-[3.5rem] font-bold leading-none">
-              <span>
-                Descubra o mundo das skins{' '}
-                <strong className="bg-mesh-gradient-green-pattern bg-clip-text text-transparent">
-                  CS:GO
-                </strong>
-              </span>
-            </p>
-            <p className="max-w-3xl text-2xl">
-              Personalize seu arsenal com as skins mais incríveis, encontrando
-              as skins perfeitas para dominar o jogo!
-            </p>
-            {!user.steamid && (
-              <CommonSteamButton onClick={() => handleOnSteam()} />
-            )}
-          </div>
+          <PageHomeHero />
         </div>
         <div className="h-1/5 w-full bg-mesh-color-neutral-800">
           <hr className="-mt-0.5 h-2 w-full bg-mesh-gradient-green-pattern" />
@@ -123,11 +64,7 @@ export default function Home() {
         </div>
       </div>
       <div className="mx-auto mb-28 flex w-4/5">
-        {isLoading ? (
-          <AllSkeletonSkins quantitySkeletons={20} />
-        ) : (
-          <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
-        )}
+        <PageHomeSkins />
       </div>
     </main>
   )

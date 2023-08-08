@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 
 // ----------------- LIBS ----------------
 import * as Dialog from '@radix-ui/react-dialog'
@@ -13,6 +13,15 @@ interface IProps {
 }
 
 export function ModalConnectInventoryMain({ activator }: IProps) {
+  const [formSubmitted, setFormSubmitted] = useState(false)
+
+  console.log(formSubmitted)
+
+  const onFormSubmit = () => {
+    console.log('ok')
+    setFormSubmitted(true)
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
@@ -21,6 +30,11 @@ export function ModalConnectInventoryMain({ activator }: IProps) {
         <Dialog.Content
           className="fixed left-1/2 top-1/2 z-30 w-6/12 -translate-x-1/2 -translate-y-1/2
         rounded-2xl bg-mesh-color-neutral-700"
+          onPointerDownOutside={(event) => {
+            if (formSubmitted) {
+              event.preventDefault()
+            }
+          }}
         >
           <div className="flex h-full w-full flex-col items-center justify-between py-8">
             {/* TOP */}
@@ -30,14 +44,18 @@ export function ModalConnectInventoryMain({ activator }: IProps) {
                   Conectar Inventário à Steam
                 </Common.Title>
               </Dialog.Title>
-              <Dialog.Close asChild>
-                <Common.Button className="border-none">
+              <Dialog.Close asChild disabled={formSubmitted}>
+                <Common.Button
+                  className={`border-none ${
+                    formSubmitted ? 'invisible' : 'visible'
+                  }`}
+                >
                   <IconClose />
                 </Common.Button>
               </Dialog.Close>
             </div>
             {/* MIDDLE */}
-            <ModalConnectInventoryForm />
+            <ModalConnectInventoryForm onFormSubmit={onFormSubmit} />
             {/* DIVISOR */}
             <div />
           </div>

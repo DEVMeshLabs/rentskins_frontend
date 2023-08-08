@@ -1,5 +1,4 @@
-'use client'
-import useUserStore from '@/stores/user.store'
+import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 
 const PageInventoryFilters = dynamic(() =>
@@ -18,11 +17,13 @@ const PageInventorySummary = dynamic(() =>
   ),
 )
 
+export const metadata: Metadata = {
+  title: 'Inventário - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
+
 export default function Inventory() {
-  const {
-    user: { steamid },
-  } = useUserStore()
-  console.log(steamid)
   return (
     <main className="w-full bg-mesh-color-others-black pt-[32px]">
       <div className="mx-auto grid w-10/12 grid-cols-10">

@@ -99,7 +99,7 @@ export function ModalPaymentRetrieveSelection() {
               !showValueError ? 'text-transparent' : 'text-red-500'
             }`}
           >
-            A inserção deve conter um valor inferior ao valor retido.
+            O campo deve conter um valor inferior ao valor retido.
           </div>
         </div>
         <div className="flex items-center gap-2 text-mesh-color-neutral-200">

@@ -3,19 +3,23 @@ import Common from '@/components/Common'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { CardSkinInventory } from '@/components/Others/CardSkin/CardSkinInventory'
+import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
-import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 
 export default function PageInventoryMiddle() {
-  const {
-    user: { steamid },
-  } = useUserStore()
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
 
   const { data: userHasConfig, isLoading } = useQuery({
     queryKey: ['config'],
-    queryFn: async () => ConfigService.findByConfigUserId(steamid as string),
-    enabled: !!steamid,
+    queryFn: async () =>
+      ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+    enabled: status === 'authenticated',
   })
 
   return (
@@ -25,7 +29,7 @@ export default function PageInventoryMiddle() {
         label="Carregando..."
         enabled={isLoading}
       >
-        {!userHasConfig || userHasConfig.status !== 200 ? (
+        {!isLoading && userHasConfig?.request?.status !== 200 ? (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">
             <Common.Title
               bold={700}
@@ -44,7 +48,7 @@ export default function PageInventoryMiddle() {
             />
           </div>
         ) : (
-          <CardSkinInventory steamid={`${steamid}`} />
+          <CardSkinInventory />
         )}
       </LayoutLoading>
     </div>

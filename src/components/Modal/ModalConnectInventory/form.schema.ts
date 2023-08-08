@@ -13,7 +13,10 @@ const formSchema = yup.object({
           return false
         }
 
-        if (!item.includes('steamcommunity.com/tradeoffer/')) {
+        if (
+          !item.includes('steamcommunity.com/tradeoffer/new/?partner=') ||
+          !item.includes('&token=')
+        ) {
           return false
         }
 
@@ -32,6 +35,16 @@ const formSchema = yup.object({
 
       const regex = /@.*\..+/
       return regex.test(item)
+    }),
+
+  phone: yup
+    .string()
+    .test('phone-test', 'O campo deve conter um telefone válido.', (item) => {
+      if (item) {
+        return item.length === 15
+      }
+
+      return true
     }),
 
   'receive-notifications': yup.bool(),

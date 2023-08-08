@@ -1,25 +1,22 @@
 'use client'
 import useComponentStore from '@/stores/components.store'
-import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
-import Aos from 'aos'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { SetStateAction, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ModalPaymentAdd } from './ModalPaymentAdd'
 import { ModalPaymentCheck } from './ModalPaymentCheck'
 import { ModalPaymentRetrieveMain } from './ModalPaymentRetrieve/ModalPaymentRetrieveMain'
 
-export function ModalPaymentMain() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const [modalOpen, setModalOpen] = useState<string | undefined>('')
-  const [modalType, setModalType] = useState<string | undefined>('')
+interface IProps {
+  children: React.ReactNode
+}
 
-  useEffect(() => {
-    Aos.init({
-      duration: 1000,
-    })
-  }, [])
+export function ModalPaymentMain({ children }: IProps) {
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const handleAfterFormSubmit = () => {
+    console.log('ok')
+    setModalOpen(false)
+  }
 
   const {
     paymentGeneralIndex,
@@ -27,43 +24,25 @@ export function ModalPaymentMain() {
     setPaymentRetrieveIndex,
   } = useComponentStore()
 
-  useEffect(() => {
-    setModalOpen(
-      searchParams.get('modalopen') as SetStateAction<string | undefined>,
-    )
-
-    setModalType(
-      searchParams.get('modaltype') as SetStateAction<string | undefined>,
-    )
-
+  const onOpenChange = () => {
     setPaymentGeneralIndex(0)
     setPaymentRetrieveIndex(0)
-  }, [searchParams, setPaymentGeneralIndex, setPaymentRetrieveIndex])
 
-  const removeDomainQuery = () => {
-    router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
-  }
-
-  const handleModalOnClose = () => {
-    setPaymentGeneralIndex(0)
-    setPaymentRetrieveIndex(0)
+    setModalOpen((state) => !state)
   }
 
   return (
-    <Dialog.Root
-      modal
-      open={modalOpen === 'true' && modalType === 'payment'}
-      defaultOpen={false}
-      onOpenChange={() => handleModalOnClose()}
-    >
+    <Dialog.Root open={modalOpen} onOpenChange={onOpenChange}>
+      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay
-          className="fixed inset-0 z-20 flex bg-black/70 transition-all"
-          onClick={() => removeDomainQuery()}
-        />
+        <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all" />
         {paymentGeneralIndex === 0 && <ModalPaymentCheck />}
-        {paymentGeneralIndex === 1 && <ModalPaymentAdd />}
-        {paymentGeneralIndex === 2 && <ModalPaymentRetrieveMain />}
+        {paymentGeneralIndex === 1 && (
+          <ModalPaymentAdd afterFormSubmit={handleAfterFormSubmit} />
+        )}
+        {paymentGeneralIndex === 2 && (
+          <ModalPaymentRetrieveMain afterFormSubmit={handleAfterFormSubmit} />
+        )}
       </Dialog.Portal>
     </Dialog.Root>
   )

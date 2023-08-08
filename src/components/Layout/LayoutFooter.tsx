@@ -1,8 +1,8 @@
 import {
   IconFacebook,
-  IconTwitter,
   IconInstagram,
   IconPinterest,
+  IconTwitter,
 } from '@/components/Icons'
 import IconLogo from '@/components/Icons/IconLogo'
 
