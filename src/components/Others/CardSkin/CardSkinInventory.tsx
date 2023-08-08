@@ -47,8 +47,6 @@ export function CardSkinInventory() {
     return () => window.removeEventListener('resize', checkPageDimensions)
   }, [])
 
-  useEffect(() => console.log(inventoryTypeFilter), [inventoryTypeFilter])
-
   useEffect(() => {
     refetch()
   }, [page, itemsPerPage, inventoryTypeFilter, refetch])
@@ -93,9 +91,8 @@ export function CardSkinInventory() {
           <CardSkin.Skeleton quantity={itemsPerPage} />
         ) : data?.data &&
           data.data.inventory &&
-          data.data.inventory.inventory &&
-          data.data.inventory.inventory.length > 0 ? (
-          data.data.inventory.inventory.map(
+          data.data.inventory.length > 0 ? (
+          data.data.inventory.map(
             (
               { icon_url, name, name_color, market_name, tags, type, assetid },
               index: number,
@@ -177,9 +174,9 @@ export function CardSkinInventory() {
           renderEmptyMessage()
         )}
       </div>
-      {!isLoading && data?.data && data?.data.inventory.maxPages > 0 && (
+      {!isLoading && data?.data && data?.data.maxPages > 0 && (
         <LayoutPagination
-          maxPages={data.data.inventory.maxPages}
+          maxPages={data.data.maxPages}
           pageState={page}
           setPageState={setPage}
           disabled={isLoading || isRefetching}
