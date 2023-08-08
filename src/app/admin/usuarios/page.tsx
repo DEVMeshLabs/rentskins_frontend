@@ -9,7 +9,7 @@ export default function AdminUsersPage() {
         <Common.Title size="2xl" bold={600}>
           Gerenciamento de Usuários
         </Common.Title>
-        <button className="rounded-lg bg-green-400 px-3 py-1 text-sm">
+        <button className="rounded-lg bg-mesh-color-primary-1200 px-3 py-1 text-sm font-semibold">
           1 Mês
         </button>
       </div>
