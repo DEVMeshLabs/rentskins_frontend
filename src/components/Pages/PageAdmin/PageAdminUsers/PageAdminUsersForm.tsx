@@ -4,7 +4,11 @@ import Form from '@/components/Forms'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './schemas/form.schema'
 
-export default function PageAdminUsersForm() {
+interface IProps {
+  handleFormSubmit: any
+}
+
+export default function PageAdminUsersForm({ handleFormSubmit }: IProps) {
   const {
     register,
     handleSubmit,
@@ -20,7 +24,7 @@ export default function PageAdminUsersForm() {
   })
 
   const onSubmit = (data: any) => {
-    console.log(data)
+    handleFormSubmit(data)
   }
 
   return (

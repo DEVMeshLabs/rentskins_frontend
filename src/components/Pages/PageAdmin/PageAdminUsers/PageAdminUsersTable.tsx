@@ -1,61 +1,30 @@
-import IconEdit from '@/components/Icons/admin/IconEdit'
+'use client'
 
-interface IAdminUserTable {
-  name: string
-  email: string
-  startDay: string
-  type: 'Usuário' | 'Administrador'
-  status: 'Ativo' | 'Suspenso'
-}
+import usersMock from '@/app/admin/users.mock'
+import { useEffect, useState } from 'react'
+import PageAdminUsersContent from './PageAdminUsersContent'
+import PageAdminUsersForm from './PageAdminUsersForm'
 
-interface IProps {
-  users: IAdminUserTable[]
-}
+export default function PageAdminUsersTable() {
+  const [filters, setFilters] = useState()
 
-export default function PageAdminUsersTable({ users }: IProps) {
+  const handleFilters = (data: any) => {
+    console.log(data)
+    setFilters(undefined)
+    return setFilters(data)
+  }
+
+  useEffect(() => console.log(filters), [filters])
+
   return (
-    <div className="h-full pb-16">
-      {/* QUERY HEADERS */}
-      <div className="grid h-16 w-full grid-cols-7 items-center border-b border-mesh-color-neutral-400 p-2 text-center text-sm font-semibold text-white">
-        <span>ID do Usuário</span>
-        <span>Email</span>
-        <span>Data de Início</span>
-        <span>Tipo de Usuário</span>
-        <span>Status</span>
-        <span>Suspender Usuário</span>
-        <span>Ação</span>
+    <>
+      <div className="flex h-1/6 w-full items-center justify-center gap-4 rounded-lg bg-mesh-color-neutral-700 p-2">
+        <PageAdminUsersForm handleFormSubmit={handleFilters} />
       </div>
-      {/* QUERY RESULTS */}
-      <div className="h-full w-full divide-y divide-mesh-color-neutral-400 overflow-y-auto overflow-x-hidden">
-        {renderTableContent(users)}
-      </div>
-    </div>
-  )
-}
 
-function renderTableContent(users: IAdminUserTable[]) {
-  return users.map((user, index) => (
-    <div
-      key={'admin-users-table-' + index}
-      className="grid w-full grid-cols-7 items-center justify-center py-4 text-center text-sm text-white odd:bg-mesh-color-neutral-700"
-    >
-      <span> {user.name} </span>
-      <span> {user.email} </span>
-      <span> {user.startDay} </span>
-      <span> {user.type} </span>
-      <div
-        className={`${
-          user.status === 'Ativo'
-            ? 'bg-mesh-color-rarity-high'
-            : 'bg-mesh-color-rarity-low'
-        } m-auto w-fit self-center rounded-lg px-2 py-1 font-bold text-black`}
-      >
-        {user.status}
+      <div className="h-full w-full overflow-hidden">
+        <PageAdminUsersContent users={usersMock as any} filters={filters} />
       </div>
-      <button className="text-red-500 underline">Suspender</button>
-      <button className="m-auto w-fit">
-        <IconEdit />
-      </button>
-    </div>
-  ))
+    </>
+  )
 }

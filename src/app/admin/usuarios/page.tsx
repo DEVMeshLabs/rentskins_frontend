@@ -1,7 +1,5 @@
 import Common from '@/components/Common'
-import PageAdminUsersForm from '@/components/Pages/PageAdmin/PageAdminUsers/PageAdminUsersForm'
 import PageAdminUsersTable from '@/components/Pages/PageAdmin/PageAdminUsers/PageAdminUsersTable'
-import usersMock from './../users.mock'
 
 export default function AdminUsersPage() {
   return (
@@ -16,15 +14,7 @@ export default function AdminUsersPage() {
       </div>
 
       <div className="flex h-full w-full flex-col gap-8 overflow-hidden">
-        {/* SEARCH BAR */}
-        <div className="flex h-1/6 w-full items-center justify-center gap-4 rounded-lg bg-mesh-color-neutral-700 p-2">
-          <PageAdminUsersForm />
-        </div>
-
-        {/* QUERY TABLE */}
-        <div className="h-full w-full overflow-hidden">
-          <PageAdminUsersTable users={usersMock as any} />
-        </div>
+        <PageAdminUsersTable />
       </div>
     </div>
   )
