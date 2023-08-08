@@ -24,6 +24,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'bit.ly',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
+      },
     ],
   },
 }

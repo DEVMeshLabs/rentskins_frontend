@@ -29,6 +29,39 @@ export default function Home({ searchParams }: IProps) {
     redirect(`/perfil/${searchParams.sellerid}`)
   }
 
+  // const { data: dataGetted, refetch: refetchGetUser } = useQuery({
+  //   queryKey: ['ifProfile', user],
+  //   queryFn: () => UserService.getUser(user.steamid),
+  //   enabled: false,
+  // })
+
+  // useEffect(() => {
+  //   refetchGetUser()
+  // }, [user.steamid])
+
+  // const { refetch } = useQuery({
+  //   queryKey: ['CreateProfile', user],
+  //   queryFn: async () => {
+  //     return UserService.createUser(
+  //       {
+  //         owner_id: user.steamid,
+  //         owner_name: user.username,
+  //         picture: user.picture,
+  //       },
+  //       LocalStorage.get('token'),
+  //     )
+  //   },
+  //   enabled: false,
+  // })
+
+  // useEffect(() => {
+  //   console.log(dataGetted)
+  //   console.log(user.steamid)
+  //   if (!dataGetted && user.steamid) {
+  //     refetch()
+  //   }
+  // }, [dataGetted])
+
   return (
     <main className="h-full">
       <div className="h-screen">
