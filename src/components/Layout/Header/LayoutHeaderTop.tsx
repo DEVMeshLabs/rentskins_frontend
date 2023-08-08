@@ -8,6 +8,7 @@ import { IconNotifications } from '@/components/Icons/IconNotifications'
 import { ModalPaymentMain } from '@/components/Modal/ModalPayment/ModalPaymentMain'
 import ISteamUser from '@/interfaces/steam.interface'
 import NotificationServices from '@/services/notifications.service'
+import UserService from '@/services/user.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
@@ -100,6 +101,29 @@ export function LayoutHeaderTop() {
       setWallet(walletCreated.data.value)
     }
   }, [walletRetrieved, walletCreated])
+
+  const { data: userRetrieved } = useQuery({
+    queryKey: ['ifProfile', trueSession.user?.name!],
+    queryFn: () => UserService.getUser(trueSession.user?.steam?.steamid!),
+    enabled: status === 'authenticated',
+  })
+
+  console.log(userRetrieved?.request.status)
+
+  useQuery({
+    queryKey: ['CreateProfile', trueSession.user?.name!],
+    queryFn: async () =>
+      UserService.createUser(
+        {
+          owner_id: trueSession.user?.steam?.steamid!,
+          owner_name: trueSession.user?.name!,
+          picture: trueSession.user?.image!,
+        },
+        trueSession.user?.token!,
+      ),
+    enabled:
+      status === 'authenticated' && userRetrieved?.request.status === '404',
+  })
 
   const handleOnProfileClick = () => {
     setShowProfileDropdown((state) => !state)

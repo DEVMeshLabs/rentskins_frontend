@@ -1,11 +1,10 @@
 'use client'
-import Perfil from '@/assets/perfil.png'
 import Common from '@/components/Common'
 import { IconSend } from '@/components/Icons/IconSend'
-import Image from 'next/image'
-import ProfileInfo from '../ProfileInfo'
 import classNames from 'classnames'
+import Image from 'next/image'
 import Link from 'next/link'
+import ProfileInfo from '../ProfileInfo'
 
 interface Props {
   isSeller?: boolean
@@ -20,7 +19,7 @@ interface Props {
   deliveryFee?: number
 }
 
-export default function PerfilPerson({
+export default function PersonProfile({
   isSeller,
   picture,
   name,
@@ -36,7 +35,7 @@ export default function PerfilPerson({
     <section className="flex w-full justify-between font-inter">
       <div className="flex gap-6">
         <Image
-          src={picture || Perfil}
+          src={picture!}
           alt="Perfil"
           width={200}
           height={200}
@@ -50,7 +49,7 @@ export default function PerfilPerson({
               size="3xl"
               className="self-start"
             >
-              {name || 'Coldzera'}
+              {name || 'Usuário'}
             </Common.Title>
             <div
               className={classNames(
