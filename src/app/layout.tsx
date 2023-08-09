@@ -8,7 +8,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Rentskins',
+  title: 'RentSkins',
   description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
   Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }

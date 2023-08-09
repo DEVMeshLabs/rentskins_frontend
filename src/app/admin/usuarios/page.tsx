@@ -1,5 +1,12 @@
 import Common from '@/components/Common'
 import PageAdminUsersTable from '@/components/Pages/PageAdmin/PageAdminUsers/PageAdminUsersTable'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Usuários - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function AdminUsersPage() {
   return (

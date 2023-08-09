@@ -1,6 +1,13 @@
 import Common from '@/components/Common'
 import IconLinear from '@/components/Icons/admin/IconLinear'
+import { Metadata } from 'next'
 import { faturamentoTotal } from '../dashboard.mock'
+
+export const metadata: Metadata = {
+  title: 'Financeiro - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function AdminFinancialPage() {
   return (

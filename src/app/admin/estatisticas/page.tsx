@@ -1,4 +1,12 @@
 import Common from '@/components/Common'
+import ModalTimeFilter from '@/components/Modal/ModalTimeFilter/ModalTimeFilter'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Estatísticas - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function AdminStatisticsPage() {
   return (
@@ -7,9 +15,13 @@ export default function AdminStatisticsPage() {
         <Common.Title size="2xl" bold={600} className="text-white">
           Estatísticas de Usuários
         </Common.Title>
-        <button className="rounded-lg bg-mesh-color-primary-1200 px-3 py-1 text-sm font-semibold">
-          1 Mês
-        </button>
+        <ModalTimeFilter
+          activator={
+            <button className="rounded-lg bg-mesh-color-primary-1200 px-3 py-1 text-sm font-semibold">
+              1 Mês
+            </button>
+          }
+        />
       </div>
 
       {/* TOP */}
