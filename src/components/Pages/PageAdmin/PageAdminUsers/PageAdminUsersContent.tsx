@@ -21,20 +21,39 @@ interface IProps {
 }
 
 export default function PageAdminUsersContent({ users, filters }: IProps) {
-  console.log(filters)
-
   const usersFiltered = users.filter((user) => {
     if (
-      filters &&
+      filters?.name &&
       !user.name.toLowerCase().includes(filters?.name!.toLowerCase())
+    ) {
+      return false
+    }
+
+    if (
+      filters?.email &&
+      !user.email.toLowerCase().includes(filters?.email!.toLowerCase())
+    ) {
+      return false
+    }
+
+    if (
+      filters?.['user-type'] &&
+      filters?.status !== 'todos' &&
+      user.status.toLowerCase() !== filters?.status.toLowerCase()
+    ) {
+      return false
+    }
+
+    if (
+      filters?.['user-type'] &&
+      filters?.['user-type'] !== 'todos' &&
+      user.type.toLowerCase() !== filters?.['user-type'].toLowerCase()
     ) {
       return false
     }
 
     return true
   })
-
-  console.log(usersFiltered)
 
   return (
     <div className="h-full pb-16">
@@ -50,7 +69,7 @@ export default function PageAdminUsersContent({ users, filters }: IProps) {
       </div>
       {/* QUERY RESULTS */}
       <div className="h-full w-full divide-y divide-mesh-color-neutral-400 overflow-y-auto overflow-x-hidden">
-        {renderTableContent(users)}
+        {renderTableContent(usersFiltered)}
       </div>
     </div>
   )

@@ -4,22 +4,11 @@ import * as yup from 'yup'
 const formSchema = yup.object({
   name: yup.string(),
 
-  email: yup
-    .string()
-    .nullable()
-    .notRequired()
-    .test('email-test', 'O campo deve ser um email válido.', (item) => {
-      if (!item) {
-        return true
-      }
-
-      const regex = /@.*\..+/
-      return regex.test(item)
-    }),
+  email: yup.string(),
 
   'user-type': yup.string(),
 
-  status: yup.string(),
+  status: yup.string().default('todos'),
 })
 
 export const formResolver = yupResolver(formSchema)

@@ -43,7 +43,7 @@ export default function PageAdminUsersForm({ handleFormSubmit }: IProps) {
       </div>
 
       <div className="w-full">
-        <Form.Input.Email
+        <Form.Input.Text
           label="Email"
           placeholder="exemplo@email.com"
           name="email"
@@ -59,7 +59,7 @@ export default function PageAdminUsersForm({ handleFormSubmit }: IProps) {
           name="user-type"
           options={[
             { label: 'Todos', value: 'todos' },
-            { label: 'Usuário', value: 'usuario' },
+            { label: 'Usuário', value: 'usuário' },
             { label: 'Administrador', value: 'administrador' },
           ]}
         />
