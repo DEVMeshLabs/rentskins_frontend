@@ -38,7 +38,7 @@ export default class SkinService {
   }
 
   public static findAllSkinsByIdSeller(sellerId: string) {
-    return Api.get<ISkins[]>(`/skins/seller/${sellerId}`)
+    return Api.get<ISkins[]>(`/skins/seller/user/${sellerId}`)
   }
 
   public static findBySearchParameter(param: string) {
@@ -47,11 +47,16 @@ export default class SkinService {
 
   public static postAllSkinsToAdvertise(
     allSkinsAdvertise: ISkinsToAdvertise[],
+    token: string,
   ) {
     const skinsWithoudId = allSkinsAdvertise.filter((skin) => {
       delete skin.id
       return skin
     })
-    return Api.post<{ status: number }>('/skins', skinsWithoudId)
+    return Api.post<{ status: number }>('/skins', skinsWithoudId, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   }
 }
