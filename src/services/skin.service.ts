@@ -8,7 +8,7 @@ export default class SkinService {
   }
 
   public static findById(id: string) {
-    return Api.get(`/skins/${id}`)
+    return Api.get<ISkins>(`/skins/${id}`)
   }
 
   public static findByWeapon(weapon: string) {

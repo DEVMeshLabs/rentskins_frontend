@@ -103,26 +103,31 @@ export function LayoutHeaderTop() {
   }, [walletRetrieved, walletCreated])
 
   const { data: userRetrieved } = useQuery({
-    queryKey: ['ifProfile', trueSession.user?.name!],
-    queryFn: () => UserService.getUser(trueSession.user?.steam?.steamid!),
+    queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
+    queryFn: () => {
+      console.log(trueSession.user?.steam?.steamid!)
+      return UserService.getUser(trueSession.user?.steam?.steamid!)
+    },
     enabled: status === 'authenticated',
   })
 
-  console.log(userRetrieved?.request.status)
-
   useQuery({
     queryKey: ['CreateProfile', trueSession.user?.name!],
-    queryFn: async () =>
+    queryFn: async () => {
+      console.log(trueSession)
       UserService.createUser(
         {
           owner_id: trueSession.user?.steam?.steamid!,
           owner_name: trueSession.user?.name!,
           picture: trueSession.user?.image!,
+          owner_country: trueSession.user?.steam?.loccountrycode!,
+          steam_url: trueSession.user?.steam?.profileurl!,
         },
         trueSession.user?.token!,
-      ),
+      )
+    },
     enabled:
-      status === 'authenticated' && userRetrieved?.request.status === '404',
+      status === 'authenticated' && userRetrieved?.request.status === 404,
   })
 
   const handleOnProfileClick = () => {

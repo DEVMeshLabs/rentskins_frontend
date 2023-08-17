@@ -22,6 +22,12 @@ export default function PageInventoryMiddle() {
     enabled: status === 'authenticated',
   })
 
+  const configValidation =
+    userHasConfig &&
+    userHasConfig!.data.owner_email !== '' &&
+    userHasConfig!.data.owner_phone !== '' &&
+    userHasConfig!.data.url_trade !== ''
+
   return (
     <div className="mb-6 min-h-[1000px]">
       <LayoutLoading
@@ -29,7 +35,7 @@ export default function PageInventoryMiddle() {
         label="Carregando..."
         enabled={isLoading}
       >
-        {!isLoading && userHasConfig?.request?.status !== 200 ? (
+        {!isLoading && !configValidation ? (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">
             <Common.Title
               bold={700}

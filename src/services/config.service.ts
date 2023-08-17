@@ -11,37 +11,6 @@ export default class ConfigService {
       .catch((e) => e)
   }
 
-  public static async createConfig({
-    owner_id,
-    owner_name,
-    owner_email,
-    owner_phone,
-    steam_guard,
-    url_sell,
-    url_trade,
-    agreed_with_emails,
-    agreed_with_terms,
-    token,
-  }: IConfig) {
-    return Api.post(
-      `/configuration`,
-      {
-        owner_id,
-        owner_name,
-        owner_email,
-        owner_phone,
-        steam_guard,
-        url_sell,
-        url_trade,
-        agreed_with_emails,
-        agreed_with_terms,
-      },
-      {
-        headers: { Authorization: 'Bearer ' + token },
-      },
-    )
-  }
-
   public static async updateConfig({
     token,
     agreed_with_emails,
@@ -54,7 +23,7 @@ export default class ConfigService {
     url_sell,
     url_trade,
   }: IOptionalConfig) {
-    await Api.put(
+    return Api.put<IConfig>(
       `/configuration/${owner_id}`,
       {
         agreed_with_emails,

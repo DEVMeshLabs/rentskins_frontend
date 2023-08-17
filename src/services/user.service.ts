@@ -14,5 +14,7 @@ export default class UserService {
         Authorization: `Bearer ${token}`,
       },
     })
+      .then((response) => response)
+      .catch((e) => e)
   }
 }
