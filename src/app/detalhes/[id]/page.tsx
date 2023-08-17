@@ -21,7 +21,6 @@ const SkinsSemelhantes = dynamic(() =>
     (module) => module.default,
   ),
 )
-// '@/components/Others/SkinsSemelhantes'
 
 export default function Details() {
   const { id } = useParams()
