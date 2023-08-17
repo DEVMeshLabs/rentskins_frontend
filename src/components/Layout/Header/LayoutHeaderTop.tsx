@@ -72,8 +72,6 @@ export function LayoutHeaderTop() {
     refetch() // Refaz a requisição a cada 1 segundo
     // }, 10 * 60 * 1000)
     setHasNotifications(thereIsNotification(data?.data))
-
-    // return () => clearInterval(interval)
   }, [pathname])
 
   const { data: walletRetrieved } = useQuery({
