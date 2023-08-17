@@ -35,14 +35,20 @@ export function LayoutRoot({ children, session }: IProps) {
       <main className="flex min-h-screen flex-col justify-between bg-mesh-color-others-black">
         {modalRender()}
 
-        <LayoutHeaderRoot>
-          <LayoutHeaderTop />
-          <LayoutHeaderBottom />
-        </LayoutHeaderRoot>
+        {pathname !== '/atividade-suspensa' ? (
+          <>
+            <LayoutHeaderRoot>
+              <LayoutHeaderTop />
+              <LayoutHeaderBottom />
+            </LayoutHeaderRoot>
 
-        {children}
+            {children}
 
-        <LayoutFooter />
+            <LayoutFooter />
+          </>
+        ) : (
+          children
+        )}
       </main>
     </SessionProvider>
   )

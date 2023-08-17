@@ -1,3 +1,4 @@
+'use client'
 import BlankUser from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
@@ -48,6 +49,10 @@ export function LayoutHeaderTop() {
   const searchWatch = watch('search')
   const [hasNotifications, setHasNotifications] = useState(false)
 
+  if (trueSession.user?.account_status === 'Ativo') {
+    router.push('/atividade-suspensa')
+  }
+
   const { notificationFilter } = useFilterStore()
 
   const { data, refetch } = useQuery({
@@ -59,7 +64,8 @@ export function LayoutHeaderTop() {
       ),
   })
 
-  const disableAddButton = pathname.includes('/pagamento' || '/oops')
+  const disableAddButton =
+    pathname.includes('/pagamento') || pathname.includes('/oops')
 
   useEffect(() => {
     // const interval = setInterval(() => {
@@ -105,7 +111,6 @@ export function LayoutHeaderTop() {
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
     queryFn: () => {
-      console.log(trueSession.user?.steam?.steamid!)
       return UserService.getUser(trueSession.user?.steam?.steamid!)
     },
     enabled: status === 'authenticated',
@@ -114,7 +119,6 @@ export function LayoutHeaderTop() {
   useQuery({
     queryKey: ['CreateProfile', trueSession.user?.name!],
     queryFn: async () => {
-      console.log(trueSession)
       UserService.createUser(
         {
           owner_id: trueSession.user?.steam?.steamid!,

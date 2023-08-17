@@ -1,4 +1,5 @@
 import ISteamUser from '@/interfaces/steam.interface'
+import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
 import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
@@ -29,17 +30,24 @@ async function handler(
       jwt({ token, account, profile }) {
         if (account?.provider === PROVIDER_ID) {
           token.steam = profile
+          token.teste = 'ok'
+          console.log(profile)
+          console.log(token)
         }
 
         return token
       },
-      session({ session, token }) {
+      async session({ session, token }) {
         if ('steam' in token) {
-          // @ts-expect-error
-          session.user.steam = token.steam
           const newToken = JsonWebToken.create(session)
           // @ts-ignore
           session.user!.token = newToken
+          // @ts-expect-error
+          session.user!.steam = token.steam
+          // @ts-expect-error
+          const user = await UserService.getUser(session.user!.steam!.steamid)
+          // @ts-ignore
+          session.user!.account_status = user.data.account_status || 'Suspenso'
         }
 
         return session as ISteamUser
