@@ -7,18 +7,20 @@ import { PageDetailsCard } from '@/components/Pages/PageDetails/PageDetailsCard'
 import { PageDetailsPerfil } from '@/components/Pages/PageDetails/PageDetailsPerfil'
 import { PageDetailsSkin } from '@/components/Pages/PageDetails/PageDetailsSkin'
 import { PageDetailsVendas } from '@/components/Pages/PageDetails/PageDetailsVendas'
+// import { IGetUser } from '@/services/interfaces/user.interface'
 import SkinService from '@/services/skin.service'
+import UserService from '@/services/user.service'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+// import { useEffect } from 'react'
 
 const SkinsSemelhantes = dynamic(() =>
   import('@/components/Others/SkinsSemelhantes').then(
     (module) => module.default,
   ),
 )
-// '@/components/Others/SkinsSemelhantes'
 
 export default function Details() {
   const { id } = useParams()
@@ -28,19 +30,23 @@ export default function Details() {
     queryFn: async () => await SkinService.findById(id),
   })
 
+  const { data: dataGetUser } = useQuery({
+    queryKey: ['ownerSkin'],
+    queryFn: async () => await UserService.getUser(data?.data.seller_id!),
+    enabled: !!data?.data,
+  })
+
   return (
     <div>
       {!isLoading && data?.data ? (
         <main className="mx-auto w-10/12 bg-mesh-color-others-black">
-          <div className="mt-8 flex items-center gap-4">
-            <Link href="/">
-              <IconArrow />
-            </Link>
+          <Link href="/" className="mt-8 flex items-center gap-4">
+            <IconArrow />
             <Common.Title color="cinza">
               Home &bull; {data?.data.skin_weapon} &bull;{' '}
               <span className="text-[#49E671]">{data?.data.skin_name}</span>
             </Common.Title>
-          </div>
+          </Link>
 
           <div className="mx-auto grid w-full grid-cols-5 py-10">
             <div className="col-span-3">
@@ -49,7 +55,7 @@ export default function Details() {
                 skinName={data!.data.skin_name}
                 skinLinkGame={data!.data.skin_link_game}
                 skinLinkSteam={data!.data.skin_link_steam}
-                skinFloat={data!.data.skin_float}
+                skinFloat={Number(data!.data.skin_float)}
               />
 
               <div>
@@ -67,7 +73,16 @@ export default function Details() {
                 sellerId={data!.data.seller_id}
                 statusFloat={data!.data.status_float}
               />
-              <PageDetailsPerfil />
+              <PageDetailsPerfil
+                account_date={dataGetUser?.data.steam_created_date!}
+                delivery_fee={dataGetUser?.data.delivery_fee!}
+                delivery_time={dataGetUser?.data.delivery_time!}
+                owner_name={dataGetUser?.data.owner_name!}
+                picture={dataGetUser?.data.picture!}
+                status_member={dataGetUser?.data.status_member!}
+                steam_level={dataGetUser?.data.steam_level!}
+                total_exchanges={dataGetUser?.data.total_exchanges!}
+              />
             </div>
           </div>
           <SkinsSemelhantes

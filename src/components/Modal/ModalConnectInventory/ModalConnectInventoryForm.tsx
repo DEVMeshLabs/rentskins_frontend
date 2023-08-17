@@ -34,6 +34,7 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
   const { data } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
     queryFn: async () => {
+      console.log('ok')
       const sellLink = `https://rentskins/?sellerid=${trueSession?.user?.steam?.steamid}`
       const params = {
         owner_id: trueSession?.user?.steam?.steamid as string,
@@ -47,13 +48,15 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
         agreed_with_terms: true,
         token: trueSession?.user?.token!,
       }
-      return ConfigService.createConfig(params)
+      console.log(params)
+      return ConfigService.updateConfig(params)
       // window.location.reload()
     },
     enabled: !!formData,
   })
 
   useEffect(() => {
+    console.log(data)
     if (data?.request.status) {
       return window.location.reload()
     }

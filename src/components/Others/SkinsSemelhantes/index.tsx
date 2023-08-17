@@ -11,7 +11,7 @@ export interface ISkinsSemelhantesProps {
   data: {
     data: ISkins
   }
-  weaponName: string
+  weaponName: string | null
 }
 
 export default function SkinsSemelhantes({
@@ -21,7 +21,7 @@ export default function SkinsSemelhantes({
 }: ISkinsSemelhantesProps) {
   const { data: data2 } = useQuery({
     queryKey: ['weapon', weaponName],
-    queryFn: async () => await SkinService.findByWeapon(weaponName),
+    queryFn: async () => await SkinService.findByWeapon(weaponName!),
   })
 
   const find = data2?.data.filter(
@@ -30,13 +30,15 @@ export default function SkinsSemelhantes({
       seller_id !== data!.data.seller_id,
   )
 
+  console.log(find)
+
   return (
     <>
       <Common.Title color="white" bold={700} className="mb-6  text-[28px]">
         Semelhantes
       </Common.Title>
       <div className="w-full pb-16">
-        <div className="flex gap-4">
+        <div className="flex gap-4 overflow-x-auto pb-3">
           {!isLoading && find && find?.length > 0 ? (
             find.map(
               (
@@ -52,7 +54,7 @@ export default function SkinsSemelhantes({
                 index: number,
               ) => {
                 return (
-                  <Link href={`/details/${id}`} key={`${skin_name}-${index}`}>
+                  <Link href={`/detalhes/${id}`} key={`${skin_name}-${index}`}>
                     <OtherCard
                       skinImage={skin_image}
                       sellerName={skin_name}

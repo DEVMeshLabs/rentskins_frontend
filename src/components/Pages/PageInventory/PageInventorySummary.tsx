@@ -3,6 +3,7 @@
 import Common from '@/components/Common'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import LocalStorage from '@/tools/localstorage.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { ColorRing } from 'react-loader-spinner'
@@ -20,6 +21,7 @@ export default function PageInventorySummary() {
       cleanSkinsToAdvertise()
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
+        LocalStorage.get('token'),
       )
       setIsLoading(false)
       return announcedSkins
