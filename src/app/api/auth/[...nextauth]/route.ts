@@ -30,9 +30,6 @@ async function handler(
       jwt({ token, account, profile }) {
         if (account?.provider === PROVIDER_ID) {
           token.steam = profile
-          token.teste = 'ok'
-          console.log(profile)
-          console.log(token)
         }
 
         return token

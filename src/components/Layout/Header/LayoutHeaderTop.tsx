@@ -49,7 +49,7 @@ export function LayoutHeaderTop() {
   const searchWatch = watch('search')
   const [hasNotifications, setHasNotifications] = useState(false)
 
-  if (trueSession.user?.account_status === 'Ativo') {
+  if (trueSession.user?.account_status === 'Suspenso') {
     router.push('/atividade-suspensa')
   }
 
