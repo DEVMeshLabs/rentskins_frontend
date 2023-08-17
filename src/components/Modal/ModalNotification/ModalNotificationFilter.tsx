@@ -3,34 +3,18 @@ import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons'
 import { ITime } from '@/services/interfaces/notification.interface'
 import useFilterStore from '@/stores/filters.store'
-import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, SetStateAction, useEffect, useState } from 'react'
+import { ChangeEvent, ReactNode, useState } from 'react'
 
-export function ModalNotificationFilter() {
+interface IProps {
+  activator: ReactNode
+}
+
+export function ModalNotificationFilter({ activator }: IProps) {
+  const [openModal, setOpenModal] = useState(false)
   const { notificationFilter, setNotificationFilter } = useFilterStore()
 
-  const [modalOpen, setModalOpen] = useState<string | undefined>('')
-  const [modalType, setModalType] = useState<string | undefined>('')
   const [selectedFilter, setSelectedFilter] = useState(notificationFilter)
-
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
-  useEffect(() => {
-    setModalOpen(
-      searchParams.get('modalopen') as SetStateAction<string | undefined>,
-    )
-
-    setModalType(
-      searchParams.get('modaltype') as SetStateAction<string | undefined>,
-    )
-  }, [searchParams])
-
-  const removeDomainQuery = () => {
-    router.push(URLQuery.removeQuery(['modalopen', 'modaltype']))
-  }
 
   const handleOnChangeFilter = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedFilter(event.target.value as ITime)
@@ -42,7 +26,8 @@ export function ModalNotificationFilter() {
     } else {
       setNotificationFilter('tudo')
     }
-    removeDomainQuery()
+
+    setOpenModal((state) => !state)
   }
 
   const filterLabels = [
@@ -55,20 +40,11 @@ export function ModalNotificationFilter() {
     { value: 'umano', label: '1 Ano' },
   ]
 
-  console.log(modalOpen)
-  console.log(modalType)
-
   return (
-    <Dialog.Root
-      modal
-      open={modalOpen === 'true' && modalType === 'filter'}
-      defaultOpen={false}
-    >
+    <Dialog.Root modal open={openModal} onOpenChange={setOpenModal}>
+      <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay
-          className="fixed inset-0 z-20 flex bg-black/70 transition-all"
-          onClick={() => removeDomainQuery()}
-        />
+        <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all" />
         <Dialog.Content className="fixed left-1/2 top-1/2 z-30 flex h-2/6 w-1/3 -translate-x-1/2 -translate-y-1/2 ">
           <div className="flex flex-col justify-between gap-2 rounded-2xl bg-mesh-color-neutral-700 px-8 py-6">
             <div className="flex flex-col gap-4">
@@ -76,7 +52,10 @@ export function ModalNotificationFilter() {
                 <Dialog.Title className="text-2xl font-semibold text-white">
                   Filtro de tempo
                 </Dialog.Title>
-                <Dialog.Close asChild onClick={() => removeDomainQuery()}>
+                <Dialog.Close
+                  asChild
+                  onClick={() => setOpenModal((state) => !state)}
+                >
                   <Common.Button className="border-none">
                     <IconClose />
                   </Common.Button>
