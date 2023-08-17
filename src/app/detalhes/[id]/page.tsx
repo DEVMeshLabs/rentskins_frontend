@@ -14,7 +14,6 @@ import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-// import { useEffect } from 'react'
 
 const SkinsSemelhantes = dynamic(() =>
   import('@/components/Others/SkinsSemelhantes').then(
