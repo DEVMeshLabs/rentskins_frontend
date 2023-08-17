@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
 
 const SkinsSemelhantes = dynamic(() =>
   import('@/components/Others/SkinsSemelhantes').then(
@@ -26,14 +27,20 @@ export default function Details() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['skin', id],
-    queryFn: async () => await SkinService.findById(id),
+    queryFn: async () => SkinService.findById(id),
   })
 
-  const { data: dataGetUser } = useQuery({
-    queryKey: ['ownerSkin'],
-    queryFn: async () => await UserService.getUser(data?.data.seller_id!),
-    enabled: !!data?.data,
+  const { data: dataGetUser, refetch } = useQuery({
+    queryKey: ['ownerSkin', data?.data.seller_id],
+    queryFn: async () => {
+      return UserService.getUser(data?.data.seller_id!)
+    },
+    enabled: !!data?.data.seller_id,
   })
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   return (
     <div>

@@ -12,7 +12,7 @@ const useFilterStore = create<IStates>((set) => ({
   selectedFilters: {
     wears: [],
     categories: [],
-    prices: { min: null, max: null },
+    prices: { min: undefined, max: undefined },
   },
 
   allSkinsFiltred: [],

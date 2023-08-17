@@ -29,7 +29,9 @@ export function FormInputCheckbox({
   ...rest
 }: IProps) {
   return (
-    <label className={`${wrapperClassname} flex items-center gap-2 text-lg`}>
+    <label
+      className={`${wrapperClassname} flex cursor-pointer items-center gap-2 text-lg`}
+    >
       <input
         id={name}
         name={name}
