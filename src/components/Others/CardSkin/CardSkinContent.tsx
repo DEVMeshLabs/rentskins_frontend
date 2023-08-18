@@ -26,12 +26,6 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
           {primeiroName}
         </span>
       </div>
-      <p className="my-4 text-sm font-medium">
-        {float !== '' && 'FT / '}
-        <span className="text-[13px] font-semibold text-mesh-color-neutral-200">
-          {float}
-        </span>
-      </p>
     </>
   )
 }

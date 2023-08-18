@@ -45,15 +45,29 @@ export default class SkinService {
     return Api.get<ISkins[]>(`/skins/search/${param}`)
   }
 
+  public static findFloatById(
+    steamid: string,
+    token: string,
+    body: { assetid: string; link: string },
+  ) {
+    return Api.post(`/skins/float/${steamid}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response)
+      .catch((e) => e)
+  }
+
   public static postAllSkinsToAdvertise(
     allSkinsAdvertise: ISkinsToAdvertise[],
     token: string,
   ) {
-    const skinsWithoudId = allSkinsAdvertise.filter((skin) => {
+    const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
       delete skin.id
       return skin
     })
-    return Api.post<{ status: number }>('/skins', skinsWithoudId, {
+    return Api.post<{ status: number }>('/skins', skinsWithoutId, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

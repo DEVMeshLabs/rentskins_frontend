@@ -13,7 +13,6 @@ import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
-import ColoredLine from '../ColoredLine'
 
 export function CardSkinInventory() {
   const { data: session, status } = useSession()
@@ -84,6 +83,8 @@ export function CardSkinInventory() {
     )
   }
 
+  console.log(data?.data.inventory[0])
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="ml-2 flex flex-wrap justify-start gap-4">
@@ -94,7 +95,16 @@ export function CardSkinInventory() {
           data.data.inventory.length > 0 ? (
           data.data.inventory.map(
             (
-              { icon_url, name, name_color, market_name, tags, type, assetid },
+              {
+                icon_url,
+                name,
+                name_color,
+                market_name,
+                tags,
+                type,
+                assetid,
+                actions,
+              },
               index: number,
             ) => {
               const primeiroName = name.split('|')[0]
@@ -162,7 +172,13 @@ export function CardSkinInventory() {
                             float={itemIsAWeapon ? '0.254665' : ''}
                           />
                         </div>
-                        {itemIsAWeapon && <ColoredLine position={0.254665} />}
+                        <CardSkin.Float
+                          itemIsAWeapon={itemIsAWeapon}
+                          assetid={assetid}
+                          link={actions[0].link}
+                          steamId={trueSession.user?.steam?.steamid!}
+                          token={trueSession.user?.token!}
+                        />
                       </CardSkin.Root>
                     </div>
                   }
