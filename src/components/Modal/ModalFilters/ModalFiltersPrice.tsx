@@ -10,12 +10,8 @@ interface IProps {
 }
 
 export default function ModalFiltersPrice({ handleOpen }: IProps) {
-  const {
-    selectedFilters,
-    setSelectedFilters,
-    cleanSelectedFilters,
-    // setCheckedInputCheckbox,
-  } = useFilterStore()
+  const { selectedFilters, setSelectedFilters, cleanSelectedFilters } =
+    useFilterStore()
   const {
     register,
     control,
@@ -33,18 +29,14 @@ export default function ModalFiltersPrice({ handleOpen }: IProps) {
 
   const onSubmit = (data: any) => {
     if (
-      Number(data.min) > 0 &&
-      Number(data.max) &&
-      Number(data.max) > Number(data.min)
+      Number(data.min.replace(/[^0-9]/g, '')) > 0 &&
+      Number(data.max.replace(/[^0-9]/g, '')) &&
+      Number(data.max.replace(/[^0-9]/g, '')) >
+        Number(data.min.replace(/[^0-9]/g, ''))
     ) {
-      const prices = {
-        min: data.min,
-        max: data.max,
-      }
-      console.log(prices)
       setSelectedFilters({
         ...selectedFilters,
-        prices,
+        prices: { min: data.min, max: data.max },
       })
       handleOpen()
     }

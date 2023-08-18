@@ -17,8 +17,8 @@ export default function SkinFilters() {
     const thereIsFilters =
       categories?.length! > 0 ||
       wears?.length! > 0 ||
-      prices.max !== null ||
-      prices.min !== null
+      prices.max !== undefined ||
+      prices.min !== undefined
 
     setThereIsFilters(thereIsFilters)
   }, [categories, wears, prices])
@@ -31,13 +31,13 @@ export default function SkinFilters() {
         <ContainerFilter title="Categoria" />
         {thereIsFilters && (
           <Common.Button
-            onClick={() =>
+            onClick={() => {
               setSelectedFilters({
                 wears: [],
                 categories: [],
-                prices: { min: null, max: null },
+                prices: { min: undefined, max: undefined },
               })
-            }
+            }}
             className="ml-2 border-none text-mesh-color-neutral-200 hover:text-mesh-color-neutral-100"
           >
             Limpar filtros
