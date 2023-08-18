@@ -31,12 +31,12 @@ const useFilterStore = create<IStates>((set) => ({
 
     set(() => ({
       allSkinsFiltred:
-        typeSort === undefined ? [] : skins.sort(organized[typeSort]),
+        typeSort === undefined ? skins : skins.sort(organized[typeSort]),
     }))
   },
 
   typeFilter: undefined,
-  setTypeFilter: (typeFilter) => set(() => ({ typeFilter })),
+  setTypeFilter: (typeFilter: TTypeSort) => set(() => ({ typeFilter })),
 
   setSelectedFilters: (selectedFilters: ISelectedFilters) => {
     set(() => ({ selectedFilters }))
