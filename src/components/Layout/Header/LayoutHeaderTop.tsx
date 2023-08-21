@@ -29,6 +29,8 @@ export function LayoutHeaderTop() {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
 
+  console.log(trueSession.user?.token)
+
   const router = useRouter()
   const pathname = usePathname()
   const refDropdown = useRef(null)
@@ -118,6 +120,9 @@ export function LayoutHeaderTop() {
           owner_id: trueSession.user?.steam?.steamid!,
           owner_name: trueSession.user?.name!,
           picture: trueSession.user?.image!,
+          owner_country: trueSession.user?.steam?.loccountrycode!,
+          steam_url: `https://steamcommunity.com/profiles/${trueSession.user
+            ?.steam?.steamid!}`,
         },
         trueSession.user?.token!,
       ),
