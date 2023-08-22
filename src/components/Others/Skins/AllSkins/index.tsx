@@ -17,10 +17,10 @@ export default function AllSkins({
   itemsPerPage = 10,
 }: IAllSkinsProps) {
   return (
-    <div className="mx-auto flex w-full flex-col items-center justify-start bg-blue-500">
+    <div className="mx-auto flex w-full flex-col items-center justify-start">
       <div
         className={classNames(
-          'mt-6 grid w-fit grid-cols-1 justify-center gap-2 bg-green-500 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6',
+          'mt-6 grid w-fit grid-cols-1 justify-center gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6',
           {
             'mb-6 mt-0 w-auto': skinsCategories !== undefined,
             'justify-center': center,
