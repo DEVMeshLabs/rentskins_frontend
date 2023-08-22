@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 'use client'
-import { skins } from '@/Mock'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import CartSkinCard from '../../CartSkinCard'
 import { useQuery } from '@tanstack/react-query'
 import CartService from '@/services/cart.service'
@@ -9,19 +8,8 @@ import ISteamUser from '@/interfaces/steam.interface'
 import { useSession } from 'next-auth/react'
 import useCartStore from '@/stores/cart.store'
 
-interface skin {
-  name: string
-  name_color: string
-  icon_url: string
-  classid: string
-}
-
 export default function AllSkinsCart() {
-  const { setSkinsOnCart, skinsOnCart } = useCartStore()
-  const [filteredIndex, setFilteredIndex] = useState<string[]>([])
-  const allSkinCart = skins.filter(
-    (skin) => !filteredIndex.some((classid) => classid === skin.classid),
-  )
+  const { setSkinsFromCart, skinsFromCart, deleteSkinFromCart } = useCartStore()
   const { data: session } = useSession()
   const trueSession = (session as ISteamUser) || {}
 
@@ -35,27 +23,29 @@ export default function AllSkinsCart() {
 
   useEffect(() => {
     if (dataSkinsCart?.data) {
-      setSkinsOnCart(dataSkinsCart.data.buyer_skins)
+      setSkinsFromCart(dataSkinsCart.data.SkinToCart)
     }
   }, [dataSkinsCart])
 
-  console.log(skinsOnCart)
-
   return (
     <div className="flex w-[798px] flex-col items-start gap-6">
-      {isLoading ? (
-        <div>
-          {allSkinCart.map(
-            ({ name, name_color, icon_url, classid }: skin, idx: number) => {
+      {!isLoading ? (
+        <div className="w-full">
+          {skinsFromCart.map(
+            (
+              { skin: { skin_name, name_color, skin_image, id, skin_weapon } },
+              idx: number,
+            ) => {
               return (
                 <CartSkinCard
-                  iconUrl={icon_url}
-                  name={name}
+                  skinWeapon={skin_weapon}
+                  iconUrl={skin_image}
+                  name={skin_name}
                   nameColor={name_color}
                   key={`${name}-${idx}`}
-                  handleOnClick={() =>
-                    setFilteredIndex([...filteredIndex, classid])
-                  }
+                  handleOnClick={() => {
+                    deleteSkinFromCart(id)
+                  }}
                 />
               )
             },

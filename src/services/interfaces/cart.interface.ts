@@ -1,5 +1,12 @@
 import { ISkins } from '@/interfaces/ISkins'
 
+export interface ISkinToCart {
+  id: string
+  cartId: string
+  skinId: string
+  skin: ISkins
+}
+
 export interface ICart {
   id: string
   buyer_name: string
@@ -8,5 +15,5 @@ export interface ICart {
   createdAt: string
   updatedAt: string | null
   deletedAt: string | null
-  buyer_skins: ISkins[]
+  SkinToCart: ISkinToCart[]
 }

@@ -1,6 +1,7 @@
-import { ISkins } from '@/interfaces/ISkins'
+import { ISkinToCart } from '@/services/interfaces/cart.interface'
 
 export interface ICartStore {
-  skinsOnCart: ISkins[]
-  setSkinsOnCart: (skinToCart: ISkins[]) => void
+  skinsFromCart: ISkinToCart[]
+  setSkinsFromCart: (skinToCart: ISkinToCart[]) => void
+  deleteSkinFromCart: (id: string) => void
 }

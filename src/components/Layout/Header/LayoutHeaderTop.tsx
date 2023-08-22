@@ -110,8 +110,6 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
-  console.log(userRetrieved?.request.status)
-
   useQuery({
     queryKey: ['CreateProfile', trueSession.user?.name!],
     queryFn: async () =>

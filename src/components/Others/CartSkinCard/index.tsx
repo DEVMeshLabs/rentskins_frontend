@@ -5,6 +5,7 @@ import { MouseEventHandler } from 'react'
 
 interface Props {
   name: string
+  skinWeapon: string
   nameColor: string
   iconUrl: string
   handleOnClick: MouseEventHandler<HTMLButtonElement>
@@ -14,10 +15,9 @@ export default function CartSkinCard({
   name,
   nameColor,
   iconUrl,
+  skinWeapon,
   handleOnClick,
 }: Props) {
-  const [skinType, skinName] = name.split('|')
-
   return (
     <section
       className="group flex h-44 w-full
@@ -41,7 +41,7 @@ export default function CartSkinCard({
           <div className="flex h-24 flex-col justify-between gap-3">
             <div>
               <Common.Title bold={600} size="2xl" color="white">
-                {skinName}
+                {name}
               </Common.Title>
               <Common.Title
                 bold={500}
@@ -58,7 +58,7 @@ export default function CartSkinCard({
               color="cinza"
               className="opacity-60"
             >
-              {skinType}
+              {skinWeapon}
             </Common.Title>
           </div>
         </div>
