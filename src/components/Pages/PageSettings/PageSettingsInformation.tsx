@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { formResolver as cpfResolver } from './schemas/information-cpf.contact.schema'
 import { formResolver as emailResolver } from './schemas/information-email.contact.schema'
 import { formResolver as phoneResolver } from './schemas/information-phone.contact.schema'
 import { formResolver as personalResolver } from './schemas/information.personal.schema'
@@ -17,6 +18,7 @@ export function PageSettingsInformation() {
   const trueSession = session as ISteamUser
   const [editEmail, setEditEmail] = useState(false)
   const [editPhone, setEditPhone] = useState(false)
+  const [editCPF, setEditCPF] = useState(false)
   const [editTradeLink, setEditTradeLink] = useState(false)
 
   const { data: userConfig, isLoading } = useQuery({
@@ -29,10 +31,6 @@ export function PageSettingsInformation() {
     },
     enabled: status === 'authenticated',
   })
-
-  if (!isLoading) {
-    console.log(userConfig.data)
-  }
 
   const {
     handleSubmit,
@@ -55,7 +53,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: emailResolver,
     defaultValues: {
-      email: undefined,
+      email: userConfig?.data?.email || undefined,
     },
   })
 
@@ -67,7 +65,19 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: phoneResolver,
     defaultValues: {
-      phone: userConfig,
+      phone: userConfig?.data?.phone || undefined,
+    },
+  })
+
+  const {
+    handleSubmit: handleSubmitCPF,
+    register: registerCPF,
+    setValue: setValueCPF,
+    formState: { errors: errorsCPF },
+  } = useForm({
+    resolver: cpfResolver,
+    defaultValues: {
+      cpf: undefined,
     },
   })
 
@@ -75,9 +85,18 @@ export function PageSettingsInformation() {
     if (!isLoading && userConfig.request.status === 200) {
       setValueEmail('email', userConfig.data.owner_email)
       setValuePhone('phone', userConfig.data.owner_phone)
+      setValueCPF('cpf', '')
+      // setValueCPF('cpf', userConfig.data.cpf)
       setValueTrade('trade-link', userConfig.data.url_trade)
     }
-  }, [userConfig, isLoading, setValueEmail, setValuePhone, setValueTrade])
+  }, [
+    userConfig,
+    isLoading,
+    setValueEmail,
+    setValueCPF,
+    setValuePhone,
+    setValueTrade,
+  ])
 
   const onSubmitPersonal = (data: any) => {
     setEditTradeLink(false)
@@ -104,6 +123,16 @@ export function PageSettingsInformation() {
       owner_id: trueSession.user?.steam?.steamid!,
       owner_phone: data.phone,
     })
+  }
+
+  const onSubmitCPF = (data: any) => {
+    setEditCPF(false)
+    console.log(data)
+    // ConfigService.updateConfig({
+    //   token: trueSession.user?.token!,
+    //   owner_id: trueSession.user?.steam?.steamid!,
+    //   owner_cpf: data.phone,
+    // })
   }
 
   useEffect(() => console.log(editEmail), [editEmail])
@@ -305,6 +334,47 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditPhone(true)}
+                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </Form.Root>
+        <Form.Root onSubmit={handleSubmitCPF(onSubmitCPF)}>
+          <div className="mt-8 flex flex-col items-start justify-center">
+            <Common.Title size={'lg'} color="white" className="-mt-4 mb-4">
+              CPF
+            </Common.Title>
+            <div className="flex w-full items-center justify-between">
+              <Form.Input.CPF
+                labelClassName="w-7/12 text-white mb-4"
+                placeholder={isLoading ? 'Verificando...' : '000.000.000-00'}
+                disabled={isLoading || !editCPF}
+                name="cpf"
+                register={registerCPF('cpf')}
+                inputClassName={`${
+                  editCPF ? 'text-white' : 'text-mesh-color-neutral-200'
+                } rounded-md bg-mesh-color-neutral-600 px-3 py-2 disabled:bg-transparent
+                transition-all ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
+                errors={errorsCPF.cpf}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
+              />
+              <div className="flex w-1/12">
+                {editCPF ? (
+                  <Form.Button
+                    buttonStyle={undefined}
+                    disabled={isLoading}
+                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  >
+                    Salvar
+                  </Form.Button>
+                ) : (
+                  <button
+                    disabled={isLoading}
+                    onClick={() => setEditCPF(true)}
                     className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
