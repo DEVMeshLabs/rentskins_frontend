@@ -27,7 +27,10 @@ export default function PageHomeSkins() {
       {isLoading ? (
         <AllSkeletonSkins quantitySkeletons={20} />
       ) : data?.data ? (
-        <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
+        <div className="flex h-full w-full flex-col items-center">
+          <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
+          {/* <LayoutPagination maxPages={8} pageState={1} setPageState={() => 2} /> */}
+        </div>
       ) : (
         <div className="flex h-[30vh] w-full items-center justify-center">
           <Common.Title bold={600} size="2xl" className="text-white">

@@ -1,14 +1,8 @@
 /* eslint-disable camelcase */
-// import { skins } from '@/Mock'
 'use client'
-import classNames from 'classnames'
-// import { PageSelector } from '@/components/PageSelector'
-// import useComponentStore from '@/stores/components.store'
 import { ISkins } from '@/interfaces/ISkins'
+import classNames from 'classnames'
 import Link from 'next/link'
-// import { findByAll } from '@/services/SkinService'
-// import { useQuery } from '@tanstack/react-query'
-// import { OtherCard } from '../../OtherCard/OtherCard'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 export interface IAllSkinsProps {
@@ -22,24 +16,16 @@ export default function AllSkins({
   center = false,
   itemsPerPage = 10,
 }: IAllSkinsProps) {
-  // const { setPageSelectorIndex, pageSelectorIndex } = useComponentStore()
-
-  // const allSkins = skinsCategories || skins
-
-  // const allSkinsFilter = allSkins.filter(
-  //   ({ name }: skin) =>
-  //     !name.includes('Coin') &&
-  //     !name.includes('Pin') &&
-  //     !name.includes('Graffiti'),
-  // )
-
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="mx-auto flex w-full flex-col items-center justify-start bg-blue-500">
       <div
-        className={classNames('mt-6 flex w-full flex-wrap gap-3', {
-          'mb-6 mt-0 w-auto': skinsCategories !== undefined,
-          'justify-center': center,
-        })}
+        className={classNames(
+          'mt-6 grid w-fit grid-cols-1 justify-center gap-2 bg-green-500 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6',
+          {
+            'mb-6 mt-0 w-auto': skinsCategories !== undefined,
+            'justify-center': center,
+          },
+        )}
       >
         {skinsCategories?.map(
           (
@@ -54,11 +40,6 @@ export default function AllSkins({
             }: ISkins,
             index: number,
           ) => {
-            // const itemIndex = index + 1
-            // if (
-            //   itemIndex > itemsPerPage * (pageSelectorIndex - 1) &&
-            //   itemIndex <= itemsPerPage * pageSelectorIndex
-            // )
             return (
               <>
                 <Link
@@ -78,16 +59,9 @@ export default function AllSkins({
                 </Link>
               </>
             )
-            // return null
           },
         )}
       </div>
-      {/* <PageSelector
-        pages={allSkinsFilter.length / itemsPerPage}
-        handleOnChange={(event) =>
-          setPageSelectorIndex(event.target.value as unknown as number)
-        }
-      /> */}
     </div>
   )
 }

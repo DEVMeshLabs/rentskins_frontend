@@ -117,7 +117,7 @@ export function LayoutHeaderTop() {
   useQuery({
     queryKey: ['CreateProfile', trueSession.user?.name!],
     queryFn: async () => {
-      UserService.createUser(
+      return UserService.createUser(
         {
           owner_id: trueSession.user?.steam?.steamid!,
           owner_name: trueSession.user?.name!,
