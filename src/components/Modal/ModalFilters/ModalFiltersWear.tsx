@@ -2,8 +2,8 @@
 'use client'
 import Common from '@/components/Common'
 import InputCheckbox from '@/components/InputCheckboxFilter'
-import { useState } from 'react'
 import useFilterStore from '@/stores/filters.store'
+import { useState } from 'react'
 
 export default function FilterWear() {
   const [wears, setWears] = useState<string[]>([])
@@ -33,11 +33,11 @@ export default function FilterWear() {
             setValues={setWears}
             values={wears}
             inputValues={[
-              'Boa de campo',
-              'Bem usada',
-              'Desgastada',
-              'Pouca usada',
-              'Muito usada',
+              'Nova de Fábrica',
+              'Pouco Usada',
+              'Testada em Campo',
+              'Bem Desgastada',
+              'Veterana de Guerra',
             ]}
             defaultChecks={
               selectedFilters.wears && selectedFilters.wears?.length > 0

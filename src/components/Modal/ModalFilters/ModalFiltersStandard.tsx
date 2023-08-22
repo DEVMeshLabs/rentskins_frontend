@@ -5,9 +5,9 @@ import Common from '@/components/Common'
 export default function ModalFiltersStandard() {
   return (
     <div className="flex h-full w-full flex-col justify-between gap-1">
-      <StandardCheckboxItem value="Menor preço" />
+      <StandardCheckboxItem value="Menor Preço" />
       <StandardCheckboxItem value="Maior Preço" />
-      <StandardCheckboxItem value="Maior float" />
+      <StandardCheckboxItem value="Maior Float" />
     </div>
   )
 }
