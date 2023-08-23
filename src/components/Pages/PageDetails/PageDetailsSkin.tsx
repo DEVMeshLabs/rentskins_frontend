@@ -1,6 +1,9 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
-// import { InputRadio } from '../InputRadio'
+import CartService from '@/services/cart.service'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 type PropsTypes = {
   skinName: string
@@ -11,6 +14,8 @@ type PropsTypes = {
   skinColor: string
   sellerId: string
   statusFloat: string
+  skinId: string
+  cartId: string
 }
 
 export function PageDetailsSkin({
@@ -22,7 +27,45 @@ export function PageDetailsSkin({
   sellerId,
   statusFloat,
   skinColor,
+  skinId,
+  cartId,
 }: PropsTypes) {
+  const [wasRaised, setWasRaised] = useState(false)
+  const { data, refetch, isLoading } = useQuery({
+    queryKey: ['createSkinFromCart', skinId, cartId],
+    queryFn: () => {
+      return CartService.createSkinFromCart(skinId, cartId)
+    },
+    enabled: false,
+  })
+
+  useEffect(() => {
+    if (wasRaised && !isLoading) {
+      if (data && data.request.status === 201) {
+        toast.success('Skin adicionada no carrinho', {
+          duration: 4000, // Duração em milissegundos
+          position: 'bottom-right', // Posição do toast
+          icon: undefined,
+          style: {
+            background: '#AFD734', // Estilo personalizado
+            color: 'black',
+          },
+        })
+        setWasRaised(false)
+      } else if (data && data.request.status === 409) {
+        toast.error('Essa skin já está em seu carrinho', {
+          duration: 4000, // Duração em milissegundos
+          position: 'bottom-right', // Posição do toast
+          style: {
+            background: '#E84E6A', // Estilo personalizado
+            color: 'white',
+          },
+        })
+        setWasRaised(false)
+      }
+    }
+  }, [wasRaised, isLoading])
+
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
       <div className="space-y-4">
@@ -100,19 +143,6 @@ export function PageDetailsSkin({
         <Common.Title className="font-semibold text-white">
           Selecione o período de Aluguel
         </Common.Title>
-        <div className="mt-4 flex gap-4">
-          {/* <InputRadio name="dias" radio="dia" style="cinza">
-            <Common.Title color="white">7 Dias</Common.Title>
-          </InputRadio>
-
-          <InputRadio name="dias" style="cinza" radio="dia">
-            <Common.Title color="white">14 Dias</Common.Title>
-          </InputRadio>
-
-          <InputRadio name="dias" style="cinza" radio="dia">
-            <Common.Title color="white">21 Dias</Common.Title>
-          </InputRadio> */}
-        </div>
       </div>
 
       <div className="mt-10 flex gap-2">
@@ -122,7 +152,13 @@ export function PageDetailsSkin({
         <Common.Button className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black">
           Comprar agora
         </Common.Button>
-        <Common.Button className="h-11 w-11">
+        <Common.Button
+          onClick={async () => {
+            await refetch()
+            setWasRaised(true)
+          }}
+          className="h-11 w-11"
+        >
           <IconCarrinho />
         </Common.Button>
       </div>

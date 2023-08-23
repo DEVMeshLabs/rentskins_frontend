@@ -1,5 +1,6 @@
 'use client'
 import Common from '@/components/Common'
+import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function NotFound() {
@@ -8,8 +9,14 @@ export default function NotFound() {
     document.title = 'Página Não Encontrada - RentSkins'
   })
 
+  const pathname = usePathname()
+
   return (
-    <main className="flex flex-col items-center justify-center gap-6">
+    <main
+      className={`flex flex-col items-center justify-center gap-6 ${
+        pathname.includes('/atividade-suspensa') && 'h-screen'
+      }`}
+    >
       <div className="flex flex-col items-center">
         <Common.Title
           bold={900}

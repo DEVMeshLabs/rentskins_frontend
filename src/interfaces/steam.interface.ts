@@ -22,6 +22,7 @@ export default interface ISteamUser {
       locstatecode?: string
     }
     token?: string
+    account_status?: 'Ativo' | 'Suspenso'
   }
   expires: string
 }
