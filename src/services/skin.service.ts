@@ -42,7 +42,7 @@ export default class SkinService {
   }
 
   public static findBySearchParameter(param: string) {
-    return Api.get<ISkins[]>(`/skins/search/${param}`)
+    return Api.get<IGetISkin>(`/skins/search/${param}`)
   }
 
   public static postAllSkinsToAdvertise(
