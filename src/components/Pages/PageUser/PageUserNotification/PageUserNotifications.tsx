@@ -2,6 +2,7 @@
 
 import { transactionsMock } from '@/Mock/notification.transaction.mock'
 import Common from '@/components/Common'
+import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
 import { INotificationHistoricProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
 import { INotificationTransactionProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
 import ISteamUser from '@/interfaces/steam.interface'
@@ -12,7 +13,6 @@ import { useQuery } from '@tanstack/react-query'
 import Aos from 'aos'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect } from 'react'
 const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
@@ -30,6 +30,27 @@ export default function PageUserNotifications() {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const { notificationFilter } = useFilterStore()
+
+  const notificationLabel = () => {
+    switch (notificationFilter as any) {
+      case 'hoje':
+        return 'Hoje'
+      case 'tresdias':
+        return '1-3 Dias'
+      case 'tresmes':
+        return '3 Meses'
+      case 'tudo':
+        return 'Tudo'
+      case 'umano':
+        return '1 Ano'
+      case 'ummes':
+        return '1 Mês'
+      case 'umasemana':
+        return '1 Semana'
+      default:
+        return 'Mais Tempo'
+    }
+  }
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -109,16 +130,13 @@ export default function PageUserNotifications() {
           </label>
         </div>
         {searchParams.get('type') === 'historic' && (
-          <Link
-            href={URLQuery.addQuery([
-              { key: 'modalopen', value: true },
-              { key: 'modaltype', value: 'filter' },
-            ])}
-            className="rounded-md border-none bg-mesh-color-primary-1200 px-3 py-1 font-semibold"
-            data-aos="zoom-in"
-          >
-            {notificationFilter}
-          </Link>
+          <ModalNotificationFilter
+            activator={
+              <button className="rounded-md border-none bg-mesh-color-primary-1200 px-3 py-1 font-semibold capitalize">
+                {notificationLabel()}
+              </button>
+            }
+          />
         )}
       </div>
       {searchParams.get('type') === 'historic' && (

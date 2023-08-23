@@ -1,10 +1,10 @@
-import { ISkins, ISkinsToAdvertise } from '@/interfaces/ISkins'
+import { IGetISkin, ISkins, ISkinsToAdvertise } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
 import { IInventory } from './interfaces/inventoryy.interface'
 
 export default class SkinService {
   public static findByAll() {
-    return Api.get<ISkins[]>('/skins')
+    return Api.get<IGetISkin>('/skins')
   }
 
   public static findById(id: string) {
@@ -42,7 +42,7 @@ export default class SkinService {
   }
 
   public static findBySearchParameter(param: string) {
-    return Api.get<ISkins[]>(`/skins/search/${param}`)
+    return Api.get<IGetISkin>(`/skins/search/${param}`)
   }
 
   public static postAllSkinsToAdvertise(

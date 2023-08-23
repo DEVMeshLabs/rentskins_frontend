@@ -40,7 +40,9 @@ export default function ModalFiltersMain({ activator, child }: IProps) {
             {child === 'Categoria' && (
               <ModalFiltersCategory handleOpen={handleOpenModal} />
             )}
-            {child === 'Padrão' && <ModalFiltersStandard />}
+            {child === 'Padrão' && (
+              <ModalFiltersStandard handleOpen={handleOpenModal} />
+            )}
           </div>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
