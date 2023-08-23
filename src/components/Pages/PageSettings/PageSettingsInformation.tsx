@@ -41,7 +41,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: personalResolver,
     defaultValues: {
-      'trade-link': undefined,
+      'trade-link': userConfig?.data?.url_trade || undefined,
     },
   })
 
@@ -53,7 +53,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: emailResolver,
     defaultValues: {
-      email: userConfig?.data?.email || undefined,
+      email: userConfig?.data?.owner_email || undefined,
     },
   })
 
@@ -65,7 +65,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: phoneResolver,
     defaultValues: {
-      phone: userConfig?.data?.phone || undefined,
+      phone: userConfig?.data?.owner_phone || undefined,
     },
   })
 
@@ -77,7 +77,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: cpfResolver,
     defaultValues: {
-      cpf: undefined,
+      cpf: userConfig?.data?.owner_cpf || undefined,
     },
   })
 
@@ -85,8 +85,7 @@ export function PageSettingsInformation() {
     if (!isLoading && userConfig.request.status === 200) {
       setValueEmail('email', userConfig.data.owner_email)
       setValuePhone('phone', userConfig.data.owner_phone)
-      setValueCPF('cpf', '')
-      // setValueCPF('cpf', userConfig.data.cpf)
+      setValueCPF('cpf', userConfig.data.owner_cpf)
       setValueTrade('trade-link', userConfig.data.url_trade)
     }
   }, [
@@ -109,33 +108,36 @@ export function PageSettingsInformation() {
 
   const onSubmitEmail = (data: any) => {
     setEditEmail(false)
-    ConfigService.updateConfig({
-      token: trueSession.user?.token!,
-      owner_id: trueSession.user?.steam?.steamid!,
-      owner_email: data.email,
-    })
+    if (data.email !== '') {
+      ConfigService.updateConfig({
+        token: trueSession.user?.token!,
+        owner_id: trueSession.user?.steam?.steamid!,
+        owner_email: data.email,
+      })
+    }
   }
 
   const onSubmitPhone = (data: any) => {
     setEditPhone(false)
-    ConfigService.updateConfig({
-      token: trueSession.user?.token!,
-      owner_id: trueSession.user?.steam?.steamid!,
-      owner_phone: data.phone,
-    })
+    if (data.phone !== '') {
+      ConfigService.updateConfig({
+        token: trueSession.user?.token!,
+        owner_id: trueSession.user?.steam?.steamid!,
+        owner_phone: data.phone,
+      })
+    }
   }
 
   const onSubmitCPF = (data: any) => {
     setEditCPF(false)
-    console.log(data)
-    // ConfigService.updateConfig({
-    //   token: trueSession.user?.token!,
-    //   owner_id: trueSession.user?.steam?.steamid!,
-    //   owner_cpf: data.phone,
-    // })
+    if (data.cpf !== '') {
+      ConfigService.updateConfig({
+        token: trueSession.user?.token!,
+        owner_id: trueSession.user?.steam?.steamid!,
+        owner_cpf: data.cpf,
+      })
+    }
   }
-
-  useEffect(() => console.log(editEmail), [editEmail])
 
   const watchTradelink = watch('trade-link')
 
@@ -375,7 +377,13 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditCPF(true)}
-                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className={`${
+                      !isLoading &&
+                      userConfig?.data?.owner_cpf !== '' &&
+                      userConfig?.data?.owner_cpf !== undefined
+                        ? 'hidden opacity-0'
+                        : 'visible opacity-100'
+                    } -mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70`}
                   >
                     Editar
                   </button>
