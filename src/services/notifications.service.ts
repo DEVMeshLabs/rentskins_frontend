@@ -14,7 +14,7 @@ export default class NotificationServices {
     time?: ITime,
   ) {
     return Api.post<INotification[]>(
-      `/notification/userAll/${userId}`,
+      `/notification/user/${userId}`,
       {
         tempo: time || 'tudo',
       },

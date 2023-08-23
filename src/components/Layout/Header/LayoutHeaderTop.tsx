@@ -62,6 +62,7 @@ export function LayoutHeaderTop() {
         trueSession.user?.steam?.steamid!,
         notificationFilter,
       ),
+    enabled: status === 'authenticated',
   })
 
   const disableAddButton =

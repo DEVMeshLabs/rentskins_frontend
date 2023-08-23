@@ -45,7 +45,6 @@ export default function PageStoreSkins() {
   } = useQuery({
     queryKey: ['skinsCategory'],
     queryFn: async () => {
-      console.log(page)
       if (search !== null && search !== undefined && search !== '') {
         const data = await SkinService.findBySearchParameter(search, page)
         return data
@@ -112,7 +111,7 @@ export default function PageStoreSkins() {
       )}
 
       {data?.data?.totalPages &&
-        data?.data?.totalItens > 0 &&
+        data?.data?.totalPages > 1 &&
         Number(page) <= data?.data?.totalPages && (
           <LayoutPagination
             maxPages={data?.data?.totalPages}

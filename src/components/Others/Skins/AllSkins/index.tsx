@@ -2,7 +2,6 @@
 'use client'
 import { ISkins } from '@/interfaces/ISkins'
 import classNames from 'classnames'
-import Link from 'next/link'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 export interface IAllSkinsProps {
@@ -42,23 +41,18 @@ export default function AllSkins({
             index: number,
           ) => {
             return (
-              <>
-                <Link
-                  key={`${id}-${index}`}
-                  href={`/detalhes/${id}`}
-                  className="flex w-[17.5rem]"
-                >
-                  <OtherCard
-                    skinImage={skin_image}
-                    sellerName={skin_name}
-                    skinColor={skin_color}
-                    skinWeapon={skin_weapon}
-                    skinFloat={skin_float}
-                    skinPrice={skin_price}
-                    key={id}
-                  />
-                </Link>
-              </>
+              <div className="flex w-[17.5rem]" key={`skin-card-${index}`}>
+                <OtherCard
+                  id={id}
+                  skinImage={skin_image}
+                  sellerName={skin_name}
+                  skinColor={skin_color}
+                  skinWeapon={skin_weapon}
+                  skinFloat={skin_float}
+                  skinPrice={skin_price}
+                  key={id}
+                />
+              </div>
             )
           },
         )}
