@@ -8,11 +8,19 @@ export default class UserService {
       .catch((e) => e)
   }
 
+  public static async getUserStatus(userSteamId: string) {
+    return Api.get<IGetUser>(`/perfil/status/${userSteamId}`)
+      .then((response) => response)
+      .catch((e) => e)
+  }
+
   public static async createUser(userCreate: ICreateUser, token: string) {
     return Api.post(`/perfil`, userCreate, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
+      .then((response) => response)
+      .catch((e) => e)
   }
 }

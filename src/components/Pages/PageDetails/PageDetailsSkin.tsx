@@ -1,5 +1,8 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
+import CartService from '@/services/cart.service'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 // import { InputRadio } from '../InputRadio'
 
 type PropsTypes = {
@@ -11,6 +14,8 @@ type PropsTypes = {
   skinColor: string
   sellerId: string
   statusFloat: string
+  skinId: string
+  cartId: string
 }
 
 export function PageDetailsSkin({
@@ -22,7 +27,16 @@ export function PageDetailsSkin({
   sellerId,
   statusFloat,
   skinColor,
+  skinId,
+  cartId,
 }: PropsTypes) {
+  const router = useRouter()
+  const { refetch } = useQuery({
+    queryKey: ['', skinId, cartId],
+    queryFn: () => CartService.createSkinFromCart(skinId, cartId),
+    enabled: false,
+  })
+
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
       <div className="space-y-4">
@@ -122,7 +136,13 @@ export function PageDetailsSkin({
         <Common.Button className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black">
           Comprar agora
         </Common.Button>
-        <Common.Button className="h-11 w-11">
+        <Common.Button
+          onClick={async () => {
+            await refetch()
+            router.push('/carrinho')
+          }}
+          className="h-11 w-11"
+        >
           <IconCarrinho />
         </Common.Button>
       </div>

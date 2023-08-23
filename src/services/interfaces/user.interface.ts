@@ -5,7 +5,7 @@ export interface IGetUser {
   delivery_time: string
   delivery_fee: number
   total_exchanges: string
-  account_date: string
+  steam_created_date: string
   steam_level: string
   owner_name: string
   picture: string

@@ -6,5 +6,7 @@ export const config = {
     '/pagamento/:path*',
     '/usuario/:path*',
     '/admin/:path*',
+    '/atividade-suspensa',
+    '/carrinho/:path*',
   ],
 }

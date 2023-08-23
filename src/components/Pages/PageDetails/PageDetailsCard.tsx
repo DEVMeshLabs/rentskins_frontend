@@ -39,7 +39,7 @@ export function PageDetailsCard({
       </div>
 
       <Image
-        src={skinImage}
+        src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
         alt={skinName}
         width={510}
         height={380}

@@ -1,3 +1,4 @@
+'use client'
 import BlankUser from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
@@ -12,6 +13,7 @@ import UserService from '@/services/user.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
+import VerificationTool from '@/tools/verification.tool'
 import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
 import { signIn, useSession } from 'next-auth/react'
@@ -26,16 +28,6 @@ import LayoutHeaderSkeleton from './LayoutHeaderSkeleton'
 import { formResolver } from './form.schema'
 
 export function LayoutHeaderTop() {
-  const { data: session, status } = useSession()
-  const trueSession = (session as ISteamUser) || {}
-
-  console.log(trueSession.user?.token)
-
-  const router = useRouter()
-  const pathname = usePathname()
-  const refDropdown = useRef(null)
-  const { setWallet, wallet } = useUserStore()
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const {
     register,
     handleSubmit,
@@ -47,8 +39,18 @@ export function LayoutHeaderTop() {
       search: undefined,
     },
   })
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
+  const router = useRouter()
+
+  const pathname = usePathname()
+  const refDropdown = useRef(null)
+  const { setWallet, wallet } = useUserStore()
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const searchWatch = watch('search')
   const [hasNotifications, setHasNotifications] = useState(false)
+
+  VerificationTool.verifyStatus(trueSession.user?.steam?.steamid!, router)
 
   const { notificationFilter } = useFilterStore()
 
@@ -61,15 +63,15 @@ export function LayoutHeaderTop() {
       ),
   })
 
-  const disableAddButton = pathname.includes('/pagamento' || '/oops')
+  const disableAddButton =
+    pathname.includes('/pagamento') || pathname.includes('/oops')
 
   useEffect(() => {
+    //
     // const interval = setInterval(() => {
     refetch() // Refaz a requisição a cada 1 segundo
     // }, 10 * 60 * 1000)
     setHasNotifications(thereIsNotification(data?.data))
-
-    // return () => clearInterval(interval)
   }, [pathname])
 
   const { data: walletRetrieved } = useQuery({
@@ -105,27 +107,29 @@ export function LayoutHeaderTop() {
   }, [walletRetrieved, walletCreated])
 
   const { data: userRetrieved } = useQuery({
-    queryKey: ['ifProfile', trueSession.user?.name!],
-    queryFn: () => UserService.getUser(trueSession.user?.steam?.steamid!),
+    queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
+    queryFn: () => {
+      return UserService.getUser(trueSession.user?.steam?.steamid!)
+    },
     enabled: status === 'authenticated',
   })
 
   useQuery({
     queryKey: ['CreateProfile', trueSession.user?.name!],
-    queryFn: async () =>
+    queryFn: async () => {
       UserService.createUser(
         {
           owner_id: trueSession.user?.steam?.steamid!,
           owner_name: trueSession.user?.name!,
           picture: trueSession.user?.image!,
           owner_country: trueSession.user?.steam?.loccountrycode!,
-          steam_url: `https://steamcommunity.com/profiles/${trueSession.user
-            ?.steam?.steamid!}`,
+          steam_url: trueSession.user?.steam?.profileurl!,
         },
         trueSession.user?.token!,
-      ),
+      )
+    },
     enabled:
-      status === 'authenticated' && userRetrieved?.request.status === '404',
+      status === 'authenticated' && userRetrieved?.request.status === 404,
   })
 
   const handleOnProfileClick = () => {
@@ -241,7 +245,7 @@ export function LayoutHeaderTop() {
               <ModalPaymentMain>
                 <button
                   disabled={disableAddButton}
-                  className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400 transition-all disabled:opacity-20"
+                  className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400 opacity-50 transition-all hover:opacity-100 disabled:opacity-20"
                 >
                   <IconCruz />
                 </button>
