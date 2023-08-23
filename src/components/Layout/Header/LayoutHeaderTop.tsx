@@ -32,6 +32,7 @@ export function LayoutHeaderTop() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { isDirty, isValid },
   } = useForm({
     resolver: formResolver,
@@ -138,6 +139,7 @@ export function LayoutHeaderTop() {
 
   const onSearch = (data: any) => {
     router.push(`/loja?search=${data.search}`)
+    setValue('search', undefined)
   }
 
   useEffect(() => {
