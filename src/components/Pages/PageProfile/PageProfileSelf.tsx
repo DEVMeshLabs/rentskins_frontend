@@ -35,11 +35,6 @@ export default function PageProfileSelf() {
       SkinService.findAllSkinsByIdSeller(trueSession?.user?.steam?.steamid!),
   })
 
-  useEffect(() => {
-    console.log('ok')
-    console.log(data?.data, 'AQUIII')
-  }, [data?.data])
-
   const { data: dataGettedUser, isLoading: isLoadingGetUser } = useQuery({
     queryKey: ['myProfile', trueSession?.user?.steam?.steamid!],
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),

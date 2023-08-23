@@ -14,7 +14,7 @@ export default function ProfileInfo({
   return (
     <div
       className="flex w-56 flex-col items-center justify-center gap-1 rounded-xl border
-      border-mesh-color-primary-1400 px-2 py-5"
+      border-mesh-color-neutral-700 px-2 py-5"
     >
       <Common.Title className="text-mesh-color-neutral-100">
         {title}
