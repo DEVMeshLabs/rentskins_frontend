@@ -5,9 +5,9 @@ interface IProps {
 }
 
 export default function AllSkeletonSkins({ quantitySkeletons = 15 }: IProps) {
-  const skeletonSkins = Array(quantitySkeletons).fill(1)
+  const skeletonSkins = Array.from({ length: quantitySkeletons })
   return (
-    <div className="flex w-full flex-wrap justify-center gap-3">
+    <div className="mb-7 mt-6 flex w-full flex-wrap justify-center gap-2">
       {skeletonSkins.map((_, idx) => (
         <div key={idx}>
           <SkeletonCardSkin />

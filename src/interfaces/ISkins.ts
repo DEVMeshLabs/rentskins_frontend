@@ -18,6 +18,12 @@ export interface ISkins {
   buyer_id: string
 }
 
+export interface ISkinsResponse {
+  totalPages: number
+  totalItens: number
+  skins: ISkins[]
+}
+
 export interface ISkinsToAdvertise {
   id?: string
   skin_image: string
