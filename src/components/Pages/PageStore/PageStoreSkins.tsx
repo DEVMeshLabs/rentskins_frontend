@@ -25,7 +25,8 @@ const AllSkins = dynamic<IAllSkinsProps>(
 export default function PageStoreSkins() {
   const search = useSearchParams().get('search') || ''
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
-  const { selectedFilters, typeFilter, setAllSkinsFiltred } = useFilterStore()
+  const { selectedFilters, typeFilter, setAllSkinsFiltred, allSkinsFiltred } =
+    useFilterStore()
 
   const {
     data,
@@ -114,8 +115,8 @@ export default function PageStoreSkins() {
 
       {isLoading ? (
         <AllSkeletonSkins />
-      ) : data?.data && data?.data.skins.length > 0 ? (
-        <AllSkins skinsCategories={data?.data.skins} itemsPerPage={15} />
+      ) : allSkinsFiltred.length > 0 ? (
+        <AllSkins skinsCategories={allSkinsFiltred} itemsPerPage={15} />
       ) : (
         <div className="mb-16 flex h-[50vh] items-center justify-center">
           {nameCorrection ? (
