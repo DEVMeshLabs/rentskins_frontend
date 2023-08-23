@@ -74,14 +74,14 @@ export default function Details() {
                 statusFloat={data!.data.status_float}
               />
               <PageDetailsPerfil
-                account_date={dataGetUser?.data.steam_created_date!}
-                delivery_fee={dataGetUser?.data.delivery_fee!}
-                delivery_time={dataGetUser?.data.delivery_time!}
-                owner_name={dataGetUser?.data.owner_name!}
-                picture={dataGetUser?.data.picture!}
-                status_member={dataGetUser?.data.status_member!}
-                steam_level={dataGetUser?.data.steam_level!}
-                total_exchanges={dataGetUser?.data.total_exchanges!}
+                account_date={dataGetUser?.data?.steam_created_date!}
+                delivery_fee={dataGetUser?.data?.delivery_fee!}
+                delivery_time={dataGetUser?.data?.delivery_time!}
+                owner_name={dataGetUser?.data?.owner_name!}
+                picture={dataGetUser?.data?.picture!}
+                status_member={dataGetUser?.data?.status_member!}
+                steam_level={dataGetUser?.data?.steam_level!}
+                total_exchanges={dataGetUser?.data?.total_exchanges!}
               />
             </div>
           </div>
