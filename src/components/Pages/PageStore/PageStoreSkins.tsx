@@ -5,22 +5,12 @@ import IconArrowLeft from '@/components/Icons/IconArrowLeft'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import SkinFilters from '@/components/Others/SkinFilters'
 import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import AllSkins from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-const AllSkins = dynamic<IAllSkinsProps>(
-  () =>
-    import('@/components/Others/Skins/AllSkins').then(
-      (module) => module.default,
-    ),
-  {
-    ssr: false,
-  },
-)
 
 export default function PageStoreSkins() {
   const router = useRouter()
