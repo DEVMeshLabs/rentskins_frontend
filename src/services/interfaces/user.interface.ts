@@ -15,6 +15,6 @@ export interface ICreateUser {
   owner_id: string
   owner_name: string
   picture: string
-  steam_url: string
   owner_country: string
+  steam_url: string
 }

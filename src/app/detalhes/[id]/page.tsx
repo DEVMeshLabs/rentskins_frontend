@@ -7,10 +7,12 @@ import { PageDetailsCard } from '@/components/Pages/PageDetails/PageDetailsCard'
 import { PageDetailsPerfil } from '@/components/Pages/PageDetails/PageDetailsPerfil'
 import { PageDetailsSkin } from '@/components/Pages/PageDetails/PageDetailsSkin'
 import { PageDetailsVendas } from '@/components/Pages/PageDetails/PageDetailsVendas'
+import ISteamUser from '@/interfaces/steam.interface'
 // import { IGetUser } from '@/services/interfaces/user.interface'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -24,6 +26,8 @@ const SkinsSemelhantes = dynamic(() =>
 
 export default function Details() {
   const { id } = useParams()
+  const { data: session, status } = useSession()
+  const trueSession = (session as ISteamUser) || {}
 
   const { data, isLoading } = useQuery({
     queryKey: ['skin', id],
@@ -34,6 +38,14 @@ export default function Details() {
     queryKey: ['ownerSkin'],
     queryFn: async () => await UserService.getUser(data?.data.seller_id!),
     enabled: !!data?.data,
+  })
+
+  const { data: userRetrieved } = useQuery({
+    queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
+    queryFn: () => {
+      return UserService.getUser(trueSession.user?.steam?.steamid!)
+    },
+    enabled: status === 'authenticated',
   })
 
   return (
@@ -72,6 +84,8 @@ export default function Details() {
                 skinColor={data!.data.skin_color}
                 sellerId={data!.data.seller_id}
                 statusFloat={data!.data.status_float}
+                skinId={data!.data.id}
+                cartId={userRetrieved && userRetrieved!.data.cart.id}
               />
               <PageDetailsPerfil
                 account_date={dataGetUser?.data?.steam_created_date!}
