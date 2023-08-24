@@ -29,8 +29,6 @@ export default function SkinsSemelhantes({
       seller_id !== data!.data.seller_id,
   )
 
-  console.log(find)
-
   return (
     <>
       <Common.Title color="white" bold={700} className="mb-6  text-[28px]">

@@ -85,7 +85,7 @@ export default function Details() {
                 sellerId={data!.data.seller_id}
                 statusFloat={data!.data.status_float}
                 skinId={data!.data.id}
-                cartId={userRetrieved && userRetrieved!.data.cart.id}
+                cartId={userRetrieved && userRetrieved?.data?.cart?.id}
               />
               <PageDetailsPerfil
                 account_date={dataGetUser?.data?.steam_created_date!}
