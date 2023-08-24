@@ -37,8 +37,13 @@ export default class SkinService {
     return Api.get<ISkins[]>(`/skins/weapon/${weapon}`)
   }
 
-  public static findAllSkinsByIdSeller(sellerId: string) {
-    return Api.get<ISkins[]>(`/skins/seller/user/${sellerId}`)
+  public static findAllSkinsByIdSeller(
+    sellerId: string,
+    page: number | string,
+  ) {
+    return Api.get<ISkinsResponse>(
+      `/skins/seller/user/${sellerId}?page=${page}`,
+    )
   }
 
   public static findBySearchParameter(param: string, page?: number | string) {

@@ -1,6 +1,7 @@
 'use client'
 
 import Common from '@/components/Common'
+import LayoutPagination from '@/components/Layout/LayoutPagination'
 import ChoiceItems from '@/components/Others/ChoiceItems'
 import PerfilPerson from '@/components/Others/PersonProfile'
 import PersonProfileSkeleton from '@/components/Others/PersonProfile/PersonProfileSkeleton'
@@ -22,6 +23,7 @@ export default function PageProfileSelf() {
     notFound()
   }
 
+  const [page, setPage] = useState(1)
   const [accountDate, setAccountDate] = useState('Data não obtida')
   const [steamLevel, setSteamLevel] = useState('Não obtido')
   const [userState, setUserState] = useState('Não obtido')
@@ -29,11 +31,18 @@ export default function PageProfileSelf() {
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState(0)
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
-      SkinService.findAllSkinsByIdSeller(trueSession?.user?.steam?.steamid!),
+      SkinService.findAllSkinsByIdSeller(
+        trueSession?.user?.steam?.steamid!,
+        page,
+      ),
   })
+
+  useEffect(() => {
+    refetch()
+  }, [page, refetch])
 
   const { data: dataGettedUser, isLoading: isLoadingGetUser } = useQuery({
     queryKey: ['myProfile', trueSession?.user?.steam?.steamid!],
@@ -77,16 +86,25 @@ export default function PageProfileSelf() {
         <PersonProfileSkeleton />
       )}
       <ChoiceItems thereIsRented={true} />
-      {isLoading ? (
+      {isLoading || isRefetching ? (
         <AllSkeletonSkins />
-      ) : data?.data.length! > 0 ? (
-        <AllSkins skinsCategories={data?.data} itemsPerPage={15} />
+      ) : data?.data.skins.length! > 0 ? (
+        <AllSkins skinsCategories={data?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil"
           title={trueSession?.user?.name!}
         />
       )}
+      {data?.data?.totalPages &&
+        data?.data?.totalPages > 1 &&
+        Number(page) <= data?.data?.totalPages && (
+          <LayoutPagination
+            maxPages={data?.data?.totalPages}
+            pageState={page}
+            setPageState={setPage}
+          />
+        )}
     </>
   )
 }

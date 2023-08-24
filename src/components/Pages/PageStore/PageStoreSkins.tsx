@@ -47,7 +47,7 @@ export default function PageStoreSkins() {
 
   useEffect(() => {
     refetchSkins()
-  }, [search, page])
+  }, [search, page, refetchSkins])
 
   return (
     <>
@@ -71,7 +71,7 @@ export default function PageStoreSkins() {
         </div>
       ) : data?.data?.skins && data?.data?.skins?.length > 0 ? (
         <div>
-          <AllSkins skinsCategories={data?.data.skins} itemsPerPage={15} />
+          <AllSkins skinsCategories={data?.data.skins} />
         </div>
       ) : (
         <div className="mb-16 flex h-[50vh] items-center justify-center">
