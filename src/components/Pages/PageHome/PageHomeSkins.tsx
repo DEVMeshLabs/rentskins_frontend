@@ -29,7 +29,7 @@ export default function PageHomeSkins() {
         <AllSkeletonSkins quantitySkeletons={20} />
       ) : data?.data && data?.data?.skins.length > 0 ? (
         <div className="flex h-full w-full flex-col items-center">
-          <AllSkins skinsCategories={data?.data?.skins} itemsPerPage={15} />
+          <AllSkins skinsCategories={data?.data?.skins} />
           <Link
             href={`/loja?page=${data?.data.totalPages > 1 ? 2 : 1}`}
             className="flex items-center justify-center rounded-md border border-mesh-color-primary-1200 bg-mesh-color-primary-1200 p-1 px-4 py-3 text-lg font-bold text-mesh-color-others-black
