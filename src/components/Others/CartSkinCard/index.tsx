@@ -1,12 +1,16 @@
 import Common from '@/components/Common'
 import { IconTrash } from '@/components/Icons/IconTrash'
+import CartService from '@/services/cart.service'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { MouseEventHandler } from 'react'
 
 interface Props {
   name: string
+  skinWeapon: string
   nameColor: string
   iconUrl: string
+  modelId: string
   handleOnClick: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -14,10 +18,15 @@ export default function CartSkinCard({
   name,
   nameColor,
   iconUrl,
+  skinWeapon,
+  modelId,
   handleOnClick,
 }: Props) {
-  const [skinType, skinName] = name.split('|')
-
+  const { refetch } = useQuery({
+    queryKey: ['deleteSkinFromCart', modelId],
+    queryFn: () => CartService.deleteSkinFromCart(modelId),
+    enabled: false,
+  })
   return (
     <section
       className="group flex h-44 w-full
@@ -41,7 +50,7 @@ export default function CartSkinCard({
           <div className="flex h-24 flex-col justify-between gap-3">
             <div>
               <Common.Title bold={600} size="2xl" color="white">
-                {skinName}
+                {name}
               </Common.Title>
               <Common.Title
                 bold={500}
@@ -58,7 +67,7 @@ export default function CartSkinCard({
               color="cinza"
               className="opacity-60"
             >
-              {skinType}
+              {skinWeapon}
             </Common.Title>
           </div>
         </div>
@@ -73,7 +82,10 @@ export default function CartSkinCard({
         </div>
       </div>
       <Common.Button
-        onClick={handleOnClick}
+        onClick={async (event) => {
+          await refetch()
+          handleOnClick(event)
+        }}
         className="group flex h-full w-0 items-center justify-center
         rounded-l-none rounded-r-xl border-none
         stroke-white transition-[width/color] hover:cursor-pointer

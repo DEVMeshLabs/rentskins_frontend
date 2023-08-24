@@ -4,6 +4,7 @@ import 'aos/dist/aos.css'
 import { Inter } from 'next/font/google'
 import { Metadata } from 'next/types'
 import './globals.css'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${inter.className} bg-[#151714]`}>
           <LayoutRoot session={session}>{children}</LayoutRoot>
+          <Toaster />
         </body>
       </html>
     </LayoutQueryProvider>

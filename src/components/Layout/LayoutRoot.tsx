@@ -2,7 +2,6 @@
 import { SessionProvider } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
-import { ModalNotificationFilter } from '../Modal/ModalNotification/ModalNotificationFilter'
 // import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
 import { LayoutHeaderBottom } from './Header/LayoutHeaderBottom'
 import { LayoutHeaderRoot } from './Header/LayoutHeaderRoot'
@@ -23,27 +22,24 @@ export function LayoutRoot({ children, session }: IProps) {
     }
   }, [pathname])
 
-  const modalRender = () => {
-    switch (pathname) {
-      case '/usuario/notificacoes':
-        return <ModalNotificationFilter />
-    }
-  }
-
   return (
     <SessionProvider session={session}>
-      <main className="flex min-h-screen flex-col justify-between bg-mesh-color-others-black">
-        {modalRender()}
+      <div className="flex min-h-screen flex-col justify-between bg-mesh-color-others-black">
+        {pathname !== '/atividade-suspensa' ? (
+          <>
+            <LayoutHeaderRoot>
+              <LayoutHeaderTop />
+              <LayoutHeaderBottom />
+            </LayoutHeaderRoot>
 
-        <LayoutHeaderRoot>
-          <LayoutHeaderTop />
-          <LayoutHeaderBottom />
-        </LayoutHeaderRoot>
+            {children}
 
-        {children}
-
-        <LayoutFooter />
-      </main>
+            <LayoutFooter />
+          </>
+        ) : (
+          children
+        )}
+      </div>
     </SessionProvider>
   )
 }

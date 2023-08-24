@@ -115,13 +115,8 @@ export default function PageStoreSkins() {
 
       {isLoading ? (
         <AllSkeletonSkins />
-      ) : data?.data && data?.data.length > 0 ? (
-        <AllSkins
-          skinsCategories={
-            allSkinsFilters?.length ? allSkinsFiltred : data.data
-          }
-          itemsPerPage={15}
-        />
+      ) : allSkinsFiltred.length > 0 ? (
+        <AllSkins skinsCategories={allSkinsFiltred} itemsPerPage={15} />
       ) : (
         <div className="mb-16 flex h-[50vh] items-center justify-center">
           {nameCorrection ? (

@@ -35,11 +35,11 @@ async function handler(
       },
       session({ session, token }) {
         if ('steam' in token) {
-          // @ts-expect-error
-          session.user.steam = token.steam
           const newToken = JsonWebToken.create(session)
           // @ts-ignore
           session.user!.token = newToken
+          // @ts-expect-error
+          session.user!.steam = token.steam
         }
 
         return session as ISteamUser
