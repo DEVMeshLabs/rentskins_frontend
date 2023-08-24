@@ -22,8 +22,7 @@ export function LayoutFooter() {
         <div className="flex flex-col items-end gap-16">
           <nav className="flex gap-12">
             <a
-              href="/termosdeuso"
-              target="_blank"
+              href="/termos-de-uso"
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -31,7 +30,6 @@ export function LayoutFooter() {
             </a>
             <a
               href="/privacidade"
-              target="_blank"
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -39,15 +37,13 @@ export function LayoutFooter() {
             </a>
             <a
               href="/sobre"
-              target="_blank"
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
               Sobre Nós
             </a>
             <a
-              href="/sobre"
-              target="_blank"
+              href="/suporte"
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -55,7 +51,6 @@ export function LayoutFooter() {
             </a>
             <a
               href="/faq"
-              target="_blank"
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
