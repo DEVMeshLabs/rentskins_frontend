@@ -79,7 +79,7 @@ export function PageDetailsPerfil({
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Total de trocas
+              Total de Transações
             </Common.Title>
             <span className="font-medium text-white">{total_exchanges}</span>
           </div>
