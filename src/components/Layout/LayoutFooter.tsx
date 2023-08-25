@@ -33,7 +33,7 @@ export function LayoutFooter() {
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
-              Privacidade
+              Política de Privacidade
             </a>
             <a
               href="/sobre"
