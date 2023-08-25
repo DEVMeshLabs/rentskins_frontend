@@ -33,7 +33,6 @@ export default function PageStoreSkins() {
     data,
     refetch: refetchSkins,
     isLoading,
-    isRefetching,
   } = useQuery({
     queryKey: ['skinsCategory'],
     queryFn: async () => {

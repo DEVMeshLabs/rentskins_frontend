@@ -2,11 +2,11 @@
 'use client'
 import classNames from 'classnames'
 import { ISkins } from '@/interfaces/ISkins'
-import Link from 'next/link'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 export interface IAllSkinsProps {
   skinsCategories: ISkins[] | undefined
+  itemsPerPage?: number
   center?: boolean
 }
 
