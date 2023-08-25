@@ -12,10 +12,10 @@ interface IMetadata {
 export async function generateMetadata({
   params: { userSteamId },
 }: IMetadata): Promise<Metadata> {
-  const response = await UserService.getUser(userSteamId as any)
+  const response = await UserService.getUser(String(userSteamId))
 
   return {
-    title: `${response.data.owner_name || 'Perfil'} - RentSkins`,
+    title: `${response?.data?.owner_name || 'Perfil'} - RentSkins`,
     description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
     Encontre skins raras e exclusivas para personalizar seu jogo.`,
   }

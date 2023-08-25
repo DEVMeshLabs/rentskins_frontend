@@ -5,8 +5,10 @@ import Image from 'next/image'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import blankProfile from '@/../public/blank-profile.png'
+import Link from 'next/link'
 
 interface IProps {
+  id: string
   picture: string
   owner_name: string
   delivery_fee: number
@@ -18,6 +20,7 @@ interface IProps {
 }
 
 export function PageDetailsPerfil({
+  id,
   picture,
   owner_name,
   delivery_fee,
@@ -34,18 +37,20 @@ export function PageDetailsPerfil({
     <div className="mt-10 min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="p-4">
         <div className="flex items-center">
-          <Image
-            src={
-              picture && picture.includes('https://avatars.steamstatic.com/')
-                ? picture
-                : blankProfile
-            }
-            alt=""
-            className="rounded-full"
-            draggable={false}
-            width={80}
-            height={80}
-          />
+          <Link href={`/perfil/${id}`} className="cursor-pointer">
+            <Image
+              src={
+                picture && picture.includes('https://avatars.steamstatic.com/')
+                  ? picture
+                  : blankProfile
+              }
+              alt=""
+              className="rounded-full"
+              draggable={false}
+              width={80}
+              height={80}
+            />
+          </Link>
           <div className="ml-4">
             <Common.Title color="white" className="text-2xl font-semibold">
               {owner_name}
@@ -74,7 +79,7 @@ export function PageDetailsPerfil({
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Total de trocas
+              Total de Transações
             </Common.Title>
             <span className="font-medium text-white">{total_exchanges}</span>
           </div>

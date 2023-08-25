@@ -110,7 +110,7 @@ export default function PersonProfile({
           value={deliveryTime && deliveryTime.replace(' no momento', '')}
         />
         <ProfileInfo
-          title="Total de trocas"
+          title="Total de Transações"
           value={totalExchanges && totalExchanges.replace(' no momento', '')}
         />
         <ProfileInfo title="Taxa de entrega" isPercent value={deliveryFee} />
