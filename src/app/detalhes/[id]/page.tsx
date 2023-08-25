@@ -60,18 +60,20 @@ export default function Details() {
             <IconArrow />
             <Common.Title color="cinza">
               Home &bull; {data?.data.skin_weapon} &bull;{' '}
-              <span className="text-[#49E671]">{data?.data.skin_name}</span>
+              <span className="text-[#49E671]">
+                {data && data?.data.skin_name}
+              </span>
             </Common.Title>
           </Link>
 
           <div className="mx-auto grid w-full grid-cols-5 py-10">
             <div className="col-span-3">
               <PageDetailsCard
-                skinImage={data!.data.skin_image}
-                skinName={data!.data.skin_name}
-                skinLinkGame={data!.data.skin_link_game}
-                skinLinkSteam={data!.data.skin_link_steam}
-                skinFloat={Number(data!.data.skin_float)}
+                skinImage={data && data!.data.skin_image}
+                skinName={data && data!.data.skin_name}
+                skinLinkGame={data && data!.data.skin_link_game}
+                skinLinkSteam={data && data!.data.skin_link_steam}
+                skinFloat={Number(data && data!.data.skin_float)}
               />
 
               <div>
@@ -92,6 +94,7 @@ export default function Details() {
                 cartId={userRetrieved && userRetrieved?.data?.cart?.id}
               />
               <PageDetailsPerfil
+                id={dataGetUser?.data?.owner_id}
                 account_date={dataGetUser?.data?.steam_created_date!}
                 delivery_fee={dataGetUser?.data?.delivery_fee!}
                 delivery_time={dataGetUser?.data?.delivery_time!}
@@ -105,7 +108,7 @@ export default function Details() {
           </div>
           <SkinsSemelhantes
             isLoading={isLoading}
-            weaponName={isLoading ? null : data?.data.skin_weapon}
+            weaponName={isLoading ? null : data && data?.data.skin_weapon}
             data={data}
           />
         </main>
