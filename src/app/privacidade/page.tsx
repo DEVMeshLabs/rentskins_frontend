@@ -59,8 +59,12 @@ export default function Privacidade() {
               práticas de privacidade e das escolhas que você pode fazer, bem
               como direitos que você pode exercer em relação aos Dados Pessoais
               tratados por nós. Se você tiver alguma dúvida sobre o uso de Dados
-              Pessoais, entre em contato com e-mail.institucional@rentskins.com
-              (e-mail que vai ser criado por você)
+              Pessoais, entre em contato com{' '}
+              <span className="font-bold text-red-500">
+                {' '}
+                email@exemplo.com{' '}
+              </span>
+              .
             </p>
             <br />
             <p>
