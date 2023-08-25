@@ -27,12 +27,12 @@ export function PageDetailsCard({
       <div className="flex space-x-4 p-2">
         <div className="flex h-8 w-[300px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50  first-line:border-neutral-600">
           <IconSteam />
-          <Link href={skinLinkGame}>Visualizar no mercado da Steam</Link>
+          <Link href={skinLinkSteam}>Visualizar no mercado da Steam</Link>
         </div>
 
         <div className="flex h-8 w-[200px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50">
           <IconOlho />
-          <Link target="_blank" href={skinLinkSteam}>
+          <Link target="_blank" href={skinLinkGame}>
             Inspecionar no jogo
           </Link>
         </div>

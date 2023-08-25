@@ -18,7 +18,7 @@ export interface ISkins {
   buyer_id: string
 }
 
-export interface IGetISkin {
+export interface ISkinsResponse {
   totalPages: number
   totalItens: number
   skins: ISkins[]
