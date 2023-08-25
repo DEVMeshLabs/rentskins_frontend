@@ -3,7 +3,7 @@ import { ISkins } from '@/interfaces/ISkins';
 import { ITime } from '@/services/interfaces/notification.interface'
 
 export interface ISelectedFilters {
-  prices: { min: number | null; max: number | null }
+  prices: { min: string | undefined; max: string | undefined }
   categories: string[] | null
   wears: string[] | null
 }

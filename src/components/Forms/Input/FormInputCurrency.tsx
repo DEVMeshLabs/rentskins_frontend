@@ -54,6 +54,7 @@ export function FormInputCurrency({
             placeholder={placeHolder}
             getInputRef={ref}
             className={`${inputClassName || options.input.className}`}
+            {...register}
             {...rest}
           />
         )}

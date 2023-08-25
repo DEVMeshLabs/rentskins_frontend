@@ -4,6 +4,7 @@ import Common from '@/components/Common'
 import Image from 'next/image'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import blankProfile from '@/../public/blank-profile.png'
 
 interface IProps {
   picture: string
@@ -34,7 +35,11 @@ export function PageDetailsPerfil({
       <div className="p-4">
         <div className="flex items-center">
           <Image
-            src={picture}
+            src={
+              picture && picture.includes('https://avatars.steamstatic.com/')
+                ? picture
+                : blankProfile
+            }
             alt=""
             className="rounded-full"
             draggable={false}

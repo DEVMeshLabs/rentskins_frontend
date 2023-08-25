@@ -1,6 +1,6 @@
 'use client'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import React from 'react'
+import React, { useState } from 'react'
 import ModalFiltersCategory from './ModalFiltersCategory'
 import ModalFiltersPrice from './ModalFiltersPrice'
 import ModalFiltersStandard from './ModalFiltersStandard'
@@ -12,8 +12,14 @@ interface IProps {
 }
 
 export default function ModalFiltersMain({ activator, child }: IProps) {
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleOpenModal = () => {
+    setOpenModal((state) => !state)
+  }
+
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root onOpenChange={setOpenModal} open={openModal}>
       <DropdownMenu.Trigger asChild>{activator}</DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content>
@@ -25,10 +31,18 @@ export default function ModalFiltersMain({ activator, child }: IProps) {
             }
               rounded-lg bg-mesh-color-neutral-800 p-4`}
           >
-            {child === 'Preço' && <ModalFiltersPrice />}
-            {child === 'Desgaste' && <ModalFiltersWear />}
-            {child === 'Categoria' && <ModalFiltersCategory />}
-            {child === 'Padrão' && <ModalFiltersStandard />}
+            {child === 'Preço' && (
+              <ModalFiltersPrice handleOpen={handleOpenModal} />
+            )}
+            {child === 'Desgaste' && (
+              <ModalFiltersWear handleOpen={handleOpenModal} />
+            )}
+            {child === 'Categoria' && (
+              <ModalFiltersCategory handleOpen={handleOpenModal} />
+            )}
+            {child === 'Padrão' && (
+              <ModalFiltersStandard handleOpen={handleOpenModal} />
+            )}
           </div>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
