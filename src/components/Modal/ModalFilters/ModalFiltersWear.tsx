@@ -2,8 +2,6 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-// import InputCheckbox from '@/components/InputCheckboxFilter'
-// import { useState } from 'react'
 import useFilterStore from '@/stores/filters.store'
 import { formWearResolver } from './schemas/Wear.schhema'
 import { useForm } from 'react-hook-form'

@@ -1,5 +1,4 @@
 'use client'
-
 import Common from '@/components/Common'
 import useFilterStore from '@/stores/filters.store'
 import { TTypeSort } from '@/stores/interfaces/filters.interface'

@@ -89,17 +89,17 @@ export default function Details() {
                 sellerId={data!.data.seller_id}
                 statusFloat={data!.data.status_float}
                 skinId={data!.data.id}
-                cartId={userRetrieved && userRetrieved!.data.cart.id}
+                cartId={userRetrieved && userRetrieved?.data?.cart?.id}
               />
               <PageDetailsPerfil
-                account_date={dataGetUser?.data.steam_created_date!}
-                delivery_fee={dataGetUser?.data.delivery_fee!}
-                delivery_time={dataGetUser?.data.delivery_time!}
-                owner_name={dataGetUser?.data.owner_name!}
-                picture={dataGetUser?.data.picture!}
-                status_member={dataGetUser?.data.status_member!}
-                steam_level={dataGetUser?.data.steam_level!}
-                total_exchanges={dataGetUser?.data.total_exchanges!}
+                account_date={dataGetUser?.data?.steam_created_date!}
+                delivery_fee={dataGetUser?.data?.delivery_fee!}
+                delivery_time={dataGetUser?.data?.delivery_time!}
+                owner_name={dataGetUser?.data?.owner_name!}
+                picture={dataGetUser?.data?.picture!}
+                status_member={dataGetUser?.data?.status_member!}
+                steam_level={dataGetUser?.data?.steam_level!}
+                total_exchanges={dataGetUser?.data?.total_exchanges!}
               />
             </div>
           </div>

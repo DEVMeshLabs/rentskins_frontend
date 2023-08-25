@@ -15,6 +15,7 @@ export interface IOptionalConfig {
   token: string
   owner_name?: string
   owner_id?: string
+  owner_cpf?: string
   owner_email?: string
   owner_phone?: string
   url_trade?: string

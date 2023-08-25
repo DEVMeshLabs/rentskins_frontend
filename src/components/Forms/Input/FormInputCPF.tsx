@@ -42,6 +42,8 @@ export function FormInputCPF({
         className={`${inputClassName || options.input.className}`}
         type="text"
         placeholder={rest.placeholder}
+        autoComplete="off"
+        {...rest}
         {...register}
       />
       <span className={errorsClassname || options.input.errors}>

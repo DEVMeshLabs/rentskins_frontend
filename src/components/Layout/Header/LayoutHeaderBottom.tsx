@@ -24,28 +24,27 @@ export function LayoutHeaderBottom({ className }: IProps) {
     >
       {/*  */}
       <div className="flex w-10/12 select-none justify-between gap-10 p-4">
-        <ContainerItem title="Faca" iconSeta={<IconSetaType />} isList={true}>
+        <ContainerItem title="Facas" iconSeta={<IconSetaType />} isList={true}>
           <ItemLink
             items={[
-              'Adagas das Sombras',
-              'Baioneta',
-              'Baioneta M9',
-              'Canivete Flip',
-              'Canivete Borboleta',
-              'Canivete Falchion',
-              'Faca Bowie',
-              'Faca Clássica',
-              'Faca de Cordame',
-              'Faca de Sobrevivência',
-              'Faca do Caçador',
-              'Faca Esqueleto',
-              'Faca Gut Hook',
-              'Faca Navaja',
-              'Faca Nômade',
-              'Faca Stiletto',
-              'Faca Talon',
-              'Faca Ursus',
+              'Bowie Knife',
+              'Shadow Daggers',
+              'Falchion Knife',
+              'Buttefly Knife',
+              'Huntsman Knife',
+              'M9 Bayonet',
+              'Bayonet',
+              'Flip Knife',
+              'Gut Knife',
               'Karambit',
+              'Talon Knife',
+              'Stiletto Knife',
+              'Navaja Knife',
+              'Ursus Knife',
+              'Survival Knife',
+              'Skeleton Knife',
+              'Paracord Knife',
+              'Nomad Knife',
             ]}
           />
         </ContainerItem>
