@@ -8,6 +8,7 @@ import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
 
 interface Props {
+  id: string
   sellerName: string
   skinPrice: string
   skinFloat: string
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function OtherCard({
+  id,
   sellerName,
   skinColor,
   skinImage,
@@ -30,23 +32,26 @@ export function OtherCard({
     <h1 className="text-sm font-medium opacity-60">{skinWeapon}</h1>
   )
 
+  //
   return (
     <article className="flex w-72 flex-col gap-3 rounded-lg border-2 border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">
-      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern">
+      <Link
+        href={`/detalhes/${id}`}
+        className="flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
+      >
         <div
           className={`h-2 w-52 rounded-b-full`}
           style={{ backgroundColor: `#${skinColor}` }}
         />
-        <div className="flex h-[154px] w-[206px] items-center justify-center">
-          <Image
-            src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
-            alt={sellerName}
-            width={206}
-            height={154}
-            draggable={false}
-          />
-        </div>
-      </div>
+        <Image
+          src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
+          className="h-[154px] w-[206px]"
+          alt={sellerName}
+          width={206}
+          height={154}
+          draggable={false}
+        />
+      </Link>
 
       <div className="flex h-11 flex-col gap-3">
         <h1>{sellerName}</h1>

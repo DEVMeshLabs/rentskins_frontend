@@ -32,6 +32,7 @@ export function LayoutHeaderTop() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { isDirty, isValid },
   } = useForm({
     resolver: formResolver,
@@ -61,6 +62,7 @@ export function LayoutHeaderTop() {
         trueSession.user?.steam?.steamid!,
         notificationFilter,
       ),
+    enabled: status === 'authenticated',
   })
 
   const disableAddButton =
@@ -117,7 +119,7 @@ export function LayoutHeaderTop() {
   useQuery({
     queryKey: ['CreateProfile', trueSession.user?.name!],
     queryFn: async () => {
-      UserService.createUser(
+      return UserService.createUser(
         {
           owner_id: trueSession.user?.steam?.steamid!,
           owner_name: trueSession.user?.name!,
@@ -138,6 +140,7 @@ export function LayoutHeaderTop() {
 
   const onSearch = (data: any) => {
     router.push(`/loja?search=${data.search}`)
+    setValue('search', undefined)
   }
 
   useEffect(() => {

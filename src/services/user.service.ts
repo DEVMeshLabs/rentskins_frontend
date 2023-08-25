@@ -15,6 +15,7 @@ export default class UserService {
   }
 
   public static async createUser(userCreate: ICreateUser, token: string) {
+    console.log(userCreate)
     return Api.post(`/perfil`, userCreate, {
       headers: {
         Authorization: `Bearer ${token}`,

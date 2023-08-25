@@ -1,6 +1,5 @@
 'use client'
 /* eslint-disable camelcase */
-// import { Card, InfoPerfil, InfoSkin, InfoVendas } from '@/components/Details'
 import Common from '@/components/Common'
 import { IconArrow } from '@/components/Icons'
 import { PageDetailsCard } from '@/components/Pages/PageDetails/PageDetailsCard'
@@ -8,7 +7,6 @@ import { PageDetailsPerfil } from '@/components/Pages/PageDetails/PageDetailsPer
 import { PageDetailsSkin } from '@/components/Pages/PageDetails/PageDetailsSkin'
 import { PageDetailsVendas } from '@/components/Pages/PageDetails/PageDetailsVendas'
 import ISteamUser from '@/interfaces/steam.interface'
-// import { IGetUser } from '@/services/interfaces/user.interface'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
 import { useQuery } from '@tanstack/react-query'
@@ -91,17 +89,17 @@ export default function Details() {
                 sellerId={data!.data.seller_id}
                 statusFloat={data!.data.status_float}
                 skinId={data!.data.id}
-                cartId={userRetrieved && userRetrieved!.data.cart.id}
+                cartId={userRetrieved && userRetrieved?.data?.cart?.id}
               />
               <PageDetailsPerfil
-                account_date={dataGetUser?.data.steam_created_date!}
-                delivery_fee={dataGetUser?.data.delivery_fee!}
-                delivery_time={dataGetUser?.data.delivery_time!}
-                owner_name={dataGetUser?.data.owner_name!}
-                picture={dataGetUser?.data.picture!}
-                status_member={dataGetUser?.data.status_member!}
-                steam_level={dataGetUser?.data.steam_level!}
-                total_exchanges={dataGetUser?.data.total_exchanges!}
+                account_date={dataGetUser?.data?.steam_created_date!}
+                delivery_fee={dataGetUser?.data?.delivery_fee!}
+                delivery_time={dataGetUser?.data?.delivery_time!}
+                owner_name={dataGetUser?.data?.owner_name!}
+                picture={dataGetUser?.data?.picture!}
+                status_member={dataGetUser?.data?.status_member!}
+                steam_level={dataGetUser?.data?.steam_level!}
+                total_exchanges={dataGetUser?.data?.total_exchanges!}
               />
             </div>
           </div>

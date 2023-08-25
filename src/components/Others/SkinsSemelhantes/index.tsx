@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
 import Common from '@/components/Common'
 import { ISkins } from '@/interfaces/ISkins'
-import Link from 'next/link'
-import { OtherCard } from '../OtherCard/OtherCard'
-import { useQuery } from '@tanstack/react-query'
 import SkinService from '@/services/skin.service'
+import { useQuery } from '@tanstack/react-query'
+import { OtherCard } from '../OtherCard/OtherCard'
 
 export interface ISkinsSemelhantesProps {
   isLoading: boolean
@@ -30,8 +29,6 @@ export default function SkinsSemelhantes({
       seller_id !== data!.data.seller_id,
   )
 
-  console.log(find)
-
   return (
     <>
       <Common.Title color="white" bold={700} className="mb-6  text-[28px]">
@@ -54,16 +51,16 @@ export default function SkinsSemelhantes({
                 index: number,
               ) => {
                 return (
-                  <Link href={`/detalhes/${id}`} key={`${skin_name}-${index}`}>
-                    <OtherCard
-                      skinImage={skin_image}
-                      sellerName={skin_name}
-                      skinColor={skin_color}
-                      skinWeapon={skin_weapon}
-                      skinFloat={skin_float}
-                      skinPrice={skin_price}
-                    />
-                  </Link>
+                  <OtherCard
+                    id={id}
+                    skinImage={skin_image}
+                    sellerName={skin_name}
+                    skinColor={skin_color}
+                    skinWeapon={skin_weapon}
+                    skinFloat={skin_float}
+                    skinPrice={skin_price}
+                    key={id}
+                  />
                 )
               },
             )

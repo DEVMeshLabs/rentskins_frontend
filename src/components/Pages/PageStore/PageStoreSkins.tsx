@@ -1,32 +1,33 @@
 'use client'
-
 import Common from '@/components/Common'
 import IconArrowLeft from '@/components/Icons/IconArrowLeft'
+import LayoutPagination from '@/components/Layout/LayoutPagination'
 import SkinFilters from '@/components/Others/SkinFilters'
 import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import AllSkins from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
 import useFilterStore from '@/stores/filters.store'
 import { useQuery } from '@tanstack/react-query'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
-const AllSkins = dynamic<IAllSkinsProps>(
-  () =>
-    import('@/components/Others/Skins/AllSkins').then(
-      (module) => module.default,
-    ),
-  {
-    ssr: false,
-  },
-)
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function PageStoreSkins() {
+  const router = useRouter()
   const search = useSearchParams().get('search') || ''
+  const pageQuery = useSearchParams().get('page') || '1'
+  const [page, setPage] = useState(pageQuery)
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
   const { selectedFilters, typeFilter, setAllSkinsFiltred, allSkinsFiltred } =
     useFilterStore()
+
+  useEffect(() => {
+    router.push(`/loja?search=${search}&page=${page}`)
+  }, [page, router, search])
+
+  useEffect(() => {
+    setPage(pageQuery)
+  }, [pageQuery])
 
   const {
     data,
@@ -36,10 +37,10 @@ export default function PageStoreSkins() {
     queryKey: ['skinsCategory'],
     queryFn: async () => {
       if (search !== null && search !== undefined && search !== '') {
-        const data = await SkinService.findBySearchParameter(search)
+        const data = await SkinService.findBySearchParameter(search, page)
         return data
       } else {
-        const data = await SkinService.findByAll()
+        const data = await SkinService.findByAll(page)
         return data
       }
     },
@@ -47,7 +48,7 @@ export default function PageStoreSkins() {
 
   const allSkinsFilters =
     data?.data &&
-    data.data.filter((skin) => {
+    data.data.skins.filter((skin) => {
       if (
         selectedFilters.categories &&
         selectedFilters.categories.some((category) =>
@@ -81,7 +82,7 @@ export default function PageStoreSkins() {
   useEffect(() => {
     if (data?.data) {
       setAllSkinsFiltred(
-        allSkinsFilters?.length ? allSkinsFilters : data!.data,
+        allSkinsFilters?.length ? allSkinsFilters : data!.data.skins,
         typeFilter,
       )
     }
@@ -95,7 +96,7 @@ export default function PageStoreSkins() {
 
   useEffect(() => {
     refetchSkins()
-  }, [search])
+  }, [search, page, refetchSkins])
 
   return (
     <>
@@ -143,6 +144,16 @@ export default function PageStoreSkins() {
           )}
         </div>
       )}
+
+      {data?.data?.totalPages &&
+        data?.data?.totalPages > 1 &&
+        Number(page) <= data?.data?.totalPages && (
+          <LayoutPagination
+            maxPages={data?.data?.totalPages}
+            pageState={page}
+            setPageState={setPage}
+          />
+        )}
     </>
   )
 }

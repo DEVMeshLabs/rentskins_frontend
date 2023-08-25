@@ -53,9 +53,32 @@ export default function PersonProfile({
             </Common.Title>
             <div
               className={classNames(
-                'w-32 rounded-3xl bg-mesh-color-primary-1400 p-1 text-center text-base font-normal text-white',
+                'w-32 rounded-3xl p-1 text-center text-base font-normal capitalize',
                 {
                   'h-8': isLoading === true,
+                },
+                {
+                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
+                    userState === 'Risco',
+                },
+                {
+                  'bg-mesh-color-rarity-low/20 text-mesh-color-rarity-low':
+                    userState === 'Questionável',
+                },
+                {
+                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
+                    userState === 'Atenção',
+                },
+                {
+                  'bg-white/20 text-white': userState === 'Membro novo',
+                },
+                {
+                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
+                    userState === 'Frequente',
+                },
+                {
+                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
+                    userState === 'Confiável',
                 },
               )}
             >
@@ -69,7 +92,10 @@ export default function PersonProfile({
             </h1>
             {isSeller ?? (
               <Link href={'/inventario'}>
-                <Common.Button color="green" className="border-transparent">
+                <Common.Button
+                  color="green"
+                  className="flex justify-center gap-2 border-transparent font-semibold"
+                >
                   <IconSend />
                   Anuncie Agora
                 </Common.Button>
