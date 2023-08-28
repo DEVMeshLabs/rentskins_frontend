@@ -279,8 +279,6 @@ export default function TermoDeUso() {
               <br />
               <li>5.2.4. MercadoPago</li>
               <br />
-              <li>5.2.4. MercadoPago</li>
-              <br />
               <li>
                 5.3. Após a venda de um item em nossa plataforma, o usuário pode
                 solicitar a retirada de seu saldo para conta bancária via PIX,
