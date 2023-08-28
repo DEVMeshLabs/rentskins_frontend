@@ -24,11 +24,14 @@ export function CardSkinInventory() {
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
 
+  console.log(skinsToAdvertise)
+
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
-        trueSession.user?.steam?.steamid!,
+        // trueSession.user?.steam?.steamid!,
+        '76561198862407248',
         inventoryTypeFilter,
         Number(page),
         Number(itemsPerPage),
