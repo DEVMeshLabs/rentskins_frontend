@@ -22,6 +22,7 @@ export default class SkinService {
     itemsPerPage: number,
     token: string,
   ) {
+    console.log(itemsPerPage)
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
