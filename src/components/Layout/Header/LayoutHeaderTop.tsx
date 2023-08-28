@@ -6,8 +6,10 @@ import { IconCarrinho, IconSearch, IconSteam } from '@/components/Icons'
 import { IconCruz } from '@/components/Icons/IconCruz'
 import { IconMira } from '@/components/Icons/IconMira'
 import { IconNotifications } from '@/components/Icons/IconNotifications'
+import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { ModalPaymentMain } from '@/components/Modal/ModalPayment/ModalPaymentMain'
 import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
 import NotificationServices from '@/services/notifications.service'
 import UserService from '@/services/user.service'
 import WalletService from '@/services/wallet.service'
@@ -64,6 +66,23 @@ export function LayoutHeaderTop() {
       ),
     enabled: status === 'authenticated',
   })
+
+  const { data: userHasConfig, isLoading } = useQuery({
+    queryKey: ['config'],
+    queryFn: async () =>
+      ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+    enabled: status === 'authenticated',
+  })
+
+  const configValidation =
+    userHasConfig &&
+    userHasConfig!.data.owner_email !== '' &&
+    userHasConfig!.data.owner_phone !== '' &&
+    userHasConfig!.data.owner_cpf !== '' &&
+    userHasConfig!.data.url_trade !== ''
 
   const disableAddButton =
     pathname.includes('/pagamento') || pathname.includes('/oops')
@@ -245,14 +264,28 @@ export function LayoutHeaderTop() {
                   </div>
                 )}
               </Common.Title>
-              <ModalPaymentMain>
-                <button
-                  disabled={disableAddButton}
-                  className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400 opacity-50 transition-all hover:opacity-100 disabled:opacity-20"
-                >
-                  <IconCruz />
-                </button>
-              </ModalPaymentMain>
+              {!isLoading && !configValidation ? (
+                <ModalConnectInventoryMain
+                  userConfig={userHasConfig?.data}
+                  activator={
+                    <button
+                      disabled={disableAddButton}
+                      className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400 opacity-50 transition-all hover:opacity-100 disabled:opacity-20"
+                    >
+                      <IconCruz />
+                    </button>
+                  }
+                />
+              ) : (
+                <ModalPaymentMain>
+                  <button
+                    disabled={disableAddButton}
+                    className="flex h-5 w-5 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1400 opacity-50 transition-all hover:opacity-100 disabled:opacity-20"
+                  >
+                    <IconCruz />
+                  </button>
+                </ModalPaymentMain>
+              )}
             </div>
           </div>
 

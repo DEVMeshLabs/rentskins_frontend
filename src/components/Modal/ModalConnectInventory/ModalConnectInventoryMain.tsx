@@ -10,11 +10,13 @@ import { ModalConnectInventoryForm } from './ModalConnectInventoryForm'
 
 interface IProps {
   activator: React.ReactNode
+  userConfig: any
 }
 
-export function ModalConnectInventoryMain({ activator }: IProps) {
+export function ModalConnectInventoryMain({ activator, userConfig }: IProps) {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
+  console.log(userConfig)
   console.log(formSubmitted)
 
   const onFormSubmit = () => {
@@ -55,7 +57,10 @@ export function ModalConnectInventoryMain({ activator }: IProps) {
               </Dialog.Close>
             </div>
             {/* MIDDLE */}
-            <ModalConnectInventoryForm onFormSubmit={onFormSubmit} />
+            <ModalConnectInventoryForm
+              userConfig={userConfig}
+              onFormSubmit={onFormSubmit}
+            />
             {/* DIVISOR */}
             <div />
           </div>

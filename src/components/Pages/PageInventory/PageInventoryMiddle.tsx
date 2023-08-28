@@ -47,6 +47,7 @@ export default function PageInventoryMiddle() {
               vincular seu inventário à Steam
             </Common.Title>
             <ModalConnectInventoryMain
+              userConfig={userHasConfig?.data}
               activator={
                 <Common.Button className="mt-4 h-10 w-full rounded-xl border-none bg-mesh-color-primary-1400 font-semibold text-black">
                   Conectar-se
