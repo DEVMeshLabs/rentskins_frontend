@@ -26,8 +26,7 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventory(
-        // trueSession.user?.steam?.steamid!,
-        '76561198862407248',
+        trueSession.user?.steam?.steamid!,
         inventoryTypeFilter,
         Number(page),
         Number(16),
