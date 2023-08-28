@@ -4,13 +4,14 @@ import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { TypeFormRadioInlineOption } from '@/components/Forms/Input/Radio/FormInputRadioBlock'
 import { IconGear, IconPaper } from '@/components/Icons'
+import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import URLQuery from '@/tools/urlquery.tool'
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageSettingsInformation } from '../PageSettings/PageSettingsInformation'
 import { PageSettingsTransactions } from '../PageSettings/PageSettingsTransactions'
@@ -18,6 +19,7 @@ import { formResolver } from './configuration.schema'
 
 export default function PageUserConfigurations() {
   const searchParams = useSearchParams()
+  const [validRoute, setValidRoute] = useState(null)
   const router = useRouter()
 
   const { register, watch } = useForm({
@@ -36,11 +38,12 @@ export default function PageUserConfigurations() {
 
     if (titleQuery !== 'personal') {
       if (titleQuery !== 'transactions') {
-        if (titleQuery !== 'security') {
-          router.push(URLQuery.addQuery([{ key: 'type', value: 'personal' }]))
-        }
+        router.push(URLQuery.addQuery([{ key: 'type', value: 'personal' }]))
+        return setValidRoute(false as any)
       }
     }
+
+    return setValidRoute(true as any)
   }, [searchParams, router])
 
   const renderPageContent = () => {
@@ -61,8 +64,9 @@ export default function PageUserConfigurations() {
       )
     }
   }
+
   return (
-    <>
+    <LayoutLoading label="Carregando" enabled={!validRoute}>
       <div className="flex h-min w-max flex-col items-end gap-2">
         <div className="flex flex-col items-start gap-6">
           <Common.Title bold={900} size="2xl" color="white">
@@ -85,7 +89,7 @@ export default function PageUserConfigurations() {
       </div>
 
       {renderPageContent()}
-    </>
+    </LayoutLoading>
   )
 }
 
