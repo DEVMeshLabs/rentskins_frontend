@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { MouseEventHandler } from 'react'
 
 interface Props {
+  skinPrice: string
   name: string
   skinWeapon: string
   nameColor: string
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export default function CartSkinCard({
+  skinPrice,
   name,
   nameColor,
   iconUrl,
@@ -26,6 +28,12 @@ export default function CartSkinCard({
     queryKey: ['deleteSkinFromCart', modelId],
     queryFn: () => CartService.deleteSkinFromCart(modelId),
     enabled: false,
+  })
+  const formattedNumber = parseFloat(skinPrice).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   })
   return (
     <section
@@ -49,14 +57,17 @@ export default function CartSkinCard({
           </div>
           <div className="flex h-24 flex-col justify-between gap-3">
             <div>
-              <Common.Title bold={600} size="2xl" color="white">
+              <Common.Title
+                bold={600}
+                className="text-2xl md:text-lg"
+                color="white"
+              >
                 {name}
               </Common.Title>
               <Common.Title
                 bold={500}
-                size="xl"
+                className="text-2xl opacity-60 md:text-lg"
                 color="cinza"
-                className="opacity-60"
               >
                 Nova de fábrica
               </Common.Title>
@@ -65,17 +76,25 @@ export default function CartSkinCard({
               bold={500}
               size="xl"
               color="cinza"
-              className="opacity-60"
+              className="text-xl opacity-60 md:text-base"
             >
               {skinWeapon}
             </Common.Title>
           </div>
         </div>
         <div>
-          <Common.Title bold={600} size="3xl" color="white">
-            R$180
+          <Common.Title
+            bold={600}
+            className="text-3xl opacity-60 md:text-xl"
+            color="white"
+          >
+            {formattedNumber}
           </Common.Title>
-          <Common.Title color="white" size="md" bold={400}>
+          <Common.Title
+            color="white"
+            className="whitespace-nowrap text-lg opacity-60 md:text-sm"
+            bold={400}
+          >
             <strong>FT / </strong>
             <span className="opacity-60">0.0003</span>
           </Common.Title>

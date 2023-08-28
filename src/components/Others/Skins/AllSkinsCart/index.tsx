@@ -19,23 +19,15 @@ export default function AllSkinsCart() {
     refetch,
   } = useQuery({
     queryKey: [trueSession.user?.steam?.steamid!],
-    queryFn: () => {
-      console.log('ok')
-      return CartService.getCart(trueSession.user?.steam?.steamid!)
-    },
+    queryFn: () => CartService.getCart(trueSession.user?.steam?.steamid!),
     refetchOnWindowFocus: true,
   })
-
-  useEffect(() => {
-    console.log(isLoading)
-  }, [isLoading])
 
   useEffect(() => {
     refetch()
   }, [])
 
   useEffect(() => {
-    console.log('fiu')
     if (dataSkinsCart?.data) {
       setSkinsFromCart(dataSkinsCart.data.SkinToCart)
     }
@@ -53,13 +45,21 @@ export default function AllSkinsCart() {
             skinsFromCart.map(
               (
                 {
-                  skin: { skin_name, name_color, skin_image, id, skin_weapon },
+                  skin: {
+                    skin_price,
+                    skin_name,
+                    name_color,
+                    skin_image,
+                    id,
+                    skin_weapon,
+                  },
                   id: modelId,
                 },
                 idx: number,
               ) => {
                 return (
                   <CartSkinCard
+                    skinPrice={skin_price}
                     skinWeapon={skin_weapon}
                     iconUrl={skin_image}
                     name={skin_name}

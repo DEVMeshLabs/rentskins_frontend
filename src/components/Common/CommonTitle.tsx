@@ -45,9 +45,6 @@ export function CommonTitle({
           'text-md': size === 'md',
         },
         {
-          'text-base': size === 'base',
-        },
-        {
           'text-lg': size === 'lg',
         },
         {

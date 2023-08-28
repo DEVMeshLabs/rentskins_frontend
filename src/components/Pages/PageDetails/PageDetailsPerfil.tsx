@@ -30,9 +30,10 @@ export function PageDetailsPerfil({
   steam_level,
   total_exchanges,
 }: IProps) {
-  const dateFormated = moment(account_date)
-    .locale('pt-br')
-    .format('MMM D, YYYY')
+  const dateFormated =
+    account_date === undefined
+      ? 'Indefinido'
+      : moment(account_date).locale('pt-br').format('MMM D, YYYY')
   return (
     <div className="mt-10 min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="p-4">
