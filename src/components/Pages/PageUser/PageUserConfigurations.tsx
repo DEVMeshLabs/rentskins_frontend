@@ -3,7 +3,7 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { TypeFormRadioInlineOption } from '@/components/Forms/Input/Radio/FormInputRadioBlock'
-import { IconGear, IconLockedShield, IconPaper } from '@/components/Icons'
+import { IconGear, IconPaper } from '@/components/Icons'
 import URLQuery from '@/tools/urlquery.tool'
 import {
   ReadonlyURLSearchParams,
@@ -13,7 +13,6 @@ import {
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageSettingsInformation } from '../PageSettings/PageSettingsInformation'
-import { PageSettingsSecurity } from '../PageSettings/PageSettingsSecurity'
 import { PageSettingsTransactions } from '../PageSettings/PageSettingsTransactions'
 import { formResolver } from './configuration.schema'
 
@@ -33,10 +32,7 @@ export default function PageUserConfigurations() {
   }, [watchTab, router])
 
   useEffect(() => {
-    const titleQuery = searchParams.get('type') as
-      | 'personal'
-      | 'transactions'
-      | 'security'
+    const titleQuery = searchParams.get('type') as 'personal' | 'transactions'
 
     if (titleQuery !== 'personal') {
       if (titleQuery !== 'transactions') {
@@ -51,15 +47,11 @@ export default function PageUserConfigurations() {
     const content = {
       personal: <PageSettingsInformation />,
       transactions: <PageSettingsTransactions />,
-      security: <PageSettingsSecurity />,
     }
 
     const possibleTypes = ['personal', 'transactions', 'security']
 
-    const index = searchParams.get('type') as
-      | 'personal'
-      | 'transactions'
-      | 'security'
+    const index = searchParams.get('type') as 'personal' | 'transactions'
 
     if (possibleTypes.includes(index)) {
       return content[index]
@@ -146,29 +138,6 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
       ),
       value: 'transactions',
       checked: searchParams.get('type') === 'transactions',
-    },
-    {
-      icon: (
-        <IconLockedShield
-          width={20}
-          height={20}
-          fill={searchParams.get('type') === 'security' ? '#A6CF2A' : '#A7B0A0'}
-          stroke="#222723"
-        />
-      ),
-      label: (
-        <div
-          className={`${
-            searchParams.get('type') === 'security'
-              ? 'text-mesh-color-primary-1200'
-              : 'text-mesh-color-neutral-200'
-          }`}
-        >
-          Segurança
-        </div>
-      ),
-      value: 'security',
-      checked: searchParams.get('type') === 'security',
     },
   ]
 
