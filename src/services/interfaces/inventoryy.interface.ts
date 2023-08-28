@@ -53,4 +53,7 @@ export interface IInventory {
   maxItems: number
   maxPages: number
   float: []
+  err?: {
+    code?: number
+  }
 }
