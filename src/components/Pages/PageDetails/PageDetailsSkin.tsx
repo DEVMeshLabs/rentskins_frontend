@@ -1,7 +1,11 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
+import ISteamUser from '@/interfaces/steam.interface'
 import CartService from '@/services/cart.service'
+import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
@@ -30,14 +34,107 @@ export function PageDetailsSkin({
   skinId,
   cartId,
 }: PropsTypes) {
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
+  const router = useRouter()
+
   const [wasRaised, setWasRaised] = useState(false)
-  const { data, refetch, isLoading } = useQuery({
+  const {
+    data,
+    refetch: createCart,
+    isLoading,
+  } = useQuery({
     queryKey: ['createSkinFromCart', skinId, cartId],
     queryFn: () => {
       return CartService.createSkinFromCart(skinId, cartId)
     },
     enabled: false,
   })
+
+  const {
+    data: skinAvailability,
+    refetch: skinAvailabilityRefetch,
+    isRefetching,
+  } = useQuery({
+    queryKey: ['verifyInventory', skinId, sellerId],
+    queryFn: () => {
+      return SkinService.findBySkinsInventory(
+        sellerId,
+        trueSession.user?.token!,
+      )
+    },
+    enabled: false,
+  })
+
+  console.log(skinAvailability?.request.status)
+  console.log(isRefetching)
+  console.log(skinId)
+
+  const verifySkinAvailability = async (type: 'cart' | 'buy' | 'rent') => {
+    const handleCart = async () => {
+      console.log('cart')
+      await createCart()
+      setWasRaised(true)
+    }
+
+    const handleBuy = () => {
+      console.log('buy')
+    }
+
+    const handleRent = () => {
+      console.log('rent')
+    }
+
+    await skinAvailabilityRefetch()
+
+    // const result = skinAvailability?.data.skins.some(
+    //   (skin) => skin.id === skinId,
+    // )
+
+    if (!isRefetching) {
+      if (skinAvailability?.request.status !== 200) {
+        toast.error(
+          'Desculpe, tivemos um problema ao verificar a disponibilidade do item. Tente novamente mais tarde.',
+          {
+            duration: 4000,
+            position: 'bottom-right',
+            style: {
+              background: '#E84E6A',
+              color: 'white',
+            },
+          },
+        )
+
+        return router.push('/')
+      } else {
+        const result = false
+
+        // VERIFICA SE EXISTE A MESMA SKIN NO INVENTÁRIO DO USUÁRIO,
+        // CASO NÃO, DISPARA UM TOAST E TRATA A SITUAÇÃO
+        if (result === false) {
+          return toast.error(
+            'Desculpe, mas o item se encontra indisponível no momento.',
+            {
+              duration: 4000,
+              position: 'bottom-right',
+              style: {
+                background: '#E84E6A',
+                color: 'white',
+              },
+            },
+          )
+        }
+
+        const typeFunction = {
+          cart: () => handleCart(),
+          buy: () => handleBuy(),
+          rent: () => handleRent(),
+        }
+
+        return typeFunction[type]()
+      }
+    }
+  }
 
   useEffect(() => {
     if (wasRaised && !isLoading) {
@@ -146,17 +243,20 @@ export function PageDetailsSkin({
       </div>
 
       <div className="mt-10 flex gap-2">
-        <Common.Button className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black">
+        <Common.Button
+          onClick={() => verifySkinAvailability('rent')}
+          className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
+        >
           Alugar
         </Common.Button>
-        <Common.Button className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black">
-          Comprar agora
+        <Common.Button
+          onClick={() => verifySkinAvailability('buy')}
+          className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
+        >
+          Comprar
         </Common.Button>
         <Common.Button
-          onClick={async () => {
-            await refetch()
-            setWasRaised(true)
-          }}
+          onClick={() => verifySkinAvailability('cart')}
           className="h-11 w-11"
         >
           <IconCarrinho />

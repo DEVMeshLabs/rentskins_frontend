@@ -63,7 +63,7 @@ export default function Home({ searchParams }: IProps) {
           </div>
         </div>
       </div>
-      <div className="mx-auto mb-28 flex w-[85%]">
+      <div className="mx-auto -mt-20 mb-28 flex w-[85%]">
         <PageHomeSkins />
       </div>
     </main>

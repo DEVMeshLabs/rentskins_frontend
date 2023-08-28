@@ -25,15 +25,17 @@ export function CardSkinInventory() {
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
-      SkinService.findBySkinsInventory(
+      SkinService.findBySkinsInventoryWithFilters(
         trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
         inventoryTypeFilter,
         Number(page),
         Number(16),
-        trueSession.user?.token!,
       ),
     enabled: status === 'authenticated',
   })
+
+  console.log(data)
 
   useEffect(() => {
     refetch()

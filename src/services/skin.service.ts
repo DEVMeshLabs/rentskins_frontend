@@ -15,14 +15,19 @@ export default class SkinService {
     return Api.get<ISkins[]>(`/skins/weapon/${weapon}`)
   }
 
-  public static findBySkinsInventory(
+  public static findBySkinsInventory(steamid: string, token: string) {
+    return Api.get<IInventory>(`/skins/inventory/${steamid}`, {
+      headers: { Authorization: 'Bearer ' + token },
+    })
+  }
+
+  public static findBySkinsInventoryWithFilters(
     steamid: string,
-    filterType: string[],
-    page: number,
-    itemsPerPage: number,
     token: string,
+    filterType?: string[],
+    page?: number,
+    itemsPerPage?: number,
   ) {
-    console.log(itemsPerPage)
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
@@ -40,11 +45,15 @@ export default class SkinService {
 
   public static findAllSkinsByIdSeller(
     sellerId: string,
-    page: number | string,
+    page?: number | string,
   ) {
-    return Api.get<ISkinsResponse>(
-      `/skins/seller/user/${sellerId}?page=${page}`,
-    )
+    if (page) {
+      return Api.get<ISkinsResponse>(
+        `/skins/seller/user/${sellerId}?page=${page}`,
+      )
+    } else {
+      return Api.get<ISkinsResponse>(`/skins/seller/user/${sellerId}`)
+    }
   }
 
   public static findBySearchParameter(param: string, page?: number | string) {

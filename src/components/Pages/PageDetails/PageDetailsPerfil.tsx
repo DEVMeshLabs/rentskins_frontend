@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 // import fallen from '@/assets/fallen.svg'
+import blankProfile from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
-import Image from 'next/image'
 import moment from 'moment'
 import 'moment/locale/pt-br'
-import blankProfile from '@/../public/blank-profile.png'
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface IProps {
@@ -46,7 +46,7 @@ export function PageDetailsPerfil({
                   : blankProfile
               }
               alt=""
-              className="rounded-full"
+              className="rounded-full opacity-50 transition-all hover:opacity-100"
               draggable={false}
               width={80}
               height={80}
