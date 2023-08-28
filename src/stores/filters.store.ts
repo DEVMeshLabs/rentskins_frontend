@@ -14,7 +14,7 @@ const useFilterStore = create<IStates>((set) => ({
     prices: { min: undefined, max: undefined },
   },
 
-  typeFilter: undefined,
+  typeFilter: 'default',
   setTypeFilter: (typeFilter: TTypeSort) => set(() => ({ typeFilter })),
 
   setSelectedFilters: (selectedFilters: ISelectedFilters) => {

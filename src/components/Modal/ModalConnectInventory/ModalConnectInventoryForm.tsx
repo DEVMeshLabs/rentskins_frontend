@@ -3,6 +3,7 @@ import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ColorRing } from 'react-loader-spinner'
@@ -153,32 +154,32 @@ export function ModalConnectInventoryForm({
           label={
             <span>
               Eu concordo com os{' '}
-              <a
-                href=""
+              <Link
+                href="/termos-de-uso"
                 tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
                 Termos de Serviço
-              </a>
+              </Link>
               ,{' '}
-              <a
-                href=""
+              <Link
+                href="/privacidade"
                 tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
                 Política de Privacidade
-              </a>{' '}
+              </Link>{' '}
               e{' '}
-              <a
-                href=""
+              <Link
+                href="/termos-de-uso"
                 tabIndex={-1}
                 target="_blank"
                 className="font-semibold text-mesh-color-primary-1200 opacity-70 transition-all hover:opacity-100"
               >
                 Política de Reembolso
-              </a>{' '}
+              </Link>{' '}
               da RentSkins.
             </span>
           }

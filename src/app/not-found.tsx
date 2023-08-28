@@ -1,5 +1,6 @@
 'use client'
 import Common from '@/components/Common'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -29,12 +30,12 @@ export default function NotFound() {
           Parece que algo deu errado!
         </Common.Title>
       </div>
-      <a
+      <Link
         href="/"
         className="rounded-md bg-mesh-color-primary-1200 px-12 py-2 font-semibold opacity-70 hover:opacity-100"
       >
         Voltar
-      </a>
+      </Link>
     </main>
   )
 }
