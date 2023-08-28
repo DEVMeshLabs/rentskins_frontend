@@ -1,11 +1,8 @@
 'use client'
-import React, { useState } from 'react'
-
-// ----------------- LIBS ----------------
-import * as Dialog from '@radix-ui/react-dialog'
-// ----------------- COMPONENTS ----------------
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
+import * as Dialog from '@radix-ui/react-dialog'
+import React, { useState } from 'react'
 import { ModalConnectInventoryForm } from './ModalConnectInventoryForm'
 
 interface IProps {
@@ -16,11 +13,7 @@ interface IProps {
 export function ModalConnectInventoryMain({ activator, userConfig }: IProps) {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
-  console.log(userConfig)
-  console.log(formSubmitted)
-
   const onFormSubmit = () => {
-    console.log('ok')
     setFormSubmitted(true)
   }
 

@@ -7,7 +7,6 @@ import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import useSkinsStore from '@/stores/skins.store'
-import Dimensions from '@/tools/dimensions.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
@@ -19,7 +18,6 @@ export function CardSkinInventory() {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const [page, setPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(16)
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
@@ -31,25 +29,15 @@ export function CardSkinInventory() {
         trueSession.user?.steam?.steamid!,
         inventoryTypeFilter,
         Number(page),
-        Number(itemsPerPage),
+        Number(16),
         trueSession.user?.token!,
       ),
     enabled: status === 'authenticated',
   })
 
-  const checkPageDimensions = () => {
-    Dimensions.setStatePerResolution(setItemsPerPage, [20, 12, 12, 9, 6, 6, 4])
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', checkPageDimensions, false)
-    checkPageDimensions()
-    return () => window.removeEventListener('resize', checkPageDimensions)
-  }, [])
-
   useEffect(() => {
     refetch()
-  }, [page, itemsPerPage, inventoryTypeFilter, refetch])
+  }, [page, inventoryTypeFilter, refetch])
 
   useEffect(() => {
     setIsInventoryFetching(isLoading || isRefetching)
@@ -92,9 +80,9 @@ export function CardSkinInventory() {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="ml-2 flex flex-wrap justify-start gap-4">
+      <div className="ml-2 flex flex-wrap justify-center gap-4">
         {isLoading || isRefetching ? (
-          <CardSkin.Skeleton quantity={itemsPerPage} />
+          <CardSkin.Skeleton quantity={16} />
         ) : data?.data &&
           data.data.inventory &&
           data.data.inventory.length > 0 ? (

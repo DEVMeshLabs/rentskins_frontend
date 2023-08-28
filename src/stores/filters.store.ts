@@ -1,4 +1,4 @@
-import { ISkins } from '@/interfaces/ISkins'
+import { ITime } from '@/services/interfaces/notification.interface'
 import { create } from 'zustand'
 import {
   IInputCheck,
@@ -6,7 +6,6 @@ import {
   IStates,
   TTypeSort,
 } from './interfaces/filters.interface'
-import { ITime } from '@/services/interfaces/notification.interface'
 
 const useFilterStore = create<IStates>((set) => ({
   selectedFilters: {
@@ -15,27 +14,7 @@ const useFilterStore = create<IStates>((set) => ({
     prices: { min: undefined, max: undefined },
   },
 
-  allSkinsFiltred: [],
-  setAllSkinsFiltred: (skins: ISkins[], typeSort: TTypeSort) => {
-    const organized = {
-      biggestPrice: (a: ISkins, b: ISkins) =>
-        parseFloat(b.skin_price.replace(',', '.')) -
-        parseFloat(a.skin_price.replace(',', '.')),
-      lowestPrice: (a: ISkins, b: ISkins) =>
-        parseFloat(a.skin_price.replace(',', '.')) -
-        parseFloat(b.skin_price.replace(',', '.')),
-      biggestFloat: (a: ISkins, b: ISkins) =>
-        parseFloat(b.skin_float.replace(',', '.')) -
-        parseFloat(a.skin_float.replace(',', '.')),
-    }
-
-    set(() => ({
-      allSkinsFiltred:
-        typeSort === undefined ? skins : skins.sort(organized[typeSort]),
-    }))
-  },
-
-  typeFilter: undefined,
+  typeFilter: 'default',
   setTypeFilter: (typeFilter: TTypeSort) => set(() => ({ typeFilter })),
 
   setSelectedFilters: (selectedFilters: ISelectedFilters) => {

@@ -2,6 +2,7 @@ import Common from '@/components/Common'
 import { IconSetaType } from '@/components/Icons'
 import { ItemLink } from '@/components/Others/ItemLink'
 import classNames from 'classnames'
+import Link from 'next/link'
 import React from 'react'
 
 type PropsContainer = {
@@ -142,18 +143,32 @@ export const ContainerItem = ({
   isList,
   className,
 }: PropsContainer) => {
+  const itemLabel = {
+    Facas: 'Knife',
+    Rifles: 'Rifle',
+    Pistolas: 'Pistol',
+    Luvas: 'Glove',
+    Figurinhas: 'Sticker',
+    Agentes: 'Agent',
+    Pesadas: 'Heavy',
+  }
+
+  const hrefQuery = itemLabel[title as keyof typeof itemLabel] || title
+
   return (
     <div className={classNames('group relative z-20 ', className)}>
       {isList ? (
         <div className="flex items-center">
-          <Common.Title color="white">{title}</Common.Title>
+          <Link href={`/loja?search=${hrefQuery}&page=1`}>
+            <Common.Title color="white">{title}</Common.Title>
+          </Link>
           <span className="ml-2 transition duration-300 ease-in-out group-hover:rotate-180">
             {iconSeta}
           </span>
         </div>
       ) : (
         <Common.Title color="white">
-          <a href={`/loja?search=${title}`}>{title}</a>
+          <Link href={`/loja?search=${hrefQuery}`}>{title}</Link>
         </Common.Title>
       )}
 

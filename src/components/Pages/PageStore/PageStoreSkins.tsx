@@ -5,6 +5,7 @@ import LayoutPagination from '@/components/Layout/LayoutPagination'
 import SkinFilters from '@/components/Others/SkinFilters'
 import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
 import AllSkins from '@/components/Others/Skins/AllSkins'
+import { ISkins } from '@/interfaces/ISkins'
 import SkinService from '@/services/skin.service'
 import useFilterStore from '@/stores/filters.store'
 import { useQuery } from '@tanstack/react-query'
@@ -18,8 +19,9 @@ export default function PageStoreSkins() {
   const pageQuery = useSearchParams().get('page') || '1'
   const [page, setPage] = useState(pageQuery)
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
-  const { selectedFilters, typeFilter, setAllSkinsFiltred, allSkinsFiltred } =
-    useFilterStore()
+  const { selectedFilters, typeFilter } = useFilterStore()
+
+  console.log(typeFilter)
 
   useEffect(() => {
     router.push(`/loja?search=${search}&page=${page}`)
@@ -32,6 +34,7 @@ export default function PageStoreSkins() {
   const {
     data,
     refetch: refetchSkins,
+    isRefetching,
     isLoading,
   } = useQuery({
     queryKey: ['skinsCategory'],
@@ -46,53 +49,60 @@ export default function PageStoreSkins() {
     },
   })
 
+  const organized = {
+    biggestPrice: (a: ISkins, b: ISkins) =>
+      parseFloat(b.skin_price.replace(',', '.')) -
+      parseFloat(a.skin_price.replace(',', '.')),
+    lowestPrice: (a: ISkins, b: ISkins) =>
+      parseFloat(a.skin_price.replace(',', '.')) -
+      parseFloat(b.skin_price.replace(',', '.')),
+    biggestFloat: (a: ISkins, b: ISkins) =>
+      parseFloat(b.skin_float.replace(',', '.')) -
+      parseFloat(a.skin_float.replace(',', '.')),
+    default: () => 1,
+  }
+
   const allSkinsFilters =
     data?.data &&
-    data.data.skins.filter((skin) => {
+    data?.data?.skins?.filter((skin) => {
       if (
         selectedFilters.categories &&
-        selectedFilters.categories.some((category) =>
+        selectedFilters.categories.length > 0 &&
+        !selectedFilters.categories.some((category) =>
           skin.skin_name.includes(category),
         )
       ) {
-        return true
+        return false
       }
 
       if (
         selectedFilters.wears &&
-        selectedFilters.wears.some((wears) => skin.status_float.includes(wears))
+        selectedFilters.wears.length > 0 &&
+        !selectedFilters.wears.some((wears) =>
+          skin.status_float.includes(wears),
+        )
       ) {
-        return true
+        return false
       }
 
       if (
-        selectedFilters.prices.max &&
-        selectedFilters.prices.min &&
-        Number(selectedFilters.prices.max.replace(/[^0-9]/g, '')) >=
-          Number(skin.skin_price) &&
-        Number(selectedFilters.prices.min.replace(/[^0-9]/g, '')) <=
-          Number(skin.skin_price)
+        selectedFilters.prices.min !== undefined &&
+        Number(skin.skin_price) <
+          Number(selectedFilters.prices.min.replace(/[^0-9]/g, ''))
       ) {
-        return true
+        return false
       }
 
-      return false
-    })
+      if (
+        selectedFilters.prices.max !== undefined &&
+        Number(skin.skin_price) >
+          Number(selectedFilters.prices.max.replace(/[^0-9]/g, ''))
+      ) {
+        return false
+      }
 
-  useEffect(() => {
-    if (data?.data) {
-      setAllSkinsFiltred(
-        allSkinsFilters?.length ? allSkinsFilters : data!.data.skins,
-        typeFilter,
-      )
-    }
-  }, [
-    typeFilter,
-    selectedFilters.categories,
-    selectedFilters.prices.max,
-    selectedFilters.prices.min,
-    selectedFilters.wears,
-  ])
+      return true
+    })
 
   useEffect(() => {
     refetchSkins()
@@ -114,10 +124,19 @@ export default function PageStoreSkins() {
 
       <SkinFilters />
 
-      {isLoading ? (
+      {isLoading || isRefetching ? (
         <AllSkeletonSkins />
-      ) : allSkinsFiltred.length > 0 ? (
-        <AllSkins skinsCategories={allSkinsFiltred} itemsPerPage={15} />
+      ) : data &&
+        data!.data.skins.length > 0 &&
+        allSkinsFilters &&
+        allSkinsFilters.length > 0 ? (
+        <AllSkins
+          skinsCategories={
+            !typeFilter
+              ? allSkinsFilters
+              : allSkinsFilters.sort(organized[typeFilter])
+          }
+        />
       ) : (
         <div className="mb-16 flex h-[50vh] items-center justify-center">
           {nameCorrection ? (

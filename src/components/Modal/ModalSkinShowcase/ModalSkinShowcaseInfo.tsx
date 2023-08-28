@@ -142,7 +142,7 @@ export function ModalSkinShowcaseInfo({
 
       <Form.Root
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 h-full w-full rounded-lg bg-mesh-color-others-black p-4"
+        className="mt-4 flex h-full w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
       >
         <div>
           <div className="mt-2 flex justify-between">
@@ -229,16 +229,16 @@ export function ModalSkinShowcaseInfo({
             <Form.Button
               disabled={disabled}
               buttonStyle={undefined}
-              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
+              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
               onClick={handleAddSkinsToAdvertise}
             >
-              <Common.Title bold={600} className="rounded-xl">
-                Anunciar
-              </Common.Title>
+              Anunciar
             </Form.Button>
           )}
           <Form.Input.Checkbox
             name="terms"
+            wrapperClassname="gap-4"
+            labelClassName="text-sm text-justify text-white"
             label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja

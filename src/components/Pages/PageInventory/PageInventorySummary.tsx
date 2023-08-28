@@ -1,37 +1,38 @@
 /* eslint-disable camelcase */
 'use client'
 import Common from '@/components/Common'
+import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
-import LocalStorage from '@/tools/localstorage.tool'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { ColorRing } from 'react-loader-spinner'
 
 export default function PageInventorySummary() {
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
+
   const { skinsToAdvertise, changeSkinToAdvertise, cleanSkinsToAdvertise } =
     useSkinsStore()
   const [subtotal, setSubtotal] = useState(0)
   const [disabled, setDisabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { data, refetch } = useQuery({
+
+  const { refetch } = useQuery({
     queryKey: ['createdSkins'],
     queryFn: async () => {
       setIsLoading(true)
       cleanSkinsToAdvertise()
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
-        LocalStorage.get('token'),
+        trueSession.user?.token!,
       )
       setIsLoading(false)
       return announcedSkins
     },
     enabled: false,
   })
-
-  useEffect(() => {
-    console.log(data?.status)
-  }, [data])
 
   useEffect(() => {
     const subtotal = skinsToAdvertise.reduce(

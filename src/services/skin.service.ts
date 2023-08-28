@@ -22,6 +22,7 @@ export default class SkinService {
     itemsPerPage: number,
     token: string,
   ) {
+    console.log(itemsPerPage)
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
@@ -54,14 +55,17 @@ export default class SkinService {
     allSkinsAdvertise: ISkinsToAdvertise[],
     token: string,
   ) {
-    const skinsWithoudId = allSkinsAdvertise.filter((skin) => {
+    const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
       delete skin.id
       return skin
     })
-    return Api.post<{ status: number }>('/skins', skinsWithoudId, {
+
+    return Api.post<{ status: number }>('/skins', skinsWithoutId, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
+      .then((response) => response)
+      .catch((err) => err)
   }
 }

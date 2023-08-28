@@ -4,7 +4,7 @@ interface IProps {
 
 export function CardSkinSkeleton({ quantity = 1 }: IProps) {
   return (
-    <div className="flex flex-wrap items-center justify-start gap-4">
+    <div className="flex flex-wrap items-center justify-center gap-4">
       {Array.from({ length: quantity }).map((item, index) => {
         return (
           <div
