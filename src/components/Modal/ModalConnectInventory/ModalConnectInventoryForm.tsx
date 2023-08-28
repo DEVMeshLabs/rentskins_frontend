@@ -10,25 +10,43 @@ import { formResolver } from './form.schema'
 
 interface IProps {
   onFormSubmit: () => void
+  userConfig: any
 }
 
-export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
+export function ModalConnectInventoryForm({
+  onFormSubmit,
+  userConfig,
+}: IProps) {
   const { data: session } = useSession()
   const trueSession = (session as ISteamUser) || {}
 
   const {
     register,
     handleSubmit,
-    formState: { errors, dirtyFields },
+    setValue,
+    formState: { errors },
   } = useForm({
     resolver: formResolver,
     defaultValues: {
-      'accept-terms': undefined,
-      'receive-notifications': false,
-      'trade-link': undefined,
-      email: undefined,
+      'accept-terms': userConfig.agreed_with_terms || undefined,
+      'receive-notifications': userConfig.agreed_with_emails || false,
+      'trade-link': userConfig.url_trade || undefined,
+      cpf: userConfig.owner_cpf || undefined,
+      email: userConfig.owner_email || undefined,
     },
   })
+
+  useEffect(() => {
+    if (userConfig) {
+      setValue('accept-terms', userConfig.agreed_with_terms)
+      setValue('cpf', userConfig.owner_cpf)
+      setValue('email', userConfig.owner_email)
+      setValue('phone', userConfig.owner_phone)
+      setValue('receive-notifications', userConfig.agreed_with_emails)
+      setValue('trade-link', userConfig.url_trade)
+    }
+  }, [userConfig, setValue])
+
   const [formData, setFormData] = useState<any>(undefined)
 
   const { data } = useQuery({
@@ -41,6 +59,7 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
         owner_name: trueSession?.user?.name as string,
         owner_email: formData.email,
         owner_phone: formData.phone,
+        owner_cpf: formData.cpf,
         steam_guard: false,
         url_sell: sellLink,
         url_trade: formData['trade-link'],
@@ -50,20 +69,15 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
       }
       console.log(params)
       return ConfigService.updateConfig(params)
-      // window.location.reload()
     },
     enabled: !!formData,
   })
 
   useEffect(() => {
-    console.log(data)
     if (data?.request.status) {
       return window.location.reload()
     }
   }, [data])
-
-  const enableButton =
-    dirtyFields.email && dirtyFields.phone && dirtyFields['trade-link']
 
   const onSubmit = (data: any) => {
     setFormData(data)
@@ -113,6 +127,15 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
         labelClassName="w-8/12 text-white"
         register={register('phone')}
         errors={errors.phone}
+      />
+
+      <Form.Input.CPF
+        name="cpf"
+        label="CPF"
+        placeholder="000.000.000-00"
+        labelClassName="w-8/12 text-white"
+        register={register('cpf')}
+        errors={errors.cpf}
       />
 
       <div className="mt-4 flex flex-col gap-2">
@@ -170,7 +193,7 @@ export function ModalConnectInventoryForm({ onFormSubmit }: IProps) {
 
       <Form.Button
         buttonStyle={undefined}
-        disabled={!enableButton || formData}
+        disabled={formData}
         className="mt-8 flex w-48 items-center justify-center border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
       >
         {formData ? buttonLoading : 'Concluir'}

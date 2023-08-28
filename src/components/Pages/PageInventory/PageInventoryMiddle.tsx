@@ -26,6 +26,7 @@ export default function PageInventoryMiddle() {
     userHasConfig &&
     userHasConfig!.data.owner_email !== '' &&
     userHasConfig!.data.owner_phone !== '' &&
+    userHasConfig!.data.owner_cpf !== '' &&
     userHasConfig!.data.url_trade !== ''
 
   return (
@@ -46,6 +47,7 @@ export default function PageInventoryMiddle() {
               vincular seu inventário à Steam
             </Common.Title>
             <ModalConnectInventoryMain
+              userConfig={userHasConfig?.data}
               activator={
                 <Common.Button className="mt-4 h-10 w-full rounded-xl border-none bg-mesh-color-primary-1400 font-semibold text-black">
                   Conectar-se

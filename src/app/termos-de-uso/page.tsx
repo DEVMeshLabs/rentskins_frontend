@@ -432,7 +432,7 @@ export default function TermoDeUso() {
                 responsabilidade o resultado de tentativas e êxitos de sites e
                 outros sistemas maliciosos que visem a roubar seus dados ou
                 itens da Steam. Como exemplo tradicional temos o &quot;API
-                Scan.&quot;
+                Scam.&quot;
               </li>
               <br />
               <li>
@@ -496,7 +496,7 @@ export default function TermoDeUso() {
               <li>
                 8. Como forma de cumprimento das regras, a RentSkins repassa
                 toda e qualquer informação adequada com relação aos riscos no
-                envio de itens para o site, de modo que a ocorrência de API Scan
+                envio de itens para o site, de modo que a ocorrência de API Scam
                 é decorrente da conta Steam estar corrompida. E caberá ao
                 usuário tomar as condutas de segurança básica, de forma
                 recorrente e periódica, a fim de evitar essas situações. Então,

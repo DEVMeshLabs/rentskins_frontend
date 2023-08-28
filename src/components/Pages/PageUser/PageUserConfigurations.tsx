@@ -3,22 +3,23 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { TypeFormRadioInlineOption } from '@/components/Forms/Input/Radio/FormInputRadioBlock'
-import { IconGear, IconLockedShield, IconPaper } from '@/components/Icons'
+import { IconGear, IconPaper } from '@/components/Icons'
+import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import URLQuery from '@/tools/urlquery.tool'
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageSettingsInformation } from '../PageSettings/PageSettingsInformation'
-import { PageSettingsSecurity } from '../PageSettings/PageSettingsSecurity'
 import { PageSettingsTransactions } from '../PageSettings/PageSettingsTransactions'
 import { formResolver } from './configuration.schema'
 
 export default function PageUserConfigurations() {
   const searchParams = useSearchParams()
+  const [validRoute, setValidRoute] = useState(null)
   const router = useRouter()
 
   const { register, watch } = useForm({
@@ -33,33 +34,27 @@ export default function PageUserConfigurations() {
   }, [watchTab, router])
 
   useEffect(() => {
-    const titleQuery = searchParams.get('type') as
-      | 'personal'
-      | 'transactions'
-      | 'security'
+    const titleQuery = searchParams.get('type') as 'personal' | 'transactions'
 
     if (titleQuery !== 'personal') {
       if (titleQuery !== 'transactions') {
-        if (titleQuery !== 'security') {
-          router.push(URLQuery.addQuery([{ key: 'type', value: 'personal' }]))
-        }
+        router.push(URLQuery.addQuery([{ key: 'type', value: 'personal' }]))
+        return setValidRoute(false as any)
       }
     }
+
+    return setValidRoute(true as any)
   }, [searchParams, router])
 
   const renderPageContent = () => {
     const content = {
       personal: <PageSettingsInformation />,
       transactions: <PageSettingsTransactions />,
-      security: <PageSettingsSecurity />,
     }
 
     const possibleTypes = ['personal', 'transactions', 'security']
 
-    const index = searchParams.get('type') as
-      | 'personal'
-      | 'transactions'
-      | 'security'
+    const index = searchParams.get('type') as 'personal' | 'transactions'
 
     if (possibleTypes.includes(index)) {
       return content[index]
@@ -69,8 +64,9 @@ export default function PageUserConfigurations() {
       )
     }
   }
+
   return (
-    <>
+    <LayoutLoading label="Carregando" enabled={!validRoute}>
       <div className="flex h-min w-max flex-col items-end gap-2">
         <div className="flex flex-col items-start gap-6">
           <Common.Title bold={900} size="2xl" color="white">
@@ -93,7 +89,7 @@ export default function PageUserConfigurations() {
       </div>
 
       {renderPageContent()}
-    </>
+    </LayoutLoading>
   )
 }
 
@@ -146,29 +142,6 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
       ),
       value: 'transactions',
       checked: searchParams.get('type') === 'transactions',
-    },
-    {
-      icon: (
-        <IconLockedShield
-          width={20}
-          height={20}
-          fill={searchParams.get('type') === 'security' ? '#A6CF2A' : '#A7B0A0'}
-          stroke="#222723"
-        />
-      ),
-      label: (
-        <div
-          className={`${
-            searchParams.get('type') === 'security'
-              ? 'text-mesh-color-primary-1200'
-              : 'text-mesh-color-neutral-200'
-          }`}
-        >
-          Segurança
-        </div>
-      ),
-      value: 'security',
-      checked: searchParams.get('type') === 'security',
     },
   ]
 
