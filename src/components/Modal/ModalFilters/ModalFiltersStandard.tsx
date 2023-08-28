@@ -12,17 +12,22 @@ export default function ModalFiltersStandard({ handleOpen }: IProps) {
     <div className="flex h-full w-full flex-col justify-between gap-1">
       <StandardCheckboxItem
         handleOpen={handleOpen}
-        label="Menor preço"
+        label="Padrão"
+        value={'default'}
+      />
+      <StandardCheckboxItem
+        handleOpen={handleOpen}
+        label="Menor Preço"
         value="lowestPrice"
       />
       <StandardCheckboxItem
         handleOpen={handleOpen}
-        label="Maior preço"
+        label="Maior Preço"
         value="biggestPrice"
       />
       <StandardCheckboxItem
         handleOpen={handleOpen}
-        label="Maior float"
+        label="Maior Float"
         value="biggestFloat"
       />
     </div>

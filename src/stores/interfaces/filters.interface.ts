@@ -1,6 +1,5 @@
 // eslint-disable-next-line prettier/prettier
-import { ISkins } from '@/interfaces/ISkins';
-import { ITime } from '@/services/interfaces/notification.interface'
+import { ITime } from '@/services/interfaces/notification.interface';
 
 export interface ISelectedFilters {
   prices: { min: string | undefined; max: string | undefined }
@@ -12,7 +11,7 @@ export type TTypeSort =
   | 'biggestPrice'
   | 'lowestPrice'
   | 'biggestFloat'
-  | undefined
+  | 'default'
 
 export interface IInputCheck {
   value: string
@@ -22,8 +21,6 @@ export interface IInputCheck {
 export interface IStates {
   selectedFilters: ISelectedFilters
   setSelectedFilters: (selectedFilters: ISelectedFilters) => void
-  allSkinsFiltred: ISkins[]
-  setAllSkinsFiltred: (skins: ISkins[], typeSort: TTypeSort) => void
   typeFilter: TTypeSort
   setTypeFilter: (typeFilter: TTypeSort) => void
   checkedInputCheckbox: IInputCheck[]

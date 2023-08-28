@@ -3,10 +3,20 @@ import Common from '@/components/Common'
 import IconFilter from '@/components/Icons/IconFilter'
 import ModalFiltersMain from '@/components/Modal/ModalFilters/ModalFiltersMain'
 import useFilterStore from '@/stores/filters.store'
+import { TTypeSort } from '@/stores/interfaces/filters.interface'
 import { useEffect, useState } from 'react'
 import ContainerFilter from './ContainerFilter'
 
 export default function SkinFilters() {
+  const { typeFilter } = useFilterStore()
+
+  const typeLabel = {
+    default: 'Padrão',
+    biggestPrice: 'Maior Preço',
+    lowestPrice: 'Menor Preço',
+    biggestFloat: 'Maior Float',
+  }
+
   const {
     selectedFilters: { categories, wears, prices },
     setSelectedFilters,
@@ -49,7 +59,7 @@ export default function SkinFilters() {
           <div className="relative z-10 flex cursor-pointer items-center">
             <Common.Button className="flex cursor-pointer items-center gap-2 border-none text-white">
               <IconFilter />
-              Padrão
+              {typeLabel[typeFilter as TTypeSort] || 'Padrão'}
             </Common.Button>
           </div>
         }
