@@ -38,7 +38,7 @@ export function CardSkinInventory() {
   })
 
   const checkPageDimensions = () => {
-    Dimensions.setStatePerResolution(setItemsPerPage, [24, 15, 12, 9, 6])
+    Dimensions.setStatePerResolution(setItemsPerPage, [20, 12, 12, 9, 6, 6, 4])
   }
 
   useEffect(() => {
@@ -69,6 +69,7 @@ export function CardSkinInventory() {
       selectedType = 'Não existem estes items em seu inventário.'
     }
 
+    console.log(data?.data)
     return (
       <div className="flex h-[50vh] items-center justify-center font-semibold text-white">
         {inventoryTypeFilter.length ? (
@@ -76,6 +77,11 @@ export function CardSkinInventory() {
             {selectedType !== undefined
               ? selectedType
               : 'Não existem armas desse tipo no seu inventário.'}
+          </span>
+        ) : data?.data?.err?.code === 429 ? (
+          <span className="text-center">
+            <p>Ocorreu um problema ao solicitar o seu inventário.</p>
+            <p>Tente novamente mais tarde.</p>
           </span>
         ) : (
           <span> Inventário vazio. </span>
