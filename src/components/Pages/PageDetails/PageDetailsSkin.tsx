@@ -85,55 +85,17 @@ export function PageDetailsSkin({
       console.log('rent')
     }
 
-    await skinAvailabilityRefetch()
-
     // const result = skinAvailability?.data.skins.some(
     //   (skin) => skin.id === skinId,
     // )
 
-    if (!isRefetching) {
-      if (skinAvailability?.request.status !== 200) {
-        toast.error(
-          'Desculpe, tivemos um problema ao verificar a disponibilidade do item. Tente novamente mais tarde.',
-          {
-            duration: 4000,
-            position: 'bottom-right',
-            style: {
-              background: '#E84E6A',
-              color: 'white',
-            },
-          },
-        )
-
-        return router.push('/')
-      } else {
-        const result = false
-
-        // VERIFICA SE EXISTE A MESMA SKIN NO INVENTÁRIO DO USUÁRIO,
-        // CASO NÃO, DISPARA UM TOAST E TRATA A SITUAÇÃO
-        if (result === false) {
-          return toast.error(
-            'Desculpe, mas o item se encontra indisponível no momento.',
-            {
-              duration: 4000,
-              position: 'bottom-right',
-              style: {
-                background: '#E84E6A',
-                color: 'white',
-              },
-            },
-          )
-        }
-
-        const typeFunction = {
-          cart: () => handleCart(),
-          buy: () => handleBuy(),
-          rent: () => handleRent(),
-        }
-
-        return typeFunction[type]()
-      }
+    const typeFunction = {
+      cart: () => handleCart(),
+      buy: () => handleBuy(),
+      rent: () => handleRent(),
     }
+
+    return typeFunction[type]()
   }
 
   useEffect(() => {

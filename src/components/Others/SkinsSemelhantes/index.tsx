@@ -6,15 +6,11 @@ import { useQuery } from '@tanstack/react-query'
 import { OtherCard } from '../OtherCard/OtherCard'
 
 export interface ISkinsSemelhantesProps {
-  isLoading: boolean
-  data: {
-    data: ISkins
-  }
+  data: ISkins
   weaponName: string | null
 }
 
 export default function SkinsSemelhantes({
-  isLoading,
   weaponName,
   data,
 }: ISkinsSemelhantesProps) {
@@ -25,8 +21,7 @@ export default function SkinsSemelhantes({
 
   const find = data2?.data.filter(
     ({ skin_weapon, seller_id }: ISkins) =>
-      skin_weapon === data!.data.skin_weapon &&
-      seller_id !== data!.data.seller_id,
+      skin_weapon === data!.skin_weapon && seller_id !== data!.seller_id,
   )
 
   return (
@@ -36,7 +31,7 @@ export default function SkinsSemelhantes({
       </Common.Title>
       <div className="w-full pb-16">
         <div className="flex gap-4 overflow-x-auto pb-3">
-          {!isLoading && find && find?.length > 0 ? (
+          {find && find?.length > 0 ? (
             find.map(
               (
                 {
