@@ -1,4 +1,3 @@
-import IconCart from '@/assets/Cart'
 import IconSteam from '@/assets/IconSteam'
 import Common from '@/components/Common'
 import IconMagic from '@/components/Icons/IconMagicpen'
@@ -92,17 +91,12 @@ export function OtherCard({
       </div>
       <ColoredLine position={skinFloat} />
       <div className="flex items-center justify-end">
-        <div className="flex gap-2">
-          <Common.Button color="invisible" className="h-10 w-10 border-2">
-            <IconCart />
-          </Common.Button>
-          <Link
-            href={`/detalhes/${id}`}
-            className="flex items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
-          >
-            Comprar
-          </Link>
-        </div>
+        <Link
+          href={`/detalhes/${id}`}
+          className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+        >
+          Comprar
+        </Link>
       </div>
     </article>
   )

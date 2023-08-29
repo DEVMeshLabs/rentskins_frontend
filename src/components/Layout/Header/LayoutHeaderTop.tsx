@@ -79,6 +79,7 @@ export function LayoutHeaderTop() {
 
   const configValidation =
     userHasConfig &&
+    userHasConfig.data &&
     userHasConfig!.data.owner_email !== '' &&
     userHasConfig!.data.owner_phone !== '' &&
     userHasConfig!.data.owner_cpf !== '' &&
