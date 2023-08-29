@@ -1,11 +1,7 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
-import ISteamUser from '@/interfaces/steam.interface'
 import CartService from '@/services/cart.service'
-import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
@@ -34,9 +30,9 @@ export function PageDetailsSkin({
   skinId,
   cartId,
 }: PropsTypes) {
-  const { data: session } = useSession()
-  const trueSession = session as ISteamUser
-  const router = useRouter()
+  // const { data: session } = useSession()
+  // const trueSession = session as ISteamUser
+  // const router = useRouter()
 
   const [wasRaised, setWasRaised] = useState(false)
   const {
@@ -50,25 +46,6 @@ export function PageDetailsSkin({
     },
     enabled: false,
   })
-
-  const {
-    data: skinAvailability,
-    refetch: skinAvailabilityRefetch,
-    isRefetching,
-  } = useQuery({
-    queryKey: ['verifyInventory', skinId, sellerId],
-    queryFn: () => {
-      return SkinService.findBySkinsInventory(
-        sellerId,
-        trueSession.user?.token!,
-      )
-    },
-    enabled: false,
-  })
-
-  console.log(skinAvailability?.request.status)
-  console.log(isRefetching)
-  console.log(skinId)
 
   const verifySkinAvailability = async (type: 'cart' | 'buy' | 'rent') => {
     const handleCart = async () => {
@@ -123,7 +100,7 @@ export function PageDetailsSkin({
         setWasRaised(false)
       }
     }
-  }, [wasRaised, isLoading])
+  }, [wasRaised, isLoading, data])
 
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
@@ -137,7 +114,11 @@ export function PageDetailsSkin({
 
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            R$: {skinPrice}
+            {Number(skinPrice).toLocaleString('PT-BR', {
+              style: 'currency',
+              currency: 'BRL',
+              minimumIntegerDigits: 2,
+            })}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
@@ -145,7 +126,11 @@ export function PageDetailsSkin({
         <div>
           <div className="flex items-center">
             <Common.Title className="text-2xl font-extrabold text-white">
-              R$: {parseFloat(skinPrice) / 10}
+              {(parseFloat(skinPrice) / 10).toLocaleString('PT-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumIntegerDigits: 2,
+              })}
             </Common.Title>
             <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
               10%

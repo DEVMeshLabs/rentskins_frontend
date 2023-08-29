@@ -1,6 +1,7 @@
 import PageDetailsMain from '@/components/Pages/PageDetails/PageDetailsMain'
 import SkinService from '@/services/skin.service'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 interface IProps {
   params: { id: string }
@@ -31,6 +32,11 @@ export async function generateMetadata({
 
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
+
+  console.log(item)
+  if (!item) {
+    notFound()
+  }
 
   return (
     <div>

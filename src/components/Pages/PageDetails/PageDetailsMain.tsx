@@ -49,7 +49,7 @@ export default function PageDetailsMain({ item }: IProps) {
       </Link>
 
       <div className="mx-auto grid w-full grid-cols-5 py-10">
-        <div className="col-span-3">
+        <div className="col-span-3 ">
           <PageDetailsCard
             skinImage={item.skin_image}
             skinName={item.skin_name}
@@ -62,7 +62,7 @@ export default function PageDetailsMain({ item }: IProps) {
             <PageDetailsVendas />
           </div>
         </div>
-        <div className="col-span-2 ml-4">
+        <div className="col-span-2 ml-4 ">
           <PageDetailsSkin
             skinName={item.skin_name}
             skinPrice={item.skin_price}
