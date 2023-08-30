@@ -5,6 +5,7 @@ import { IconArrow } from '@/components/Icons'
 import SkinsSemelhantes from '@/components/Others/SkinsSemelhantes'
 import { ISkins } from '@/interfaces/ISkins'
 import ISteamUser from '@/interfaces/steam.interface'
+import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
@@ -16,19 +17,12 @@ import { PageDetailsVendas } from './PageDetailsVendas'
 
 interface IProps {
   item: ISkins
+  seller: IGetUser
 }
 
-export default function PageDetailsMain({ item }: IProps) {
+export default function PageDetailsMain({ item, seller }: IProps) {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
-
-  const { data: dataGetUser } = useQuery({
-    queryKey: ['ownerSkin', item.seller_id],
-    queryFn: async () => {
-      return UserService.getUser(item.seller_id!)
-    },
-    enabled: !!item.seller_id,
-  })
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
@@ -37,8 +31,6 @@ export default function PageDetailsMain({ item }: IProps) {
     },
     enabled: status === 'authenticated',
   })
-
-  console.log(dataGetUser?.data?.status_member!)
 
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
@@ -79,15 +71,15 @@ export default function PageDetailsMain({ item }: IProps) {
             cartId={userRetrieved && userRetrieved?.data?.cart?.id}
           />
           <PageDetailsPerfil
-            id={dataGetUser?.data?.owner_id}
-            account_date={dataGetUser?.data?.steam_created_date!}
-            delivery_fee={dataGetUser?.data?.delivery_fee!}
-            delivery_time={dataGetUser?.data?.delivery_time!}
-            owner_name={dataGetUser?.data?.owner_name!}
-            picture={dataGetUser?.data?.picture!}
-            status_member={dataGetUser?.data?.status_member!}
-            steam_level={dataGetUser?.data?.steam_level!}
-            total_exchanges={dataGetUser?.data?.total_exchanges!}
+            id={seller.owner_id}
+            account_date={seller.steam_created_date!}
+            delivery_fee={seller.delivery_fee!}
+            delivery_time={seller.delivery_time!}
+            owner_name={seller.owner_name!}
+            picture={seller.picture!}
+            status_member={seller.status_member!}
+            steam_level={seller.steam_level!}
+            total_exchanges={seller.total_exchanges!}
           />
         </div>
       </div>
