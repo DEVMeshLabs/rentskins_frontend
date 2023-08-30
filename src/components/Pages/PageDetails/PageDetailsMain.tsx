@@ -38,6 +38,8 @@ export default function PageDetailsMain({ item }: IProps) {
     enabled: status === 'authenticated',
   })
 
+  console.log(dataGetUser?.data?.status_member!)
+
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
       <Link href="/" className="mt-8 flex w-fit items-center gap-4">

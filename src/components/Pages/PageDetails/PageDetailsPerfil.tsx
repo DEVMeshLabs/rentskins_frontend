@@ -2,6 +2,7 @@
 // import fallen from '@/assets/fallen.svg'
 import blankProfile from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
+import classnames from 'classnames'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import Image from 'next/image'
@@ -56,8 +57,35 @@ export function PageDetailsPerfil({
             <Common.Title color="white" className="text-2xl font-semibold">
               {owner_name}
             </Common.Title>
-            <span className="mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none bg-mesh-color-others-green px-3 text-sm text-mesh-color-accent-600">
-              Confiável
+            <span
+              className={classnames(
+                'mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none bg-mesh-color-others-green px-3 text-sm capitalize text-mesh-color-accent-600',
+                {
+                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
+                    status_member === 'Risco',
+                },
+                {
+                  'bg-mesh-color-rarity-low/20 text-mesh-color-rarity-low':
+                    status_member === 'Questionável',
+                },
+                {
+                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
+                    status_member === 'Atenção',
+                },
+                {
+                  'bg-white/20 text-white': status_member === 'Membro novo',
+                },
+                {
+                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
+                    status_member === 'Frequente',
+                },
+                {
+                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
+                    status_member === 'Confiável',
+                },
+              )}
+            >
+              {status_member}
             </span>
           </div>
         </div>

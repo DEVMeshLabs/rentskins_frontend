@@ -60,7 +60,6 @@ export default function PageProfileSelf() {
           .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
       setSteamLevel(dataGettedUser?.data.steam_level)
-      setUserState(dataGettedUser.data.status_member)
       setUserState(dataGettedUser?.data.status_member)
       setTotalExchanges(dataGettedUser.data.total_exchanges)
       setDeliveryTime(dataGettedUser.data.delivery_time)
