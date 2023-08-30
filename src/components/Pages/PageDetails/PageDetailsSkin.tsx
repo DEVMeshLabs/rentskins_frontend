@@ -3,7 +3,8 @@ import { IconCarrinho } from '@/components/Icons'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 type PropsTypes = {
@@ -34,6 +35,33 @@ export function PageDetailsSkin({
   assetId,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
+  const [methodSelected, setMethodSelected] = useState<any>()
+  const router = useRouter()
+
+  const successToast = (message: string) => {
+    setMethodSelected(undefined)
+    return toast.success(message, {
+      duration: 4000, // Duração em milissegundos
+      position: 'bottom-right', // Posição do toast
+      icon: undefined,
+      style: {
+        background: '#AFD734', // Estilo personalizado
+        color: 'black',
+      },
+    })
+  }
+
+  const errorToast = (message: string) => {
+    setMethodSelected(undefined)
+    return toast.error(message, {
+      duration: 4000, // Duração em milissegundos
+      position: 'bottom-right', // Posição do toast
+      style: {
+        background: '#E84E6A', // Estilo personalizado
+        color: 'white',
+      },
+    })
+  }
 
   const {
     data,
@@ -48,8 +76,8 @@ export function PageDetailsSkin({
   })
 
   const {
-    data: resultAvailability,
     refetch: refetchAvailability,
+    data: resultAvailability,
     isRefetching: refetchingAvailability,
   } = useQuery({
     queryKey: ['checkItemAvailability', assetId, sellerId],
@@ -57,60 +85,61 @@ export function PageDetailsSkin({
     enabled: false,
   })
 
-  console.log(resultAvailability)
-
-  const verifySkinAvailability = async (type: 'cart' | 'buy' | 'rent') => {
-    const handleCart = async () => {
-      console.log('cart')
-      await createCart()
-      setWasRaised(true)
+  useEffect(() => {
+    if (methodSelected !== undefined) {
+      refetchAvailability()
     }
+  }, [methodSelected, refetchAvailability])
 
-    const handleBuy = () => {
-      console.log('buy')
+  const proceedItem = useCallback(async () => {
+    if (methodSelected !== undefined) {
+      const handleCart = async () => {
+        await createCart()
+        setWasRaised(true)
+      }
+
+      const handleBuy = () => {
+        console.log('buy')
+        return successToast('Indo para a compra.')
+      }
+
+      const handleRent = () => {
+        console.log('rent')
+        return successToast('Indo para o aluguel.')
+      }
+
+      console.log(methodSelected)
+      const typeFunction = {
+        cart: () => handleCart(),
+        buy: () => handleBuy(),
+        rent: () => handleRent(),
+      }
+      return typeFunction[methodSelected! as keyof typeof typeFunction]()
     }
+  }, [methodSelected, createCart])
 
-    const handleRent = () => {
-      console.log('rent')
-    }
-
-    await refetchAvailability()
-
-    if (!refetchingAvailability) {
-      if (resultAvailability) {
-        const typeFunction = {
-          cart: () => handleCart(),
-          buy: () => handleBuy(),
-          rent: () => handleRent(),
-        }
-        console.log(await resultAvailability)
-        return typeFunction[type]()
+  useEffect(() => {
+    console.log(resultAvailability)
+    if (resultAvailability?.request && !refetchingAvailability) {
+      if (resultAvailability?.request.status === 200) {
+        proceedItem()
+      } else if (resultAvailability?.request.status === 404) {
+        errorToast('Desculpe, o item não se encontra mais disponível.')
+        router.push('/')
+      } else {
+        errorToast('Erro ao verificar o item. Tente novamente mais tarde!')
+        router.push('/')
       }
     }
-  }
+  }, [resultAvailability, refetchingAvailability, proceedItem, router])
 
   useEffect(() => {
     if (wasRaised && !isLoading) {
       if (data && data.request.status === 201) {
-        toast.success('Skin adicionada no carrinho', {
-          duration: 4000, // Duração em milissegundos
-          position: 'bottom-right', // Posição do toast
-          icon: undefined,
-          style: {
-            background: '#AFD734', // Estilo personalizado
-            color: 'black',
-          },
-        })
+        successToast('Item adicionado ao carrinho!')
         setWasRaised(false)
       } else if (data && data.request.status === 409) {
-        toast.error('Essa skin já está em seu carrinho', {
-          duration: 4000, // Duração em milissegundos
-          position: 'bottom-right', // Posição do toast
-          style: {
-            background: '#E84E6A', // Estilo personalizado
-            color: 'white',
-          },
-        })
+        errorToast('Item já adicionado em seu carrinho.')
         setWasRaised(false)
       }
     }
@@ -205,19 +234,19 @@ export function PageDetailsSkin({
 
       <div className="mt-10 flex gap-2">
         <Common.Button
-          onClick={() => verifySkinAvailability('rent')}
+          onClick={() => setMethodSelected('rent')}
           className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
         >
           Alugar
         </Common.Button>
         <Common.Button
-          onClick={() => verifySkinAvailability('buy')}
+          onClick={() => setMethodSelected('buy')}
           className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
         >
           Comprar
         </Common.Button>
         <Common.Button
-          onClick={() => verifySkinAvailability('cart')}
+          onClick={() => setMethodSelected('cart')}
           className="h-11 w-11"
         >
           <IconCarrinho />

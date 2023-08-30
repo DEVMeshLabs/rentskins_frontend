@@ -42,3 +42,7 @@ export interface ISkinsToAdvertise {
   skin_link_game: string
   skin_link_steam: string
 }
+
+export interface ISkinsAvailability {
+  error?: string
+}

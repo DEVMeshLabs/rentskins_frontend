@@ -1,5 +1,11 @@
-import { ISkins, ISkinsResponse, ISkinsToAdvertise } from '@/interfaces/ISkins'
+import {
+  ISkins,
+  ISkinsAvailability,
+  ISkinsResponse,
+  ISkinsToAdvertise,
+} from '@/interfaces/ISkins'
 import { Api } from '@/providers'
+import { AxiosResponse } from 'axios'
 import { IInventory } from './interfaces/inventoryy.interface'
 
 export default class SkinService {
@@ -78,11 +84,19 @@ export default class SkinService {
       .catch((err) => err)
   }
 
-  public static postCheckItemAvailability(assetId: string, ownerId: string) {
-    return Api.post(`/skins/availability/${ownerId}`, {
-      assetid: assetId,
-    })
+  public static async postCheckItemAvailability(
+    assetId: string,
+    ownerId: string,
+  ) {
+    const result: AxiosResponse<ISkinsAvailability, any> = await Api.post(
+      `/skins/availability/${ownerId}`,
+      {
+        assetid: assetId,
+      },
+    )
       .then((response) => response)
       .catch((e) => e)
+
+    return result
   }
 }
