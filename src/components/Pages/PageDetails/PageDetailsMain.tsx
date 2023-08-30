@@ -23,6 +23,8 @@ interface IProps {
 export default function PageDetailsMain({ item, seller }: IProps) {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
+  const defaultID = item.skin_link_game.slice(20)
+  console.log(defaultID)
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],

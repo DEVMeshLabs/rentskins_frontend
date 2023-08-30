@@ -17,11 +17,23 @@ interface IMetadata {
 }
 
 const fetchItem = cache(async (id: string) => {
-  return (await SkinService.findById(id)).data
+  try {
+    return (await SkinService.findById(id)).data
+  } catch (err) {
+    console.log(err)
+  }
 })
 
-const fetchSeller = cache(async (sellerid: string) => {
-  return (await UserService.getUser(sellerid)).data
+const fetchSeller = cache(async (sellerid?: string) => {
+  try {
+    if (sellerid) {
+      return (await UserService.getUser(sellerid)).data
+    }
+
+    return null
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 export async function generateMetadata({
@@ -38,15 +50,15 @@ export async function generateMetadata({
 
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
-  const seller = await fetchSeller(item.seller_id)
+  const seller = await fetchSeller(item && item.seller_id)
 
-  if (!item && !seller) {
+  if (!item || !seller) {
     notFound()
   }
 
   return (
     <div>
-      <PageDetailsMain item={item} seller={seller} />
+      <PageDetailsMain item={item!} seller={seller} />
     </div>
   )
 }
