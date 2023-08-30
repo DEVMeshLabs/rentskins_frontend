@@ -77,4 +77,12 @@ export default class SkinService {
       .then((response) => response)
       .catch((err) => err)
   }
+
+  public static postCheckItemAvailability(assetId: string, ownerId: string) {
+    return Api.post(`/skins/availability/${ownerId}`, {
+      assetid: assetId,
+    })
+      .then((response) => response)
+      .catch((e) => e)
+  }
 }

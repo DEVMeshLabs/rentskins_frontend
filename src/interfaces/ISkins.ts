@@ -1,5 +1,6 @@
 export interface ISkins {
   id: string
+  assent_id: string
   name_color: string
   skin_image: string
   skin_name: string

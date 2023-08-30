@@ -40,7 +40,7 @@ export default function PageDetailsMain({ item }: IProps) {
 
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
-      <Link href="/" className="mt-8 flex items-center gap-4">
+      <Link href="/" className="mt-8 flex w-fit items-center gap-4">
         <IconArrow />
         <Common.Title color="cinza">
           Home &bull; {item.skin_weapon} &bull;{' '}
@@ -64,6 +64,7 @@ export default function PageDetailsMain({ item }: IProps) {
         </div>
         <div className="col-span-2 ml-4 ">
           <PageDetailsSkin
+            assetId={item.assent_id}
             skinName={item.skin_name}
             skinPrice={item.skin_price}
             skinFloat={item.skin_float}

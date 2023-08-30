@@ -1,6 +1,7 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
 import CartService from '@/services/cart.service'
+import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -16,6 +17,7 @@ type PropsTypes = {
   statusFloat: string
   skinId: string
   cartId: string
+  assetId: string
 }
 
 export function PageDetailsSkin({
@@ -29,12 +31,10 @@ export function PageDetailsSkin({
   skinColor,
   skinId,
   cartId,
+  assetId,
 }: PropsTypes) {
-  // const { data: session } = useSession()
-  // const trueSession = session as ISteamUser
-  // const router = useRouter()
-
   const [wasRaised, setWasRaised] = useState(false)
+
   const {
     data,
     refetch: createCart,
@@ -46,6 +46,18 @@ export function PageDetailsSkin({
     },
     enabled: false,
   })
+
+  const {
+    data: resultAvailability,
+    refetch: refetchAvailability,
+    isRefetching: refetchingAvailability,
+  } = useQuery({
+    queryKey: ['checkItemAvailability', assetId, sellerId],
+    queryFn: () => SkinService.postCheckItemAvailability(assetId, sellerId),
+    enabled: false,
+  })
+
+  console.log(resultAvailability)
 
   const verifySkinAvailability = async (type: 'cart' | 'buy' | 'rent') => {
     const handleCart = async () => {
@@ -62,17 +74,19 @@ export function PageDetailsSkin({
       console.log('rent')
     }
 
-    // const result = skinAvailability?.data.skins.some(
-    //   (skin) => skin.id === skinId,
-    // )
+    await refetchAvailability()
 
-    const typeFunction = {
-      cart: () => handleCart(),
-      buy: () => handleBuy(),
-      rent: () => handleRent(),
+    if (!refetchingAvailability) {
+      if (resultAvailability) {
+        const typeFunction = {
+          cart: () => handleCart(),
+          buy: () => handleBuy(),
+          rent: () => handleRent(),
+        }
+        console.log(await resultAvailability)
+        return typeFunction[type]()
+      }
     }
-
-    return typeFunction[type]()
   }
 
   useEffect(() => {
