@@ -99,4 +99,12 @@ export default class SkinService {
 
     return result
   }
+
+  public static async deleteById(id: string) {
+    const result: AxiosResponse<any> = await Api.delete(`/skins/${id}`)
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
 }

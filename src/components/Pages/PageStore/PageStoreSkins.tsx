@@ -21,8 +21,6 @@ export default function PageStoreSkins() {
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
   const { selectedFilters, typeFilter } = useFilterStore()
 
-  console.log(typeFilter)
-
   useEffect(() => {
     router.push(`/loja?search=${search}&page=${page}`)
   }, [page, router, search])
@@ -47,6 +45,7 @@ export default function PageStoreSkins() {
         return data
       }
     },
+    keepPreviousData: true,
   })
 
   const organized = {

@@ -33,6 +33,7 @@ export function CardSkinInventory() {
         Number(16),
       ),
     enabled: status === 'authenticated',
+    keepPreviousData: true,
   })
 
   console.log(data)

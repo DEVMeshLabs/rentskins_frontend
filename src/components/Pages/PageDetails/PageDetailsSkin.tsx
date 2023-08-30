@@ -38,31 +38,6 @@ export function PageDetailsSkin({
   const [methodSelected, setMethodSelected] = useState<any>()
   const router = useRouter()
 
-  const successToast = (message: string) => {
-    setMethodSelected(undefined)
-    return toast.success(message, {
-      duration: 4000, // Duração em milissegundos
-      position: 'bottom-right', // Posição do toast
-      icon: undefined,
-      style: {
-        background: '#AFD734', // Estilo personalizado
-        color: 'black',
-      },
-    })
-  }
-
-  const errorToast = (message: string) => {
-    setMethodSelected(undefined)
-    return toast.error(message, {
-      duration: 4000, // Duração em milissegundos
-      position: 'bottom-right', // Posição do toast
-      style: {
-        background: '#E84E6A', // Estilo personalizado
-        color: 'white',
-      },
-    })
-  }
-
   const {
     data,
     refetch: createCart,
@@ -84,6 +59,39 @@ export function PageDetailsSkin({
     queryFn: () => SkinService.postCheckItemAvailability(assetId, sellerId),
     enabled: false,
   })
+
+  const { data: deleteResult, refetch: deleteItem } = useQuery({
+    queryKey: ['deleteItem', assetId, sellerId],
+    queryFn: () => SkinService.deleteById(skinId),
+    enabled: false,
+  })
+
+  console.log(deleteResult)
+
+  const successToast = (message: string) => {
+    setMethodSelected(undefined)
+    return toast.success(message, {
+      duration: 4000,
+      position: 'bottom-right',
+      icon: undefined,
+      style: {
+        background: '#AFD734',
+        color: 'black',
+      },
+    })
+  }
+
+  const errorToast = (message: string) => {
+    setMethodSelected(undefined)
+    return toast.error(message, {
+      duration: 4000,
+      position: 'bottom-right',
+      style: {
+        background: '#E84E6A',
+        color: 'white',
+      },
+    })
+  }
 
   useEffect(() => {
     if (methodSelected !== undefined) {
@@ -118,6 +126,8 @@ export function PageDetailsSkin({
     }
   }, [methodSelected, createCart])
 
+  console.log(skinId)
+
   useEffect(() => {
     console.log(resultAvailability)
     if (resultAvailability?.request && !refetchingAvailability) {
@@ -125,13 +135,19 @@ export function PageDetailsSkin({
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
         errorToast('Desculpe, o item não se encontra mais disponível.')
-        router.push('/')
+        deleteItem()
       } else {
         errorToast('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
       }
     }
-  }, [resultAvailability, refetchingAvailability, proceedItem, router])
+  }, [
+    resultAvailability,
+    refetchingAvailability,
+    proceedItem,
+    router,
+    deleteItem,
+  ])
 
   useEffect(() => {
     if (wasRaised && !isLoading) {
