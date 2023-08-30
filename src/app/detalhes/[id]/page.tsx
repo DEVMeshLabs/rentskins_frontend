@@ -26,13 +26,24 @@ const fetchItem = cache(async (id: string) => {
 
 const fetchSeller = cache(async (sellerid?: string) => {
   try {
+    console.log(sellerid)
     if (sellerid) {
+      const response = await UserService.getUser(sellerid)
+      console.log(response)
       return (await UserService.getUser(sellerid)).data
     }
 
     return null
   } catch (err) {
     console.log(err)
+  }
+})
+
+const deleteItem = cache(async (id: string) => {
+  try {
+    return await SkinService.deleteById(id)
+  } catch (err) {
+    return undefined
   }
 })
 
@@ -52,7 +63,10 @@ export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
   const seller = await fetchSeller(item && item.seller_id)
 
-  if (!item || !seller) {
+  if (!seller) {
+    if (item) {
+      await deleteItem(item.id)
+    }
     notFound()
   }
 

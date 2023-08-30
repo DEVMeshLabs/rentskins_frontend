@@ -21,6 +21,9 @@ export default function PageHomeSkins() {
   const { data, isLoading } = useQuery({
     queryKey: ['allSkins'],
     queryFn: () => SkinService.findByAll(),
+    cacheTime: 0,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
   })
 
   return (
