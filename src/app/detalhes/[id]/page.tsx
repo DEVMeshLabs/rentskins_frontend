@@ -2,6 +2,7 @@ import PageDetailsMain from '@/components/Pages/PageDetails/PageDetailsMain'
 import SkinService from '@/services/skin.service'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
 
 interface IProps {
   params: { id: string }
@@ -10,18 +11,18 @@ interface IProps {
 interface IMetadata {
   searchParams: { [key: string]: string | string[] | undefined }
   params: {
-    id: { [key: string]: string | string[] | undefined }
+    id: string
   }
 }
 
-const fetchItem = async (id: string) => {
+const fetchItem = cache(async (id: string) => {
   return (await SkinService.findById(id)).data
-}
+})
 
 export async function generateMetadata({
   params: { id },
 }: IMetadata): Promise<Metadata> {
-  const response = (await SkinService.findById(id as unknown as string)).data
+  const response = await fetchItem(id)
 
   return {
     title: `${response?.skin_name || 'Detalhes'} - RentSkins`,
@@ -33,7 +34,6 @@ export async function generateMetadata({
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
 
-  console.log(item)
   if (!item) {
     notFound()
   }
