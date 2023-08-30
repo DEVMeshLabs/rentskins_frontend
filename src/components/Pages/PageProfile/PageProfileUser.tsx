@@ -49,6 +49,7 @@ export default function PageProfileUser() {
   } = useQuery({
     queryKey: ['profileSkins', userSteamId],
     queryFn: () => SkinService.findAllSkinsByIdSeller(userSteamId, page),
+    keepPreviousData: true,
   })
 
   useEffect(() => {

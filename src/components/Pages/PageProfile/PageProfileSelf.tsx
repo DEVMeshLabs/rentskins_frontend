@@ -38,6 +38,7 @@ export default function PageProfileSelf() {
         trueSession?.user?.steam?.steamid!,
         page,
       ),
+    keepPreviousData: true,
   })
 
   useEffect(() => {
