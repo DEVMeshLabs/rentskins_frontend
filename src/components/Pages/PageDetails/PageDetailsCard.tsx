@@ -2,7 +2,6 @@ import { IconSteam } from '@/components/Icons'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
 import Image from 'next/image'
-import Link from 'next/link'
 
 type PropsType = {
   skinImage: string
@@ -22,18 +21,20 @@ export function PageDetailsCard({
   return (
     <div className="h-full min-h-[560px] w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat">
       <div className="flex h-full w-full flex-col justify-between gap-8">
-        <div className="flex space-x-2 p-2">
-          <div className="flex h-8 w-[300px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50  first-line:border-neutral-600">
-            <IconSteam />
-            <Link href={skinLinkSteam}>Visualizar no mercado da Steam</Link>
-          </div>
+        <div className="flex select-none space-x-2 p-2">
+          <a href={skinLinkSteam}>
+            <div className="flex h-8 w-[300px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
+              <IconSteam />
+              Visualizar no mercado da Steam
+            </div>
+          </a>
 
-          <div className="flex h-8 w-[200px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50">
-            <IconOlho />
-            <Link target="_blank" href={skinLinkGame}>
+          <a target="_blank" href={skinLinkGame} rel="noreferrer">
+            <div className="flex h-8 w-[200px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all hover:opacity-100">
+              <IconOlho />
               Inspecionar no jogo
-            </Link>
-          </div>
+            </div>
+          </a>
         </div>
 
         <Image

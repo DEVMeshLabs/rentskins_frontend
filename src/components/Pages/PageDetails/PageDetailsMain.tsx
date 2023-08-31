@@ -44,7 +44,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
       </Link>
 
       <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4">
-        <div className="col-span-3 grid grid-rows-2 gap-8">
+        <div className="col-span-3 grid grid-rows-2 gap-4">
           <PageDetailsCard
             skinImage={item.skin_image}
             skinName={item.skin_name}
@@ -56,7 +56,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
           <PageDetailsVendas />
         </div>
 
-        <div className="col-span-2 grid grid-rows-2 gap-8">
+        <div className="col-span-2 grid grid-rows-2 gap-4">
           <PageDetailsSkin
             defaultID={defaultID}
             userStatus={status}

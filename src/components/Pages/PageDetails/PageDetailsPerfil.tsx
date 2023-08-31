@@ -36,7 +36,7 @@ export function PageDetailsPerfil({
       ? 'Indefinido'
       : moment(account_date).locale('pt-br').format('MMM D, YYYY')
   return (
-    <div className="h-5/6 min-h-[300px] self-center rounded-lg border-2 border-mesh-color-neutral-600">
+    <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="p-4">
         <div className="flex items-center">
           <Link href={`/perfil/${id}`} className="cursor-pointer">
@@ -92,7 +92,7 @@ export function PageDetailsPerfil({
         <div className="mt-7 space-y-3">
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Taxa de entrega
+              Taxa de Entrega
             </Common.Title>
             <span className="font-medium text-mesh-color-primary-1400">
               {delivery_fee}%
@@ -101,7 +101,7 @@ export function PageDetailsPerfil({
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Tempo de entrega
+              Tempo de Entrega
             </Common.Title>
             <span className="font-medium text-white">{delivery_time}</span>
           </div>
@@ -115,14 +115,14 @@ export function PageDetailsPerfil({
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Steam level
+              Nível da Steam
             </Common.Title>
             <span className="font-medium text-white">{steam_level}</span>
           </div>
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Membro da Steam desde
+              Membro da Steam Desde
             </Common.Title>
             <span className="font-medium text-white">{dateFormated}</span>
           </div>
