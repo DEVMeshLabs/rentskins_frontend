@@ -23,8 +23,7 @@ interface IProps {
 export default function PageDetailsMain({ item, seller }: IProps) {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
-  const defaultID = item.skin_link_game.slice(20)
-  console.log(defaultID)
+  const defaultID = item.skin_link_game.slice(20, 37)
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
@@ -60,7 +59,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
         </div>
         <div className="col-span-2 ml-4 ">
           <PageDetailsSkin
-            assetId={item.assent_id}
+            defaultID={defaultID}
+            assetId={item.asset_id}
             skinName={item.skin_name}
             skinPrice={item.skin_price}
             skinFloat={item.skin_float}

@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { ColorRing } from 'react-loader-spinner'
 
 type PropsTypes = {
   skinName: string
@@ -16,6 +17,7 @@ type PropsTypes = {
   skinColor: string
   sellerId: string
   statusFloat: string
+  defaultID: string
   skinId: string
   cartId: string
   assetId: string
@@ -30,6 +32,7 @@ export function PageDetailsSkin({
   sellerId,
   statusFloat,
   skinColor,
+  defaultID,
   skinId,
   cartId,
   assetId,
@@ -41,7 +44,7 @@ export function PageDetailsSkin({
   const {
     data,
     refetch: createCart,
-    isLoading,
+    isRefetching: recreatingCart,
   } = useQuery({
     queryKey: ['createSkinFromCart', skinId, cartId],
     queryFn: () => {
@@ -60,13 +63,22 @@ export function PageDetailsSkin({
     enabled: false,
   })
 
-  const { data: deleteResult, refetch: deleteItem } = useQuery({
+  const {
+    data: deleteResult,
+    refetch: deleteItem,
+    isRefetching: deletingItem,
+  } = useQuery({
     queryKey: ['deleteItem', assetId, sellerId],
     queryFn: () => SkinService.deleteById(skinId),
     enabled: false,
   })
 
-  console.log(deleteResult)
+  useEffect(() => {
+    if (deleteResult) {
+      errorToast('Desculpe, o item não se encontra mais disponível.')
+      router.push('/')
+    }
+  }, [deleteResult, router])
 
   const successToast = (message: string) => {
     setMethodSelected(undefined)
@@ -107,16 +119,13 @@ export function PageDetailsSkin({
       }
 
       const handleBuy = () => {
-        console.log('buy')
         return successToast('Indo para a compra.')
       }
 
       const handleRent = () => {
-        console.log('rent')
         return successToast('Indo para o aluguel.')
       }
 
-      console.log(methodSelected)
       const typeFunction = {
         cart: () => handleCart(),
         buy: () => handleBuy(),
@@ -126,15 +135,11 @@ export function PageDetailsSkin({
     }
   }, [methodSelected, createCart])
 
-  console.log(skinId)
-
   useEffect(() => {
-    console.log(resultAvailability)
     if (resultAvailability?.request && !refetchingAvailability) {
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        errorToast('Desculpe, o item não se encontra mais disponível.')
         deleteItem()
       } else {
         errorToast('Erro ao verificar o item. Tente novamente mais tarde!')
@@ -150,7 +155,7 @@ export function PageDetailsSkin({
   ])
 
   useEffect(() => {
-    if (wasRaised && !isLoading) {
+    if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
         successToast('Item adicionado ao carrinho!')
         setWasRaised(false)
@@ -159,7 +164,7 @@ export function PageDetailsSkin({
         setWasRaised(false)
       }
     }
-  }, [wasRaised, isLoading, data])
+  }, [wasRaised, data, recreatingCart])
 
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
@@ -185,7 +190,7 @@ export function PageDetailsSkin({
         <div>
           <div className="flex items-center">
             <Common.Title className="text-2xl font-extrabold text-white">
-              {(parseFloat(skinPrice) / 10).toLocaleString('PT-BR', {
+              {(parseFloat(skinPrice) * 0.1).toLocaleString('PT-BR', {
                 style: 'currency',
                 currency: 'BRL',
                 minimumIntegerDigits: 2,
@@ -211,7 +216,7 @@ export function PageDetailsSkin({
           <Common.Title className="text-mesh-color-neutral-200">
             ID Padrão
           </Common.Title>
-          <p className="text-white">{sellerId}</p>
+          <p className="text-white">{defaultID}</p>
         </div>
 
         <div className="flex justify-between">
@@ -248,26 +253,46 @@ export function PageDetailsSkin({
         </Common.Title>
       </div>
 
-      <div className="mt-10 flex gap-2">
-        <Common.Button
-          onClick={() => setMethodSelected('rent')}
-          className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
-        >
-          Alugar
-        </Common.Button>
-        <Common.Button
-          onClick={() => setMethodSelected('buy')}
-          className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
-        >
-          Comprar
-        </Common.Button>
-        <Common.Button
-          onClick={() => setMethodSelected('cart')}
-          className="h-11 w-11"
-        >
-          <IconCarrinho />
-        </Common.Button>
+      <div className="mt-10 flex items-center justify-between">
+        <div className="flex gap-2">
+          <Common.Button
+            onClick={() => setMethodSelected('rent')}
+            disabled={recreatingCart || deletingItem || refetchingAvailability}
+            className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+          >
+            Alugar
+          </Common.Button>
+          <Common.Button
+            onClick={() => setMethodSelected('buy')}
+            disabled={recreatingCart || deletingItem || refetchingAvailability}
+            className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+          >
+            Comprar
+          </Common.Button>
+          <Common.Button
+            onClick={() => setMethodSelected('cart')}
+            disabled={recreatingCart || deletingItem || refetchingAvailability}
+            className="h-11 w-11 opacity-100 disabled:opacity-10"
+          >
+            <IconCarrinho />
+          </Common.Button>
+        </div>
+        {(recreatingCart || deletingItem || refetchingAvailability) && (
+          <ButtonLoading />
+        )}
       </div>
+    </div>
+  )
+}
+
+function ButtonLoading() {
+  return (
+    <div className="-my-1 flex flex-col justify-end">
+      <ColorRing
+        width={48}
+        height={'90%'}
+        colors={['#95BC1E', '#95BC1E', '#95BC1E', '#95BC1E', '#95BC1E']}
+      />
     </div>
   )
 }
