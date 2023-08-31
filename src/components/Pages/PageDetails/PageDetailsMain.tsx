@@ -60,6 +60,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
         <div className="col-span-2 ml-4 ">
           <PageDetailsSkin
             defaultID={defaultID}
+            userStatus={status}
             assetId={item.asset_id}
             skinName={item.skin_name}
             skinPrice={item.skin_price}

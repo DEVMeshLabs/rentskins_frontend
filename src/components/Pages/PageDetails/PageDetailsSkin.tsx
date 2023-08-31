@@ -2,13 +2,15 @@ import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { ColorRing } from 'react-loader-spinner'
 
 type PropsTypes = {
+  userStatus: 'authenticated' | 'loading' | 'unauthenticated'
   skinName: string
   skinPrice: string
   skinFloat: string
@@ -24,6 +26,7 @@ type PropsTypes = {
 }
 
 export function PageDetailsSkin({
+  userStatus,
   skinName,
   skinPrice,
   skinFloat,
@@ -40,6 +43,7 @@ export function PageDetailsSkin({
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const router = useRouter()
+  const pathname = usePathname()
 
   const {
     data,
@@ -51,6 +55,7 @@ export function PageDetailsSkin({
       return CartService.createSkinFromCart(skinId, cartId)
     },
     enabled: false,
+    cacheTime: 0,
   })
 
   const {
@@ -61,6 +66,7 @@ export function PageDetailsSkin({
     queryKey: ['checkItemAvailability', assetId, sellerId],
     queryFn: () => SkinService.postCheckItemAvailability(assetId, sellerId),
     enabled: false,
+    cacheTime: 0,
   })
 
   const {
@@ -71,39 +77,15 @@ export function PageDetailsSkin({
     queryKey: ['deleteItem', assetId, sellerId],
     queryFn: () => SkinService.deleteById(skinId),
     enabled: false,
+    cacheTime: 0,
   })
 
   useEffect(() => {
     if (deleteResult) {
-      errorToast('Desculpe, o item não se encontra mais disponível.')
+      Toast.Error('Desculpe, o item não se encontra mais disponível.')
       router.push('/')
     }
   }, [deleteResult, router])
-
-  const successToast = (message: string) => {
-    setMethodSelected(undefined)
-    return toast.success(message, {
-      duration: 4000,
-      position: 'bottom-right',
-      icon: undefined,
-      style: {
-        background: '#AFD734',
-        color: 'black',
-      },
-    })
-  }
-
-  const errorToast = (message: string) => {
-    setMethodSelected(undefined)
-    return toast.error(message, {
-      duration: 4000,
-      position: 'bottom-right',
-      style: {
-        background: '#E84E6A',
-        color: 'white',
-      },
-    })
-  }
 
   useEffect(() => {
     if (methodSelected !== undefined) {
@@ -111,38 +93,57 @@ export function PageDetailsSkin({
     }
   }, [methodSelected, refetchAvailability])
 
+  console.log(userStatus)
+
+  console.log(refetchingAvailability)
+  console.log(resultAvailability)
+
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
-      const handleCart = async () => {
-        await createCart()
-        setWasRaised(true)
-      }
+      if (userStatus === 'authenticated') {
+        const handleCart = async () => {
+          await createCart()
+          setWasRaised(true)
+        }
 
-      const handleBuy = () => {
-        return successToast('Indo para a compra.')
-      }
+        const handleBuy = () => {
+          return Toast.Success('Prosseguindo para a compra.')
+        }
 
-      const handleRent = () => {
-        return successToast('Indo para o aluguel.')
-      }
+        const handleRent = () => {
+          return Toast.Success('Prosseguindo para o aluguel.')
+        }
 
-      const typeFunction = {
-        cart: () => handleCart(),
-        buy: () => handleBuy(),
-        rent: () => handleRent(),
+        const typeFunction = {
+          cart: () => handleCart(),
+          buy: () => handleBuy(),
+          rent: () => handleRent(),
+        }
+        return typeFunction[methodSelected! as keyof typeof typeFunction]()
+      } else if (userStatus === 'unauthenticated') {
+        Toast.Blank('Você deve estar logado em sua conta para prosseguir.')
+        Toast.Loading('Estamos te direcionando para a tela de login da Steam.')
+
+        return setTimeout(
+          () => signIn('steam', { callbackUrl: pathname }),
+          2000,
+        )
+      } else if (userStatus === 'loading') {
+        return Toast.Error('Tente novamente após alguns segundos.')
       }
-      return typeFunction[methodSelected! as keyof typeof typeFunction]()
+      setMethodSelected(undefined)
     }
-  }, [methodSelected, createCart])
+  }, [methodSelected, createCart, userStatus, pathname])
 
   useEffect(() => {
     if (resultAvailability?.request && !refetchingAvailability) {
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        deleteItem()
+        proceedItem()
+        // deleteItem()
       } else {
-        errorToast('Erro ao verificar o item. Tente novamente mais tarde!')
+        Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
       }
     }
@@ -157,10 +158,10 @@ export function PageDetailsSkin({
   useEffect(() => {
     if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
-        successToast('Item adicionado ao carrinho!')
+        Toast.Success('Item adicionado ao carrinho!')
         setWasRaised(false)
       } else if (data && data.request.status === 409) {
-        errorToast('Item já adicionado em seu carrinho.')
+        Toast.Error('Item já adicionado em seu carrinho.')
         setWasRaised(false)
       }
     }
