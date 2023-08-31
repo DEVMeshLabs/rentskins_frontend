@@ -88,7 +88,6 @@ export function LayoutHeaderTop() {
     pathname.includes('/pagamento') || pathname.includes('/oops')
 
   useEffect(() => {
-    //
     // const interval = setInterval(() => {
     refetch() // Refaz a requisição a cada 1 segundo
     // }, 10 * 60 * 1000)
