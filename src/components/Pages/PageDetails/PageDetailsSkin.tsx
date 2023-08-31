@@ -9,9 +9,9 @@ import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ColorRing } from 'react-loader-spinner'
+import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
 
 type PropsTypes = {
@@ -50,16 +50,35 @@ export function PageDetailsSkin({
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
-  const [openConfigurationModal, setOpenConfigurationModal] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
   const hasConfigurations =
+    userConfiguration &&
     userConfiguration?.owner_email !== undefined &&
     userConfiguration?.owner_phone !== undefined &&
     userConfiguration?.owner_cpf !== undefined &&
     userConfiguration?.agreed_with_terms !== false &&
     userConfiguration?.url_trade !== undefined
+
+  useEffect(() => {
+    if (loading && userStatus === 'authenticated' && hasConfigurations) {
+      Toast.Loading(
+        'Aguarde enquanto verificamos a disponibilidade do item.',
+        2000,
+      )
+    }
+  }, [loading, userStatus, hasConfigurations])
+
+  useEffect(() => {
+    let toastWhileLoading
+
+    if (userStatus !== 'loading') {
+      toast.dismiss(toastWhileLoading)
+    } else {
+      toastWhileLoading = Toast.Loading('Carregando...', 10000)
+    }
+  }, [userStatus])
 
   const {
     data,
@@ -98,6 +117,22 @@ export function PageDetailsSkin({
     },
   })
 
+  const renderButton = (child: ReactNode) => {
+    if (hasConfigurations === true) {
+      return child
+    }
+    if (userStatus === 'authenticated') {
+      return (
+        <ModalConnectInventoryMain
+          activator={child}
+          userConfig={userConfiguration}
+        />
+      )
+    } else {
+      return child
+    }
+  }
+
   const watchRentTime = watch('rent-time')
 
   useEffect(() => {
@@ -109,12 +144,8 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (methodSelected !== undefined) {
-      if (hasConfigurations) {
-        setLoading(true)
-        refetchAvailability()
-      } else {
-        setOpenConfigurationModal(true)
-      }
+      setLoading(true)
+      refetchAvailability()
     } else {
       setLoading(false)
     }
@@ -123,32 +154,34 @@ export function PageDetailsSkin({
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
       if (userStatus === 'authenticated') {
-        const handleCart = async () => {
-          await createCart()
-          setWasRaised(true)
-          setMethodSelected(undefined)
-        }
+        if (hasConfigurations) {
+          const handleCart = async () => {
+            await createCart()
+            setWasRaised(true)
+            setMethodSelected(undefined)
+          }
 
-        const handleBuy = () => {
-          setMethodSelected(undefined)
-          return Toast.Success(
-            'Sucesso! Porém o método de compra ainda está em desenvolvimento.',
-          )
-        }
+          const handleBuy = () => {
+            setMethodSelected(undefined)
+            return Toast.Success(
+              'Sucesso! Porém o método de compra ainda está em desenvolvimento.',
+            )
+          }
 
-        const handleRent = () => {
-          setMethodSelected(undefined)
-          return Toast.Success(
-            'Sucesso! Porém o método de aluguel ainda está em desenvolvimento.',
-          )
-        }
+          const handleRent = () => {
+            setMethodSelected(undefined)
+            return Toast.Success(
+              'Sucesso! Porém o método de aluguel ainda está em desenvolvimento.',
+            )
+          }
 
-        const typeFunction = {
-          cart: () => handleCart(),
-          buy: () => handleBuy(),
-          rent: () => handleRent(),
+          const typeFunction = {
+            cart: () => handleCart(),
+            buy: () => handleBuy(),
+            rent: () => handleRent(),
+          }
+          return typeFunction[methodSelected! as keyof typeof typeFunction]()
         }
-        return typeFunction[methodSelected! as keyof typeof typeFunction]()
       } else if (userStatus === 'unauthenticated') {
         Toast.Blank('Você deve estar logado em sua conta para prosseguir.')
         Toast.Loading('Estamos te direcionando para a tela de login da Steam.')
@@ -198,12 +231,6 @@ export function PageDetailsSkin({
 
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
-      <ModalConnectInventoryMain
-        userConfig={userConfiguration}
-        activator={null}
-        open={openConfigurationModal}
-      />
-
       <div className="space-y-4">
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
@@ -297,7 +324,9 @@ export function PageDetailsSkin({
               peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600
               font-medium`}
             name="rent-time"
-            disabled={loading}
+            disabled={
+              (loading && hasConfigurations) || userStatus === 'loading'
+            }
             items={[
               { label: '7 Dias', value: 7 },
               { label: '14 Dias', value: 14 },
@@ -309,51 +338,54 @@ export function PageDetailsSkin({
 
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
-            <Common.Button
-              onClick={() => {
-                if (!watchRentTime) {
-                  Toast.Error(
-                    'Você deve selecionar um período para prosseguir com o aluguel.',
-                  )
-                } else {
-                  setMethodSelected('rent')
+            {renderButton(
+              <Common.Button
+                onClick={() => {
+                  if (!watchRentTime) {
+                    Toast.Error(
+                      'Você deve selecionar um período para prosseguir com o aluguel.',
+                    )
+                  } else {
+                    setMethodSelected('rent')
+                  }
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
                 }
-              }}
-              disabled={loading}
-              className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-            >
-              Alugar
-            </Common.Button>
-            <Common.Button
-              onClick={() => setMethodSelected('buy')}
-              disabled={loading}
-              className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-            >
-              Comprar
-            </Common.Button>
-            <Common.Button
-              onClick={() => setMethodSelected('cart')}
-              disabled={loading}
-              className="h-11 w-11 border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
-            >
-              <IconCarrinho />
-            </Common.Button>
+                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+              >
+                Alugar
+              </Common.Button>,
+            )}
+            {renderButton(
+              <Common.Button
+                onClick={() => {
+                  setMethodSelected('buy')
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+              >
+                Comprar
+              </Common.Button>,
+            )}
+            {renderButton(
+              <Common.Button
+                onClick={() => {
+                  setMethodSelected('cart')
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                className="h-11 w-11 border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
+              >
+                <IconCarrinho />
+              </Common.Button>,
+            )}
           </div>
-          {loading && <ButtonLoading />}
         </div>
       </div>
-    </div>
-  )
-}
-
-function ButtonLoading() {
-  return (
-    <div className="-my-1 flex flex-col justify-end">
-      <ColorRing
-        width={48}
-        height={'90%'}
-        colors={['#95BC1E', '#95BC1E', '#95BC1E', '#95BC1E', '#95BC1E']}
-      />
     </div>
   )
 }

@@ -31,7 +31,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
       return UserService.getUser(trueSession.user?.steam?.steamid!)
     },
     enabled: status === 'authenticated',
-    cacheTime: 0,
   })
 
   return (
