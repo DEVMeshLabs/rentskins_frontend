@@ -1,3 +1,5 @@
+import { IOptionalConfig } from '@/interfaces/IConfig'
+
 export interface IGetUserCart {
   id: string
   buyer_id: string
@@ -20,6 +22,7 @@ export interface IGetUser {
   owner_name: string
   picture: string
   cart: IGetUserCart
+  configuration: IOptionalConfig
 }
 
 export interface ICreateUser {

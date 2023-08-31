@@ -8,9 +8,14 @@ import { ModalConnectInventoryForm } from './ModalConnectInventoryForm'
 interface IProps {
   activator: React.ReactNode
   userConfig: any
+  open?: boolean
 }
 
-export function ModalConnectInventoryMain({ activator, userConfig }: IProps) {
+export function ModalConnectInventoryMain({
+  activator,
+  userConfig,
+  open,
+}: IProps) {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
   const onFormSubmit = () => {
@@ -18,7 +23,7 @@ export function ModalConnectInventoryMain({ activator, userConfig }: IProps) {
   }
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70" />

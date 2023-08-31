@@ -31,6 +31,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
       return UserService.getUser(trueSession.user?.steam?.steamid!)
     },
     enabled: status === 'authenticated',
+    cacheTime: 0,
   })
 
   return (
@@ -70,7 +71,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             sellerId={item.seller_id}
             statusFloat={item.status_float}
             skinId={item.id}
-            cartId={userRetrieved && userRetrieved?.data?.cart?.id}
+            cartId={userRetrieved?.data?.cart?.id as string}
+            userConfiguration={userRetrieved?.data?.configuration!}
           />
           <PageDetailsPerfil
             id={seller.owner_id}

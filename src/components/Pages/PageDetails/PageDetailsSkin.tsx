@@ -1,6 +1,8 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { IconCarrinho } from '@/components/Icons'
+import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
+import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import Toast from '@/tools/toast.tool'
@@ -14,6 +16,7 @@ import { formResolver } from './schemas/form.schema'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
+  userConfiguration: IOptionalConfig
   skinName: string
   skinPrice: string
   skinFloat: string
@@ -30,6 +33,7 @@ type PropsTypes = {
 
 export function PageDetailsSkin({
   userStatus,
+  userConfiguration,
   skinName,
   skinPrice,
   skinFloat,
@@ -46,8 +50,16 @@ export function PageDetailsSkin({
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
+  const [openConfigurationModal, setOpenConfigurationModal] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+
+  const hasConfigurations =
+    userConfiguration?.owner_email !== undefined &&
+    userConfiguration?.owner_phone !== undefined &&
+    userConfiguration?.owner_cpf !== undefined &&
+    userConfiguration?.agreed_with_terms !== false &&
+    userConfiguration?.url_trade !== undefined
 
   const {
     data,
@@ -97,12 +109,16 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (methodSelected !== undefined) {
-      setLoading(true)
-      refetchAvailability()
+      if (hasConfigurations) {
+        setLoading(true)
+        refetchAvailability()
+      } else {
+        setOpenConfigurationModal(true)
+      }
     } else {
       setLoading(false)
     }
-  }, [methodSelected, refetchAvailability])
+  }, [methodSelected, refetchAvailability, hasConfigurations])
 
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
@@ -153,7 +169,8 @@ export function PageDetailsSkin({
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        deleteItem()
+        proceedItem()
+        // deleteItem()
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
@@ -181,6 +198,12 @@ export function PageDetailsSkin({
 
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
+      <ModalConnectInventoryMain
+        userConfig={userConfiguration}
+        activator={null}
+        open={openConfigurationModal}
+      />
+
       <div className="space-y-4">
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">

@@ -37,7 +37,7 @@ export function PageDetailsPerfil({
       : moment(account_date).locale('pt-br').format('MMM D, YYYY')
   return (
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
-      <div className="p-4">
+      <div className="flex flex-col justify-between gap-8 p-4">
         <div className="flex items-center">
           <Link href={`/perfil/${id}`} className="cursor-pointer">
             <Image
@@ -89,7 +89,7 @@ export function PageDetailsPerfil({
             </span>
           </div>
         </div>
-        <div className="mt-7 space-y-3">
+        <div className="space-y-3">
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
               Taxa de Entrega
@@ -126,6 +126,14 @@ export function PageDetailsPerfil({
             </Common.Title>
             <span className="font-medium text-white">{dateFormated}</span>
           </div>
+        </div>
+        <div className="self-center">
+          <Link
+            href={`/perfil/${id}`}
+            className="cursor-pointer select-none text-lg font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
+          >
+            Ver mais itens à venda
+          </Link>
         </div>
       </div>
     </div>
