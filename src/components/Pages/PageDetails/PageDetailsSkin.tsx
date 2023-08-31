@@ -88,8 +88,6 @@ export function PageDetailsSkin({
 
   const watchRentTime = watch('rent-time')
 
-  useEffect(() => console.log(watchRentTime), [watchRentTime])
-
   useEffect(() => {
     if (deleteResult) {
       Toast.Error('Desculpe, o item não se encontra mais disponível.')
@@ -117,12 +115,16 @@ export function PageDetailsSkin({
 
         const handleBuy = () => {
           setMethodSelected(undefined)
-          return Toast.Success('Prosseguindo para a compra.')
+          return Toast.Success(
+            'Sucesso! Porém o método de compra ainda está em desenvolvimento.',
+          )
         }
 
         const handleRent = () => {
           setMethodSelected(undefined)
-          return Toast.Success('Prosseguindo para o aluguel.')
+          return Toast.Success(
+            'Sucesso! Porém o método de aluguel ainda está em desenvolvimento.',
+          )
         }
 
         const typeFunction = {
