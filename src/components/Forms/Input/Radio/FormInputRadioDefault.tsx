@@ -14,6 +14,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   inputClassName?: string
   disabled?: boolean
   items: IItem[]
+  onChange?: () => void
 
   register: any
   errors?: any
@@ -31,6 +32,7 @@ export function FormInputRadioDefault({
   errors,
   errorsClassname,
   items,
+  onChange,
   ...rest
 }: IProps) {
   const renderItems = items.map((item, index) => (
@@ -42,6 +44,7 @@ export function FormInputRadioDefault({
         value={item.value}
         className={`peer absolute appearance-none ${inputClassName}`}
         {...register}
+        onChange={onChange}
       />
       <label htmlFor={item.value} className={labelClassName}>
         {item.label}

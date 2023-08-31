@@ -1,13 +1,17 @@
 import Common from '@/components/Common'
+import Form from '@/components/Forms'
 import { IconCarrinho } from '@/components/Icons'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
+import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { ColorRing } from 'react-loader-spinner'
+import { formResolver } from './schemas/form.schema'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
@@ -43,6 +47,7 @@ export function PageDetailsSkin({
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
+  const [selectedRentTime, setSelectedRentTime] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -76,6 +81,18 @@ export function PageDetailsSkin({
     enabled: false,
     cacheTime: 0,
   })
+  const { register, handleSubmit, watch } = useForm({
+    resolver: formResolver,
+    defaultValues: {
+      'rent-time': undefined,
+    },
+  })
+
+  const watchRentTime = watch('rent-time')
+
+  const onFormSubmit = (data: { 'rent-time': undefined | string }) => {
+    console.log(data)
+  }
 
   useEffect(() => {
     if (deleteResult) {
@@ -250,11 +267,31 @@ export function PageDetailsSkin({
         </div>
       </div>
 
-      <div className="mt-10">
-        <Common.Title className="font-semibold text-white">
-          Selecione o período de Aluguel
-        </Common.Title>
-      </div>
+      <Form.Root onSubmit={handleSubmit(onFormSubmit)}>
+        <div className="mt-10">
+          <Common.Title className="font-semibold text-white">
+            Selecione o período de Aluguel
+          </Common.Title>
+          <Form.Input.Radio.Default
+            containerClassname="flex gap-2 mt-2"
+            labelClassName={classNames(
+              'peer-checked:bg-mesh-color-primary-1200 w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
+              {
+                'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
+              },
+            )}
+            onChange={() => setSelectedRentTime(false)}
+            className="bg-mesh-color-rarity-lowest text-white"
+            name="rent-time"
+            items={[
+              { label: '7 Dias', value: 7 },
+              { label: '14 Dias', value: 14 },
+              { label: '21 Dias', value: 21 },
+            ]}
+            register={register('rent-time')}
+          />
+        </div>
+      </Form.Root>
 
       <div className="mt-10 flex items-center justify-between">
         <div className="flex gap-2">
@@ -266,7 +303,12 @@ export function PageDetailsSkin({
             Alugar
           </Common.Button>
           <Common.Button
-            onClick={() => setMethodSelected('buy')}
+            onClick={() => {
+              if (!watchRentTime) {
+                setSelectedRentTime(true)
+              }
+              setMethodSelected('buy')
+            }}
             disabled={loading}
             className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
           >

@@ -97,7 +97,7 @@ export function OtherCard({
             <IconCart />
           </Common.Button>
           <Link
-            href={'/details'}
+            href={`/detalhes/${id}`}
             className="flex items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
           >
             Comprar
