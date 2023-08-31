@@ -5,7 +5,6 @@ import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
-import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -47,7 +46,6 @@ export function PageDetailsSkin({
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
-  const [selectedRentTime, setSelectedRentTime] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -81,7 +79,7 @@ export function PageDetailsSkin({
     enabled: false,
     cacheTime: 0,
   })
-  const { register, handleSubmit, watch } = useForm({
+  const { register, watch } = useForm({
     resolver: formResolver,
     defaultValues: {
       'rent-time': undefined,
@@ -90,9 +88,7 @@ export function PageDetailsSkin({
 
   const watchRentTime = watch('rent-time')
 
-  const onFormSubmit = (data: { 'rent-time': undefined | string }) => {
-    console.log(data)
-  }
+  useEffect(() => console.log(watchRentTime), [watchRentTime])
 
   useEffect(() => {
     if (deleteResult) {
@@ -109,11 +105,6 @@ export function PageDetailsSkin({
       setLoading(false)
     }
   }, [methodSelected, refetchAvailability])
-
-  console.log(userStatus)
-
-  console.log(refetchingAvailability)
-  console.log(resultAvailability)
 
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
@@ -267,22 +258,21 @@ export function PageDetailsSkin({
         </div>
       </div>
 
-      <Form.Root onSubmit={handleSubmit(onFormSubmit)}>
-        <div className="mt-10">
+      <div className="mt-6 flex flex-col gap-4">
+        <div className="">
           <Common.Title className="font-semibold text-white">
             Selecione o período de Aluguel
           </Common.Title>
           <Form.Input.Radio.Default
-            containerClassname="flex gap-2 mt-2"
-            labelClassName={classNames(
-              'peer-checked:bg-mesh-color-primary-1200 w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
-              {
-                'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
-              },
-            )}
-            onChange={() => setSelectedRentTime(false)}
-            className="bg-mesh-color-rarity-lowest text-white"
+            wrapperClassname="select-none"
+            containerClassname="flex gap-2 mt-1"
+            labelClassName={`peer-checked:bg-mesh-color-primary-1200 peer-disabled
+              peer:opacity-100 peer-disabled:opacity-10 peer-checked:border-mesh-color-primary-1200
+              w-full h-full border text-white p-2 rounded-lg border-mesh-color-neutral-400
+              peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600
+              font-medium`}
             name="rent-time"
+            disabled={loading}
             items={[
               { label: '7 Dias', value: 7 },
               { label: '14 Dias', value: 14 },
@@ -291,38 +281,41 @@ export function PageDetailsSkin({
             register={register('rent-time')}
           />
         </div>
-      </Form.Root>
 
-      <div className="mt-10 flex items-center justify-between">
-        <div className="flex gap-2">
-          <Common.Button
-            onClick={() => setMethodSelected('rent')}
-            disabled={loading}
-            className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-          >
-            Alugar
-          </Common.Button>
-          <Common.Button
-            onClick={() => {
-              if (!watchRentTime) {
-                setSelectedRentTime(true)
-              }
-              setMethodSelected('buy')
-            }}
-            disabled={loading}
-            className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-          >
-            Comprar
-          </Common.Button>
-          <Common.Button
-            onClick={() => setMethodSelected('cart')}
-            disabled={loading}
-            className="h-11 w-11 opacity-100 disabled:opacity-10"
-          >
-            <IconCarrinho />
-          </Common.Button>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2">
+            <Common.Button
+              onClick={() => {
+                if (!watchRentTime) {
+                  Toast.Error(
+                    'Você deve selecionar um período para prosseguir com o aluguel.',
+                  )
+                } else {
+                  setMethodSelected('rent')
+                }
+              }}
+              disabled={loading}
+              className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+            >
+              Alugar
+            </Common.Button>
+            <Common.Button
+              onClick={() => setMethodSelected('buy')}
+              disabled={loading}
+              className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+            >
+              Comprar
+            </Common.Button>
+            <Common.Button
+              onClick={() => setMethodSelected('cart')}
+              disabled={loading}
+              className="h-11 w-11 opacity-100 disabled:opacity-10"
+            >
+              <IconCarrinho />
+            </Common.Button>
+          </div>
+          {loading && <ButtonLoading />}
         </div>
-        {loading && <ButtonLoading />}
       </div>
     </div>
   )
