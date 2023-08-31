@@ -28,6 +28,8 @@ const formSchema = yup.object({
     .bool()
     .isTrue('Você deve concordar com os termos para prosseguir.'),
   terms: yup.bool(),
+  rent: yup.bool(),
+  sell: yup.bool(),
 })
 
 export const formResolver = yupResolver(formSchema)
