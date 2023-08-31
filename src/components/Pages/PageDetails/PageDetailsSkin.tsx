@@ -42,6 +42,7 @@ export function PageDetailsSkin({
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -69,11 +70,7 @@ export function PageDetailsSkin({
     cacheTime: 0,
   })
 
-  const {
-    data: deleteResult,
-    refetch: deleteItem,
-    isRefetching: deletingItem,
-  } = useQuery({
+  const { data: deleteResult, refetch: deleteItem } = useQuery({
     queryKey: ['deleteItem', assetId, sellerId],
     queryFn: () => SkinService.deleteById(skinId),
     enabled: false,
@@ -89,7 +86,10 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (methodSelected !== undefined) {
+      setLoading(true)
       refetchAvailability()
+    } else {
+      setLoading(false)
     }
   }, [methodSelected, refetchAvailability])
 
@@ -104,13 +104,16 @@ export function PageDetailsSkin({
         const handleCart = async () => {
           await createCart()
           setWasRaised(true)
+          setMethodSelected(undefined)
         }
 
         const handleBuy = () => {
+          setMethodSelected(undefined)
           return Toast.Success('Prosseguindo para a compra.')
         }
 
         const handleRent = () => {
+          setMethodSelected(undefined)
           return Toast.Success('Prosseguindo para o aluguel.')
         }
 
@@ -129,9 +132,9 @@ export function PageDetailsSkin({
           2000,
         )
       } else if (userStatus === 'loading') {
+        setMethodSelected(undefined)
         return Toast.Error('Tente novamente após alguns segundos.')
       }
-      setMethodSelected(undefined)
     }
   }, [methodSelected, createCart, userStatus, pathname])
 
@@ -140,8 +143,7 @@ export function PageDetailsSkin({
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        proceedItem()
-        // deleteItem()
+        deleteItem()
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
@@ -258,29 +260,27 @@ export function PageDetailsSkin({
         <div className="flex gap-2">
           <Common.Button
             onClick={() => setMethodSelected('rent')}
-            disabled={recreatingCart || deletingItem || refetchingAvailability}
+            disabled={loading}
             className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
           >
             Alugar
           </Common.Button>
           <Common.Button
             onClick={() => setMethodSelected('buy')}
-            disabled={recreatingCart || deletingItem || refetchingAvailability}
+            disabled={loading}
             className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
           >
             Comprar
           </Common.Button>
           <Common.Button
             onClick={() => setMethodSelected('cart')}
-            disabled={recreatingCart || deletingItem || refetchingAvailability}
+            disabled={loading}
             className="h-11 w-11 opacity-100 disabled:opacity-10"
           >
             <IconCarrinho />
           </Common.Button>
         </div>
-        {(recreatingCart || deletingItem || refetchingAvailability) && (
-          <ButtonLoading />
-        )}
+        {loading && <ButtonLoading />}
       </div>
     </div>
   )
