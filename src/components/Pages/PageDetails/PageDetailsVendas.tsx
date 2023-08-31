@@ -3,7 +3,7 @@ import { IconArrow } from '@/components/Icons'
 
 export function PageDetailsVendas() {
   return (
-    <div className="mt-8 min-h-[484px] rounded-lg border-2 border-mesh-color-others-black-olive">
+    <div className="min-h-[484px] rounded-lg border-2 border-mesh-color-others-black-olive">
       <div className="p-4">
         <Common.Title color="white" className="text-[28px] font-bold">
           Últimas vendas

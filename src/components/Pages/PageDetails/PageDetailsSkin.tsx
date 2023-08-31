@@ -311,7 +311,7 @@ export function PageDetailsSkin({
             <Common.Button
               onClick={() => setMethodSelected('cart')}
               disabled={loading}
-              className="h-11 w-11 opacity-100 disabled:opacity-10"
+              className="h-11 w-11 border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
             >
               <IconCarrinho />
             </Common.Button>

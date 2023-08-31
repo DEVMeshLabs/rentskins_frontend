@@ -20,7 +20,7 @@ export function PageDetailsCard({
   skinFloat,
 }: PropsType) {
   return (
-    <div className="h-full max-h-[560px] min-h-[560px] w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat">
+    <div className="h-full min-h-[560px] w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat">
       <div className="flex h-full w-full flex-col justify-between gap-8">
         <div className="flex space-x-2 p-2">
           <div className="flex h-8 w-[300px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50  first-line:border-neutral-600">

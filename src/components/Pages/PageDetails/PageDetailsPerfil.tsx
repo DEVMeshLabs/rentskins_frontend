@@ -36,7 +36,7 @@ export function PageDetailsPerfil({
       ? 'Indefinido'
       : moment(account_date).locale('pt-br').format('MMM D, YYYY')
   return (
-    <div className="mt-10 min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
+    <div className="h-5/6 min-h-[300px] self-center rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="p-4">
         <div className="flex items-center">
           <Link href={`/perfil/${id}`} className="cursor-pointer">
