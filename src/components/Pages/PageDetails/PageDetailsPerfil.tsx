@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 // import fallen from '@/assets/fallen.svg'
+import blankProfile from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
-import Image from 'next/image'
+import classnames from 'classnames'
 import moment from 'moment'
 import 'moment/locale/pt-br'
-import blankProfile from '@/../public/blank-profile.png'
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface IProps {
@@ -35,8 +36,8 @@ export function PageDetailsPerfil({
       ? 'Indefinido'
       : moment(account_date).locale('pt-br').format('MMM D, YYYY')
   return (
-    <div className="mt-10 min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
-      <div className="p-4">
+    <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
+      <div className="flex flex-col justify-between gap-8 p-4">
         <div className="flex items-center">
           <Link href={`/perfil/${id}`} className="cursor-pointer">
             <Image
@@ -46,7 +47,7 @@ export function PageDetailsPerfil({
                   : blankProfile
               }
               alt=""
-              className="rounded-full"
+              className="rounded-full opacity-50 transition-all hover:opacity-100"
               draggable={false}
               width={80}
               height={80}
@@ -56,15 +57,42 @@ export function PageDetailsPerfil({
             <Common.Title color="white" className="text-2xl font-semibold">
               {owner_name}
             </Common.Title>
-            <span className="mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none bg-mesh-color-others-green px-3 text-sm text-mesh-color-accent-600">
-              Confiável
+            <span
+              className={classnames(
+                'mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none bg-mesh-color-others-green px-3 text-sm capitalize text-mesh-color-accent-600',
+                {
+                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
+                    status_member === 'Risco',
+                },
+                {
+                  'bg-mesh-color-rarity-low/20 text-mesh-color-rarity-low':
+                    status_member === 'Questionável',
+                },
+                {
+                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
+                    status_member === 'Atenção',
+                },
+                {
+                  'bg-white/20 text-white': status_member === 'Membro novo',
+                },
+                {
+                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
+                    status_member === 'Frequente',
+                },
+                {
+                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
+                    status_member === 'Confiável',
+                },
+              )}
+            >
+              {status_member}
             </span>
           </div>
         </div>
-        <div className="mt-7 space-y-3">
+        <div className="space-y-3">
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Taxa de entrega
+              Taxa de Entrega
             </Common.Title>
             <span className="font-medium text-mesh-color-primary-1400">
               {delivery_fee}%
@@ -73,7 +101,7 @@ export function PageDetailsPerfil({
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Tempo de entrega
+              Tempo de Entrega
             </Common.Title>
             <span className="font-medium text-white">{delivery_time}</span>
           </div>
@@ -87,17 +115,25 @@ export function PageDetailsPerfil({
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Steam level
+              Nível da Steam
             </Common.Title>
             <span className="font-medium text-white">{steam_level}</span>
           </div>
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
-              Membro da Steam desde
+              Membro da Steam Desde
             </Common.Title>
             <span className="font-medium text-white">{dateFormated}</span>
           </div>
+        </div>
+        <div className="self-center">
+          <Link
+            href={`/perfil/${id}`}
+            className="cursor-pointer select-none text-lg font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
+          >
+            Ver mais itens à venda
+          </Link>
         </div>
       </div>
     </div>

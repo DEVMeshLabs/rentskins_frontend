@@ -38,6 +38,7 @@ export default function PageProfileSelf() {
         trueSession?.user?.steam?.steamid!,
         page,
       ),
+    keepPreviousData: true,
   })
 
   useEffect(() => {
@@ -49,9 +50,11 @@ export default function PageProfileSelf() {
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),
   })
 
+  console.log(dataGettedUser)
+
   useEffect(() => {
     if (dataGettedUser?.data) {
-      const accountDate = new Date(dataGettedUser?.data.account_date)
+      const accountDate = new Date(dataGettedUser?.data.steam_created_date)
       setAccountDate(
         `${accountDate.getDate().toString().padStart(2, '0')}/${(
           accountDate.getMonth() + 1
@@ -60,7 +63,6 @@ export default function PageProfileSelf() {
           .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
       setSteamLevel(dataGettedUser?.data.steam_level)
-      setUserState(dataGettedUser.data.status_member)
       setUserState(dataGettedUser?.data.status_member)
       setTotalExchanges(dataGettedUser.data.total_exchanges)
       setDeliveryTime(dataGettedUser.data.delivery_time)

@@ -1,5 +1,11 @@
-import { ISkins, ISkinsResponse, ISkinsToAdvertise } from '@/interfaces/ISkins'
+import {
+  ISkins,
+  ISkinsAvailability,
+  ISkinsResponse,
+  ISkinsToAdvertise,
+} from '@/interfaces/ISkins'
 import { Api } from '@/providers'
+import { AxiosResponse } from 'axios'
 import { IInventory } from './interfaces/inventoryy.interface'
 
 export default class SkinService {
@@ -15,14 +21,19 @@ export default class SkinService {
     return Api.get<ISkins[]>(`/skins/weapon/${weapon}`)
   }
 
-  public static findBySkinsInventory(
+  public static findBySkinsInventory(steamid: string, token: string) {
+    return Api.get<IInventory>(`/skins/inventory/${steamid}`, {
+      headers: { Authorization: 'Bearer ' + token },
+    })
+  }
+
+  public static findBySkinsInventoryWithFilters(
     steamid: string,
-    filterType: string[],
-    page: number,
-    itemsPerPage: number,
     token: string,
+    filterType?: string[],
+    page?: number,
+    itemsPerPage?: number,
   ) {
-    console.log(itemsPerPage)
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
@@ -40,11 +51,15 @@ export default class SkinService {
 
   public static findAllSkinsByIdSeller(
     sellerId: string,
-    page: number | string,
+    page?: number | string,
   ) {
-    return Api.get<ISkinsResponse>(
-      `/skins/seller/user/${sellerId}?page=${page}`,
-    )
+    if (page) {
+      return Api.get<ISkinsResponse>(
+        `/skins/seller/user/${sellerId}?page=${page}`,
+      )
+    } else {
+      return Api.get<ISkinsResponse>(`/skins/seller/user/${sellerId}`)
+    }
   }
 
   public static findBySearchParameter(param: string, page?: number | string) {
@@ -67,5 +82,29 @@ export default class SkinService {
     })
       .then((response) => response)
       .catch((err) => err)
+  }
+
+  public static async postCheckItemAvailability(
+    assetId: string,
+    ownerId: string,
+  ) {
+    const result: AxiosResponse<ISkinsAvailability, any> = await Api.post(
+      `/skins/availability/${ownerId}`,
+      {
+        assetid: assetId,
+      },
+    )
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
+
+  public static async deleteById(id: string) {
+    const result: AxiosResponse<any> = await Api.delete(`/skins/${id}`)
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
   }
 }

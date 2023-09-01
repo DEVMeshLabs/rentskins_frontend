@@ -1,120 +1,107 @@
-'use client'
-/* eslint-disable camelcase */
 import Common from '@/components/Common'
-import { IconArrow } from '@/components/Icons'
-import { PageDetailsCard } from '@/components/Pages/PageDetails/PageDetailsCard'
-import { PageDetailsPerfil } from '@/components/Pages/PageDetails/PageDetailsPerfil'
-import { PageDetailsSkin } from '@/components/Pages/PageDetails/PageDetailsSkin'
-import { PageDetailsVendas } from '@/components/Pages/PageDetails/PageDetailsVendas'
-import ISteamUser from '@/interfaces/steam.interface'
+import PageDetailsMain from '@/components/Pages/PageDetails/PageDetailsMain'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
-import { useQuery } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
+import { Metadata } from 'next'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { notFound } from 'next/navigation'
+import { cache } from 'react'
 
-const SkinsSemelhantes = dynamic(() =>
-  import('@/components/Others/SkinsSemelhantes').then(
-    (module) => module.default,
-  ),
-)
+interface IProps {
+  params: { id: string }
+}
 
-export default function Details() {
-  const { id } = useParams()
-  const { data: session, status } = useSession()
-  const trueSession = (session as ISteamUser) || {}
+interface IMetadata {
+  searchParams: { [key: string]: string | string[] | undefined }
+  params: {
+    id: string
+  }
+}
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['skin', id],
-    queryFn: async () => SkinService.findById(id),
-  })
+const fetchItem = cache(async (id: string) => {
+  try {
+    return (await SkinService.findById(id)).data
+  } catch (err) {
+    console.log(err)
+  }
+})
 
-  const { data: dataGetUser, refetch } = useQuery({
-    queryKey: ['ownerSkin', data?.data.seller_id],
-    queryFn: async () => {
-      return UserService.getUser(data?.data.seller_id!)
-    },
-    enabled: !!data?.data.seller_id,
-  })
+const fetchSeller = cache(async (sellerid?: string) => {
+  try {
+    if (sellerid) {
+      return (await UserService.getUser(sellerid)).data
+    }
 
-  useEffect(() => {
-    refetch()
-  }, [])
+    return null
+  } catch (err) {
+    console.log(err)
+  }
+})
 
-  const { data: userRetrieved } = useQuery({
-    queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
-    queryFn: () => {
-      return UserService.getUser(trueSession.user?.steam?.steamid!)
-    },
-    enabled: status === 'authenticated',
-  })
+const deleteItem = cache(async (id: string) => {
+  try {
+    return await SkinService.deleteById(id)
+  } catch (err) {
+    return undefined
+  }
+})
+
+export async function generateMetadata({
+  params: { id },
+}: IMetadata): Promise<Metadata> {
+  const response = await fetchItem(id)
+
+  return {
+    title: `${response?.skin_name || 'Detalhes'} - RentSkins`,
+    description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+    Encontre skins raras e exclusivas para personalizar seu jogo.`,
+  }
+}
+
+export default async function Details({ params }: IProps) {
+  const item = await fetchItem(params.id)
+  const seller = await fetchSeller(item && item.seller_id)
+
+  if (item) {
+    if (!seller) {
+      await deleteItem(item.id)
+    }
+  } else {
+    notFound()
+  }
 
   return (
     <div>
-      {!isLoading && data?.data ? (
-        <main className="mx-auto w-10/12 bg-mesh-color-others-black">
-          <Link href="/" className="mt-8 flex items-center gap-4">
-            <IconArrow />
-            <Common.Title color="cinza">
-              Home &bull; {data?.data.skin_weapon} &bull;{' '}
-              <span className="text-[#49E671]">
-                {data && data?.data.skin_name}
-              </span>
-            </Common.Title>
-          </Link>
-
-          <div className="mx-auto grid w-full grid-cols-5 py-10">
-            <div className="col-span-3">
-              <PageDetailsCard
-                skinImage={data && data!.data.skin_image}
-                skinName={data && data!.data.skin_name}
-                skinLinkGame={data && data!.data.skin_link_game}
-                skinLinkSteam={data && data!.data.skin_link_steam}
-                skinFloat={Number(data && data!.data.skin_float)}
-              />
-
-              <div>
-                <PageDetailsVendas />
-              </div>
-            </div>
-            <div className="col-span-2 ml-4">
-              <PageDetailsSkin
-                skinName={data!.data.skin_name}
-                skinPrice={data!.data.skin_price}
-                skinFloat={data!.data.skin_float}
-                skinCategory={data!.data.skin_category}
-                skinWeapon={data!.data.skin_weapon}
-                skinColor={data!.data.skin_color}
-                sellerId={data!.data.seller_id}
-                statusFloat={data!.data.status_float}
-                skinId={data!.data.id}
-                cartId={userRetrieved && userRetrieved?.data?.cart?.id}
-              />
-              <PageDetailsPerfil
-                id={dataGetUser?.data?.owner_id}
-                account_date={dataGetUser?.data?.steam_created_date!}
-                delivery_fee={dataGetUser?.data?.delivery_fee!}
-                delivery_time={dataGetUser?.data?.delivery_time!}
-                owner_name={dataGetUser?.data?.owner_name!}
-                picture={dataGetUser?.data?.picture!}
-                status_member={dataGetUser?.data?.status_member!}
-                steam_level={dataGetUser?.data?.steam_level!}
-                total_exchanges={dataGetUser?.data?.total_exchanges!}
-              />
-            </div>
-          </div>
-          <SkinsSemelhantes
-            isLoading={isLoading}
-            weaponName={isLoading ? null : data && data?.data.skin_weapon}
-            data={data}
-          />
-        </main>
+      {seller ? (
+        <PageDetailsMain item={item!} seller={seller} />
       ) : (
-        <Common.Title color="white">Carregando...</Common.Title>
+        <RenderUnavailableScreen />
       )}
     </div>
+  )
+}
+
+function RenderUnavailableScreen() {
+  return (
+    <main className={`flex flex-col items-center justify-center gap-6`}>
+      <div className="flex flex-col items-center">
+        <Common.Title
+          bold={900}
+          size="3xl"
+          className="bg-mesh-gradient-green-pattern bg-clip-text text-transparent"
+        >
+          OOPS...
+        </Common.Title>
+        <Common.Title bold={600} size="xl" className="text-white">
+          O item se encontra indisponível no momento.
+        </Common.Title>
+      </div>
+      <Link
+        href="/loja?search=&page=1"
+        className="rounded-md bg-mesh-color-primary-1200 px-12 py-2 font-semibold opacity-70 hover:opacity-100"
+      >
+        Voltar à Loja
+      </Link>
+    </main>
   )
 }

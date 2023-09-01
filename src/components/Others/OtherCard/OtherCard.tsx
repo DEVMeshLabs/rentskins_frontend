@@ -5,6 +5,7 @@ import { IconOlho } from '@/components/Icons/IconOlho'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
+import classNames from 'classnames'
 
 interface Props {
   id: string
@@ -30,13 +31,20 @@ export function OtherCard({
   const titleSkinWeapon = (
     <h1 className="text-sm font-medium opacity-60">{skinWeapon}</h1>
   )
+  const customName = sellerName.includes('StatTrak™')
+    ? sellerName.split('™')
+    : sellerName
 
-  //
   return (
     <article className="flex w-72 flex-col gap-3 rounded-lg border-2 border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white">
       <Link
         href={`/detalhes/${id}`}
-        className="flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
+        className={classNames(
+          'flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
+          {
+            'border-mesh-color-secondary-1200': typeof customName === 'object',
+          },
+        )}
       >
         <div
           className={`h-2 w-52 rounded-b-full`}
@@ -53,7 +61,16 @@ export function OtherCard({
       </Link>
 
       <div className="flex h-11 flex-col gap-3">
-        <h1>{sellerName}</h1>
+        {typeof customName === 'object' ? (
+          <h1>
+            <span className="text-mesh-color-secondary-1200">
+              {customName[0]}
+            </span>
+            {customName[1]}
+          </h1>
+        ) : (
+          customName
+        )}
         {sellerName.length < 15 && titleSkinWeapon}
       </div>
       <div

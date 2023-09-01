@@ -1,11 +1,16 @@
 import { Api } from '@/providers'
+import { AxiosResponse } from 'axios'
 import { ICreateUser, IGetUser } from './interfaces/user.interface'
 
 export default class UserService {
   public static async getUser(userSteamId: string) {
-    return Api.get<IGetUser>(`/perfil/user/${userSteamId}`)
+    const result: AxiosResponse<IGetUser> = await Api.get<IGetUser>(
+      `/perfil/user/${userSteamId}`,
+    )
       .then((response) => response)
       .catch((e) => e)
+
+    return result
   }
 
   public static async getUserStatus(userSteamId: string) {

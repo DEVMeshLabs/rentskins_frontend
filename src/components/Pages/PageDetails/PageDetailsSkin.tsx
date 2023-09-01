@@ -1,15 +1,22 @@
 import Common from '@/components/Common'
+import Form from '@/components/Forms'
 import { IconCarrinho } from '@/components/Icons'
+import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
+import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
+import SkinService from '@/services/skin.service'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
-import Form from '@/components/Forms'
-import classNames from 'classnames'
 
 type PropsTypes = {
+  userStatus: 'authenticated' | 'loading' | 'unauthenticated'
+  userConfiguration: IOptionalConfig
   skinName: string
   skinPrice: string
   skinFloat: string
@@ -18,11 +25,15 @@ type PropsTypes = {
   skinColor: string
   sellerId: string
   statusFloat: string
+  defaultID: string
   skinId: string
   cartId: string
+  assetId: string
 }
 
 export function PageDetailsSkin({
+  userStatus,
+  userConfiguration,
   skinName,
   skinPrice,
   skinFloat,
@@ -31,57 +42,192 @@ export function PageDetailsSkin({
   sellerId,
   statusFloat,
   skinColor,
+  defaultID,
   skinId,
   cartId,
+  assetId,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
-  const [selectedRentTime, setSelectedRentTime] = useState(false)
-  const { data, refetch, isLoading } = useQuery({
+  const [methodSelected, setMethodSelected] = useState<any>()
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const hasConfigurations =
+    userConfiguration &&
+    userConfiguration?.owner_email !== undefined &&
+    userConfiguration?.owner_phone !== undefined &&
+    userConfiguration?.owner_cpf !== undefined &&
+    userConfiguration?.agreed_with_terms !== false &&
+    userConfiguration?.url_trade !== undefined
+
+  useEffect(() => {
+    if (loading && userStatus === 'authenticated' && hasConfigurations) {
+      Toast.Loading(
+        'Aguarde enquanto verificamos a disponibilidade do item.',
+        2000,
+      )
+    }
+  }, [loading, userStatus, hasConfigurations])
+
+  useEffect(() => {
+    let toastWhileLoading
+
+    if (userStatus !== 'loading') {
+      toast.dismiss(toastWhileLoading)
+    } else {
+      toastWhileLoading = Toast.Loading('Carregando...', 10000)
+    }
+  }, [userStatus])
+
+  const {
+    data,
+    refetch: createCart,
+    isRefetching: recreatingCart,
+  } = useQuery({
     queryKey: ['createSkinFromCart', skinId, cartId],
     queryFn: () => {
       return CartService.createSkinFromCart(skinId, cartId)
     },
     enabled: false,
+    cacheTime: 0,
   })
-  const { register, handleSubmit, watch } = useForm({
+
+  const {
+    refetch: refetchAvailability,
+    data: resultAvailability,
+    isRefetching: refetchingAvailability,
+  } = useQuery({
+    queryKey: ['checkItemAvailability', assetId, sellerId],
+    queryFn: () => SkinService.postCheckItemAvailability(assetId, sellerId),
+    enabled: false,
+    cacheTime: 0,
+  })
+
+  const { data: deleteResult, refetch: deleteItem } = useQuery({
+    queryKey: ['deleteItem', assetId, sellerId],
+    queryFn: () => SkinService.deleteById(skinId),
+    enabled: false,
+    cacheTime: 0,
+  })
+  const { register, watch } = useForm({
     resolver: formResolver,
     defaultValues: {
       'rent-time': undefined,
     },
   })
 
-  const watchRentTime = watch('rent-time')
-
-  const onFormSubmit = (data: { 'rent-time': undefined | string }) => {
-    console.log(data)
+  const renderButton = (child: ReactNode) => {
+    if (hasConfigurations === true) {
+      return child
+    }
+    if (userStatus === 'authenticated') {
+      return (
+        <ModalConnectInventoryMain
+          activator={child}
+          userConfig={userConfiguration}
+        />
+      )
+    } else {
+      return child
+    }
   }
 
+  const watchRentTime = watch('rent-time')
+
   useEffect(() => {
-    if (wasRaised && !isLoading) {
+    if (deleteResult) {
+      Toast.Error('Desculpe, o item não se encontra mais disponível.')
+      router.push('/')
+    }
+  }, [deleteResult, router])
+
+  useEffect(() => {
+    if (methodSelected !== undefined) {
+      setLoading(true)
+      refetchAvailability()
+    } else {
+      setLoading(false)
+    }
+  }, [methodSelected, refetchAvailability, hasConfigurations])
+
+  const proceedItem = useCallback(async () => {
+    if (methodSelected !== undefined) {
+      if (userStatus === 'authenticated') {
+        if (hasConfigurations) {
+          const handleCart = async () => {
+            await createCart()
+            setWasRaised(true)
+            setMethodSelected(undefined)
+          }
+
+          const handleBuy = () => {
+            setMethodSelected(undefined)
+            return Toast.Success(
+              'Sucesso! Porém o método de compra ainda está em desenvolvimento.',
+            )
+          }
+
+          const handleRent = () => {
+            setMethodSelected(undefined)
+            return Toast.Success(
+              'Sucesso! Porém o método de aluguel ainda está em desenvolvimento.',
+            )
+          }
+
+          const typeFunction = {
+            cart: () => handleCart(),
+            buy: () => handleBuy(),
+            rent: () => handleRent(),
+          }
+          return typeFunction[methodSelected! as keyof typeof typeFunction]()
+        }
+      } else if (userStatus === 'unauthenticated') {
+        Toast.Blank('Você deve estar logado em sua conta para prosseguir.')
+        Toast.Loading('Estamos te direcionando para a tela de login da Steam.')
+
+        return setTimeout(
+          () => signIn('steam', { callbackUrl: pathname }),
+          2000,
+        )
+      } else if (userStatus === 'loading') {
+        setMethodSelected(undefined)
+        return Toast.Error('Tente novamente após alguns segundos.')
+      }
+    }
+  }, [methodSelected, createCart, userStatus, pathname])
+
+  useEffect(() => {
+    if (resultAvailability?.request && !refetchingAvailability) {
+      if (resultAvailability?.request.status === 200) {
+        proceedItem()
+      } else if (resultAvailability?.request.status === 404) {
+        proceedItem()
+        // deleteItem()
+      } else {
+        Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
+        router.push('/')
+      }
+    }
+  }, [
+    resultAvailability,
+    refetchingAvailability,
+    proceedItem,
+    router,
+    deleteItem,
+  ])
+
+  useEffect(() => {
+    if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
-        toast.success('Skin adicionada no carrinho', {
-          duration: 4000, // Duração em milissegundos
-          position: 'bottom-right', // Posição do toast
-          icon: undefined,
-          style: {
-            background: '#AFD734', // Estilo personalizado
-            color: 'black',
-          },
-        })
+        Toast.Success('Item adicionado ao carrinho!')
         setWasRaised(false)
       } else if (data && data.request.status === 409) {
-        toast.error('Essa skin já está em seu carrinho', {
-          duration: 4000, // Duração em milissegundos
-          position: 'bottom-right', // Posição do toast
-          style: {
-            background: '#E84E6A', // Estilo personalizado
-            color: 'white',
-          },
-        })
+        Toast.Error('Item já adicionado em seu carrinho.')
         setWasRaised(false)
       }
     }
-  }, [wasRaised, isLoading])
+  }, [wasRaised, data, recreatingCart])
 
   return (
     <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
@@ -95,7 +241,11 @@ export function PageDetailsSkin({
 
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            R$: {skinPrice}
+            {Number(skinPrice).toLocaleString('PT-BR', {
+              style: 'currency',
+              currency: 'BRL',
+              minimumIntegerDigits: 2,
+            })}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
@@ -103,7 +253,11 @@ export function PageDetailsSkin({
         <div>
           <div className="flex items-center">
             <Common.Title className="text-2xl font-extrabold text-white">
-              R$: {parseFloat(skinPrice) / 10}
+              {(parseFloat(skinPrice) * 0.1).toLocaleString('PT-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumIntegerDigits: 2,
+              })}
             </Common.Title>
             <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
               10%
@@ -125,7 +279,7 @@ export function PageDetailsSkin({
           <Common.Title className="text-mesh-color-neutral-200">
             ID Padrão
           </Common.Title>
-          <p className="text-white">{sellerId}</p>
+          <p className="text-white">{defaultID}</p>
         </div>
 
         <div className="flex justify-between">
@@ -156,8 +310,8 @@ export function PageDetailsSkin({
         </div>
       </div>
 
-      <Form.Root onSubmit={handleSubmit(onFormSubmit)}>
-        <div className="mt-10">
+      <div className="mt-6 flex flex-col gap-4">
+        <div className="">
           <Common.Title className="font-semibold text-white">
             Selecione o período de Aluguel
           </Common.Title>
@@ -172,6 +326,9 @@ export function PageDetailsSkin({
             onChange={() => setSelectedRentTime(false)}
             className="bg-mesh-color-rarity-lowest text-white"
             name="rent-time"
+            disabled={
+              (loading && hasConfigurations) || userStatus === 'loading'
+            }
             items={[
               { label: '7 Dias', value: 7 },
               { label: '14 Dias', value: 14 },
@@ -181,32 +338,56 @@ export function PageDetailsSkin({
           />
         </div>
 
-        <div className="mt-10 flex gap-2">
-          <Form.Button
-            buttonStyle={undefined}
-            onClick={() => {
-              if (!watchRentTime) {
-                setSelectedRentTime(true)
-              }
-            }}
-            className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black"
-          >
-            Alugar
-          </Form.Button>
-          <Common.Button className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black">
-            Comprar agora
-          </Common.Button>
-          <Common.Button
-            onClick={async () => {
-              await refetch()
-              setWasRaised(true)
-            }}
-            className="h-11 w-11"
-          >
-            <IconCarrinho />
-          </Common.Button>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2">
+            {renderButton(
+              <Common.Button
+                onClick={() => {
+                  if (!watchRentTime) {
+                    Toast.Error(
+                      'Você deve selecionar um período para prosseguir com o aluguel.',
+                    )
+                  } else {
+                    setMethodSelected('rent')
+                  }
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+              >
+                Alugar
+              </Common.Button>,
+            )}
+            {renderButton(
+              <Common.Button
+                onClick={() => {
+                  setMethodSelected('buy')
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+              >
+                Comprar
+              </Common.Button>,
+            )}
+            {renderButton(
+              <Common.Button
+                onClick={() => {
+                  setMethodSelected('cart')
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                className="h-11 w-11 border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
+              >
+                <IconCarrinho />
+              </Common.Button>,
+            )}
+          </div>
         </div>
-      </Form.Root>
+      </div>
     </div>
   )
 }

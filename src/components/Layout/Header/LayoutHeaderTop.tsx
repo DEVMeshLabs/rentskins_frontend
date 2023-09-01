@@ -89,7 +89,6 @@ export function LayoutHeaderTop() {
     pathname.includes('/pagamento') || pathname.includes('/oops')
 
   useEffect(() => {
-    //
     // const interval = setInterval(() => {
     refetch() // Refaz a requisição a cada 1 segundo
     // }, 10 * 60 * 1000)
@@ -222,7 +221,7 @@ export function LayoutHeaderTop() {
           </Link>
           <Common.Button
             className="flex h-[44px] w-[220px] gap-2 rounded-[14px] border-transparent bg-mesh-color-primary-1400 opacity-100"
-            onClick={() => signIn('steam')}
+            onClick={() => signIn('steam', { callbackUrl: '/' })}
           >
             <IconSteam />
             <span className="font-semibold">Entre com sua Steam</span>

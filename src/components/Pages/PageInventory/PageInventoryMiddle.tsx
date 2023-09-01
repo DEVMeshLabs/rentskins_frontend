@@ -27,7 +27,8 @@ export default function PageInventoryMiddle() {
     userHasConfig!.data.owner_email !== '' &&
     userHasConfig!.data.owner_phone !== '' &&
     userHasConfig!.data.owner_cpf !== '' &&
-    userHasConfig!.data.url_trade !== ''
+    userHasConfig!.data.url_trade !== '' &&
+    userHasConfig!.data.agreed_with_terms
 
   return (
     <div className="mb-6 min-h-[1000px]">

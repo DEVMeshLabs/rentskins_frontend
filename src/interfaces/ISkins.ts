@@ -1,5 +1,6 @@
 export interface ISkins {
   id: string
+  asset_id: string
   name_color: string
   skin_image: string
   skin_name: string
@@ -40,4 +41,8 @@ export interface ISkinsToAdvertise {
   status_float: string
   skin_link_game: string
   skin_link_steam: string
+}
+
+export interface ISkinsAvailability {
+  error?: string
 }

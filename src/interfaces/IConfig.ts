@@ -5,10 +5,8 @@ export interface IConfig {
   owner_phone: string
   url_trade: string
   url_sell: string
-  steam_guard: boolean
   agreed_with_emails: boolean
   agreed_with_terms: boolean
-  token: string
 }
 
 export interface IOptionalConfig {

@@ -79,10 +79,14 @@ export function ModalSkinShowcaseInfo({
       value: undefined,
       warning: undefined,
       terms: false,
+      rent: false,
+      sell: false,
     },
   })
   const watchValue = watch('value')
   const watchTerms = watch('terms')
+  const watchSell = watch('rent')
+  const watchRent = watch('sell')
 
   const formattedValue = (value: string): number => {
     let newFormattedValue
@@ -93,8 +97,15 @@ export function ModalSkinShowcaseInfo({
   }
 
   useEffect(() => {
-    setDisabled(!(watchValue && watchValue?.length > 0 && watchTerms))
-  }, [watchValue, watchTerms])
+    setDisabled(
+      !(
+        watchValue &&
+        watchValue?.length > 0 &&
+        watchTerms &&
+        (watchRent || watchSell)
+      ),
+    )
+  }, [watchValue, watchTerms, watchSell, watchRent])
 
   const handleAddSkinsToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
@@ -178,8 +189,8 @@ export function ModalSkinShowcaseInfo({
             </Common.Title>
             <div
               className="transitions-all rounded-md border-[2px]
-    border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-3 py-3 ring-mesh-color-primary-1900
-    duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
+              border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-3 py-3 ring-mesh-color-primary-1900
+                duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
             >
               <Common.Title
                 className="ml-2 opacity-60"
@@ -201,6 +212,18 @@ export function ModalSkinShowcaseInfo({
               </Common.Title>
             </div>
           </div>
+        </div>
+        <div className="flex gap-2">
+          <Form.Input.Checkbox
+            name="sell-rent"
+            register={register('sell')}
+            label="Venda"
+          />
+          <Form.Input.Checkbox
+            name="sell-rent"
+            register={register('rent')}
+            label="Aluguel"
+          />
         </div>
         {/* ---------INPUT FIM -------------  */}
 

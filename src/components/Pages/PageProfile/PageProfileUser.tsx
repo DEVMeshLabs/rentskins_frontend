@@ -49,6 +49,7 @@ export default function PageProfileUser() {
   } = useQuery({
     queryKey: ['profileSkins', userSteamId],
     queryFn: () => SkinService.findAllSkinsByIdSeller(userSteamId, page),
+    keepPreviousData: true,
   })
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function PageProfileUser() {
 
   useEffect(() => {
     if (data?.data) {
-      const accountDate = new Date(data?.data.account_date)
+      const accountDate = new Date(data?.data.steam_created_date)
       setAccountDate(
         `${accountDate.getDate().toString().padStart(2, '0')}/${(
           accountDate.getMonth() + 1
