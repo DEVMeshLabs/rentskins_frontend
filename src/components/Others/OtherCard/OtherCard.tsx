@@ -2,10 +2,10 @@ import IconSteam from '@/assets/IconSteam'
 import Common from '@/components/Common'
 import IconMagic from '@/components/Icons/IconMagicpen'
 import { IconOlho } from '@/components/Icons/IconOlho'
+import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
-import classNames from 'classnames'
 
 interface Props {
   id: string
@@ -47,19 +47,14 @@ export function OtherCard({
       <div
         className={classNames(
           'flex w-72 flex-col gap-3 rounded-lg border-2 border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white',
-          {
-            'border-mesh-color-secondary-1200 shadow-sm shadow-mesh-color-secondary-1900':
-              typeof customName === 'object',
-            'opacity-30': deletedAt !== null,
-          },
         )}
       >
         <Link
           href={`/detalhes/${id}`}
           className={classNames(
-            'flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
+            'flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
             {
-              'border-mesh-color-secondary-1200':
+              'border-mesh-color-secondary-1400 shadow-stattrak-glow':
                 typeof customName === 'object',
             },
           )}
@@ -81,7 +76,7 @@ export function OtherCard({
         <div className="flex h-11 flex-col gap-3">
           {typeof customName === 'object' ? (
             <h1>
-              <span className="text-mesh-color-secondary-1200">
+              <span className="text-mesh-color-secondary-1200 ">
                 {customName[0]}
               </span>
               {customName[1]}
@@ -111,7 +106,7 @@ export function OtherCard({
             </Common.Button>
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex select-none items-center justify-between">
           <h1 className="text-lg font-semibold">
             {Number(skinPrice).toLocaleString('pt-br', {
               currency: 'BRL',
@@ -125,7 +120,7 @@ export function OtherCard({
           </h1>
         </div>
         <ColoredLine position={skinFloat} />
-        <div className="flex items-center justify-end">
+        <div className="flex select-none items-center justify-end">
           <Link
             href={`/detalhes/${id}`}
             className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
