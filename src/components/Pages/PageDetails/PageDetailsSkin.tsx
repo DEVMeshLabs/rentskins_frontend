@@ -323,7 +323,7 @@ export function PageDetailsSkin({
               (loading && hasConfigurations) || userStatus === 'loading'
             }
             labelClassName={classNames(
-              'peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
+              'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
               {
                 'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
               },
