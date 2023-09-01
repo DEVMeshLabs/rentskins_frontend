@@ -50,9 +50,11 @@ export default function PageProfileSelf() {
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),
   })
 
+  console.log(dataGettedUser)
+
   useEffect(() => {
     if (dataGettedUser?.data) {
-      const accountDate = new Date(dataGettedUser?.data.account_date)
+      const accountDate = new Date(dataGettedUser?.data.steam_created_date)
       setAccountDate(
         `${accountDate.getDate().toString().padStart(2, '0')}/${(
           accountDate.getMonth() + 1
