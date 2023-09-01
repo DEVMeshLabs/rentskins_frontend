@@ -15,6 +15,7 @@ export default function SkinFilters() {
     biggestPrice: 'Maior Preço',
     lowestPrice: 'Menor Preço',
     biggestFloat: 'Maior Float',
+    lowestFloat: 'Menor Float',
   }
 
   const {

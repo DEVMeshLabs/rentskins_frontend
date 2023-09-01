@@ -58,6 +58,9 @@ export default function PageStoreSkins() {
     biggestFloat: (a: ISkins, b: ISkins) =>
       parseFloat(b.skin_float.replace(',', '.')) -
       parseFloat(a.skin_float.replace(',', '.')),
+    lowestFloat: (a: ISkins, b: ISkins) =>
+      parseFloat(a.skin_float.replace(',', '.')) -
+      parseFloat(b.skin_float.replace(',', '.')),
     default: () => 1,
   }
 
@@ -110,15 +113,9 @@ export default function PageStoreSkins() {
   return (
     <>
       <Link href={'/'}>
-        {nameCorrection ? (
-          <Common.Title className="w-fit stroke-mesh-color-neutral-300 text-mesh-color-neutral-300 transition-all hover:stroke-white hover:text-white">
-            <IconArrowLeft /> Home &bull; {nameCorrection}
-          </Common.Title>
-        ) : (
-          <Common.Title className="w-fit stroke-mesh-color-neutral-300 text-mesh-color-neutral-300 transition-all hover:stroke-white hover:text-white">
-            <IconArrowLeft /> Home
-          </Common.Title>
-        )}
+        <Common.Title className="w-fit stroke-mesh-color-neutral-300 text-mesh-color-neutral-300 transition-all hover:stroke-white hover:text-white">
+          <IconArrowLeft /> Home {nameCorrection && `• ${nameCorrection}`}
+        </Common.Title>
       </Link>
 
       <SkinFilters />

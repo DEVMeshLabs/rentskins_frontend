@@ -30,6 +30,11 @@ export default function ModalFiltersStandard({ handleOpen }: IProps) {
         label="Maior Float"
         value="biggestFloat"
       />
+      <StandardCheckboxItem
+        handleOpen={handleOpen}
+        label="Menor Float"
+        value="lowestFloat"
+      />
     </div>
   )
 }
