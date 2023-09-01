@@ -171,11 +171,12 @@ export function ModalSkinShowcaseInfo({
         </div>
 
         {/* ---------INPUT -------------  */}
-        <div className="mt-5 flex w-full gap-4">
-          <div className="">
+        <div className="mt-5 flex w-full max-w-[100%] gap-4">
+          <div className="w-1/2 max-w-[50%]">
             <Form.Input.Currency
               name="value"
               control={control}
+              maxLength={10}
               label="Preço de Venda"
               placeHolder={savePrice ? `R$ ${savePrice}` : 'R$ 2.000,00'}
               register={register('value')}
@@ -183,17 +184,17 @@ export function ModalSkinShowcaseInfo({
             />
           </div>
 
-          <div className="flex w-full flex-col">
+          <div className="flex w-1/2 max-w-[50%] flex-col">
             <Common.Title bold={500} color="white" size="lg">
               Você irá receber
             </Common.Title>
             <div
-              className="transitions-all rounded-md border-[2px]
-              border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-3 py-3 ring-mesh-color-primary-1900
-                duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
+              className="transitions-all max-w-[100%] overflow-hidden text-ellipsis rounded-md
+              border-[2px] border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-1 py-3
+                ring-mesh-color-primary-1900 duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
             >
               <Common.Title
-                className="ml-2 opacity-60"
+                className="w-max-[200px] relative ml-2 w-fit text-ellipsis opacity-60"
                 bold={500}
                 color="white"
                 size="lg"
@@ -213,7 +214,7 @@ export function ModalSkinShowcaseInfo({
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-4">
           <Form.Input.Checkbox
             name="sell-rent"
             register={register('sell')}
