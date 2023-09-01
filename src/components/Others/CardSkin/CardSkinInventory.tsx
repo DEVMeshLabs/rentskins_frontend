@@ -36,8 +36,6 @@ export function CardSkinInventory() {
     keepPreviousData: true,
   })
 
-  console.log(data)
-
   useEffect(() => {
     refetch()
   }, [page, inventoryTypeFilter, refetch])

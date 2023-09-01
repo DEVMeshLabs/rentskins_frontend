@@ -218,6 +218,7 @@ export function ModalSkinShowcaseInfo({
             name="sell-rent"
             register={register('sell')}
             label="Venda"
+            checked={true}
           />
           <Form.Input.Checkbox
             name="sell-rent"
