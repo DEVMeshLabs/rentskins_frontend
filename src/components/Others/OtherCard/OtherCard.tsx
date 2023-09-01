@@ -48,6 +48,8 @@ export function OtherCard({
         className={classNames(
           'flex w-72 flex-col gap-3 rounded-lg border-2 border-mesh-color-neutral-600 border-opacity-60 px-3 pb-4 pt-3 text-white',
           {
+            'border-mesh-color-secondary-1200 shadow-sm shadow-mesh-color-secondary-1900':
+              typeof customName === 'object',
             'opacity-30': deletedAt !== null,
           },
         )}
