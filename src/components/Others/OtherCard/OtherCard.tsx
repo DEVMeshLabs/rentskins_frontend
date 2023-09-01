@@ -42,7 +42,8 @@ export function OtherCard({
         className={classNames(
           'flex flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
           {
-            'border-mesh-color-secondary-1200': typeof customName === 'object',
+            'border-mesh-color-secondary-1200 shadow-sm shadow-mesh-color-secondary-1900':
+              typeof customName === 'object',
           },
         )}
       >
