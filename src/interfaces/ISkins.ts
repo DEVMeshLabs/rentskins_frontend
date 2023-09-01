@@ -17,6 +17,7 @@ export interface ISkins {
   status_float: string
   buyer_name: string
   buyer_id: string
+  deletedAt: string | null
 }
 
 export interface ISkinsResponse {

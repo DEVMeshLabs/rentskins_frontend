@@ -3,8 +3,8 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import useFilterStore from '@/stores/filters.store'
-import { formWearResolver } from './schemas/Wear.schhema'
 import { useForm } from 'react-hook-form'
+import { formWearResolver } from './schemas/Wear.schhema'
 
 interface IProps {
   handleOpen: () => void
@@ -36,16 +36,17 @@ export default function FilterWear({ handleOpen }: IProps) {
   }
 
   const wearsLabel = [
-    'Boa de campo',
-    'Bem usada',
-    'Desgastada',
-    'Pouca usada',
-    'Muito usada',
+    'Nova de Fábrica',
+    'Pouco Usada',
+    'Testada em Campo',
+    'Bem Desgastada',
+    'Veterana de Guerra',
+    'Vanilla',
   ]
 
   return (
     <Form.Root
-      className="realtive flex h-full flex-col justify-between"
+      className="flex h-full flex-col justify-between"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-5">

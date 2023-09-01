@@ -41,6 +41,8 @@ export default function PageProfileSelf() {
     keepPreviousData: true,
   })
 
+  console.log(data?.data.skins)
+
   useEffect(() => {
     refetch()
   }, [page, refetch])
@@ -62,8 +64,8 @@ export default function PageProfileSelf() {
           .toString()
           .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
-      setSteamLevel(dataGettedUser?.data.steam_level)
-      setUserState(dataGettedUser?.data.status_member)
+      setSteamLevel(dataGettedUser.data.steam_level)
+      setUserState(dataGettedUser.data.status_member)
       setTotalExchanges(dataGettedUser.data.total_exchanges)
       setDeliveryTime(dataGettedUser.data.delivery_time)
       setDeliveryFee(dataGettedUser.data.delivery_fee)

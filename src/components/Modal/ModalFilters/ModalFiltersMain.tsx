@@ -28,7 +28,7 @@ export default function ModalFiltersMain({ activator, child }: IProps) {
               child === 'Padrão'
                 ? '-right-10 top-1 w-[184px] py-4'
                 : 'h-64 w-[497px]'
-            }
+            } ${child === 'Desgaste' && 'h-[325px]'}
               rounded-lg bg-mesh-color-neutral-800 p-4`}
           >
             {child === 'Preço' && (

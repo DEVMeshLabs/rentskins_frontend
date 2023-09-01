@@ -11,6 +11,7 @@ export type TTypeSort =
   | 'biggestPrice'
   | 'lowestPrice'
   | 'biggestFloat'
+  | 'lowestFloat'
   | 'default'
 
 export interface IInputCheck {
