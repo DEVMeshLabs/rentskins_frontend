@@ -41,6 +41,7 @@ export default function SkinsSemelhantes({
                   skin_float,
                   skin_price,
                   skin_weapon,
+                  deletedAt,
                   id,
                 }: ISkins,
                 index: number,
@@ -54,6 +55,7 @@ export default function SkinsSemelhantes({
                     skinWeapon={skin_weapon}
                     skinFloat={skin_float}
                     skinPrice={skin_price}
+                    deletedAt={deletedAt}
                     key={id}
                   />
                 )

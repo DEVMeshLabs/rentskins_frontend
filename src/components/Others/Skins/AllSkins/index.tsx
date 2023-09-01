@@ -18,7 +18,7 @@ export default function AllSkins({
     <div className="mx-auto flex w-full flex-col items-center justify-start ">
       <div
         className={classNames(
-          'mt-6 flex w-fit flex-wrap justify-center gap-2',
+          'mt-6 flex w-fit flex-wrap justify-center gap-x-5 gap-y-3',
           {
             'mb-6 mt-0 w-auto': skinsCategories !== undefined,
             'justify-center': center,
@@ -34,6 +34,7 @@ export default function AllSkins({
               skin_float,
               skin_price,
               skin_weapon,
+              deletedAt,
               id,
             }: ISkins,
             index: number,
@@ -48,6 +49,7 @@ export default function AllSkins({
                   skinWeapon={skin_weapon}
                   skinFloat={skin_float}
                   skinPrice={skin_price}
+                  deletedAt={deletedAt}
                   key={id}
                 />
               </div>
