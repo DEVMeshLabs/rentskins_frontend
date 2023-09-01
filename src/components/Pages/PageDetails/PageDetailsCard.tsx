@@ -24,8 +24,8 @@ export function PageDetailsCard({
   return (
     <div className="relative">
       {deletedAt !== null && (
-        <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform whitespace-nowrap text-6xl font-semibold text-mesh-color-rarity-lowest">
-          SKIN DELETADA
+        <div className="absolute left-1/2 top-1/2 z-10 w-fit -translate-x-1/2 -translate-y-1/2 transform text-center text-6xl font-semibold text-mesh-color-rarity-lowest">
+          ITEM REMOVIDO
         </div>
       )}
       <div
