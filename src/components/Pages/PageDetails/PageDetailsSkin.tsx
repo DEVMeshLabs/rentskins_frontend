@@ -13,6 +13,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
+import classNames from 'classnames'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
@@ -50,6 +51,7 @@ export function PageDetailsSkin({
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
+  const [selectedRentTime, setSelectedRentTime] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -316,17 +318,18 @@ export function PageDetailsSkin({
             Selecione o período de Aluguel
           </Common.Title>
           <Form.Input.Radio.Default
-            wrapperClassname="select-none"
-            containerClassname="flex gap-2 mt-1"
-            labelClassName={`peer-checked:bg-mesh-color-primary-1200 peer-disabled
-              peer:opacity-100 peer-disabled:opacity-10 peer-checked:border-mesh-color-primary-1200
-              w-full h-full border text-white p-2 rounded-lg border-mesh-color-neutral-400
-              peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600
-              font-medium`}
-            name="rent-time"
+            containerClassname="flex gap-2 mt-2"
             disabled={
               (loading && hasConfigurations) || userStatus === 'loading'
             }
+            labelClassName={classNames(
+              'peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
+              {
+                'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
+              },
+            )}
+            onClick={() => setSelectedRentTime(false)}
+            name="rent-time"
             items={[
               { label: '7 Dias', value: 7 },
               { label: '14 Dias', value: 14 },
@@ -342,6 +345,7 @@ export function PageDetailsSkin({
               <Common.Button
                 onClick={() => {
                   if (!watchRentTime) {
+                    setSelectedRentTime(true)
                     Toast.Error(
                       'Você deve selecionar um período para prosseguir com o aluguel.',
                     )

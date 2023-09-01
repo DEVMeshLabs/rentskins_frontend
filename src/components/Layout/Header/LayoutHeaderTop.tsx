@@ -79,10 +79,11 @@ export function LayoutHeaderTop() {
 
   const configValidation =
     userHasConfig &&
-    userHasConfig!.data?.owner_email !== '' &&
-    userHasConfig!.data?.owner_phone !== '' &&
-    userHasConfig!.data?.owner_cpf !== '' &&
-    userHasConfig!.data?.url_trade !== ''
+    userHasConfig.data &&
+    userHasConfig!.data.owner_email !== '' &&
+    userHasConfig!.data.owner_phone !== '' &&
+    userHasConfig!.data.owner_cpf !== '' &&
+    userHasConfig!.data.url_trade !== ''
 
   const disableAddButton =
     pathname.includes('/pagamento') || pathname.includes('/oops')

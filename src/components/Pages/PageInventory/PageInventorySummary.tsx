@@ -36,7 +36,7 @@ export default function PageInventorySummary() {
 
   useEffect(() => {
     const subtotal = skinsToAdvertise.reduce(
-      (acc, { skin_price }) => acc + Number(skin_price),
+      (acc, { skin_price }) => acc + Number(skin_price.replace(/[^0-9]/g, '')),
       0,
     )
     setSubtotal(subtotal)

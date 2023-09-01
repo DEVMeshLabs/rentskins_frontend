@@ -53,7 +53,6 @@ export function ModalConnectInventoryForm({
   const { data } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
     queryFn: async () => {
-      console.log('ok')
       const sellLink = `https://rentskins/?sellerid=${trueSession?.user?.steam?.steamid}`
       const params = {
         owner_id: trueSession?.user?.steam?.steamid as string,
@@ -61,20 +60,19 @@ export function ModalConnectInventoryForm({
         owner_email: formData.email,
         owner_phone: formData.phone,
         owner_cpf: formData.cpf,
-        steam_guard: false,
         url_sell: sellLink,
         url_trade: formData['trade-link'],
         agreed_with_emails: formData['receive-notifications'],
         agreed_with_terms: true,
         token: trueSession?.user?.token!,
       }
-      console.log(params)
       return ConfigService.updateConfig(params)
     },
     enabled: !!formData,
   })
 
   useEffect(() => {
+    console.log(data)
     if (data?.request.status) {
       return window.location.reload()
     }
@@ -103,7 +101,7 @@ export function ModalConnectInventoryForm({
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="http://steamcommunity.com/my/tradeoffers/privacy"
+            href="https://steamcommunity.com/my/tradeoffers/privacy"
             tabIndex={-1}
             className="h-full w-min whitespace-nowrap border-none text-mesh-color-primary-1200"
           >
