@@ -51,6 +51,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             skinLinkGame={item.skin_link_game}
             skinLinkSteam={item.skin_link_steam}
             skinFloat={Number(item.skin_float)}
+            deletedAt={item.deletedAt}
           />
 
           <PageDetailsVendas />
