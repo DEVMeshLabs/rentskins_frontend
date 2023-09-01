@@ -14,7 +14,7 @@ export function CommonSteamButton({
 }: Props) {
   return (
     <button
-      onClick={() => signIn('steam')}
+      onClick={() => signIn('steam', { callbackUrl: '/' })}
       type="button"
       className={
         className ||

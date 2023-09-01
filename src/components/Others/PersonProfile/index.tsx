@@ -106,15 +106,15 @@ export default function PersonProfile({
       </div>
       <div className="flex w-[500px] flex-wrap gap-5">
         <ProfileInfo
-          title="Tempo de entrega"
+          title="Tempo de Entrega"
           value={deliveryTime && deliveryTime.replace(' no momento', '')}
         />
         <ProfileInfo
           title="Total de Transações"
           value={totalExchanges && totalExchanges.replace(' no momento', '')}
         />
-        <ProfileInfo title="Taxa de entrega" isPercent value={deliveryFee} />
-        <ProfileInfo title="Membro da Steam desde" value={accountDate} />
+        <ProfileInfo title="Taxa de Entrega" isPercent value={deliveryFee} />
+        <ProfileInfo title="Membro da Steam Desde" value={accountDate} />
       </div>
     </section>
   )

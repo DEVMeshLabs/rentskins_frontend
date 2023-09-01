@@ -29,11 +29,11 @@ export function ModalConnectInventoryForm({
   } = useForm({
     resolver: formResolver,
     defaultValues: {
-      'accept-terms': userConfig.agreed_with_terms || undefined,
-      'receive-notifications': userConfig.agreed_with_emails || false,
-      'trade-link': userConfig.url_trade || undefined,
-      cpf: userConfig.owner_cpf || undefined,
-      email: userConfig.owner_email || undefined,
+      'accept-terms': userConfig?.agreed_with_terms || undefined,
+      'receive-notifications': userConfig?.agreed_with_emails || false,
+      'trade-link': userConfig?.url_trade || undefined,
+      cpf: userConfig?.owner_cpf || undefined,
+      email: userConfig?.owner_email || undefined,
     },
   })
 

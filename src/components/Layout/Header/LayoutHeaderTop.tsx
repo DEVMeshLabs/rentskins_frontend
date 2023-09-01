@@ -79,10 +79,10 @@ export function LayoutHeaderTop() {
 
   const configValidation =
     userHasConfig &&
-    userHasConfig!.data.owner_email !== '' &&
-    userHasConfig!.data.owner_phone !== '' &&
-    userHasConfig!.data.owner_cpf !== '' &&
-    userHasConfig!.data.url_trade !== ''
+    userHasConfig!.data?.owner_email !== '' &&
+    userHasConfig!.data?.owner_phone !== '' &&
+    userHasConfig!.data?.owner_cpf !== '' &&
+    userHasConfig!.data?.url_trade !== ''
 
   const disableAddButton =
     pathname.includes('/pagamento') || pathname.includes('/oops')
@@ -221,7 +221,7 @@ export function LayoutHeaderTop() {
           </Link>
           <Common.Button
             className="flex h-[44px] w-[220px] gap-2 rounded-[14px] border-transparent bg-mesh-color-primary-1400 opacity-100"
-            onClick={() => signIn('steam')}
+            onClick={() => signIn('steam', { callbackUrl: '/' })}
           >
             <IconSteam />
             <span className="font-semibold">Entre com sua Steam</span>

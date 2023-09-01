@@ -1,3 +1,15 @@
+import { IOptionalConfig } from '@/interfaces/IConfig'
+
+export interface IGetUserCart {
+  id: string
+  buyer_id: string
+  price: number
+  createdAt: Date | string
+  updatedAt: Date | string | null
+  deletedAt: Date | string | null
+  skinId: string | null
+}
+
 export interface IGetUser {
   id: string
   owner_id: string
@@ -9,6 +21,8 @@ export interface IGetUser {
   steam_level: string
   owner_name: string
   picture: string
+  cart: IGetUserCart
+  configuration: IOptionalConfig
 }
 
 export interface ICreateUser {
