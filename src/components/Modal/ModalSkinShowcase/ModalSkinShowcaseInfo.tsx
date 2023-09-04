@@ -26,6 +26,7 @@ type Props = {
   status_float: string
   id: string
   isSelected: boolean
+  asset_id: string
 }
 
 export function ModalSkinShowcaseInfo({
@@ -43,6 +44,7 @@ export function ModalSkinShowcaseInfo({
   statusFloatText,
   recommendedPrice = '2.000,00',
   isSelected,
+  asset_id,
   id,
 }: Props) {
   const { data: session } = useSession()
@@ -124,6 +126,7 @@ export function ModalSkinShowcaseInfo({
         skin_weapon,
         status,
         status_float,
+        asset_id,
         skin_price: String(formattedValue(watchValue)),
       })
     }

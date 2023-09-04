@@ -19,6 +19,7 @@ interface IProps {
   skinCategory: string
   id: string
   isSelected: boolean
+  asset_id: string
 }
 
 export function ModalSkinShowcaseMain({
@@ -32,6 +33,7 @@ export function ModalSkinShowcaseMain({
   skinColor,
   skinName,
   isSelected,
+  asset_id,
   id,
 }: IProps) {
   return (
@@ -66,6 +68,7 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                asset_id={asset_id}
                 isSelected={isSelected}
                 id={id}
                 skin_name={skinName}
