@@ -29,7 +29,10 @@ export default function AllSkinsCart() {
 
   useEffect(() => {
     if (dataSkinsCart?.data) {
-      setSkinsFromCart(dataSkinsCart.data.SkinToCart)
+      const skinsFiltred = dataSkinsCart.data.SkinToCart.filter(
+        ({ skin: { deletedAt } }) => deletedAt === null,
+      )
+      setSkinsFromCart(skinsFiltred)
     }
   }, [dataSkinsCart?.data])
 
@@ -52,6 +55,7 @@ export default function AllSkinsCart() {
                     skin_image,
                     id,
                     skin_weapon,
+                    deletedAt,
                   },
                   id: modelId,
                 },
