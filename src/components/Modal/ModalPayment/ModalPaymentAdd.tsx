@@ -11,7 +11,7 @@ import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './add.schema'
 
@@ -34,12 +34,17 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
     resolver: formResolver,
     defaultValues: {
       method: 'mastercard',
-      value: '',
+      value: undefined,
       valueButtons: 'R$ 5,00',
     },
   })
 
   const watchValue = watch('value')
+
+  console.log(watchValue)
+
+  useEffect(() => console.log(watchValue), [watchValue])
+  console.log('ok')
 
   const onSubmit = (data: any) => {
     setIsLoading(true)
@@ -125,7 +130,11 @@ rounded-2xl bg-mesh-color-neutral-700"
                   <Form.Input.Radio.Default
                     name="value"
                     wrapperClassname="h-16 w-full"
-                    disabled={watchValue !== ''}
+                    disabled={
+                      watchValue !== 'R$ 0,00' &&
+                      watchValue !== undefined &&
+                      watchValue !== ''
+                    }
                     labelClassName="transition-all bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
                     hover:cursor-pointer hover:border-mesh-color-primary-600/50 peer-checked:border-mesh-color-primary-600 text-white peer-disabled:border-transparent
                     peer-disabled:bg-mesh-color-neutral-800 peer-disabled:text-mesh-color-neutral-500 peer-disabled:cursor-default "
@@ -143,7 +152,7 @@ rounded-2xl bg-mesh-color-neutral-700"
                   Ao prosseguir para finalizar o pagamento, você concorda com os
                   nossos{' '}
                   <a
-                    href=""
+                    href="/termos-de-uso"
                     target="_blank"
                     className="hover:text-inherit/50 text-mesh-color-primary-1000"
                   >
@@ -151,7 +160,7 @@ rounded-2xl bg-mesh-color-neutral-700"
                   </a>
                   ,{' '}
                   <a
-                    href=""
+                    href="/privacidade"
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
