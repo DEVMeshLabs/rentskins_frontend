@@ -1,4 +1,3 @@
 export interface IStripeCreatePayment {
-  amount: number
-  currency: 'brl'
+  amount: number | string
 }

@@ -2,6 +2,11 @@
 import Common from '@/components/Common'
 import { IconLeftArrow } from '@/components/Icons/IconLeftArrow'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
+import ISteamUser from '@/interfaces/steam.interface'
+import StripeService from '@/services/stripe.service'
+import usePaymentStore from '@/stores/payment.store'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { notFound, useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { PagePaymentRechargeMastercard } from './PagePaymentRechargeMastercard'
@@ -10,18 +15,39 @@ import { PagePaymentRechargeTicket } from './PagePaymentRechargeTicket'
 
 export default function PagePaymentRecharge() {
   const { method } = useParams()
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
 
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [methodComponent, setMethodComponent] = useState<
     undefined | React.ReactNode
   >(undefined)
+  const { paymentAdd } = usePaymentStore()
+
+  const { data, isRefetching, refetch } = useQuery({
+    queryKey: ['Payment', paymentAdd.method, paymentAdd.value],
+    queryFn: () =>
+      StripeService.createPayment(
+        { amount: String(Number(paymentAdd.value)) },
+        trueSession.user?.token!,
+      ),
+    cacheTime: 0,
+    enabled: false,
+  })
+
+  console.log(data)
+  console.log(data?.data)
+  console.log(isRefetching)
+  console.log(String(Number(paymentAdd.value)))
 
   useEffect(() => {
     const handleOnSubmit = (data: any) => {
       console.log(data)
       setIsLoading(true)
-      router.push('/pagamento/recarregar/sucesso')
+      console.log(paymentAdd)
+      refetch()
+      // router.push('/pagamento/recarregar/sucesso')
     }
 
     const handleOnCancel = () => {
@@ -52,7 +78,7 @@ export default function PagePaymentRecharge() {
     setMethodComponent(
       methodComponents[method as 'mastercard' | 'pix' | 'boleto'] || null,
     )
-  }, [method, router])
+  }, [method, router, refetch, paymentAdd])
 
   const renderContent = (
     <>

@@ -49,7 +49,9 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   const onSubmit = (data: any) => {
     setIsLoading(true)
 
-    if (data.value === '') {
+    console.log(data)
+
+    if (data.value === '' || data.value === undefined) {
       let currencyToNumber
       currencyToNumber = data?.valueButtons.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
@@ -58,6 +60,7 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
       setPaymentAdd({ method: data.method, value: currencyToNumber })
     } else {
       let currencyToNumber
+      console.log(currencyToNumber)
       currencyToNumber = data?.value.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
       currencyToNumber = currencyToNumber.replace(',', '.')

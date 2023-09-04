@@ -31,10 +31,10 @@ const formSchema = yup.object({
           return false
         }
 
-        const day = Number(item.slice(0, 2))
-        const month = Number(item.slice(3, 5))
+        const month = Number(item.slice(0, 2))
+        const year = Number(item.slice(3, 5))
 
-        if (day <= 0 || day > 31 || month <= 0 || month > 12) {
+        if (month <= 0 || month > 12 || year <= 0 || year > 99) {
           return false
         }
 
