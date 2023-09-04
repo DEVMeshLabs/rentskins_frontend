@@ -174,7 +174,7 @@ export const ContainerItem = ({
 
       {isList && (
         <div
-          className={`invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white shadow-md delay-75 group-hover:visible`}
+          className={`shadow-md invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white delay-75 group-hover:visible`}
         >
           <ul className="flex flex-col">{children}</ul>
         </div>

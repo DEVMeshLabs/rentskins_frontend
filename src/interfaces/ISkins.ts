@@ -28,6 +28,7 @@ export interface ISkinsResponse {
 
 export interface ISkinsToAdvertise {
   id?: string
+  asset_id: string
   skin_image: string
   skin_name: string
   skin_category: string

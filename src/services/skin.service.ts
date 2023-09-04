@@ -66,7 +66,7 @@ export default class SkinService {
     return Api.get<ISkinsResponse>(`/skins/search/${param}?page=${page || 1}`)
   }
 
-  public static postAllSkinsToAdvertise(
+  public static async postAllSkinsToAdvertise(
     allSkinsAdvertise: ISkinsToAdvertise[],
     token: string,
   ) {
@@ -75,13 +75,17 @@ export default class SkinService {
       return skin
     })
 
-    return Api.post<{ status: number }>('/skins', skinsWithoutId, {
+    const result: AxiosResponse<{ status: number }> = await Api.post<{
+      status: number
+    }>('/skins', skinsWithoutId, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response)
       .catch((err) => err)
+
+    return result
   }
 
   public static async postCheckItemAvailability(
