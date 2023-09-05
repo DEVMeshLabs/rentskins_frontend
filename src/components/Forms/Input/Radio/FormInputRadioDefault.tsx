@@ -44,7 +44,6 @@ export function FormInputRadioDefault({
         value={item.value}
         className={`peer absolute appearance-none ${inputClassName}`}
         {...register}
-        {...rest}
       />
       <label htmlFor={item.value} className={labelClassName}>
         {item.label}

@@ -40,6 +40,9 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   })
 
   const watchValue = watch('value')
+  const watchButton = watch('valueButtons')
+
+  console.log(watchButton)
 
   console.log(watchValue)
 
