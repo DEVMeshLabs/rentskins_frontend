@@ -364,13 +364,13 @@ export function PageDetailsSkin({
                       setMethodSelected('rent')
                     }
                   } else {
-                    Toast.Error('Você não pode alugar a sua propria skin.')
+                    Toast.Error('Você não pode alugar o seu próprio item.')
                   }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
               >
                 Alugar
               </Common.Button>,
@@ -381,13 +381,15 @@ export function PageDetailsSkin({
                   if (userIsOwnerSkin) {
                     setMethodSelected('buy')
                   } else {
-                    Toast.Error('Você não pode comprar a sua propria skin.')
+                    Toast.Error('Você não pode comprar o seu próprio item.')
                   }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                className={
+                  'h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10'
+                }
               >
                 Comprar
               </Common.Button>,
@@ -399,14 +401,14 @@ export function PageDetailsSkin({
                     setMethodSelected('cart')
                   } else {
                     Toast.Error(
-                      'Você não pode adicionar a sua própria skin no carrinho.',
+                      'Você não pode adicionar o seu próprio item no carrinho.',
                     )
                   }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-11 border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
+                className="h-11 w-11 cursor-pointer border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
               >
                 <IconCarrinho />
               </Common.Button>,
