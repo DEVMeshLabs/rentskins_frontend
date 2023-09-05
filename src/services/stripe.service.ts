@@ -12,4 +12,6 @@ export default class StripeService {
 
     return result
   }
+
+  public static async verifyPayment(paymentIntent: string) {}
 }

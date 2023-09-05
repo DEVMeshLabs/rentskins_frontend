@@ -33,7 +33,6 @@ export function FormInputRadioDefault({
   errorsClassname,
   items,
   onChange,
-  ...rest
 }: IProps) {
   const renderItems = items.map((item, index) => (
     <div key={item.value + index} className={`${wrapperClassname} flex`}>
