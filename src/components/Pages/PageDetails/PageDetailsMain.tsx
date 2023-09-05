@@ -59,6 +59,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
 
         <div className="col-span-2 grid grid-rows-2 gap-4">
           <PageDetailsSkin
+            userId={trueSession.user?.steam?.steamid}
+            ownerSkin={item.seller_id}
             defaultID={defaultID}
             userStatus={status}
             assetId={item.asset_id}

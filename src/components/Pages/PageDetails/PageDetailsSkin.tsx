@@ -30,6 +30,8 @@ type PropsTypes = {
   skinId: string
   cartId: string
   assetId: string
+  ownerSkin: string
+  userId: string | undefined
 }
 
 export function PageDetailsSkin({
@@ -47,13 +49,22 @@ export function PageDetailsSkin({
   skinId,
   cartId,
   assetId,
+  ownerSkin,
+  userId,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
+  const [userIsOwnerSkin, setUserIsOwnerSkin] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+
+  useEffect(() => {
+    if (ownerSkin === userId) {
+      setUserIsOwnerSkin(false)
+    }
+  }, [ownerSkin, userId])
 
   const hasConfigurations =
     userConfiguration &&
@@ -344,13 +355,17 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  if (!watchRentTime) {
-                    setSelectedRentTime(true)
-                    Toast.Error(
-                      'Você deve selecionar um período para prosseguir com o aluguel.',
-                    )
+                  if (userIsOwnerSkin) {
+                    if (!watchRentTime) {
+                      setSelectedRentTime(true)
+                      Toast.Error(
+                        'Você deve selecionar um período para prosseguir com o aluguel.',
+                      )
+                    } else {
+                      setMethodSelected('rent')
+                    }
                   } else {
-                    setMethodSelected('rent')
+                    Toast.Error('Você não pode alugar a sua propria skin.')
                   }
                 }}
                 disabled={
@@ -364,7 +379,11 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  setMethodSelected('buy')
+                  if (userIsOwnerSkin) {
+                    setMethodSelected('buy')
+                  } else {
+                    Toast.Error('Você não pode comprar a sua propria skin.')
+                  }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
@@ -377,7 +396,13 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  setMethodSelected('cart')
+                  if (userIsOwnerSkin) {
+                    setMethodSelected('cart')
+                  } else {
+                    Toast.Error(
+                      'Você não pode adicionar a sua própria skin no carrinho.',
+                    )
+                  }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
