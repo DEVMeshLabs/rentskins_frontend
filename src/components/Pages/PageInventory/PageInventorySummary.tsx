@@ -24,11 +24,12 @@ export default function PageInventorySummary() {
     queryKey: ['createdSkins'],
     queryFn: async () => {
       setIsLoading(true)
-      cleanSkinsToAdvertise()
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
         trueSession.user?.token!,
       )
+      console.log(announcedSkins)
+      cleanSkinsToAdvertise()
       setIsLoading(false)
       return announcedSkins
     },

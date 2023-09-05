@@ -30,6 +30,8 @@ type PropsTypes = {
   skinId: string
   cartId: string
   assetId: string
+  ownerSkin: string
+  userId: string | undefined
 }
 
 export function PageDetailsSkin({
@@ -47,13 +49,22 @@ export function PageDetailsSkin({
   skinId,
   cartId,
   assetId,
+  ownerSkin,
+  userId,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
+  const [userIsOwnerSkin, setUserIsOwnerSkin] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+
+  useEffect(() => {
+    if (ownerSkin === userId) {
+      setUserIsOwnerSkin(false)
+    }
+  }, [ownerSkin, userId])
 
   const hasConfigurations =
     userConfiguration &&
@@ -343,19 +354,23 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  if (!watchRentTime) {
-                    setSelectedRentTime(true)
-                    Toast.Error(
-                      'Você deve selecionar um período para prosseguir com o aluguel.',
-                    )
+                  if (userIsOwnerSkin) {
+                    if (!watchRentTime) {
+                      setSelectedRentTime(true)
+                      Toast.Error(
+                        'Você deve selecionar um período para prosseguir com o aluguel.',
+                      )
+                    } else {
+                      setMethodSelected('rent')
+                    }
                   } else {
-                    setMethodSelected('rent')
+                    Toast.Error('Você não pode alugar o seu próprio item.')
                   }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
               >
                 Alugar
               </Common.Button>,
@@ -363,12 +378,18 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  setMethodSelected('buy')
+                  if (userIsOwnerSkin) {
+                    setMethodSelected('buy')
+                  } else {
+                    Toast.Error('Você não pode comprar o seu próprio item.')
+                  }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-[167px] border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                className={
+                  'h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10'
+                }
               >
                 Comprar
               </Common.Button>,
@@ -376,12 +397,18 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  setMethodSelected('cart')
+                  if (userIsOwnerSkin) {
+                    setMethodSelected('cart')
+                  } else {
+                    Toast.Error(
+                      'Você não pode adicionar o seu próprio item no carrinho.',
+                    )
+                  }
                 }}
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-11 border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
+                className="h-11 w-11 cursor-pointer border-mesh-color-neutral-400 opacity-100 disabled:opacity-10"
               >
                 <IconCarrinho />
               </Common.Button>,
