@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 'use client'
+import ISteamUser from '@/interfaces/steam.interface'
+import CartService from '@/services/cart.service'
+import useCartStore from '@/stores/cart.store'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import CartSkinCard from '../../CartSkinCard'
-import { useQuery } from '@tanstack/react-query'
-import CartService from '@/services/cart.service'
-import ISteamUser from '@/interfaces/steam.interface'
-import { useSession } from 'next-auth/react'
-import useCartStore from '@/stores/cart.store'
 
 export default function AllSkinsCart() {
   const { setSkinsFromCart, skinsFromCart, deleteSkinFromCart } = useCartStore()
@@ -29,9 +29,12 @@ export default function AllSkinsCart() {
 
   useEffect(() => {
     if (dataSkinsCart?.data) {
-      setSkinsFromCart(dataSkinsCart.data.SkinToCart)
+      const skinsFiltred = dataSkinsCart.data.SkinToCart.filter(
+        ({ skin: { deletedAt } }) => deletedAt === null,
+      )
+      setSkinsFromCart(skinsFiltred)
     }
-  }, [dataSkinsCart?.data])
+  }, [dataSkinsCart?.data, setSkinsFromCart])
 
   return (
     <div className="flex w-[798px] flex-col items-start gap-6">
@@ -52,6 +55,7 @@ export default function AllSkinsCart() {
                     skin_image,
                     id,
                     skin_weapon,
+                    deletedAt,
                   },
                   id: modelId,
                 },

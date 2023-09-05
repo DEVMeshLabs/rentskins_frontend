@@ -69,7 +69,7 @@ export function TransactionsTable({ data }: IProps) {
            px-8 py-8 opacity-0
           transition-all group-hover:visible group-hover:opacity-100"
             >
-              <p className="rounded-lg bg-mesh-color-neutral-300 px-2 shadow-md">
+              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2">
                 {item.name}
               </p>
             </div>

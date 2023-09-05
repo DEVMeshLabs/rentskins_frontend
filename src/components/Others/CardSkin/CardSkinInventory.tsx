@@ -108,6 +108,7 @@ export function CardSkinInventory() {
               return (
                 <ModalSkinShowcaseMain
                   key={assetid}
+                  asset_id={assetid}
                   skinImage={icon_url}
                   skinName={name}
                   skinCategory={category}

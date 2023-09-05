@@ -4,6 +4,7 @@ import Common from '@/components/Common'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
@@ -19,7 +20,7 @@ export default function PageInventorySummary() {
   const [disabled, setDisabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const { refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['createdSkins'],
     queryFn: async () => {
       setIsLoading(true)
@@ -33,7 +34,20 @@ export default function PageInventorySummary() {
       return announcedSkins
     },
     enabled: false,
+    cacheTime: 0,
   })
+
+  useEffect(() => {
+    if (data) {
+      if (data?.request.status === 201) {
+        Toast.Success('Anúncio adicionado com sucesso!')
+      } else {
+        Toast.Error(
+          'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
+        )
+      }
+    }
+  }, [data])
 
   useEffect(() => {
     const subtotal = skinsToAdvertise.reduce(

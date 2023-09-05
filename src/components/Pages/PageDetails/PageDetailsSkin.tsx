@@ -7,13 +7,13 @@ import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
+import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
-import classNames from 'classnames'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
@@ -215,8 +215,7 @@ export function PageDetailsSkin({
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        proceedItem()
-        // deleteItem()
+        deleteItem()
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')

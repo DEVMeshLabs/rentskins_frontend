@@ -36,12 +36,14 @@ export function FormInputCheckbox({
         id={name}
         name={name}
         type="checkbox"
-        className={`${inputClassName || options.input.className} peer`}
+        className={`${
+          inputClassName || options.input.className
+        } peer cursor-pointer`}
         {...register}
         {...rest}
       />
       <div
-        className={`${checkClassname} absolute mt-[-0.2rem] h-2 w-4 -rotate-45
+        className={`${checkClassname} absolute mt-[-0.2rem] h-2 w-4 -rotate-45 cursor-pointer
         border-b-2 border-l-2 bg-transparent opacity-0 transition-all peer-checked:opacity-100 peer-disabled:peer-checked:opacity-30`}
       />
       <span

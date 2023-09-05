@@ -10,7 +10,7 @@ type Props = {
 
 export function ModalSkinShowcaseSkin({ icon_url, weapon, float }: Props) {
   return (
-    <div className="relative mr-6 mt-2 flex h-full w-[60%] items-center justify-center rounded-lg bg-mesh-image-details bg-cover bg-no-repeat">
+    <div className="relative mr-6 mt-2 flex h-full w-[60%] select-none items-center justify-center rounded-lg bg-mesh-image-details bg-cover bg-no-repeat">
       <Image
         src={`https://steamcommunity-a.akamaihd.net/economy/image/${icon_url}`}
         alt={weapon}
