@@ -1,3 +1,4 @@
+'use client'
 import ImageMastercard from '@/../public/payment/mastercard.png'
 import ImagePIX from '@/../public/payment/pix.png'
 import ImageTicket from '@/../public/payment/ticket.png'
@@ -6,9 +7,13 @@ import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons/IconClose'
 import { IconMoneyBag } from '@/components/Icons/IconMoneyBag'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
+import ISteamUser from '@/interfaces/steam.interface'
+import StripeService from '@/services/stripe.service'
 import usePaymentStore from '@/stores/payment.store'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -20,8 +25,10 @@ interface IProps {
 }
 
 export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
   const router = useRouter()
-  const { setPaymentAdd } = usePaymentStore()
+  const { setPaymentAdd, paymentAdd } = usePaymentStore()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -39,6 +46,28 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
     },
   })
 
+  const {
+    data,
+    isRefetching,
+    refetch: createPayment,
+  } = useQuery({
+    queryKey: ['Payment', paymentAdd.method, paymentAdd.value],
+    queryFn: async () => {
+      return await StripeService.createPayment(
+        {
+          // amount: String(Number(paymentAdd.value)),
+          owner_id: trueSession.user?.steam?.steamid!,
+        },
+        trueSession.user?.token!,
+      )
+    },
+    cacheTime: 0,
+    enabled: false,
+  })
+
+  console.log(data)
+  console.log(isRefetching)
+
   const watchValue = watch('value')
   const watchButton = watch('valueButtons')
 
@@ -47,7 +76,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   console.log(watchValue)
 
   useEffect(() => console.log(watchValue), [watchValue])
-  console.log('ok')
 
   const onSubmit = (data: any) => {
     setIsLoading(true)
@@ -71,8 +99,9 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
       setPaymentAdd({ method: data.method, value: currencyToNumber })
     }
 
-    router.push(`/pagamento/recarregar/${data.method}`)
-    afterFormSubmit()
+    createPayment()
+    // router.push(`/pagamento/recarregar/${data.method}`)
+    // afterFormSubmit()
   }
 
   return (

@@ -51,7 +51,7 @@ export function FormInputRadioDefault({
   ))
 
   return (
-    <div className={containerClassname}>
+    <div className={containerClassname + ' select-none'}>
       {renderItems}
       <span className={errorsClassname}>{errors && errors?.message}</span>
     </div>
