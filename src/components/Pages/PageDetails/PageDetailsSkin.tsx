@@ -106,6 +106,9 @@ export function PageDetailsSkin({
     cacheTime: 0,
   })
 
+  console.log(skinId)
+  console.log(cartId)
+
   console.log(data)
 
   const {
