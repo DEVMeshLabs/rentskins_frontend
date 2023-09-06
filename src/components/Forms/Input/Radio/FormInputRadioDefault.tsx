@@ -33,7 +33,6 @@ export function FormInputRadioDefault({
   errorsClassname,
   items,
   onChange,
-  ...rest
 }: IProps) {
   const renderItems = items.map((item, index) => (
     <div key={item.value + index} className={`${wrapperClassname} flex`}>
@@ -44,7 +43,6 @@ export function FormInputRadioDefault({
         value={item.value}
         className={`peer absolute appearance-none ${inputClassName}`}
         {...register}
-        {...rest}
       />
       <label htmlFor={item.value} className={labelClassName}>
         {item.label}
@@ -53,7 +51,7 @@ export function FormInputRadioDefault({
   ))
 
   return (
-    <div className={containerClassname}>
+    <div className={containerClassname + ' select-none'}>
       {renderItems}
       <span className={errorsClassname}>{errors && errors?.message}</span>
     </div>

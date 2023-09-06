@@ -42,8 +42,6 @@ export interface IWithdrawInfo {
 }
 
 export interface IStates {
-  paymentAdd: IPayment
-  setPaymentAdd: (paymentAdd: IPayment) => void
   paymentRetrieve: IPayment
   setPaymentRetrieve: (paymentRetrieve: IPayment) => void
   paymentWithdrawInfo: IWithdrawInfo

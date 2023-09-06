@@ -23,6 +23,26 @@ const formSchema = yup.object({
 
         return true
       },
+    )
+    .test(
+      'form-value-min-test',
+      'O campo deve conter um valor igual ou acima de R$ 5,00.',
+      (item) => {
+        if (item === '' || item === undefined) {
+          return true
+        }
+
+        let currencyToNumber
+        currencyToNumber = item.replace(/\./g, '')
+        currencyToNumber = currencyToNumber.replace('R$ ', '')
+        currencyToNumber = currencyToNumber.replace(',', '.')
+
+        if (Number(currencyToNumber) < 5) {
+          return false
+        }
+
+        return true
+      },
     ),
   valueButtons: yup.string(),
   method: yup.string().required(),
