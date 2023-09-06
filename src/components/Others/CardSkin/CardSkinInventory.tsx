@@ -13,6 +13,8 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
+import { ISteamItens } from '@/interfaces/ISkins'
+import { filterSkinsToInventory } from '@/utils/filterSkinsToInvetory'
 
 export function CardSkinInventory() {
   const { data: session, status } = useSession()
@@ -21,6 +23,17 @@ export function CardSkinInventory() {
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
+  const [steamItens, setSteamItens] = useState<ISteamItens[]>([])
+
+  const { data: skinsProfile, refetch: refetchSkinsProfile } = useQuery({
+    queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
+    queryFn: () =>
+      SkinService.findAllSkinsByIdSeller(
+        trueSession?.user?.steam?.steamid!,
+        page,
+      ),
+    keepPreviousData: true,
+  })
 
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
@@ -37,7 +50,21 @@ export function CardSkinInventory() {
   })
 
   useEffect(() => {
+    if (
+      data?.data &&
+      data.data.inventory &&
+      skinsProfile?.data &&
+      skinsProfile.data.skins
+    ) {
+      setSteamItens(
+        filterSkinsToInventory(data.data.inventory, skinsProfile.data.skins),
+      )
+    }
+  }, [data, skinsProfile])
+
+  useEffect(() => {
     refetch()
+    refetchSkinsProfile()
   }, [page, inventoryTypeFilter, refetch])
 
   useEffect(() => {
@@ -58,7 +85,6 @@ export function CardSkinInventory() {
       selectedType = 'Não existem estes items em seu inventário.'
     }
 
-    console.log(data?.data)
     return (
       <div className="flex h-[50vh] items-center justify-center font-semibold text-white">
         {inventoryTypeFilter.length ? (
@@ -84,10 +110,8 @@ export function CardSkinInventory() {
       <div className="ml-2 flex flex-wrap justify-center gap-4">
         {isLoading || isRefetching ? (
           <CardSkin.Skeleton quantity={16} />
-        ) : data?.data &&
-          data.data.inventory &&
-          data.data.inventory.length > 0 ? (
-          data.data.inventory.map(
+        ) : steamItens.length > 0 ? (
+          steamItens.map(
             (
               { icon_url, name, name_color, market_name, tags, type, assetid },
               index: number,

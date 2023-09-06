@@ -20,6 +20,53 @@ export interface ISkins {
   deletedAt: string | null
 }
 
+export interface ISteamItens {
+  appid: number
+  contextid: string
+  assetid: string
+  classid: string
+  instanceid: string
+  amount: number
+  pos: number
+  id: string
+  currency: number
+  background_color: string
+  icon_url: string
+  icon_url_large: string
+  descriptions: Array<{
+    type: string
+    value: string
+    color?: string
+  }>
+  tradable: boolean
+  actions: Array<{
+    link: string
+    name: string
+  }>
+  name: string
+  name_color: string
+  type: string
+  market_name: string
+  market_hash_name: string
+  market_actions: Array<{
+    link: string
+    name: string
+  }>
+  commodity: boolean
+  market_tradable_restriction: number
+  marketable: boolean
+  tags: Array<{
+    internal_name: string
+    name: string
+    category: string
+    color: string
+    category_name: string
+  }>
+  is_currency: boolean
+  market_marketable_restriction: number
+  fraudwarnings: string[]
+}
+
 export interface ISkinsResponse {
   totalPages: number
   totalItens: number
