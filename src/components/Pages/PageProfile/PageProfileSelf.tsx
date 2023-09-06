@@ -41,8 +41,6 @@ export default function PageProfileSelf() {
     keepPreviousData: true,
   })
 
-  console.log(data?.data.skins)
-
   useEffect(() => {
     refetch()
   }, [page, refetch])

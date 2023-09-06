@@ -28,8 +28,9 @@ export default function PageInventorySummary() {
         skinsToAdvertise,
         trueSession.user?.token!,
       )
-      console.log(announcedSkins)
-      cleanSkinsToAdvertise()
+      if (announcedSkins.request.status !== 409) {
+        cleanSkinsToAdvertise()
+      }
       setIsLoading(false)
       return announcedSkins
     },
@@ -41,6 +42,12 @@ export default function PageInventorySummary() {
     if (data) {
       if (data?.request.status === 201) {
         Toast.Success('Anúncio adicionado com sucesso!')
+      } else if (data?.request.status === 409) {
+        const itemName = data.request.response
+          .split('"')[3]
+          .replace('Skin', '')
+          .replace(' Already Exist', '')
+        Toast.Error(`O item ${itemName} já existe no seu perfil.`)
       } else {
         Toast.Error(
           'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
