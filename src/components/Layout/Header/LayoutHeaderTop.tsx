@@ -67,6 +67,8 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
+  console.log(data)
+
   const { data: userHasConfig, isLoading } = useQuery({
     queryKey: ['config'],
     queryFn: async () =>
@@ -125,7 +127,7 @@ export function LayoutHeaderTop() {
     } else if (walletCreated && walletCreated.data) {
       setWallet(walletCreated.data.value)
     }
-  }, [walletRetrieved, walletCreated])
+  }, [walletRetrieved, walletCreated, setWallet])
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
