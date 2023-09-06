@@ -106,6 +106,11 @@ export function PageDetailsSkin({
     cacheTime: 0,
   })
 
+  console.log(skinId)
+  console.log(cartId)
+
+  console.log(data)
+
   const {
     refetch: refetchAvailability,
     data: resultAvailability,
@@ -169,9 +174,9 @@ export function PageDetailsSkin({
       if (userStatus === 'authenticated') {
         if (hasConfigurations) {
           const handleCart = async () => {
+            setMethodSelected(undefined)
             await createCart()
             setWasRaised(true)
-            setMethodSelected(undefined)
           }
 
           const handleBuy = () => {
@@ -208,14 +213,15 @@ export function PageDetailsSkin({
         return Toast.Error('Tente novamente após alguns segundos.')
       }
     }
-  }, [methodSelected, createCart, userStatus, pathname])
+  }, [methodSelected, createCart, userStatus, pathname, hasConfigurations])
 
   useEffect(() => {
     if (resultAvailability?.request && !refetchingAvailability) {
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        deleteItem()
+        proceedItem()
+        // deleteItem()
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')

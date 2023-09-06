@@ -67,6 +67,8 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
+  console.log(data)
+
   const { data: userHasConfig, isLoading } = useQuery({
     queryKey: ['config'],
     queryFn: async () =>
@@ -80,10 +82,10 @@ export function LayoutHeaderTop() {
   const configValidation =
     userHasConfig &&
     userHasConfig.data &&
-    userHasConfig!.data.owner_email !== '' &&
-    userHasConfig!.data.owner_phone !== '' &&
-    userHasConfig!.data.owner_cpf !== '' &&
-    userHasConfig!.data.url_trade !== ''
+    userHasConfig!.data?.owner_email !== '' &&
+    userHasConfig!.data?.owner_phone !== '' &&
+    userHasConfig!.data?.owner_cpf !== '' &&
+    userHasConfig!.data?.url_trade !== ''
 
   const disableAddButton =
     pathname.includes('/pagamento') || pathname.includes('/oops')
@@ -125,7 +127,7 @@ export function LayoutHeaderTop() {
     } else if (walletCreated && walletCreated.data) {
       setWallet(walletCreated.data.value)
     }
-  }, [walletRetrieved, walletCreated])
+  }, [walletRetrieved, walletCreated, setWallet])
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
