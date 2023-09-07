@@ -55,6 +55,8 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
         Pagamento cancelado. Seu saldo não foi recarregado.
       </Common.Title>
 
+      {referer}
+
       <Link
         className="flex w-64 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1200 py-3 text-xl font-bold text-black opacity-70 transition-all hover:opacity-100"
         href={'/'}
