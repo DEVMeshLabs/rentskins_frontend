@@ -2,6 +2,7 @@ import Common from '@/components/Common'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Status da Recarga - RentSkins',
@@ -21,17 +22,17 @@ interface IProps {
 export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
   const referer = headers().get('referer')
 
-  // if (params.status !== 'processo' && params.status !== 'cancelado') {
-  //   notFound()
-  // }
+  if (params.status !== 'processo' && params.status !== 'cancelado') {
+    notFound()
+  }
 
-  // const validURLs = [`https://checkout.stripe.com`]
+  const validURLs = `https://checkout.stripe.com/`
 
-  // const urlIsValid = validURLs.some((url) => url.includes(referer as string))
+  const urlIsValid = referer?.includes(validURLs)
 
-  // if (!urlIsValid) {
-  //   notFound()
-  // }
+  if (!urlIsValid) {
+    notFound()
+  }
 
   const renderSucessMessage = () => (
     <div className="flex h-1/3 flex-col items-center justify-center gap-10">
@@ -45,6 +46,10 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
       >
         Continuar
       </Link>
+
+      <span className="text-xs text-white">
+        ID da Transação: {searchParams.id || 'Indefinido'}
+      </span>
     </div>
   )
 
@@ -53,8 +58,6 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
       <Common.Title className="w-2/3 text-center" size="2xl" bold={600}>
         Pagamento cancelado. Seu saldo não foi recarregado.
       </Common.Title>
-
-      {referer}
 
       <Link
         className="flex w-64 items-center justify-center rounded-md border-transparent bg-mesh-color-primary-1200 py-3 text-xl font-bold text-black opacity-70 transition-all hover:opacity-100"
@@ -69,7 +72,6 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
     <main className="flex h-[40vh] flex-col items-center justify-center bg-mesh-color-others-black text-white">
       {params.status === 'processo' && renderSucessMessage()}
       {params.status === 'cancelado' && renderCancelMessage()}
-      {referer}
     </main>
   )
 }
