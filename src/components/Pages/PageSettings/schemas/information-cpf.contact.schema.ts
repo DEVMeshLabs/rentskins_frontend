@@ -4,7 +4,6 @@ import * as yup from 'yup'
 const formSchema = yup.object({
   cpf: yup
     .string()
-    .required('Campo necessário.')
     .test('cpf-test', 'O campo deve ser um CPF válido.', (item) => {
       function calculateDigit(digits: string): string {
         const factors = digits.split('').map(Number).reverse()

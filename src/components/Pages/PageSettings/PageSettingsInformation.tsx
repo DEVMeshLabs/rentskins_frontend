@@ -41,7 +41,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: personalResolver,
     defaultValues: {
-      'trade-link': userConfig?.data?.url_trade || undefined,
+      'trade-link': userConfig?.data?.url_trade! || undefined,
     },
   })
 
@@ -82,11 +82,11 @@ export function PageSettingsInformation() {
   })
 
   useEffect(() => {
-    if (!isLoading && userConfig.request.status === 200) {
-      setValueEmail('email', userConfig.data.owner_email)
-      setValuePhone('phone', userConfig.data.owner_phone)
-      setValueCPF('cpf', userConfig.data.owner_cpf)
-      setValueTrade('trade-link', userConfig.data.url_trade)
+    if (!isLoading && userConfig?.request.status === 200) {
+      setValueEmail('email', userConfig?.data.owner_email)
+      setValuePhone('phone', userConfig?.data.owner_phone)
+      setValueCPF('cpf', userConfig?.data.owner_cpf)
+      setValueTrade('trade-link', userConfig?.data.url_trade)
     }
   }, [
     userConfig,
