@@ -3,6 +3,7 @@ export interface IConfig {
   owner_id: string
   owner_email: string
   owner_phone: string
+  owner_cpf: string
   url_trade: string
   url_sell: string
   agreed_with_emails: boolean
