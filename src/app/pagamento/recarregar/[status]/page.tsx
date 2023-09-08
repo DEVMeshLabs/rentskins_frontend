@@ -2,7 +2,6 @@ import Common from '@/components/Common'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Status da Recarga - RentSkins',
@@ -22,17 +21,17 @@ interface IProps {
 export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
   const referer = headers().get('referer')
 
-  if (params.status !== 'processo' && params.status !== 'cancelado') {
-    notFound()
-  }
+  // if (params.status !== 'processo' && params.status !== 'cancelado') {
+  //   notFound()
+  // }
 
-  const validURLs = [`https://checkout.stripe.com`]
+  // const validURLs = [`https://checkout.stripe.com`]
 
-  const urlIsValid = validURLs.some((url) => url.includes(referer as string))
+  // const urlIsValid = validURLs.some((url) => url.includes(referer as string))
 
-  if (!urlIsValid) {
-    notFound()
-  }
+  // if (!urlIsValid) {
+  //   notFound()
+  // }
 
   const renderSucessMessage = () => (
     <div className="flex h-1/3 flex-col items-center justify-center gap-10">
@@ -70,6 +69,7 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
     <main className="flex h-[40vh] flex-col items-center justify-center bg-mesh-color-others-black text-white">
       {params.status === 'processo' && renderSucessMessage()}
       {params.status === 'cancelado' && renderCancelMessage()}
+      {referer}
     </main>
   )
 }

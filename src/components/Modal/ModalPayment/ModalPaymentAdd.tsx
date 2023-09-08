@@ -8,6 +8,7 @@ import { IconClose } from '@/components/Icons/IconClose'
 import { IconMoneyBag } from '@/components/Icons/IconMoneyBag'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
 import StripeService from '@/services/stripe.service'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -46,12 +47,22 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
     },
   })
 
+  const { data: userConfigurations } = useQuery({
+    queryKey: ['UserConfig', trueSession.user?.steam?.steamid],
+    queryFn: async () =>
+      ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+  })
+
   const { data: createdPayment, refetch: createPayment } = useQuery({
     queryKey: ['Payment'],
     queryFn: () =>
       StripeService.createPayment(
         {
           owner_id: trueSession.user?.steam?.steamid!,
+          email: userConfigurations?.data.owner_email!,
           success_url: ('https://rentskins-testing.vercel.app' +
             '/pagamento/recarregar') as string,
           cancel_url: ('https://rentskins-testing.vercel.app' +
@@ -72,8 +83,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
       setStartPayment(false)
     }
   }, [payment, startPayment, afterFormSubmit, createPayment])
-
-  console.log(createdPayment)
 
   useEffect(() => {
     if (createdPayment?.request.status === 200) {
