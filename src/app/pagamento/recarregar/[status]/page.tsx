@@ -25,9 +25,9 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
   //   notFound()
   // }
 
-  const validURLs = [`https://checkout.stripe.com`]
+  // const validURLs = [`https://checkout.stripe.com`]
 
-  const urlIsValid = validURLs.some((url) => url.includes(referer as string))
+  // const urlIsValid = validURLs.some((url) => url.includes(referer as string))
 
   // if (!urlIsValid) {
   //   notFound()
