@@ -63,6 +63,7 @@ export function LayoutHeaderTop() {
       NotificationServices.getAllNotifsByUser(
         trueSession.user?.steam?.steamid!,
         notificationFilter,
+        trueSession.user?.token,
       ),
     enabled: status === 'authenticated',
   })
@@ -92,7 +93,9 @@ export function LayoutHeaderTop() {
 
   useEffect(() => {
     // const interval = setInterval(() => {
-    refetch() // Refaz a requisição a cada 1 segundo
+    if (trueSession.user?.steam?.steamid) {
+      refetch() // Refaz a requisição a cada 1 segundo
+    }
     // }, 10 * 60 * 1000)
     setHasNotifications(thereIsNotification(data?.data))
   }, [pathname])

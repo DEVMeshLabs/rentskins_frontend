@@ -25,8 +25,8 @@ export default function RootLayout({ children, session }: ILayoutRootProps) {
     <LayoutQueryProvider>
       <html lang="en">
         <body className={`${inter.className} bg-[#151714]`}>
-          <LayoutRoot session={session}>{children}</LayoutRoot>
           <Toaster />
+          <LayoutRoot session={session}>{children}</LayoutRoot>
         </body>
       </html>
     </LayoutQueryProvider>
