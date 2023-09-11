@@ -88,9 +88,6 @@ export function LayoutHeaderTop() {
     userHasConfig!.data?.owner_cpf !== '' &&
     userHasConfig!.data?.url_trade !== ''
 
-  const disableAddButton =
-    pathname.includes('/pagamento') || pathname.includes('/oops')
-
   useEffect(() => {
     // const interval = setInterval(() => {
     if (trueSession.user?.steam?.steamid) {
@@ -109,6 +106,12 @@ export function LayoutHeaderTop() {
       ),
     enabled: status === 'authenticated',
   })
+
+  const disableAddButton =
+    pathname.includes('/pagamento') ||
+    pathname.includes('/oops') ||
+    isLoading ||
+    !configValidation
 
   const { data: walletCreated } = useQuery({
     queryKey: ['WalletService.createEmptyWallet'],
