@@ -60,8 +60,8 @@ export default function PageUserNotifications() {
     queryFn: async () => {
       const allNotifications = NotificationServices.getAllNotifsByUser(
         trueSession.user?.steam?.steamid!,
-        trueSession.user?.token!,
         notificationFilter,
+        trueSession.user?.token!,
       )
       if ((await allNotifications).data.length > 0) {
         NotificationServices.readingAllNotifications(
