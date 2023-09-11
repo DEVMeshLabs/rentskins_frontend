@@ -63,6 +63,7 @@ export function LayoutHeaderTop() {
       NotificationServices.getAllNotifsByUser(
         trueSession.user?.steam?.steamid!,
         notificationFilter,
+        trueSession.user?.token,
       ),
     enabled: status === 'authenticated',
   })
@@ -87,12 +88,11 @@ export function LayoutHeaderTop() {
     userHasConfig!.data?.owner_cpf !== '' &&
     userHasConfig!.data?.url_trade !== ''
 
-  const disableAddButton =
-    pathname.includes('/pagamento') || pathname.includes('/oops')
-
   useEffect(() => {
     // const interval = setInterval(() => {
-    refetch() // Refaz a requisição a cada 1 segundo
+    if (trueSession.user?.steam?.steamid) {
+      refetch() // Refaz a requisição a cada 1 segundo
+    }
     // }, 10 * 60 * 1000)
     setHasNotifications(thereIsNotification(data?.data))
   }, [pathname])
@@ -106,6 +106,12 @@ export function LayoutHeaderTop() {
       ),
     enabled: status === 'authenticated',
   })
+
+  const disableAddButton =
+    pathname.includes('/pagamento') ||
+    pathname.includes('/oops') ||
+    isLoading ||
+    !configValidation
 
   const { data: walletCreated } = useQuery({
     queryKey: ['WalletService.createEmptyWallet'],
