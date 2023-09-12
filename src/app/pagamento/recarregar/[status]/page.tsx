@@ -36,8 +36,12 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
 
   const renderSucessMessage = () => (
     <div className="flex h-1/3 flex-col items-center justify-center gap-10">
-      <Common.Title className="w-2/3 text-center" size="2xl" bold={600}>
-        Pagamento concluído! Seu saldo foi recarregado com sucesso!
+      <Common.Title className="w-5/6 text-center" size="2xl" bold={600}>
+        O seu pagamento está sendo processado com sucesso!
+      </Common.Title>
+
+      <Common.Title className="w-fit text-center" size="xl" bold={600}>
+        Em breve, o seu saldo será recarregado.
       </Common.Title>
 
       <Link
@@ -46,10 +50,6 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
       >
         Continuar
       </Link>
-
-      <span className="text-xs text-white">
-        ID da Transação: {searchParams.id || 'Indefinido'}
-      </span>
     </div>
   )
 

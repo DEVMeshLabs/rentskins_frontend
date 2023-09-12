@@ -262,7 +262,7 @@ export function PageDetailsSkin({
             {Number(skinPrice).toLocaleString('PT-BR', {
               style: 'currency',
               currency: 'BRL',
-              minimumIntegerDigits: 2,
+              minimumFractionDigits: 2,
             })}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">Preço Total</p>
@@ -274,7 +274,7 @@ export function PageDetailsSkin({
               {(parseFloat(skinPrice) * 0.1).toLocaleString('PT-BR', {
                 style: 'currency',
                 currency: 'BRL',
-                minimumIntegerDigits: 2,
+                minimumFractionDigits: 2,
               })}
             </Common.Title>
             <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
