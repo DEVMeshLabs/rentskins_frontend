@@ -70,9 +70,6 @@ export default async function Details({ params }: IProps) {
     notFound()
   }
 
-  console.log(item)
-  console.log(seller)
-
   return (
     <div>
       {seller ? (
