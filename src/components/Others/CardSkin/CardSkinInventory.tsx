@@ -2,19 +2,19 @@
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import { ModalSkinShowcaseMain } from '@/components/Modal/ModalSkinShowcase/ModalSkinShowcaseMain'
+import { ISteamItens } from '@/interfaces/ISkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import useSkinsStore from '@/stores/skins.store'
+import { filterSkinsToInventory } from '@/utils/filterSkinsToInvetory'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
-import { ISteamItens } from '@/interfaces/ISkins'
-import { filterSkinsToInventory } from '@/utils/filterSkinsToInvetory'
 
 export function CardSkinInventory() {
   const { data: session, status } = useSession()

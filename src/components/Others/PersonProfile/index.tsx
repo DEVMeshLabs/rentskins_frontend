@@ -58,6 +58,9 @@ export default function PersonProfile({
                   'h-8': isLoading === true,
                 },
                 {
+                  'bg-white/20 text-white': userState === 'Não Obtido',
+                },
+                {
                   'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
                     userState === 'Risco',
                 },
@@ -107,11 +110,17 @@ export default function PersonProfile({
       <div className="flex w-[500px] flex-wrap gap-5">
         <ProfileInfo
           title="Tempo de Entrega"
-          value={deliveryTime && deliveryTime.replace(' no momento', '')}
+          value={
+            (deliveryTime && deliveryTime.replace(' no momento', '')) ||
+            'Não Obtido'
+          }
         />
         <ProfileInfo
           title="Total de Transações"
-          value={totalExchanges && totalExchanges.replace(' no momento', '')}
+          value={
+            (totalExchanges && totalExchanges.replace(' no momento', '')) ||
+            'Não Obtido'
+          }
         />
         <ProfileInfo title="Taxa de Entrega" isPercent value={deliveryFee} />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />
