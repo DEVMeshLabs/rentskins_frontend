@@ -59,7 +59,6 @@ export function CardSkinInventory() {
       setSteamItens(
         filterSkinsToInventory(data.data.inventory, skinsProfile.data.skins),
       )
-      console.log(steamItens)
     }
   }, [data, skinsProfile])
 
@@ -152,6 +151,7 @@ export function CardSkinInventory() {
                   skinColor={name_color}
                   float={'0.2555'}
                   linkForPreviewSkin={linkForPreviewSkin}
+                  linkForProfile={trueSession.user?.steam?.profileurl!}
                   id={assetid}
                   isSelected={isSelected}
                   activator={
