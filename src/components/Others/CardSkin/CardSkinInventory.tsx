@@ -59,6 +59,7 @@ export function CardSkinInventory() {
       setSteamItens(
         filterSkinsToInventory(data.data.inventory, skinsProfile.data.skins),
       )
+      console.log(steamItens)
     }
   }, [data, skinsProfile])
 
@@ -113,7 +114,16 @@ export function CardSkinInventory() {
         ) : steamItens.length > 0 ? (
           steamItens.map(
             (
-              { icon_url, name, name_color, market_name, tags, type, assetid },
+              {
+                icon_url,
+                name,
+                name_color,
+                market_name,
+                tags,
+                type,
+                assetid,
+                actions,
+              },
               index: number,
             ) => {
               const primeiroName = name.split('|')[0]
@@ -128,6 +138,7 @@ export function CardSkinInventory() {
               const isSelected = skinsToAdvertise.some(
                 ({ id }) => assetid === id,
               )
+              const linkForPreviewSkin = actions[0].link
 
               return (
                 <ModalSkinShowcaseMain
@@ -140,6 +151,7 @@ export function CardSkinInventory() {
                   statusFloat={statusFloat as string}
                   skinColor={name_color}
                   float={'0.2555'}
+                  linkForPreviewSkin={linkForPreviewSkin}
                   id={assetid}
                   isSelected={isSelected}
                   activator={

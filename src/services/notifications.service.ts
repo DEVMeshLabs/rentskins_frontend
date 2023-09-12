@@ -17,7 +17,7 @@ export default class NotificationServices {
     const result: AxiosPromise<INotification[]> = await Api.post<
       INotification[]
     >(
-      `/notification/user/${userId}`,
+      `/notification/userAll/${userId}`,
       {
         tempo: time || 'tudo',
       },
@@ -25,8 +25,6 @@ export default class NotificationServices {
     )
       .then((response) => response)
       .catch((e) => e)
-
-    console.log(result)
 
     return result
   }
