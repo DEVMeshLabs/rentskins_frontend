@@ -22,6 +22,29 @@ export default class Toast {
     })
   }
 
+  public static Icon(
+    message: string,
+    icon: string,
+    duration: number = 4000,
+    background: string = '#222723',
+    position:
+      | 'bottom-right'
+      | 'bottom-left'
+      | 'top-left'
+      | 'top-right' = 'bottom-right',
+    color: string = 'white',
+  ) {
+    return toast(message, {
+      duration,
+      position,
+      style: {
+        background,
+        color,
+      },
+      icon,
+    })
+  }
+
   public static Success(
     message: string,
     duration: number = 4000,

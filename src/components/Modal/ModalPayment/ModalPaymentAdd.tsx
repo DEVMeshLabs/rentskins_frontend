@@ -1,5 +1,5 @@
 'use client'
-import ImageMastercard from '@/../public/payment/mastercard.png'
+import ImageCard from '@/../public/payment/card.png'
 import ImagePIX from '@/../public/payment/pix.png'
 import ImageTicket from '@/../public/payment/ticket.png'
 import Common from '@/components/Common'
@@ -10,6 +10,7 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import StripeService from '@/services/stripe.service'
+import Toast from '@/tools/toast.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
@@ -77,6 +78,14 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   })
 
   useEffect(() => {
+    Toast.Icon(
+      'O pagamento por PIX se encontra desativado no momento.',
+      '⚠️',
+      3000,
+    )
+  }, [])
+
+  useEffect(() => {
     if (payment && startPayment) {
       createPayment()
       afterFormSubmit()
@@ -96,10 +105,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
 
   const onSubmit = (data: any) => {
     setIsLoading(true)
-
-    console.log(data)
-
-    console.log('ok')
 
     if (data.value === '' || data.value === undefined) {
       let currencyToNumber
@@ -139,7 +144,7 @@ rounded-2xl bg-mesh-color-neutral-700"
           <Form.Input.Radio.Default
             name="method"
             wrapperClassname="h-24 w-full"
-            labelClassName="transition-all bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
+            labelClassName="transition-all peer-disabled:opacity-20 bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
           hover:cursor-pointer hover:border-mesh-color-primary-600/50 peer-checked:border-mesh-color-primary-600 text-white"
             containerClassname="mt-4 grid grid-cols-2 items-center justify-start gap-1 w-full"
             items={renderRadioMethodOptions()}
@@ -252,12 +257,13 @@ const renderRadioMethodOptions = () => {
 
   return [
     {
-      label: renderImage(ImageMastercard, 'mastercard'),
+      label: renderImage(ImageCard, 'mastercard'),
       value: 'card',
     },
     {
       label: renderImage(ImagePIX, 'pix'),
       value: 'pix',
+      disabled: true,
     },
     {
       label: renderImage(ImageTicket, 'boleto'),
