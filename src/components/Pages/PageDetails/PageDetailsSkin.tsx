@@ -14,11 +14,14 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
+import useSkinsStore from '@/stores/skins.store'
+import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
   userConfiguration: IOptionalConfig
   skinName: string
+  skinImage: string
   skinPrice: string
   skinFloat: string
   skinCategory: string
@@ -38,6 +41,7 @@ export function PageDetailsSkin({
   userStatus,
   userConfiguration,
   skinName,
+  skinImage,
   skinPrice,
   skinFloat,
   skinCategory,
@@ -59,6 +63,22 @@ export function PageDetailsSkin({
   const [userIsOwnerSkin, setUserIsOwnerSkin] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+  const {
+    setOpenModalBuySkin,
+    setWhatModalOpenToBuySkin,
+    setSkinToBuy,
+    setRentTime,
+  } = useSkinsStore()
+
+  const skinToBuy = {
+    skinPrice,
+    skinColor,
+    skinFloat,
+    skinImage,
+    skinName,
+    skinWeapon,
+    statusFloat,
+  }
 
   useEffect(() => {
     if (ownerSkin === userId) {
@@ -105,11 +125,6 @@ export function PageDetailsSkin({
     enabled: false,
     cacheTime: 0,
   })
-
-  console.log(skinId)
-  console.log(cartId)
-
-  console.log(data)
 
   const {
     refetch: refetchAvailability,
@@ -344,7 +359,9 @@ export function PageDetailsSkin({
                 'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
               },
             )}
-            onClick={() => setSelectedRentTime(false)}
+            onClick={() => {
+              setSelectedRentTime(false)
+            }}
             name="rent-time"
             items={[
               { label: '7 Dias', value: 7 },
@@ -359,7 +376,7 @@ export function PageDetailsSkin({
           <div className="flex gap-2">
             {renderButton(
               <Common.Button
-                onClick={() => {
+                onClick={async () => {
                   if (userIsOwnerSkin) {
                     if (!watchRentTime) {
                       setSelectedRentTime(true)
@@ -367,7 +384,10 @@ export function PageDetailsSkin({
                         'Você deve selecionar um período para prosseguir com o aluguel.',
                       )
                     } else {
-                      setMethodSelected('rent')
+                      setSkinToBuy(skinToBuy)
+                      setRentTime(+watchRentTime)
+                      setWhatModalOpenToBuySkin(1)
+                      setOpenModalBuySkin(true)
                     }
                   } else {
                     Toast.Error('Você não pode alugar o seu próprio item.')
@@ -381,25 +401,30 @@ export function PageDetailsSkin({
                 Alugar
               </Common.Button>,
             )}
-            {renderButton(
-              <Common.Button
-                onClick={() => {
-                  if (userIsOwnerSkin) {
-                    setMethodSelected('buy')
-                  } else {
-                    Toast.Error('Você não pode comprar o seu próprio item.')
+            <ModalBuyMain>
+              {renderButton(
+                <Common.Button
+                  onClick={async () => {
+                    if (userIsOwnerSkin) {
+                      setMethodSelected('buy')
+                      setSkinToBuy(skinToBuy)
+                      setWhatModalOpenToBuySkin(0)
+                      setOpenModalBuySkin(true)
+                    } else {
+                      Toast.Error('Você não pode comprar o seu próprio item.')
+                    }
+                  }}
+                  disabled={
+                    (loading && hasConfigurations) || userStatus === 'loading'
                   }
-                }}
-                disabled={
-                  (loading && hasConfigurations) || userStatus === 'loading'
-                }
-                className={
-                  'h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10'
-                }
-              >
-                Comprar
-              </Common.Button>,
-            )}
+                  className={
+                    'h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10'
+                  }
+                >
+                  Comprar
+                </Common.Button>,
+              )}
+            </ModalBuyMain>
             {renderButton(
               <Common.Button
                 onClick={() => {

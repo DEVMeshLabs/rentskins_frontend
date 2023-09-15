@@ -20,6 +20,16 @@ export interface ISkins {
   deletedAt: string | null
 }
 
+export interface ISkinsCardModal {
+  skinPrice: string
+  skinColor: string
+  skinName: string
+  skinImage: string
+  statusFloat: string
+  skinFloat: string
+  skinWeapon: string
+}
+
 export interface ISteamItens {
   appid: number
   contextid: string

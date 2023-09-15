@@ -39,6 +39,26 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
   cleanSkinsToAdvertise: () => {
     set(() => ({ skinsToAdvertise: [] }))
   },
+
+  openModalBuySkin: false,
+  setOpenModalBuySkin: (openModalBuySkin) => {
+    set(() => ({ openModalBuySkin }))
+  },
+
+  skinToBuy: null,
+  setSkinToBuy: (skinToBuy) => {
+    set(() => ({ skinToBuy }))
+  },
+
+  whatModalOpenToBuySkin: 0,
+  setWhatModalOpenToBuySkin: (whatModalOpen) => {
+    set(() => ({ whatModalOpenToBuySkin: whatModalOpen }))
+  },
+
+  rentTime: 0,
+  setRentTime: (rentTime) => {
+    set(() => ({ rentTime }))
+  },
 }))
 
 export default useSkinsStore
