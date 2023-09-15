@@ -37,7 +37,7 @@ export default function PaymentAddStatusPage({ params, searchParams }: IProps) {
   const renderSucessMessage = () => (
     <div className="flex h-1/3 flex-col items-center justify-center gap-10">
       <Common.Title className="w-5/6 text-center" size="2xl" bold={600}>
-        O seu pagamento está sendo processado com sucesso!
+        O seu pagamento está sendo processado!
       </Common.Title>
 
       <Common.Title className="w-fit text-center" size="xl" bold={600}>
