@@ -53,6 +53,7 @@ export function PageDetailsSkin({
   userId,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
+  const [rentPercentage, setRentPercentage] = useState(10)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
@@ -106,11 +107,6 @@ export function PageDetailsSkin({
     cacheTime: 0,
   })
 
-  console.log(skinId)
-  console.log(cartId)
-
-  console.log(data)
-
   const {
     refetch: refetchAvailability,
     data: resultAvailability,
@@ -152,6 +148,17 @@ export function PageDetailsSkin({
   }
 
   const watchRentTime = watch('rent-time')
+
+  useEffect(() => {
+    switch (String(watchRentTime)) {
+      case '7':
+        return setRentPercentage(10)
+      case '14':
+        return setRentPercentage(18)
+      case '21':
+        return setRentPercentage(25)
+    }
+  }, [watchRentTime])
 
   useEffect(() => {
     if (deleteResult) {
@@ -220,8 +227,7 @@ export function PageDetailsSkin({
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
-        proceedItem()
-        // deleteItem()
+        deleteItem()
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
@@ -268,17 +274,26 @@ export function PageDetailsSkin({
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
 
-        <div>
+        <div
+          className={`transition-all duration-500 ${
+            watchRentTime !== undefined && watchRentTime !== null
+              ? 'opacity-100'
+              : 'opacity-0'
+          }`}
+        >
           <div className="flex items-center">
             <Common.Title className="text-2xl font-extrabold text-white">
-              {(parseFloat(skinPrice) * 0.1).toLocaleString('PT-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-              })}
+              {(parseFloat(skinPrice) * (rentPercentage / 100)).toLocaleString(
+                'PT-BR',
+                {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 2,
+                },
+              )}
             </Common.Title>
             <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
-              10%
+              {rentPercentage}%
             </span>
           </div>
           <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
