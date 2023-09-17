@@ -59,6 +59,11 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
   setRentTime: (rentTime) => {
     set(() => ({ rentTime }))
   },
+
+  itemAvailable: false,
+  setItemAvailable: (itemAvailable: boolean) => {
+    set(() => ({ itemAvailable }))
+  },
 }))
 
 export default useSkinsStore

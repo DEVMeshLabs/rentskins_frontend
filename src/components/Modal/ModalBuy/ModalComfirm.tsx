@@ -4,9 +4,10 @@ import Link from 'next/link'
 interface IProps {
   label: string
   onClick: () => void
+  itemAvailable: boolean
 }
 
-export function ModalConfirm({ label, onClick }: IProps) {
+export function ModalConfirm({ label, onClick, itemAvailable }: IProps) {
   return (
     <div className="flex items-end pt-2">
       <p className="w-4/5 leading-tight text-mesh-color-neutral-0">
@@ -32,6 +33,7 @@ export function ModalConfirm({ label, onClick }: IProps) {
         height="45px"
         className="h-11 text-lg font-bold text-black"
         onClick={onClick}
+        disable={!itemAvailable}
       >
         {label}
       </Common.Button>

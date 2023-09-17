@@ -21,6 +21,7 @@ export interface ISkins {
 }
 
 export interface ISkinsCardModal {
+  skinId: string
   skinPrice: string
   skinColor: string
   skinName: string

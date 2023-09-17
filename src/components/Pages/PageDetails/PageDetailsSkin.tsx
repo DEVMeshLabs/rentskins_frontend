@@ -34,7 +34,9 @@ type PropsTypes = {
   cartId: string
   assetId: string
   ownerSkin: string
-  userId: string | undefined
+  userId: string
+  userName: string
+  token: string
 }
 
 export function PageDetailsSkin({
@@ -55,6 +57,8 @@ export function PageDetailsSkin({
   assetId,
   ownerSkin,
   userId,
+  userName,
+  token,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [methodSelected, setMethodSelected] = useState<any>()
@@ -68,9 +72,11 @@ export function PageDetailsSkin({
     setWhatModalOpenToBuySkin,
     setSkinToBuy,
     setRentTime,
+    setItemAvailable,
   } = useSkinsStore()
 
   const skinToBuy = {
+    skinId,
     skinPrice,
     skinColor,
     skinFloat,
@@ -176,6 +182,7 @@ export function PageDetailsSkin({
   }, [deleteResult, router])
 
   useEffect(() => {
+    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
       setLoading(true)
       refetchAvailability()
@@ -183,6 +190,27 @@ export function PageDetailsSkin({
       setLoading(false)
     }
   }, [methodSelected, refetchAvailability, hasConfigurations])
+
+  useEffect(() => {
+    if (methodSelected === 'buy' && resultAvailability?.status === 200) {
+      setLoading(false)
+      setRentTime(watchRentTime!)
+      setWhatModalOpenToBuySkin(0)
+      setItemAvailable(true)
+    } else if (
+      methodSelected === 'rent' &&
+      resultAvailability?.status === 200
+    ) {
+      setLoading(false)
+      setRentTime(watchRentTime!)
+      setWhatModalOpenToBuySkin(1)
+      setItemAvailable(true)
+    } else if (resultAvailability?.request.status === 404) {
+      setLoading(false)
+      setItemAvailable(false)
+      Toast.Error('Desculpe, infelizmente esse item não está mais disponível.')
+    }
+  }, [resultAvailability])
 
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
@@ -195,10 +223,7 @@ export function PageDetailsSkin({
           }
 
           const handleBuy = () => {
-            setMethodSelected(undefined)
-            return Toast.Success(
-              'Sucesso! Porém o método de compra ainda está em desenvolvimento.',
-            )
+            setMethodSelected('buy')
           }
 
           const handleRent = () => {
@@ -401,7 +426,7 @@ export function PageDetailsSkin({
                 Alugar
               </Common.Button>,
             )}
-            <ModalBuyMain>
+            <ModalBuyMain updateSkin={{ skinId, token, userId, userName }}>
               {renderButton(
                 <Common.Button
                   onClick={async () => {

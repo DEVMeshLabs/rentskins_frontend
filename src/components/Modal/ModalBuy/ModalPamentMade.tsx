@@ -34,6 +34,7 @@ export default function ModalPaymentMade() {
       </div>
 
       <Common.Button
+        onClick={() => setOpenModalBuySkin(false)}
         type="button"
         className="h-11 w-3/4 border-mesh-color-primary-1200 bg-mesh-color-primary-1200 px-4 py-3 text-lg font-bold text-mesh-color-others-black disabled:border-mesh-color-neutral-500 disabled:bg-mesh-color-neutral-500 disabled:text-mesh-color-neutral-300"
       >

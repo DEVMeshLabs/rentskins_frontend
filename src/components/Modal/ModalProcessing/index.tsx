@@ -1,23 +1,9 @@
 'use client'
 import Common from '@/components/Common'
-import useSkinsStore from '@/stores/skins.store'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useEffect } from 'react'
 import { ColorRing } from 'react-loader-spinner'
 
 export function ModalProcessing() {
-  const { setWhatModalOpenToBuySkin } = useSkinsStore()
-  useEffect(() => {
-    let timerId
-    async function opa() {
-      const promise = await setTimeout(() => {
-        setWhatModalOpenToBuySkin(3)
-      }, 3000)
-      timerId = promise
-    }
-    opa()
-    return clearTimeout(timerId)
-  }, [setWhatModalOpenToBuySkin])
   return (
     <Dialog.Content
       className="fixed left-1/2 top-1/2 z-30  flex

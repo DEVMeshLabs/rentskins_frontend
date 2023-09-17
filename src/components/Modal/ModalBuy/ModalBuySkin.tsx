@@ -7,11 +7,17 @@ import { ModalInfoSkin } from './ModalInfoSkin'
 import { ModalTitleSkin } from './ModalTitleSkin'
 import { ModalConfirm } from './ModalComfirm'
 
-//
+interface IProps {
+  onClick: () => void
+}
 
-export function ModalBuySkin() {
-  const { setOpenModalBuySkin, skinToBuy, setWhatModalOpenToBuySkin } =
-    useSkinsStore()
+export function ModalBuySkin({ onClick }: IProps) {
+  const {
+    setOpenModalBuySkin,
+    skinToBuy,
+    itemAvailable,
+    setWhatModalOpenToBuySkin,
+  } = useSkinsStore()
 
   return (
     <Dialog.Content
@@ -54,7 +60,11 @@ export function ModalBuySkin() {
         </div>
         <hr className="w-full border-mesh-color-neutral-200" />
         <ModalConfirm
-          onClick={() => setWhatModalOpenToBuySkin(2)}
+          itemAvailable={itemAvailable}
+          onClick={() => {
+            onClick()
+            setWhatModalOpenToBuySkin(2)
+          }}
           label="Comprar"
         />
       </div>
