@@ -26,7 +26,7 @@ export default class UserService {
       },
     })
       .then((response) => response)
-      .catch((e) => e)
+      .catch((e) => e) as AxiosPromise<any>
   }
 
   public static async suspendUser(steamId: string, token: string) {
