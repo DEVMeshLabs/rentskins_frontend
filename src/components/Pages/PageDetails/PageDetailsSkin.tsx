@@ -65,7 +65,7 @@ export function PageDetailsSkin({
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
-  const [userIsOwnerSkin, setUserIsOwnerSkin] = useState(true)
+  const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -89,7 +89,7 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (ownerSkin === userId) {
-      setUserIsOwnerSkin(false)
+      setUserIsntOwnerSkin(false)
     }
   }, [ownerSkin, userId])
 
@@ -188,7 +188,7 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (deleteResult) {
-      Toast.Error('Desculpe, o item não se encontra mais disponível.')
+      Toast.Error('Desculpe, o item não se encontra mais disponível.', 7000)
       router.push('/')
     }
   }, [deleteResult, router])
@@ -273,6 +273,7 @@ export function PageDetailsSkin({
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
         deleteItem()
+        setOpenModalBuySkin(false)
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
@@ -422,7 +423,7 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={async () => {
-                  if (userIsOwnerSkin) {
+                  if (userIsntOwnerSkin) {
                     if (!watchRentTime) {
                       setSelectedRentTime(true)
                       Toast.Error(
@@ -454,34 +455,33 @@ export function PageDetailsSkin({
                 userId,
                 userName,
               }}
-            >
-              {renderButton(
-                <Common.Button
-                  onClick={async () => {
-                    if (userIsOwnerSkin) {
-                      setMethodSelected('buy')
-                      setSkinToBuy(skinToBuy)
-                      setWhatModalOpenToBuySkin(0)
-                      setOpenModalBuySkin(true)
-                    } else {
-                      Toast.Error('Você não pode comprar o seu próprio item.')
-                    }
-                  }}
-                  disabled={
-                    (loading && hasConfigurations) || userStatus === 'loading'
+            />
+            {renderButton(
+              <Common.Button
+                onClick={async () => {
+                  if (userIsntOwnerSkin) {
+                    setMethodSelected('buy')
+                    setSkinToBuy(skinToBuy)
+                    setWhatModalOpenToBuySkin(0)
+                    setOpenModalBuySkin(true)
+                  } else {
+                    Toast.Error('Você não pode comprar o seu próprio item.')
                   }
-                  className={
-                    'h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10'
-                  }
-                >
-                  Comprar
-                </Common.Button>,
-              )}
-            </ModalBuyMain>
+                }}
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                className={
+                  'h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10'
+                }
+              >
+                Comprar
+              </Common.Button>,
+            )}
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  if (userIsOwnerSkin) {
+                  if (userIsntOwnerSkin) {
                     setMethodSelected('cart')
                   } else {
                     Toast.Error(

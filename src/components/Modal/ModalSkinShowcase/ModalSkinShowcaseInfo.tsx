@@ -50,7 +50,7 @@ export function ModalSkinShowcaseInfo({
   const { data: session } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const [disabled, setDisabled] = useState(true)
-  const [savePrice, setSavePrice] = useState('')
+  const [savePrice, setSavePrice] = useState<null | number>(null)
   const {
     setSkinsToAdvertise,
     removeSkinToAdvertise,
@@ -127,14 +127,14 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        skin_price: String(formattedValue(watchValue)),
+        skin_price: Number(formattedValue(watchValue)),
       })
     }
   }
 
   const handleChangeSkinToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
-      changeSkinToAdvertise(id, watchValue)
+      changeSkinToAdvertise(id, Number(watchValue))
     }
   }
 
@@ -204,9 +204,9 @@ export function ModalSkinShowcaseInfo({
               >
                 {(
                   (formattedValue(watchValue || '') ||
-                    formattedValue(savePrice)) -
+                    formattedValue(String(savePrice))) -
                   (formattedValue(watchValue || '') ||
-                    formattedValue(savePrice)) *
+                    formattedValue(String(savePrice))) *
                     0.05
                 ).toLocaleString('pt-br', {
                   style: 'currency',

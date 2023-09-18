@@ -91,7 +91,7 @@ export interface ISkinsToAdvertise {
   skin_name: string
   skin_category: string
   skin_weapon: string
-  skin_price: string
+  skin_price: number
   skin_float: string
   seller_name: string
   seller_id: string

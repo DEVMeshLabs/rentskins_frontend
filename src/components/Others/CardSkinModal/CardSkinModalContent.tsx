@@ -20,9 +20,8 @@ export function CardSkinModalContent({
   skinImage,
   skinColor,
 }: Props) {
-  const customName = skinName.includes('StatTrak™')
-    ? skinName.split('™')
-    : skinName
+  const customName =
+    skinName && skinName.includes('StatTrak™') ? skinName.split('™') : skinName
   return (
     <div className="flex items-center justify-between rounded-t-xl bg-mesh-color-neutral-800 pb-4 pl-4 pt-4">
       <div className="flex gap-3">

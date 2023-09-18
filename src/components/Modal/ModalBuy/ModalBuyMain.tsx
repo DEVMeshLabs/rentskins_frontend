@@ -12,7 +12,6 @@ import { useQuery } from '@tanstack/react-query'
 import useUserStore from '@/stores/user.store'
 
 interface IProps {
-  children: React.ReactNode
   updateSkin: {
     userName: string
     userId: string
@@ -23,7 +22,6 @@ interface IProps {
 }
 
 export function ModalBuyMain({
-  children,
   updateSkin: { skinId, token, userId, userName, skinPrice },
 }: IProps) {
   const {
@@ -46,8 +44,6 @@ export function ModalBuyMain({
   })
 
   useEffect(() => {
-    console.log(updatedSkin)
-    console.log(typeof wallet.value)
     if (wallet.value && wallet.value < skinPrice) {
       setWhatModalOpenToBuySkin(4)
     } else if (updatedSkin?.status === 204) {
@@ -57,7 +53,6 @@ export function ModalBuyMain({
 
   return (
     <Dialog.Root open={openModalBuySkin} onOpenChange={onOpenChange}>
-      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all">
           {whatModalOpenToBuySkin === 0 && (
