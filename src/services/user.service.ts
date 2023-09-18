@@ -32,7 +32,7 @@ export default class UserService {
   public static async suspendUser(steamId: string, token: string) {
     return Api.put(
       `/perfil/${steamId}`,
-      { account_status: true },
+      { account_status: 'Suspenso' },
       {
         headers: { Authorization: 'Bearer ' + token },
       },
