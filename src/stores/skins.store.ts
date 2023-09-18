@@ -23,7 +23,7 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
     })
   },
 
-  changeSkinToAdvertise: (skinId: string, price: string) => {
+  changeSkinToAdvertise: (skinId: string, price: number) => {
     set(({ skinsToAdvertise: oldSkinsToAdvertise }) => {
       const newChangedSkinsToAdvertise = oldSkinsToAdvertise.map((skin) => {
         if (skin.id === skinId) {
