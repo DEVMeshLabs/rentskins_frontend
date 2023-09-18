@@ -15,10 +15,11 @@ import UserService from '@/services/user.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
+import Toast from '@/tools/toast.tool'
 import VerificationTool from '@/tools/verification.tool'
 import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -43,8 +44,23 @@ export function LayoutHeaderTop() {
     },
   })
   const { data: session, status } = useSession()
-  const trueSession = (session as ISteamUser) || {}
+  const trueSession = session as ISteamUser
   const router = useRouter()
+
+  useEffect(() => {
+    if (trueSession.user?.steam?.banned) {
+      UserService.suspendUser(
+        trueSession.user.steam.steamid!,
+        trueSession.user.token!,
+      )
+
+      Toast.Error(
+        'Desculpe, sua conta foi bloqueada devido a um banimento VAC vinculado à sua conta.',
+      )
+
+      signOut()
+    }
+  }, [trueSession])
 
   const pathname = usePathname()
   const refDropdown = useRef(null)

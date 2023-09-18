@@ -6,7 +6,7 @@ export default class VerificationTool {
     const response = await UserService.getUserStatus(steamId)
 
     if (response?.data?.status === 'Suspenso') {
-      router.push('/atividade-suspensa')
+      return router.push('/atividade-suspensa')
     }
   }
 }
