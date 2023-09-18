@@ -1,4 +1,5 @@
 import ISteamUser from '@/interfaces/steam.interface'
+import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
 import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
@@ -33,13 +34,21 @@ async function handler(
 
         return token
       },
-      session({ session, token }) {
+      async session({ session, token }) {
         if ('steam' in token) {
           const newToken = JsonWebToken.create(session)
           // @ts-ignore
           session.user!.token = newToken
           // @ts-expect-error
           session.user!.steam = token.steam
+
+          const verifyVAC = await UserService.verifyAccountStatus(
+            // @ts-expect-error
+            session?.user?.steam?.steamid!,
+          )
+
+          // @ts-expect-error
+          session.user!.steam.banned = verifyVAC.data
         }
 
         return session as ISteamUser

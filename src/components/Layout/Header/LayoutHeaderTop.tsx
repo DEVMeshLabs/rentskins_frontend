@@ -43,8 +43,14 @@ export function LayoutHeaderTop() {
     },
   })
   const { data: session, status } = useSession()
-  const trueSession = (session as ISteamUser) || {}
+  const trueSession = session as ISteamUser
   const router = useRouter()
+
+  useEffect(() => {
+    if (trueSession?.user?.steam?.banned) {
+      VerificationTool.suspendAccount(trueSession, true)
+    }
+  }, [trueSession])
 
   const pathname = usePathname()
   const refDropdown = useRef(null)
@@ -53,7 +59,7 @@ export function LayoutHeaderTop() {
   const searchWatch = watch('search')
   const [hasNotifications, setHasNotifications] = useState(false)
 
-  VerificationTool.verifyStatus(trueSession.user?.steam?.steamid!, router)
+  VerificationTool.verifyStatus(trueSession?.user?.steam?.steamid!, router)
 
   const { notificationFilter } = useFilterStore()
 
@@ -61,9 +67,9 @@ export function LayoutHeaderTop() {
     queryKey: ['thereIsNotifications', session?.user as ISteamUser],
     queryFn: async () =>
       NotificationServices.getAllNotifsByUser(
-        trueSession.user?.steam?.steamid!,
+        trueSession?.user?.steam?.steamid!,
         notificationFilter,
-        trueSession.user?.token,
+        trueSession?.user?.token,
       ),
     enabled: status === 'authenticated',
   })
@@ -72,8 +78,8 @@ export function LayoutHeaderTop() {
     queryKey: ['config'],
     queryFn: async () =>
       ConfigService.findByConfigUserId(
-        trueSession.user?.steam?.steamid!,
-        trueSession.user?.token!,
+        trueSession?.user?.steam?.steamid!,
+        trueSession?.user?.token!,
       ),
     enabled: status === 'authenticated',
   })
@@ -88,7 +94,7 @@ export function LayoutHeaderTop() {
 
   useEffect(() => {
     // const interval = setInterval(() => {
-    if (trueSession.user?.steam?.steamid) {
+    if (trueSession?.user?.steam?.steamid) {
       refetch() // Refaz a requisição a cada 1 segundo
     }
     // }, 10 * 60 * 1000)
@@ -99,8 +105,8 @@ export function LayoutHeaderTop() {
     queryKey: ['WalletService.getWalletById'],
     queryFn: () =>
       WalletService.getWalletBySteamID(
-        trueSession.user?.steam?.steamid!,
-        trueSession.user?.token!,
+        trueSession?.user?.steam?.steamid!,
+        trueSession?.user?.token!,
       ),
     enabled: status === 'authenticated',
   })
@@ -112,9 +118,9 @@ export function LayoutHeaderTop() {
     queryKey: ['WalletService.createEmptyWallet'],
     queryFn: () =>
       WalletService.createEmptyWallet(
-        trueSession.user?.name!,
-        trueSession.user?.steam?.steamid!,
-        trueSession.user?.token!,
+        trueSession?.user?.name!,
+        trueSession?.user?.steam?.steamid!,
+        trueSession?.user?.token!,
       ),
     enabled:
       walletRetrieved !== undefined &&
@@ -131,30 +137,36 @@ export function LayoutHeaderTop() {
   }, [walletRetrieved, walletCreated, setWallet])
 
   const { data: userRetrieved } = useQuery({
-    queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
+    queryKey: ['ifProfile', trueSession?.user?.steam?.steamid!],
     queryFn: () => {
-      return UserService.getUser(trueSession.user?.steam?.steamid!)
+      return UserService.getUser(trueSession?.user?.steam?.steamid!)
     },
     enabled: status === 'authenticated',
   })
 
-  useQuery({
-    queryKey: ['CreateProfile', trueSession.user?.name!],
+  const { data: userCreated } = useQuery({
+    queryKey: ['CreateProfile', trueSession?.user?.name!],
     queryFn: async () => {
       return UserService.createUser(
         {
-          owner_id: trueSession.user?.steam?.steamid!,
-          owner_name: trueSession.user?.name!,
-          picture: trueSession.user?.image!,
-          owner_country: trueSession.user?.steam?.loccountrycode!,
-          steam_url: trueSession.user?.steam?.profileurl!,
+          owner_id: trueSession?.user?.steam?.steamid!,
+          owner_name: trueSession?.user?.name!,
+          picture: trueSession?.user?.image!,
+          owner_country: trueSession?.user?.steam?.loccountrycode!,
+          steam_url: trueSession?.user?.steam?.profileurl!,
         },
-        trueSession.user?.token!,
+        trueSession?.user?.token!,
       )
     },
     enabled:
       status === 'authenticated' && userRetrieved?.request.status === 404,
   })
+
+  useEffect(() => {
+    if (userCreated?.request.status === '401') {
+      VerificationTool.suspendAccount(trueSession, false)
+    }
+  }, [userCreated, trueSession])
 
   const handleOnProfileClick = () => {
     setShowProfileDropdown((state) => !state)
@@ -313,11 +325,11 @@ export function LayoutHeaderTop() {
                 }`}
               >
                 <Image
-                  src={trueSession.user?.image! || BlankUser}
-                  alt={trueSession.user?.name! || 'Profile'}
+                  src={trueSession?.user?.image! || BlankUser}
+                  alt={trueSession?.user?.name! || 'Profile'}
                   className="cursor-pointer rounded-full"
-                  width={trueSession.user?.image! ? 44 : 32}
-                  height={trueSession.user?.image! ? 44 : 32}
+                  width={trueSession?.user?.image! ? 44 : 32}
+                  height={trueSession?.user?.image! ? 44 : 32}
                   draggable={false}
                   onClick={handleOnProfileClick}
                 />
