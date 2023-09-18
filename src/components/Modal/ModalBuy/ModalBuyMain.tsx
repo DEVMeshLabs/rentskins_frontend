@@ -9,6 +9,7 @@ import ModalPaymentMade from './ModalPamentMade'
 import ModalPaymentRefused from './ModalPaymentRefused'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
+import useUserStore from '@/stores/user.store'
 
 interface IProps {
   children: React.ReactNode
@@ -16,13 +17,14 @@ interface IProps {
     userName: string
     userId: string
     skinId: string
+    skinPrice: number
     token: string
   }
 }
 
 export function ModalBuyMain({
   children,
-  updateSkin: { skinId, token, userId, userName },
+  updateSkin: { skinId, token, userId, userName, skinPrice },
 }: IProps) {
   const {
     openModalBuySkin,
@@ -30,6 +32,7 @@ export function ModalBuyMain({
     whatModalOpenToBuySkin,
     setWhatModalOpenToBuySkin,
   } = useSkinsStore()
+  const { wallet } = useUserStore()
 
   const onOpenChange = () => {
     setOpenModalBuySkin(!openModalBuySkin)
@@ -43,7 +46,11 @@ export function ModalBuyMain({
   })
 
   useEffect(() => {
-    if (updatedSkin?.status === 204) {
+    console.log(updatedSkin)
+    console.log(typeof wallet.value)
+    if (wallet.value && wallet.value < skinPrice) {
+      setWhatModalOpenToBuySkin(4)
+    } else if (updatedSkin?.status === 204) {
       setWhatModalOpenToBuySkin(3)
     }
   }, [updatedSkin, refetchUpdatedSkin])

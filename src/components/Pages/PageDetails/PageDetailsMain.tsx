@@ -25,6 +25,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   const trueSession = (session as ISteamUser) || {}
   const defaultID = item.skin_link_game.slice(20, 37)
 
+  console.log(item.id)
+
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
     queryFn: () => {

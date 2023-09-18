@@ -426,7 +426,15 @@ export function PageDetailsSkin({
                 Alugar
               </Common.Button>,
             )}
-            <ModalBuyMain updateSkin={{ skinId, token, userId, userName }}>
+            <ModalBuyMain
+              updateSkin={{
+                skinPrice: Number(skinPrice),
+                skinId,
+                token,
+                userId,
+                userName,
+              }}
+            >
               {renderButton(
                 <Common.Button
                   onClick={async () => {
