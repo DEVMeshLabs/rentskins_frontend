@@ -20,6 +20,8 @@ interface IProps {
   id: string
   isSelected: boolean
   asset_id: string
+  linkForPreviewSkin: string
+  linkForProfile: string
 }
 
 export function ModalSkinShowcaseMain({
@@ -34,6 +36,8 @@ export function ModalSkinShowcaseMain({
   skinName,
   isSelected,
   asset_id,
+  linkForPreviewSkin,
+  linkForProfile,
   id,
 }: IProps) {
   return (
@@ -79,8 +83,8 @@ export function ModalSkinShowcaseMain({
                 skin_color={skinColor}
                 skin_float={float}
                 skin_image={skinImage}
-                skin_link_game={''}
-                skin_link_steam={''}
+                skin_link_game={linkForPreviewSkin}
+                skin_link_steam={`${linkForProfile}inventory#730_2_${asset_id}`}
                 status_float={statusFloat}
                 statusFloatText={statusFloat}
               />

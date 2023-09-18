@@ -68,8 +68,6 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
-  console.log(data)
-
   const { data: userHasConfig, isLoading } = useQuery({
     queryKey: ['config'],
     queryFn: async () =>
