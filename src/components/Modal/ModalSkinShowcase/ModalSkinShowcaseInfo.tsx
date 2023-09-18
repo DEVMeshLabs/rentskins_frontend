@@ -6,6 +6,7 @@ import useSkinsStore from '@/stores/skins.store'
 import { useEffect, useState } from 'react'
 
 import ISteamUser from '@/interfaces/steam.interface'
+import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
@@ -69,6 +70,8 @@ export function ModalSkinShowcaseInfo({
     }
   }, [])
 
+  console.log(savePrice)
+
   const {
     register,
     watch,
@@ -95,6 +98,7 @@ export function ModalSkinShowcaseInfo({
     newFormattedValue = value.replace(/\./g, '')
     newFormattedValue = newFormattedValue.replace('R$ ', '')
     newFormattedValue = newFormattedValue.replace(',', '.')
+
     return Number(newFormattedValue)
   }
 
@@ -181,7 +185,15 @@ export function ModalSkinShowcaseInfo({
               control={control}
               maxLength={10}
               label="Preço de Venda"
-              placeHolder={savePrice ? `R$ ${savePrice}` : 'R$ 2.000,00'}
+              placeHolder={
+                savePrice
+                  ? `${formattedValue(savePrice).toLocaleString('pt-br', {
+                      currency: 'BRL',
+                      style: 'currency',
+                      minimumFractionDigits: 2,
+                    })}`
+                  : 'R$ 2.000,00'
+              }
               register={register('value')}
               errors={errors.value}
             />
@@ -235,15 +247,17 @@ export function ModalSkinShowcaseInfo({
         <div className="space-y-6">
           {isSelected ? (
             <div className="flex gap-4">
-              <Common.Button
-                disabled={disabled}
-                onClick={handleChangeSkinToAdvertise}
-                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
-              >
-                <Common.Title bold={600} className="rounded-xl">
-                  Alterar
-                </Common.Title>
-              </Common.Button>
+              <Dialog.Close className="w-full">
+                <Common.Button
+                  disabled={disabled}
+                  onClick={handleChangeSkinToAdvertise}
+                  className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+                >
+                  <Common.Title bold={600} className="rounded-xl">
+                    Alterar
+                  </Common.Title>
+                </Common.Button>
+              </Dialog.Close>
               <Common.Button
                 onClick={() => removeSkinToAdvertise(id)}
                 className="mt-4 h-11 w-3/5 border-mesh-color-neutral-200"
@@ -254,14 +268,16 @@ export function ModalSkinShowcaseInfo({
               </Common.Button>
             </div>
           ) : (
-            <Form.Button
-              disabled={disabled}
-              buttonStyle={undefined}
-              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-              onClick={handleAddSkinsToAdvertise}
-            >
-              Anunciar
-            </Form.Button>
+            <Dialog.Close className="w-full">
+              <Form.Button
+                disabled={disabled}
+                buttonStyle={undefined}
+                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+                onClick={handleAddSkinsToAdvertise}
+              >
+                Anunciar
+              </Form.Button>
+            </Dialog.Close>
           )}
           <Form.Input.Checkbox
             name="terms"
