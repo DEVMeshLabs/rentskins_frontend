@@ -15,6 +15,7 @@ export function ModalExchangeSkin() {
     skinToBuy,
     rentTime,
     setWhatModalOpenToBuySkin,
+    itemAvailable,
   } = useSkinsStore()
 
   return (
@@ -76,6 +77,7 @@ export function ModalExchangeSkin() {
         </div>
         <hr className="w-full border-mesh-color-neutral-200" />
         <ModalConfirm
+          itemAvailable={itemAvailable}
           onClick={() => setWhatModalOpenToBuySkin(2)}
           label="Alugar"
         />
