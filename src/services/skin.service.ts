@@ -6,7 +6,7 @@ import {
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
 import { AxiosResponse } from 'axios'
-import { IInventory } from './interfaces/inventoryy.interface'
+import { IInventory } from './interfaces/inventory.interface'
 
 export default class SkinService {
   public static findByAll(page?: number | string) {

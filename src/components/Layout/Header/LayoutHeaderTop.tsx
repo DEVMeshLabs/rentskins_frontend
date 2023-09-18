@@ -106,10 +106,7 @@ export function LayoutHeaderTop() {
   })
 
   const disableAddButton =
-    pathname.includes('/pagamento') ||
-    pathname.includes('/oops') ||
-    isLoading ||
-    !configValidation
+    pathname.includes('/pagamento') || pathname.includes('/oops') || isLoading
 
   const { data: walletCreated } = useQuery({
     queryKey: ['WalletService.createEmptyWallet'],

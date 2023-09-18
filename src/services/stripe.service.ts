@@ -7,8 +7,7 @@ import {
 
 export default class StripeService {
   public static async createPayment(data: IStripeCreatePayment, token: string) {
-    console.log(data)
-    const result = (await Api.post(`/transaction`, data, {
+    const result = (await Api.post(`/transaction/checkout`, data, {
       headers: { Authorization: 'Bearer ' + token },
     })
       .then((response) => response)

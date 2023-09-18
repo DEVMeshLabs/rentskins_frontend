@@ -24,9 +24,9 @@ export default function PageProfileSelf() {
   }
 
   const [page, setPage] = useState(1)
-  const [accountDate, setAccountDate] = useState('Data não obtida')
-  const [steamLevel, setSteamLevel] = useState('Não obtido')
-  const [userState, setUserState] = useState('Não obtido')
+  const [accountDate, setAccountDate] = useState('Data Não Obtida')
+  const [steamLevel, setSteamLevel] = useState('Não Obtido')
+  const [userState, setUserState] = useState('Não Obtido')
   const [totalExchanges, setTotalExchanges] = useState('')
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState(0)
