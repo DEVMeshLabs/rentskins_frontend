@@ -13,21 +13,33 @@ export default class VerificationTool {
     }
   }
 
-  public static suspendAccount(trueSession: ISteamUser, hasAccount: boolean) {
+  public static async suspendAccount(
+    trueSession: ISteamUser,
+    hasAccount: boolean,
+  ) {
     if (hasAccount) {
-      UserService.suspendUser(
+      Toast.Error(
+        'Desculpe, sua conta foi bloqueada devido a um banimento VAC vinculado à sua conta.',
+      )
+
+      console.log('ok')
+
+      const data = await UserService.suspendUser(
         trueSession?.user?.steam?.steamid!,
         trueSession?.user?.token!,
       )
 
-      Toast.Error(
-        'Desculpe, sua conta foi bloqueada devido a um banimento VAC vinculado à sua conta.',
-      )
+      console.log(data)
+
+      if (data !== undefined && data !== null) {
+        signOut({ callbackUrl: '/' })
+      }
     } else {
       Toast.Error(
         'Desculpe, seu registro foi cancelado devido a um banimento VAC vinculado à sua conta.',
       )
+
+      signOut({ callbackUrl: '/' })
     }
-    signOut({ callbackUrl: '/' })
   }
 }

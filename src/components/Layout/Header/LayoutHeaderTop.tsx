@@ -111,6 +111,13 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
+  useEffect(() => {
+    if (trueSession) {
+      console.log('ok')
+      VerificationTool.suspendAccount(trueSession, true)
+    }
+  }, [trueSession])
+
   const disableAddButton =
     pathname.includes('/pagamento') || pathname.includes('/oops') || isLoading
 
