@@ -5,7 +5,7 @@ import {
   ISkinsToAdvertise,
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
-import { AxiosResponse } from 'axios'
+import axios, { AxiosPromise, AxiosResponse } from 'axios'
 import { IInventory } from './interfaces/inventory.interface'
 
 export default class SkinService {
@@ -64,6 +64,15 @@ export default class SkinService {
 
   public static findBySearchParameter(param: string, page?: number | string) {
     return Api.get<ISkinsResponse>(`/skins/search/${param}?page=${page || 1}`)
+  }
+
+  public static async getPriceHistory(itemName: string) {
+    return (await axios
+      .get(
+        `https://steamcommunity.com/market/pricehistory/?country=BR&currency=3&appid=730&market_hash_name=${itemName}`,
+      )
+      .then((response) => response)
+      .catch((e) => e)) as AxiosPromise<any>
   }
 
   public static async postAllSkinsToAdvertise(

@@ -6,13 +6,15 @@ import useSkinsStore from '@/stores/skins.store'
 import { useEffect, useState } from 'react'
 
 import ISteamUser from '@/interfaces/steam.interface'
+import SkinService from '@/services/skin.service'
+import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  recommendedPrice?: string
+  market_hash_name: string
   sale_type?: string
   skin_category: string
   skin_color: string
@@ -42,7 +44,7 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  recommendedPrice = '2.000,00',
+  market_hash_name,
   isSelected,
   asset_id,
   id,
@@ -143,6 +145,17 @@ export function ModalSkinShowcaseInfo({
     handleAddSkinsToAdvertise()
   }
 
+  const { data: priceHistory } = useQuery({
+    queryKey: ['getPriceHistory', market_hash_name],
+    queryFn: async () => {
+      const filteredName = market_hash_name.replaceAll(' ', '%20')
+      return await SkinService.getPriceHistory(filteredName)
+    },
+    enabled: !!market_hash_name,
+  })
+
+  console.log(priceHistory)
+
   return (
     <div className="flex h-full w-[40%] flex-col">
       <div>
@@ -163,9 +176,7 @@ export function ModalSkinShowcaseInfo({
             <Common.Title size="md" bold={500} color="white">
               Preço recomendado
             </Common.Title>
-            <span className="text-mesh-color-accent-1000">
-              R$: {recommendedPrice}
-            </span>
+            <span className="text-mesh-color-accent-1000">CHANGE</span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
             Preço que recomendamos com base no mercado do momento

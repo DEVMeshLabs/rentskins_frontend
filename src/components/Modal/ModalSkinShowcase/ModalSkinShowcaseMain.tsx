@@ -15,6 +15,7 @@ interface IProps {
   skinImage: string
   skinWeapon: string
   statusFloat: string
+  marketName: string
   skinColor: string
   skinCategory: string
   id: string
@@ -32,6 +33,7 @@ export function ModalSkinShowcaseMain({
   statusFloat,
   float,
   skinCategory,
+  marketName,
   skinColor,
   skinName,
   isSelected,
@@ -77,7 +79,7 @@ export function ModalSkinShowcaseMain({
                 id={id}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
-                recommendedPrice={''}
+                market_hash_name={marketName}
                 sale_type={'sale'}
                 skin_category={skinCategory}
                 skin_color={skinColor}
