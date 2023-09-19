@@ -49,6 +49,7 @@ export default function PageInventorySummary() {
           .replace(' Already Exist', '')
         Toast.Error(`O item ${itemName} já existe no seu perfil.`)
       } else {
+        console.log(data)
         Toast.Error(
           'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
         )
@@ -58,7 +59,7 @@ export default function PageInventorySummary() {
 
   useEffect(() => {
     const subtotal = skinsToAdvertise.reduce(
-      (acc, { skin_price }) => acc + Number(skin_price.replace(/[^0-9]/g, '')),
+      (acc, { skin_price }) => acc + skin_price,
       0,
     )
     setSubtotal(subtotal)

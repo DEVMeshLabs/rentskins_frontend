@@ -14,11 +14,14 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
+import useSkinsStore from '@/stores/skins.store'
+import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
   userConfiguration: IOptionalConfig
   skinName: string
+  skinImage: string
   skinPrice: string
   skinFloat: string
   skinCategory: string
@@ -31,13 +34,16 @@ type PropsTypes = {
   cartId: string
   assetId: string
   ownerSkin: string
-  userId: string | undefined
+  userId: string
+  userName: string
+  token: string
 }
 
 export function PageDetailsSkin({
   userStatus,
   userConfiguration,
   skinName,
+  skinImage,
   skinPrice,
   skinFloat,
   skinCategory,
@@ -51,19 +57,39 @@ export function PageDetailsSkin({
   assetId,
   ownerSkin,
   userId,
+  userName,
+  token,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [rentPercentage, setRentPercentage] = useState(10)
   const [methodSelected, setMethodSelected] = useState<any>()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
-  const [userIsOwnerSkin, setUserIsOwnerSkin] = useState(true)
+  const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+  const {
+    setOpenModalBuySkin,
+    setWhatModalOpenToBuySkin,
+    setSkinToBuy,
+    setRentTime,
+    setItemAvailable,
+  } = useSkinsStore()
+
+  const skinToBuy = {
+    skinId,
+    skinPrice,
+    skinColor,
+    skinFloat,
+    skinImage,
+    skinName,
+    skinWeapon,
+    statusFloat,
+  }
 
   useEffect(() => {
     if (ownerSkin === userId) {
-      setUserIsOwnerSkin(false)
+      setUserIsntOwnerSkin(false)
     }
   }, [ownerSkin, userId])
 
@@ -162,12 +188,13 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (deleteResult) {
-      Toast.Error('Desculpe, o item não se encontra mais disponível.')
+      Toast.Error('Desculpe, o item não se encontra mais disponível.', 7000)
       router.push('/')
     }
   }, [deleteResult, router])
 
   useEffect(() => {
+    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
       setLoading(true)
       refetchAvailability()
@@ -175,6 +202,27 @@ export function PageDetailsSkin({
       setLoading(false)
     }
   }, [methodSelected, refetchAvailability, hasConfigurations])
+
+  useEffect(() => {
+    if (methodSelected === 'buy' && resultAvailability?.status === 200) {
+      setLoading(false)
+      setRentTime(watchRentTime!)
+      setWhatModalOpenToBuySkin(0)
+      setItemAvailable(true)
+    } else if (
+      methodSelected === 'rent' &&
+      resultAvailability?.status === 200
+    ) {
+      setLoading(false)
+      setRentTime(watchRentTime!)
+      setWhatModalOpenToBuySkin(1)
+      setItemAvailable(true)
+    } else if (resultAvailability?.request.status === 404) {
+      setLoading(false)
+      setItemAvailable(false)
+      Toast.Error('Desculpe, infelizmente esse item não está mais disponível.')
+    }
+  }, [resultAvailability])
 
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
@@ -187,10 +235,7 @@ export function PageDetailsSkin({
           }
 
           const handleBuy = () => {
-            setMethodSelected(undefined)
-            return Toast.Success(
-              'Sucesso! Porém o método de compra ainda está em desenvolvimento.',
-            )
+            setMethodSelected('buy')
           }
 
           const handleRent = () => {
@@ -228,6 +273,7 @@ export function PageDetailsSkin({
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
         deleteItem()
+        setOpenModalBuySkin(false)
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
@@ -359,7 +405,9 @@ export function PageDetailsSkin({
                 'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
               },
             )}
-            onClick={() => setSelectedRentTime(false)}
+            onClick={() => {
+              setSelectedRentTime(false)
+            }}
             name="rent-time"
             items={[
               { label: '7 Dias', value: 7 },
@@ -374,15 +422,18 @@ export function PageDetailsSkin({
           <div className="flex gap-2">
             {renderButton(
               <Common.Button
-                onClick={() => {
-                  if (userIsOwnerSkin) {
+                onClick={async () => {
+                  if (userIsntOwnerSkin) {
                     if (!watchRentTime) {
                       setSelectedRentTime(true)
                       Toast.Error(
                         'Você deve selecionar um período para prosseguir com o aluguel.',
                       )
                     } else {
-                      setMethodSelected('rent')
+                      setSkinToBuy(skinToBuy)
+                      setRentTime(+watchRentTime)
+                      setWhatModalOpenToBuySkin(1)
+                      setOpenModalBuySkin(true)
                     }
                   } else {
                     Toast.Error('Você não pode alugar o seu próprio item.')
@@ -396,11 +447,23 @@ export function PageDetailsSkin({
                 Alugar
               </Common.Button>,
             )}
+            <ModalBuyMain
+              updateSkin={{
+                skinPrice: Number(skinPrice),
+                skinId,
+                token,
+                userId,
+                userName,
+              }}
+            />
             {renderButton(
               <Common.Button
-                onClick={() => {
-                  if (userIsOwnerSkin) {
+                onClick={async () => {
+                  if (userIsntOwnerSkin) {
                     setMethodSelected('buy')
+                    setSkinToBuy(skinToBuy)
+                    setWhatModalOpenToBuySkin(0)
+                    setOpenModalBuySkin(true)
                   } else {
                     Toast.Error('Você não pode comprar o seu próprio item.')
                   }
@@ -418,7 +481,7 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  if (userIsOwnerSkin) {
+                  if (userIsntOwnerSkin) {
                     setMethodSelected('cart')
                   } else {
                     Toast.Error(
