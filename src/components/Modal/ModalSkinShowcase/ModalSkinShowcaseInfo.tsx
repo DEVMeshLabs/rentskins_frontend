@@ -187,11 +187,14 @@ export function ModalSkinShowcaseInfo({
               label="Preço de Venda"
               placeHolder={
                 savePrice
-                  ? `${formattedValue(savePrice).toLocaleString('pt-br', {
-                      currency: 'BRL',
-                      style: 'currency',
-                      minimumFractionDigits: 2,
-                    })}`
+                  ? `${formattedValue(String(savePrice)).toLocaleString(
+                      'pt-br',
+                      {
+                        currency: 'BRL',
+                        style: 'currency',
+                        minimumFractionDigits: 2,
+                      },
+                    )}`
                   : 'R$ 2.000,00'
               }
               register={register('value')}

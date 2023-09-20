@@ -37,6 +37,7 @@ export default class NotificationServices {
     )
       .then((response) => response)
       .catch((e) => e)
+    console.log(test)
     return test
   }
 }
