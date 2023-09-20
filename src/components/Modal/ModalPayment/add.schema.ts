@@ -60,8 +60,6 @@ const formSchema = yup.object({
         if (Number(currencyToNumber) > 25000) {
           return false
         }
-
-        return true
       },
     ),
   valueButtons: yup.string(),
