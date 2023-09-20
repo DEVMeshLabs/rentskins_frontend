@@ -111,4 +111,28 @@ export default class SkinService {
 
     return result
   }
+
+  public static async updateSkin(
+    userName: string,
+    userId: string,
+    skinId: string,
+    token: string,
+  ) {
+    const result: AxiosResponse<any> = await Api.put(
+      `/skins/${skinId}`,
+      {
+        buyer_id: userId,
+        buyer_name: userName,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
 }
