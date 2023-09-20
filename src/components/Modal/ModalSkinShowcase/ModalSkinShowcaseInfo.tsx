@@ -2,13 +2,10 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import useSkinsStore from '@/stores/skins.store'
-import { useEffect, useState } from 'react'
-
 import ISteamUser from '@/interfaces/steam.interface'
-import SkinService from '@/services/skin.service'
-import { useQuery } from '@tanstack/react-query'
+import useSkinsStore from '@/stores/skins.store'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
 
@@ -141,20 +138,8 @@ export function ModalSkinShowcaseInfo({
   }
 
   const onSubmit = (data: any) => {
-    console.log(data)
     handleAddSkinsToAdvertise()
   }
-
-  const { data: priceHistory } = useQuery({
-    queryKey: ['getPriceHistory', market_hash_name],
-    queryFn: async () => {
-      const filteredName = market_hash_name.replaceAll(' ', '%20')
-      return await SkinService.getPriceHistory(filteredName)
-    },
-    enabled: !!market_hash_name,
-  })
-
-  console.log(priceHistory)
 
   return (
     <div className="flex h-full w-[40%] flex-col">
@@ -174,9 +159,9 @@ export function ModalSkinShowcaseInfo({
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado
+              Preço recomendado:
             </Common.Title>
-            <span className="text-mesh-color-accent-1000">CHANGE</span>
+            <span className="text-mesh-color-accent-1000"></span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
             Preço que recomendamos com base no mercado do momento
