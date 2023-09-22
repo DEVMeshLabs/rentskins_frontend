@@ -44,14 +44,11 @@ export function ModalSkinShowcaseMain({
   linkForProfile,
   id,
 }: IProps) {
-  const { data: averagePrice, isLoading } = useQuery({
+  const { data: averagePrice } = useQuery({
     queryKey: ['GetItemAveragePrice', marketName],
     queryFn: () => SkinService.getItemAveragePrice([marketName]),
     enabled: !!marketName,
   })
-
-  console.log(averagePrice?.data[0])
-  console.log(isLoading)
 
   return (
     <Dialog.Root>
@@ -90,7 +87,7 @@ export function ModalSkinShowcaseMain({
                 id={id}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
-                market_hash_name={marketName}
+                recomended_price={averagePrice?.data[0] || 'Não encontrado'}
                 sale_type={'sale'}
                 skin_category={skinCategory}
                 skin_color={skinColor}

@@ -13,7 +13,7 @@ import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  market_hash_name: string
+  recomended_price: string
   sale_type?: string
   skin_category: string
   skin_color: string
@@ -43,7 +43,7 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  market_hash_name,
+  recomended_price,
   isSelected,
   asset_id,
   id,
@@ -63,14 +63,12 @@ export function ModalSkinShowcaseInfo({
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
     )
-    console.log(savedSkin)
+
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
       console.log(savePrice)
     }
   }, [])
-
-  console.log(savePrice)
 
   const {
     register,
@@ -166,7 +164,9 @@ export function ModalSkinShowcaseInfo({
             <Common.Title size="md" bold={500} color="white">
               Preço recomendado:
             </Common.Title>
-            <span className="text-mesh-color-accent-1000"></span>
+            <span className="text-mesh-color-accent-1000">
+              {recomended_price}
+            </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
             Preço que recomendamos com base no mercado do momento

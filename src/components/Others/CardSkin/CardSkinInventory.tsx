@@ -35,8 +35,6 @@ export function CardSkinInventory() {
     keepPreviousData: true,
   })
 
-  console.log(skinsProfile!.data.skins)
-
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
