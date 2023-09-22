@@ -5,7 +5,7 @@ import {
   ISkinsToAdvertise,
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
-import { AxiosResponse } from 'axios'
+import { AxiosPromise, AxiosResponse } from 'axios'
 import { IInventory } from './interfaces/inventory.interface'
 
 export default class SkinService {
@@ -60,6 +60,14 @@ export default class SkinService {
     } else {
       return Api.get<ISkinsResponse>(`/skins/seller/user/${sellerId}`)
     }
+  }
+
+  public static async getItemAveragePrice(items: string[]) {
+    return (await Api.post(`/skins/median/price`, {
+      names: items,
+    })
+      .then((response) => response)
+      .catch((e) => e)) as AxiosPromise<string[]>
   }
 
   public static findBySearchParameter(param: string, page?: number | string) {

@@ -2,18 +2,18 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import useSkinsStore from '@/stores/skins.store'
-import { useEffect, useState } from 'react'
-
 import ISteamUser from '@/interfaces/steam.interface'
+
+import useSkinsStore from '@/stores/skins.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  recommendedPrice?: string
+  recomended_price: string
   sale_type?: string
   skin_category: string
   skin_color: string
@@ -43,7 +43,7 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  recommendedPrice = '2.000,00',
+  recomended_price,
   isSelected,
   asset_id,
   id,
@@ -63,14 +63,12 @@ export function ModalSkinShowcaseInfo({
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
     )
-    console.log(savedSkin)
+
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
       console.log(savePrice)
     }
   }, [])
-
-  console.log(savePrice)
 
   const {
     register,
@@ -143,7 +141,6 @@ export function ModalSkinShowcaseInfo({
   }
 
   const onSubmit = (data: any) => {
-    console.log(data)
     handleAddSkinsToAdvertise()
   }
 
@@ -165,10 +162,10 @@ export function ModalSkinShowcaseInfo({
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado
+              Preço recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
-              R$: {recommendedPrice}
+              {recomended_price}
             </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
