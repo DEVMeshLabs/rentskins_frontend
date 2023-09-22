@@ -2,7 +2,9 @@
 'use client'
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
+import SkinService from '@/services/skin.service'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { ModalSkinShowcaseInfo } from './ModalSkinShowcaseInfo'
 import { ModalSkinShowcaseSkin } from './ModalSkinShowcaseSkin'
@@ -42,6 +44,15 @@ export function ModalSkinShowcaseMain({
   linkForProfile,
   id,
 }: IProps) {
+  const { data: averagePrice, isLoading } = useQuery({
+    queryKey: ['GetItemAveragePrice', marketName],
+    queryFn: () => SkinService.getItemAveragePrice([marketName]),
+    enabled: !!marketName,
+  })
+
+  console.log(averagePrice?.data[0])
+  console.log(isLoading)
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
