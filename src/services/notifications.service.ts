@@ -29,10 +29,15 @@ export default class NotificationServices {
     return result
   }
 
-  public static readingAllNotifications(ownerId: string, token: string) {
-    console.log('ok')
-    return Api.put(`/notification/${ownerId}`, {
-      headers: { Authorization: 'Bearer ' + token },
-    })
+  public static async readingAllNotifications(ownerId: string, token: string) {
+    const test = await Api.put(
+      `/notification/${ownerId}`,
+      {},
+      { headers: { Authorization: 'Bearer ' + token } },
+    )
+      .then((response) => response)
+      .catch((e) => e)
+    console.log(test)
+    return test
   }
 }

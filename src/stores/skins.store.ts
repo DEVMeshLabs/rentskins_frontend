@@ -23,7 +23,7 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
     })
   },
 
-  changeSkinToAdvertise: (skinId: string, price: string) => {
+  changeSkinToAdvertise: (skinId: string, price: number) => {
     set(({ skinsToAdvertise: oldSkinsToAdvertise }) => {
       const newChangedSkinsToAdvertise = oldSkinsToAdvertise.map((skin) => {
         if (skin.id === skinId) {
@@ -38,6 +38,31 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
 
   cleanSkinsToAdvertise: () => {
     set(() => ({ skinsToAdvertise: [] }))
+  },
+
+  openModalBuySkin: false,
+  setOpenModalBuySkin: (openModalBuySkin) => {
+    set(() => ({ openModalBuySkin }))
+  },
+
+  skinToBuy: null,
+  setSkinToBuy: (skinToBuy) => {
+    set(() => ({ skinToBuy }))
+  },
+
+  whatModalOpenToBuySkin: 0,
+  setWhatModalOpenToBuySkin: (whatModalOpen) => {
+    set(() => ({ whatModalOpenToBuySkin: whatModalOpen }))
+  },
+
+  rentTime: 0,
+  setRentTime: (rentTime) => {
+    set(() => ({ rentTime }))
+  },
+
+  itemAvailable: false,
+  setItemAvailable: (itemAvailable: boolean) => {
+    set(() => ({ itemAvailable }))
   },
 }))
 

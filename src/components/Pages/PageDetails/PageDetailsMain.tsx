@@ -33,6 +33,14 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     enabled: status === 'authenticated',
   })
 
+  const { data: latestSales } = useQuery({
+    queryKey: ['latestSales', seller.owner_id],
+    queryFn: () => UserService.getLatestSales(seller.owner_id),
+    enabled: status === 'authenticated',
+  })
+
+  console.log(latestSales)
+
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
       <Link href="/" className="mt-8 flex w-fit items-center gap-4">
@@ -54,12 +62,15 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             deletedAt={item.deletedAt}
           />
 
-          <PageDetailsVendas />
+          <PageDetailsVendas latestSales={latestSales.data} />
         </div>
 
         <div className="col-span-2 grid grid-rows-2 gap-4">
           <PageDetailsSkin
-            userId={trueSession.user?.steam?.steamid}
+            token={trueSession.user?.token!}
+            userName={trueSession.user?.name!}
+            skinImage={item.skin_image}
+            userId={trueSession.user?.steam?.steamid!}
             ownerSkin={item.seller_id}
             defaultID={defaultID}
             userStatus={status}

@@ -20,6 +20,7 @@ export default interface ISteamUser {
       personastateflags?: number
       loccountrycode?: string
       locstatecode?: string
+      banned?: boolean
     }
     token?: string
     account_status?: 'Ativo' | 'Suspenso'

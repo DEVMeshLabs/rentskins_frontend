@@ -30,9 +30,6 @@ export function OtherCard({
   deletedAt,
   itsRent,
 }: Props) {
-  const titleSkinWeapon = (
-    <h1 className="text-sm font-medium opacity-60">{skinWeapon}</h1>
-  )
   const customName = sellerName.includes('StatTrak™')
     ? sellerName.split('™')
     : sellerName
@@ -84,14 +81,9 @@ export function OtherCard({
           ) : (
             customName
           )}
-          {sellerName.length < 15 && titleSkinWeapon}
         </div>
-        <div
-          className={`flex items-center ${
-            sellerName.length < 15 ? 'justify-end' : 'justify-between'
-          }`}
-        >
-          {sellerName.length >= 15 && titleSkinWeapon}
+        <div className="flex items-center justify-between">
+          <h1 className="text-sm font-medium opacity-60">{skinWeapon}</h1>
           <div className="flex gap-2">
             {itsRent && (
               <Common.Button color="invisible">

@@ -5,3 +5,8 @@ export interface IUser {
   profile: string
   country: string
 }
+
+export interface ILatestSales {
+  saleAt: string
+  value: number
+}
