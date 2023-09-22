@@ -30,15 +30,15 @@ export default class UserService {
   }
 
   public static async suspendUser(steamId: string, token: string) {
-    return Api.put(
-      `/perfil/${steamId}`,
+    return (await Api.put(
+      `/perfil/user/${steamId}`,
       { account_status: 'Suspenso' },
       {
         headers: { Authorization: 'Bearer ' + token },
       },
     )
-      .then((response) => console.log(response))
-      .catch((e) => console.log(e))
+      .then((response) => response)
+      .catch((e) => e)) as unknown as AxiosPromise<void>
   }
 
   public static verifyAccountStatus(steamId: string) {
