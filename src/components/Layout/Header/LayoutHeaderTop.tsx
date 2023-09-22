@@ -50,7 +50,7 @@ export function LayoutHeaderTop() {
     if (trueSession?.user?.steam?.banned) {
       VerificationTool.suspendAccount(trueSession, true, router)
     }
-  }, [trueSession])
+  }, [trueSession, router])
 
   const pathname = usePathname()
   const refDropdown = useRef(null)
@@ -110,13 +110,6 @@ export function LayoutHeaderTop() {
       ),
     enabled: status === 'authenticated',
   })
-
-  useEffect(() => {
-    if (trueSession) {
-      console.log('ok')
-      VerificationTool.suspendAccount(trueSession, true, router)
-    }
-  }, [trueSession])
 
   const disableAddButton =
     pathname.includes('/pagamento') || pathname.includes('/oops') || isLoading
