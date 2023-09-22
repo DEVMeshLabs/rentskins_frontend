@@ -3,11 +3,9 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import ISteamUser from '@/interfaces/steam.interface'
-<<<<<<< HEAD
+
 import useSkinsStore from '@/stores/skins.store'
-=======
 import * as Dialog from '@radix-ui/react-dialog'
->>>>>>> ca7e1a1bb26f74199b8d6dcfea5a3faa375fa79e
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
