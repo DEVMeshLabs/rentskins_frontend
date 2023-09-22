@@ -5,7 +5,7 @@ import {
   ISkinsToAdvertise,
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
-import { AxiosResponse } from 'axios'
+import { AxiosPromise, AxiosResponse } from 'axios'
 import { IInventory } from './interfaces/inventory.interface'
 
 export default class SkinService {
@@ -62,6 +62,14 @@ export default class SkinService {
     }
   }
 
+  public static async getItemAveragePrice(items: string[]) {
+    return (await Api.post(`/skins/median/price`, {
+      names: items,
+    })
+      .then((response) => response)
+      .catch((e) => e)) as AxiosPromise<string[]>
+  }
+
   public static findBySearchParameter(param: string, page?: number | string) {
     return Api.get<ISkinsResponse>(`/skins/search/${param}?page=${page || 1}`)
   }
@@ -106,6 +114,30 @@ export default class SkinService {
 
   public static async deleteById(id: string) {
     const result: AxiosResponse<any> = await Api.delete(`/skins/${id}`)
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
+
+  public static async updateSkin(
+    userName: string,
+    userId: string,
+    skinId: string,
+    token: string,
+  ) {
+    const result: AxiosResponse<any> = await Api.put(
+      `/skins/${skinId}`,
+      {
+        buyer_id: userId,
+        buyer_name: userName,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
       .then((response) => response)
       .catch((e) => e)
 

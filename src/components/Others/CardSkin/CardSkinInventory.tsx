@@ -49,6 +49,8 @@ export function CardSkinInventory() {
     keepPreviousData: true,
   })
 
+  console.log(data?.data.inventory)
+
   useEffect(() => {
     if (
       data?.data &&
@@ -118,6 +120,7 @@ export function CardSkinInventory() {
                 name,
                 name_color,
                 market_name,
+                market_hash_name,
                 tags,
                 type,
                 assetid,
@@ -144,6 +147,7 @@ export function CardSkinInventory() {
                   key={assetid}
                   asset_id={assetid}
                   skinImage={icon_url}
+                  marketName={market_hash_name}
                   skinName={name}
                   skinCategory={category}
                   skinWeapon={weapon}

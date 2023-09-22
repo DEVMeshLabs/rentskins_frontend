@@ -2,18 +2,18 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import useSkinsStore from '@/stores/skins.store'
-import { useEffect, useState } from 'react'
-
 import ISteamUser from '@/interfaces/steam.interface'
+
+import useSkinsStore from '@/stores/skins.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  recommendedPrice?: string
+  recomended_price: string
   sale_type?: string
   skin_category: string
   skin_color: string
@@ -43,7 +43,7 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  recommendedPrice = '2.000,00',
+  recomended_price,
   isSelected,
   asset_id,
   id,
@@ -51,7 +51,7 @@ export function ModalSkinShowcaseInfo({
   const { data: session } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const [disabled, setDisabled] = useState(true)
-  const [savePrice, setSavePrice] = useState('')
+  const [savePrice, setSavePrice] = useState<null | number>(null)
   const {
     setSkinsToAdvertise,
     removeSkinToAdvertise,
@@ -63,14 +63,12 @@ export function ModalSkinShowcaseInfo({
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
     )
-    console.log(savedSkin)
+
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
       console.log(savePrice)
     }
   }, [])
-
-  console.log(savePrice)
 
   const {
     register,
@@ -131,19 +129,18 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        skin_price: String(formattedValue(watchValue)),
+        skin_price: Number(formattedValue(watchValue)),
       })
     }
   }
 
   const handleChangeSkinToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
-      changeSkinToAdvertise(id, watchValue)
+      changeSkinToAdvertise(id, Number(watchValue))
     }
   }
 
   const onSubmit = (data: any) => {
-    console.log(data)
     handleAddSkinsToAdvertise()
   }
 
@@ -165,10 +162,10 @@ export function ModalSkinShowcaseInfo({
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado
+              Preço recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
-              R$: {recommendedPrice}
+              {recomended_price}
             </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
@@ -187,11 +184,14 @@ export function ModalSkinShowcaseInfo({
               label="Preço de Venda"
               placeHolder={
                 savePrice
-                  ? `${formattedValue(savePrice).toLocaleString('pt-br', {
-                      currency: 'BRL',
-                      style: 'currency',
-                      minimumFractionDigits: 2,
-                    })}`
+                  ? `${formattedValue(String(savePrice)).toLocaleString(
+                      'pt-br',
+                      {
+                        currency: 'BRL',
+                        style: 'currency',
+                        minimumFractionDigits: 2,
+                      },
+                    )}`
                   : 'R$ 2.000,00'
               }
               register={register('value')}
@@ -216,9 +216,9 @@ export function ModalSkinShowcaseInfo({
               >
                 {(
                   (formattedValue(watchValue || '') ||
-                    formattedValue(savePrice)) -
+                    formattedValue(String(savePrice))) -
                   (formattedValue(watchValue || '') ||
-                    formattedValue(savePrice)) *
+                    formattedValue(String(savePrice))) *
                     0.05
                 ).toLocaleString('pt-br', {
                   style: 'currency',

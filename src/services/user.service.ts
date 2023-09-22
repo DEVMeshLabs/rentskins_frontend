@@ -46,4 +46,13 @@ export default class UserService {
       .then((response) => response)
       .then((e) => e) as AxiosPromise<boolean>
   }
+
+  public static async getLatestSales(ownerID: string) {
+    console.log('chegou aqui')
+    const test = await Api.get(`/transaction/last/sales/${ownerID}`)
+      .then((response) => response)
+      .catch((e) => e)
+    console.log(test)
+    return test
+  }
 }
