@@ -48,7 +48,7 @@ export function LayoutHeaderTop() {
 
   useEffect(() => {
     if (trueSession?.user?.steam?.banned) {
-      VerificationTool.suspendAccount(trueSession, true)
+      VerificationTool.suspendAccount(trueSession, true, router)
     }
   }, [trueSession])
 
@@ -114,7 +114,7 @@ export function LayoutHeaderTop() {
   useEffect(() => {
     if (trueSession) {
       console.log('ok')
-      VerificationTool.suspendAccount(trueSession, true)
+      VerificationTool.suspendAccount(trueSession, true, router)
     }
   }, [trueSession])
 
@@ -151,7 +151,7 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
-  const { data: userCreated } = useQuery({
+  useQuery({
     queryKey: ['CreateProfile', trueSession?.user?.name!],
     queryFn: async () => {
       return UserService.createUser(
@@ -168,12 +168,6 @@ export function LayoutHeaderTop() {
     enabled:
       status === 'authenticated' && userRetrieved?.request.status === 404,
   })
-
-  useEffect(() => {
-    if (userCreated?.request.status === '401') {
-      VerificationTool.suspendAccount(trueSession, false)
-    }
-  }, [userCreated, trueSession])
 
   const handleOnProfileClick = () => {
     setShowProfileDropdown((state) => !state)
