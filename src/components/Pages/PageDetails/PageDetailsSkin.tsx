@@ -184,7 +184,7 @@ export function PageDetailsSkin({
       case '14':
         return setRentPercentage(18)
       case '21':
-        return setRentPercentage(25)
+        return setRentPercentage(23)
     }
   }, [watchRentTime])
 
