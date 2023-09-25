@@ -40,16 +40,16 @@ export function PageDetailsCard({
           {deletedAt === null && (
             <div className="flex select-none space-x-2 p-2">
               <a href={skinLinkSteam}>
-                <div className="flex h-8 w-[300px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
+                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
                   <IconSteam />
-                  Visualizar no mercado da Steam
+                  Visualizar no Mercado da Steam
                 </div>
               </a>
 
               <a target="_blank" href={skinLinkGame} rel="noreferrer">
-                <div className="flex h-8 w-[200px] items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all hover:opacity-100">
+                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all hover:opacity-100">
                   <IconOlho />
-                  Inspecionar no jogo
+                  Inspecionar no Jogo
                 </div>
               </a>
             </div>

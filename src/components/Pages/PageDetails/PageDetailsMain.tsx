@@ -62,7 +62,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             deletedAt={item.deletedAt}
           />
 
-          <PageDetailsVendas latestSales={latestSales.data} />
+          <PageDetailsVendas latestSales={latestSales?.data} />
         </div>
 
         <div className="col-span-2 grid grid-rows-2 gap-4">

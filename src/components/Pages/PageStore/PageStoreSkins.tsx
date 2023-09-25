@@ -50,17 +50,13 @@ export default function PageStoreSkins() {
 
   const organized = {
     biggestPrice: (a: ISkins, b: ISkins) =>
-      parseFloat(b.skin_price.replace(',', '.')) -
-      parseFloat(a.skin_price.replace(',', '.')),
+      parseFloat(b.skin_price) - parseFloat(a.skin_price),
     lowestPrice: (a: ISkins, b: ISkins) =>
-      parseFloat(a.skin_price.replace(',', '.')) -
-      parseFloat(b.skin_price.replace(',', '.')),
+      parseFloat(a.skin_price) - parseFloat(b.skin_price),
     biggestFloat: (a: ISkins, b: ISkins) =>
-      parseFloat(b.skin_float.replace(',', '.')) -
-      parseFloat(a.skin_float.replace(',', '.')),
+      parseFloat(b.skin_float) - parseFloat(a.skin_float),
     lowestFloat: (a: ISkins, b: ISkins) =>
-      parseFloat(a.skin_float.replace(',', '.')) -
-      parseFloat(b.skin_float.replace(',', '.')),
+      parseFloat(a.skin_float) - parseFloat(b.skin_float),
     default: () => 1,
   }
 
