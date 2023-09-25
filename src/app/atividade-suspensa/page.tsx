@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Atividade Suspensa - RentSkins',
-  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO. Encontre skins raras e exclusivas para personalizar seu jogo.`,
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 
 export default async function AtividadeSuspensaPage() {
