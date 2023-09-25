@@ -1,26 +1,34 @@
-'use client'
-import { QueryClientProvider } from '@tanstack/react-query'
-import './globals.css'
+import LayoutQueryProvider from '@/components/Layout/LayoutQueryProvider'
+import { LayoutRoot } from '@/components/Layout/LayoutRoot'
 import 'aos/dist/aos.css'
 import { Inter } from 'next/font/google'
-import { queryClient } from '@/services/queryClient'
-import { LayoutPage } from '@/components/Shared'
+import { Metadata } from 'next/types'
+import './globals.css'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function RootLayout({
-  children,
-}: {
+interface ILayoutRootProps {
   // eslint-disable-next-line no-undef
   children: React.ReactNode
-}) {
+  session: any
+}
+
+export const metadata: Metadata = {
+  title: 'Rentskins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
+
+export default function RootLayout({ children, session }: ILayoutRootProps) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <LayoutQueryProvider>
       <html lang="en">
-        <body className={inter.className}>
-          <LayoutPage>{children}</LayoutPage>
+        <body className={`${inter.className} bg-[#151714]`}>
+          <Toaster />
+          <LayoutRoot session={session}>{children}</LayoutRoot>
         </body>
       </html>
-    </QueryClientProvider>
+    </LayoutQueryProvider>
   )
 }

@@ -3,21 +3,15 @@ import {
   IPayment,
   IStates,
   IWithdrawInfo,
-  TypeMethod,
 } from './interfaces/payment.interface'
 
 const usePaymentStore = create<IStates>((set) => ({
-  paymentAdd: { value: 5, method: 'mastercard' },
-  setPaymentAdd: (paymentAdd: IPayment) => {
-    set(() => ({ paymentAdd }))
-  },
-
-  paymentRetrieve: { method: 'mastercard' },
-  setPaymentRetrieve: (paymentRetrieve: { method: TypeMethod }) => {
+  paymentRetrieve: { value: 0, method: 'mastercard' },
+  setPaymentRetrieve: (paymentRetrieve: IPayment) => {
     set(() => ({ paymentRetrieve }))
   },
 
-  paymentWithdrawInfo: {},
+  paymentWithdrawInfo: { selectedValue: 0 },
   setPaymentWithdrawInfo: (paymentWithdrawInfo: IWithdrawInfo) => {
     set(() => ({ paymentWithdrawInfo }))
   },

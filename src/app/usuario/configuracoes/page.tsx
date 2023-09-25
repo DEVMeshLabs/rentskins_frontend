@@ -1,34 +1,16 @@
-'use client'
-import {
-  SettingsInformation,
-  SettingsSecurity,
-  SettingsTransactions,
-} from '@/components/Settings'
-import { SideRadioButton } from '@/components/Settings/SideRadioButton'
-import { Title } from '@/components/Title'
-import useComponentStore from '@/stores/components.store'
+import PageUserConfigurations from '@/components/Pages/PageUser/PageUserConfigurations'
+import { Metadata } from 'next'
 
-export default function Settings() {
-  const { settingsIndex } = useComponentStore()
+export const metadata: Metadata = {
+  title: 'Configurações - RentSkins',
+  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
+  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
+
+export default async function Configurations() {
   return (
-    <div className="flex h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pt-8">
-      {/* Left Side */}
-      <div className="flex h-min w-max flex-col items-end gap-2">
-        <div className="flex flex-col items-start gap-6">
-          <Title bold={900} size="2xl" color="white">
-            Configurações
-          </Title>
-
-          <div className="flex flex-col gap-2">
-            <SideRadioButton />
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side */}
-      {settingsIndex === 0 && <SettingsInformation />}
-      {settingsIndex === 1 && <SettingsTransactions />}
-      {settingsIndex === 2 && <SettingsSecurity />}
-    </div>
+    <main className="flex min-h-screen justify-center gap-10 bg-mesh-color-others-black px-[7.5rem] pb-16 pt-8">
+      <PageUserConfigurations />
+    </main>
   )
 }

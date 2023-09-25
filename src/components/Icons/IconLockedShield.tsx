@@ -1,16 +1,20 @@
 interface IProps {
   stroke?: string
   fill?: string
+  width?: number
+  height?: number
 }
 
 export function IconLockedShield({
   stroke = '#151714',
   fill = '#A7B0A0',
+  width = 20,
+  height = 22,
 }: IProps) {
   return (
     <svg
-      width="20"
-      height="22"
+      width={width}
+      height={height}
       viewBox="0 0 20 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

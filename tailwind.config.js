@@ -6,6 +6,24 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    boxShadow: {
+      'stattrak-glow': '0 0 5px 0.1px rgba(188, 149, 30, 1)',
+    },
+    screens: {
+      sm: '640px',
+
+      md: '768px',
+
+      lg: '1024px',
+
+      xl: '1280px',
+
+      '2xl': '1536px',
+
+      '3xl': '1792px',
+
+      '4xl': '2048px',
+    },
     extend: {
       colors: {
         'mesh-color': {

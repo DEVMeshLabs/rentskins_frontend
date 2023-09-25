@@ -1,7 +1,9 @@
+/* eslint-disable camelcase */
+import { ISkins } from '@/interfaces/ISkins'
 import create from 'zustand'
 import {
-  PaymentMethodRefound,
   IPaymentRefound,
+  PaymentMethodRefound,
 } from './interfaces/components.interface'
 
 interface IStates {
@@ -11,8 +13,6 @@ interface IStates {
   setPaymentRetrieveIndex: (index: 0 | 1) => void
   paymentWithdrawIndex: 0 | 1 | 2 | 3
   setPaymentWithdrawIndex: (index: 0 | 1 | 2 | 3) => void
-  settingsIndex: 0 | 1 | 2
-  setSettingsIndex: (index: 0 | 1 | 2) => void
   profileTabValue: 'sales' | 'rented'
   setProfileTabValue: (value: 'sales' | 'rented') => void
   refoundGeneralIndex: 0 | 1 | 2 | 3
@@ -23,6 +23,11 @@ interface IStates {
   setPageSelectorIndex: (index: number) => void
   filterType: 0 | 1 | 2
   setFilterType: (type: 0 | 1 | 2) => void
+  allSkinsCategory: ISkins[] | undefined
+  setAllSkinsCategory: (skins: ISkins[]) => void
+
+  isInventoryFetching: boolean
+  setIsInventoryFetching: (isInventoryFetching: boolean) => void
 }
 
 const useComponentStore = create<IStates>((set) => ({
@@ -39,11 +44,6 @@ const useComponentStore = create<IStates>((set) => ({
   paymentWithdrawIndex: 0,
   setPaymentWithdrawIndex: (index) => {
     set(() => ({ paymentWithdrawIndex: index }))
-  },
-
-  settingsIndex: 0,
-  setSettingsIndex: (index) => {
-    set(() => ({ settingsIndex: index }))
   },
 
   refoundGeneralIndex: 0,
@@ -69,6 +69,16 @@ const useComponentStore = create<IStates>((set) => ({
   filterType: 0,
   setFilterType: (type: 0 | 1 | 2) => {
     set(() => ({ filterType: type }))
+  },
+
+  allSkinsCategory: [],
+  setAllSkinsCategory: (skins: ISkins[]) => {
+    set(() => ({ allSkinsCategory: skins }))
+  },
+
+  isInventoryFetching: false,
+  setIsInventoryFetching: (isInventoryFetching: boolean) => {
+    set(() => ({ isInventoryFetching }))
   },
 }))
 

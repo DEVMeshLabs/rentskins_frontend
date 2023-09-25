@@ -1,13 +1,20 @@
 interface IProps {
   stroke?: string
   fill?: string
+  width?: number
+  height?: number
 }
 
-export function IconGear({ stroke = '#151714', fill = '#A7B0A0' }: IProps) {
+export function IconGear({
+  stroke = '#151714',
+  fill = '#A7B0A0',
+  width = 23,
+  height = 21,
+}: IProps) {
   return (
     <svg
-      width="23"
-      height="21"
+      width={width}
+      height={height}
       viewBox="0 0 23 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,5 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'accept-transactions',
+            value: 'true',
+          },
+        ],
+      },
+    ]
+  },
   images: {
     domains: ['avatars.steamstatic.com'],
     remotePatterns: [
@@ -10,6 +23,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'bit.ly',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
       },
     ],
   },
