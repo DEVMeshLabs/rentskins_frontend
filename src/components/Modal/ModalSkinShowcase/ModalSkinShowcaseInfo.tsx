@@ -227,10 +227,10 @@ export function ModalSkinShowcaseInfo({
                 size="lg"
               >
                 {(
-                  (formattedValue(watchValue || '') ||
-                    formattedValue(String(savePrice))) -
-                  (formattedValue(watchValue || '') ||
-                    formattedValue(String(savePrice))) *
+                  (formattedValue(watchValue ? String(watchValue) : '') ||
+                    formattedValue(savePrice ? String(savePrice) : '')) -
+                  (formattedValue(watchValue ? String(watchValue) : '') ||
+                    formattedValue(savePrice ? String(savePrice) : '')) *
                     0.05
                 ).toLocaleString('pt-br', {
                   style: 'currency',

@@ -39,8 +39,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     enabled: status === 'authenticated',
   })
 
-  console.log(latestSales)
-
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
       <Link href="/" className="mt-8 flex w-fit items-center gap-4">
@@ -81,6 +79,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             skinCategory={item.skin_category}
             skinWeapon={item.skin_weapon}
             skinColor={item.skin_color}
+            skinMedianPrice={item.median_price}
             sellerId={item.seller_id}
             statusFloat={item.status_float}
             skinId={item.id}
