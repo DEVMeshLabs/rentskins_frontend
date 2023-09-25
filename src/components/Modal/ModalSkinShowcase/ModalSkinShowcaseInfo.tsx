@@ -70,6 +70,17 @@ export function ModalSkinShowcaseInfo({
     }
   }, [])
 
+  console.log(recomended_price)
+
+  const removeSign = (value: string) => {
+    const response = value
+      .replace('R$ ', '')
+      .replaceAll('.', '')
+      .replace(',', '.')
+
+    return Number(response)
+  }
+
   const {
     register,
     watch,
@@ -129,6 +140,7 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
+        median_price: removeSign(recomended_price),
         skin_price: Number(formattedValue(watchValue)),
       })
     }

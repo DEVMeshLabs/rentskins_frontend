@@ -24,13 +24,17 @@ export default function PageInventorySummary() {
     queryKey: ['createdSkins'],
     queryFn: async () => {
       setIsLoading(true)
+      console.log('Skins:', skinsToAdvertise)
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
         trueSession.user?.token!,
       )
+      console.log(announcedSkins)
+
       if (announcedSkins.request.status !== 409) {
         cleanSkinsToAdvertise()
       }
+
       setIsLoading(false)
       return announcedSkins
     },
@@ -39,6 +43,7 @@ export default function PageInventorySummary() {
   })
 
   useEffect(() => {
+    console.log('ok')
     if (data) {
       if (data?.request.status === 201) {
         Toast.Success('Anúncio adicionado com sucesso!')
