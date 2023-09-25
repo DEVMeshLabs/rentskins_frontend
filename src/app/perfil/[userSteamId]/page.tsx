@@ -16,8 +16,7 @@ export async function generateMetadata({
 
   return {
     title: `${response?.data?.owner_name || 'Perfil'} - RentSkins`,
-    description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
-    Encontre skins raras e exclusivas para personalizar seu jogo.`,
+    description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO. Encontre skins raras e exclusivas para personalizar seu jogo.`,
   }
 }
 
