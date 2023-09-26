@@ -16,7 +16,7 @@ export default function PageInventorySummary() {
 
   const { skinsToAdvertise, changeSkinToAdvertise, cleanSkinsToAdvertise } =
     useSkinsStore()
-  const [subtotal, setSubtotal] = useState(0)
+  const [subtotal, setSubtotal] = useState<number>(0)
   const [disabled, setDisabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -24,12 +24,10 @@ export default function PageInventorySummary() {
     queryKey: ['createdSkins'],
     queryFn: async () => {
       setIsLoading(true)
-      console.log('Skins:', skinsToAdvertise)
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
         trueSession.user?.token!,
       )
-      console.log(announcedSkins)
 
       if (announcedSkins.request.status !== 409) {
         cleanSkinsToAdvertise()
@@ -43,7 +41,6 @@ export default function PageInventorySummary() {
   })
 
   useEffect(() => {
-    console.log('ok')
     if (data) {
       if (data?.request.status === 201) {
         Toast.Success('Anúncio adicionado com sucesso!')
@@ -63,10 +60,11 @@ export default function PageInventorySummary() {
   }, [data])
 
   useEffect(() => {
-    const subtotal = skinsToAdvertise.reduce(
-      (acc, { skin_price }) => acc + skin_price,
-      0,
-    )
+    console.log(skinsToAdvertise)
+    const subtotal = skinsToAdvertise.reduce((acc, { skin_price }) => {
+      console.log(skin_price)
+      return acc + skin_price
+    }, 0)
     setSubtotal(subtotal)
   }, [skinsToAdvertise, changeSkinToAdvertise])
 
