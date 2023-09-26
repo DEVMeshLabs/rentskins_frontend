@@ -15,6 +15,7 @@ export interface ISkins {
   skin_link_game: string
   skin_link_steam: string
   status_float: string
+  median_price: number
   buyer_name: string
   buyer_id: string
   deletedAt: string | null

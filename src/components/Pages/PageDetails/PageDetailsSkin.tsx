@@ -29,6 +29,7 @@ type PropsTypes = {
   skinColor: string
   sellerId: string
   statusFloat: string
+  skinMedianPrice: number
   defaultID: string
   skinId: string
   cartId: string
@@ -44,6 +45,7 @@ export function PageDetailsSkin({
   userConfiguration,
   skinName,
   skinImage,
+  skinMedianPrice,
   skinPrice,
   skinFloat,
   skinCategory,
@@ -182,7 +184,7 @@ export function PageDetailsSkin({
       case '14':
         return setRentPercentage(18)
       case '21':
-        return setRentPercentage(25)
+        return setRentPercentage(23)
     }
   }, [watchRentTime])
 
@@ -351,7 +353,13 @@ export function PageDetailsSkin({
           <Common.Title className="text-mesh-color-neutral-200">
             Tendências de mercado
           </Common.Title>
-          <p className="text-white">Undefined</p>
+          <p className="text-white">
+            {skinMedianPrice.toLocaleString('pt-br', {
+              currency: 'BRL',
+              style: 'currency',
+              minimumFractionDigits: 2,
+            })}
+          </p>
         </div>
 
         <div className="flex justify-between">
