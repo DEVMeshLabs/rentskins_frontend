@@ -39,7 +39,7 @@ export function PageDetailsCard({
         <div className="flex h-full w-full flex-col justify-between gap-8">
           {deletedAt === null && (
             <div className="flex select-none space-x-2 p-2">
-              <a href={skinLinkSteam}>
+              <a href={skinLinkSteam} target="_blank" rel="noreferrer">
                 <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
                   <IconSteam />
                   Visualizar no Mercado da Steam

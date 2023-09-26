@@ -122,6 +122,10 @@ export function ModalSkinShowcaseInfo({
     )
   }, [watchValue, watchTerms, watchSell, watchRent])
 
+  const inspectLink = skin_link_game
+    .replace('%owner_steamid%', trueSession.user?.steam?.steamid!)
+    .replace('%assetid%', asset_id)
+
   const handleAddSkinsToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
       console.log(formattedValue(String(watchValue)))
@@ -134,7 +138,7 @@ export function ModalSkinShowcaseInfo({
         skin_color,
         skin_float,
         skin_image,
-        skin_link_game,
+        skin_link_game: inspectLink,
         skin_link_steam,
         skin_name,
         skin_weapon,

@@ -142,6 +142,7 @@ export function CardSkinInventory() {
               )
               const linkForPreviewSkin = actions[0].link
 
+              console.log(linkForPreviewSkin)
               return (
                 <ModalSkinShowcaseMain
                   key={assetid}
