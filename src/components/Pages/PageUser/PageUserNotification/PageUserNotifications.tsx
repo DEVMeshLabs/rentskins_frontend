@@ -10,7 +10,6 @@ import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
 import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
-import Aos from 'aos'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -80,11 +79,6 @@ export default function PageUserNotifications() {
   }
 
   useEffect(() => {
-    Aos.init({
-      duration: 600,
-      delay: 0,
-    })
-
     const titleQuery = searchParams.get('type') as 'historic' | 'transactions'
 
     if (titleQuery !== 'historic') {

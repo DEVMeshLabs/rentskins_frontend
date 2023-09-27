@@ -56,18 +56,12 @@ export default function PageNotificationTransaction({
         <span className="text-lg font-medium text-mesh-color-neutral-200">
           Pendentes
         </span>
-        <div
-          className="mt-4 flex h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2"
-          data-aos="fade-up"
-        >
+        <div className="mt-4 flex h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2">
           {data ? renderPending : <TransactionCard.Skeleton quantity={3} />}
         </div>
       </div>
-      <div
-        data-aos="fade-up"
-        className="my-14 h-1 w-full rounded-full bg-mesh-color-others-black-olive"
-      />
-      <div data-aos="fade-up">
+      <div className="my-14 h-1 w-full rounded-full bg-mesh-color-others-black-olive" />
+      <div>
         <div className="grid grid-cols-6 rounded-lg bg-mesh-color-neutral-800 py-2 text-lg font-medium text-mesh-color-neutral-100">
           <span className="text-center">Item</span>
           <span className="text-left">Descrição</span>

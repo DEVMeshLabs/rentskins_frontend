@@ -14,7 +14,7 @@ export default function PageNotificationHistoric({
 }: INotificationHistoricProps) {
   return (
     <div className="mt-4 h-fit gap-4 overflow-y-scroll pr-4">
-      <div className="flex flex-col gap-4" data-aos="fade-up">
+      <div className="flex flex-col gap-4">
         {!loading ? (
           data?.length ? (
             data!.map((notifs, index) => {
