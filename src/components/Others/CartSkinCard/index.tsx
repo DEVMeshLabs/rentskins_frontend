@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { MouseEventHandler } from 'react'
 
 interface Props {
-  skinPrice: string
+  skinPrice: number
   name: string
   skinWeapon: string
   nameColor: string
@@ -29,12 +29,15 @@ export default function CartSkinCard({
     queryFn: () => CartService.deleteSkinFromCart(modelId),
     enabled: false,
   })
-  const formattedNumber = parseFloat(skinPrice).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
+  const formattedNumber = parseFloat(String(skinPrice)).toLocaleString(
+    'pt-BR',
+    {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+  )
   return (
     <section
       className="group flex h-44 w-full

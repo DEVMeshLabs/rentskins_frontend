@@ -17,7 +17,7 @@ interface IProps {
   account_date: string
   status_member: string
   steam_level: string
-  total_exchanges: string
+  total_exchanges: number
 }
 
 export function PageDetailsPerfil({

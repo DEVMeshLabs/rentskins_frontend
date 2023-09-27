@@ -27,7 +27,7 @@ export default function PageProfileSelf() {
   const [accountDate, setAccountDate] = useState('Data Não Obtida')
   const [steamLevel, setSteamLevel] = useState('Não Obtido')
   const [userState, setUserState] = useState('Não Obtido')
-  const [totalExchanges, setTotalExchanges] = useState('')
+  const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState(0)
 
@@ -91,7 +91,7 @@ export default function PageProfileSelf() {
       {isLoading || isRefetching ? (
         <AllSkeletonSkins />
       ) : data?.data.skins.length! > 0 ? (
-        <AllSkins skinsCategories={data?.data?.skins} />
+        <AllSkins itsRent={true} skinsCategories={data?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil"

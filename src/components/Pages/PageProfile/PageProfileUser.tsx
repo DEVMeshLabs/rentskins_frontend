@@ -24,7 +24,7 @@ export default function PageProfileUser() {
   const [userState, setUserState] = useState('')
   const [picture, setPicture] = useState('')
   const [name, setName] = useState('')
-  const [totalExchanges, setTotalExchanges] = useState('')
+  const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState(0)
   const { userSteamId } = useParams()

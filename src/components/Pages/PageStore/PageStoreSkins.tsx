@@ -50,9 +50,9 @@ export default function PageStoreSkins() {
 
   const organized = {
     biggestPrice: (a: ISkins, b: ISkins) =>
-      parseFloat(b.skin_price) - parseFloat(a.skin_price),
+      parseFloat(String(b.skin_price)) - parseFloat(String(a.skin_price)),
     lowestPrice: (a: ISkins, b: ISkins) =>
-      parseFloat(a.skin_price) - parseFloat(b.skin_price),
+      parseFloat(String(a.skin_price)) - parseFloat(String(b.skin_price)),
     biggestFloat: (a: ISkins, b: ISkins) =>
       parseFloat(b.skin_float) - parseFloat(a.skin_float),
     lowestFloat: (a: ISkins, b: ISkins) =>
