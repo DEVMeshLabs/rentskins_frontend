@@ -10,6 +10,8 @@ export function TransactionImage({ image, alt }: IProps) {
     <Image
       src={image}
       alt={alt}
+      width={112}
+      height={64}
       className="w-28 rounded-lg bg-mesh-color-others-black p-4"
     />
   )

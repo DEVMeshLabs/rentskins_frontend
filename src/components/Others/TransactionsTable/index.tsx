@@ -1,21 +1,12 @@
-import Image, { StaticImageData } from 'next/image'
-
-interface IData {
-  image: StaticImageData
-  name: string
-  weapon: string
-  condition: string
-  float: number
-  value: number
-  status: string
-  type: string
-}
+import { ITransaction } from '@/services/interfaces/transactions.interface'
+import Image from 'next/image'
 
 interface IProps {
-  data: IData[]
+  data: ITransaction[]
+  steamid: string
 }
 
-export function TransactionsTable({ data }: IProps) {
+export function TransactionsTable({ data, steamid }: IProps) {
   const treatStatus = (status: string) => {
     const generateElement = (className: string) => {
       return (
@@ -56,7 +47,9 @@ export function TransactionsTable({ data }: IProps) {
             <div className="flex flex-col items-center justify-between overflow-hidden rounded-md border border-mesh-color-neutral-500 bg-mesh-gradient-black-pattern px-2">
               <div className="mb-1 h-1.5 w-5/6 rounded-b-2xl bg-green-500" />
               <Image
-                src={item.image}
+                src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+                width={112}
+                height={64}
                 alt="Image"
                 draggable={false}
                 className="w-28"
@@ -70,34 +63,43 @@ export function TransactionsTable({ data }: IProps) {
           transition-all group-hover:visible group-hover:opacity-100"
             >
               <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2">
-                {item.name}
+                {item.skin.skin_name}
               </p>
             </div>
             <p
               className={`group w-40 overflow-hidden text-ellipsis text-lg
           font-medium ${
-            item.name.includes('StatTrak')
+            item.skin.skin_name.includes('StatTrak')
               ? 'text-mesh-color-secondary-800'
               : 'text-white'
           } `}
             >
-              {item.name}
+              {item.skin.skin_name}
             </p>
-            <p className="text-mesh-color-neutral-300 "> {item.weapon} </p>
+            <p className="text-mesh-color-neutral-300 ">
+              {' '}
+              {item.skin.skin_weapon}{' '}
+            </p>
           </div>
           <div className="w-48 text-start">
-            <p className="text-lg font-medium text-white">{item.condition}</p>
-            <p className="text-mesh-color-neutral-300">{item.float}</p>
+            <p className="text-lg font-medium text-white">
+              {item.skin.status_float}
+            </p>
+            <p className="text-mesh-color-neutral-300">
+              {item.skin.skin_float}
+            </p>
           </div>
           {treatStatus(item.status)}
           <div className="text-white">
-            {item.value.toLocaleString('pt-br', {
+            {item.skin.skin_price.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
             })}
           </div>
-          <div className="text-white"> {item.type} </div>
+          <div className="text-white">
+            {item.buyer_id === steamid ? 'Compra' : 'Venda'}
+          </div>
         </div>
       ))}
     </div>
