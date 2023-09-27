@@ -1,23 +1,50 @@
 import Common from '@/components/Common'
 import NotificationCard from '@/components/Others/NotificationCard'
-import { INotification } from '@/services/interfaces/notification.interface'
+import ISteamUser from '@/interfaces/steam.interface'
+import { ITime } from '@/services/interfaces/notification.interface'
+import NotificationServices from '@/services/notifications.service'
+import { useQuery } from '@tanstack/react-query'
 // import useFilterStore from '@/stores/filters.store'
 
-export interface INotificationHistoricProps {
-  data: INotification[] | undefined
-  loading: boolean
+export interface IProps {
+  trueSession: ISteamUser
+  status: 'authenticated' | 'loading' | 'unauthenticated'
+  notificationFilter: ITime
 }
 
 export default function PageNotificationHistoric({
-  data,
-  loading,
-}: INotificationHistoricProps) {
+  trueSession,
+  status,
+  notificationFilter,
+}: IProps) {
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ['allNotificationsUser', trueSession.user?.steam?.steamid!],
+    queryFn: async () => {
+      const allNotifications = NotificationServices.getAllNotifsByUser(
+        trueSession.user?.steam?.steamid!,
+        notificationFilter,
+        trueSession.user?.token!,
+      )
+      if ((await allNotifications).data.length > 0) {
+        NotificationServices.readingAllNotifications(
+          trueSession.user?.steam?.steamid!,
+          trueSession.user?.token!,
+        )
+      }
+      return allNotifications
+    },
+    enabled: status === 'authenticated',
+    cacheTime: 0,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+  })
+
   return (
     <div className="mt-4 h-fit gap-4 overflow-y-scroll pr-4">
       <div className="flex flex-col gap-4">
-        {!loading ? (
-          data?.length ? (
-            data!.map((notifs, index) => {
+        {!isLoading ? (
+          notifications?.data?.length ? (
+            notifications?.data!.map((notifs, index) => {
               const timestamp = new Date(notifs.createdAt)
               const currentTimestamp = Date.now()
 

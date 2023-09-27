@@ -2,17 +2,19 @@
 
 import Common from '@/components/Common'
 import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
-import { INotificationHistoricProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
 import ISteamUser from '@/interfaces/steam.interface'
-import NotificationServices from '@/services/notifications.service'
+import { ITime } from '@/services/interfaces/notification.interface'
 import useFilterStore from '@/stores/filters.store'
 import URLQuery from '@/tools/urlquery.tool'
-import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect } from 'react'
-const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
+const PageNotificationHistoric = dynamic<{
+  trueSession: ISteamUser
+  status: 'authenticated' | 'loading' | 'unauthenticated'
+  notificationFilter: ITime
+}>(() =>
   import(
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
   ).then((module) => module.default),
@@ -52,28 +54,6 @@ export default function PageUserNotifications() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['allNotificationsUser', trueSession.user?.steam?.steamid!],
-    queryFn: async () => {
-      const allNotifications = NotificationServices.getAllNotifsByUser(
-        trueSession.user?.steam?.steamid!,
-        notificationFilter,
-        trueSession.user?.token!,
-      )
-      if ((await allNotifications).data.length > 0) {
-        NotificationServices.readingAllNotifications(
-          trueSession.user?.steam?.steamid!,
-          trueSession.user?.token!,
-        )
-      }
-      return allNotifications
-    },
-    enabled: status === 'authenticated',
-    cacheTime: 0,
-    refetchOnMount: true,
-    refetchOnReconnect: true,
-  })
-
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     router.push(URLQuery.addQuery([{ key: 'type', value }]))
@@ -104,10 +84,20 @@ export default function PageUserNotifications() {
               value={'transactions'}
               onChange={(event) => handleOnRadio(event)}
             />
-            <span className="text-xl font-semibold text-white/50 transition-all peer-checked:text-white">
+            <span
+              className={`text-xl font-semibold transition-all ${
+                searchParams.get('type') === 'transactions'
+                  ? 'text-white'
+                  : 'text-white/50'
+              }`}
+            >
               Transações
             </span>
-            <div className="mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all peer-checked:pl-20" />
+            <div
+              className={`mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all ${
+                searchParams.get('type') === 'transactions' && 'pl-20'
+              }`}
+            />
           </label>
           <label className="flex cursor-pointer flex-col">
             <input
@@ -118,10 +108,20 @@ export default function PageUserNotifications() {
               value={'historic'}
               onChange={(event) => handleOnRadio(event)}
             />
-            <span className="text-xl font-semibold text-white/50 transition-all peer-checked:text-white">
+            <span
+              className={`text-xl font-semibold  transition-all ${
+                searchParams.get('type') === 'historic'
+                  ? 'text-white'
+                  : 'text-white/50'
+              }`}
+            >
               Histórico
             </span>
-            <div className="mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all peer-checked:pl-16" />
+            <div
+              className={`mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all ${
+                searchParams.get('type') === 'historic' && 'pl-16'
+              }`}
+            />
           </label>
         </div>
         {searchParams.get('type') === 'historic' && (
@@ -135,7 +135,11 @@ export default function PageUserNotifications() {
         )}
       </div>
       {searchParams.get('type') === 'historic' && (
-        <PageNotificationHistoric data={data?.data} loading={isLoading} />
+        <PageNotificationHistoric
+          status={status}
+          trueSession={trueSession}
+          notificationFilter={notificationFilter}
+        />
       )}
       {searchParams.get('type') === 'transactions' && (
         <PageNotificationTransaction
