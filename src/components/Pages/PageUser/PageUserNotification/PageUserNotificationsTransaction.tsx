@@ -17,47 +17,53 @@ export default function PageNotificationTransaction({ steamid }: IProps) {
 
   const renderTransactions = transactions?.data?.map((item, index) => {
     if (item.status === 'Em andamento') {
+      const isABuyer = item.buyer_id === steamid
+
       return (
-        <>
-          <TransactionCard.Root key={'transactions-' + index}>
-            <div className="flex items-center gap-4">
-              <TransactionCard.Image
-                image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
-                alt={item.skin.skin_name}
-              />
-              <TransactionCard.Label
-                name={item.skin.skin_name}
-                weapon={item.skin.skin_weapon}
-              />
-            </div>
-            <TransactionCard.Content
-              text={item.skin.status_float}
-              subtext={item.skin.skin_float}
-              textIsCurrency={false}
+        <TransactionCard.Root key={'transactions-' + index}>
+          <div className="flex items-center gap-4">
+            <TransactionCard.Image
+              image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+              alt={item.skin.skin_name}
             />
-            <TransactionCard.Content
-              text={item.skin.skin_price}
-              textIsCurrency
-              subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
+            <TransactionCard.Label
+              name={item.skin.skin_name}
+              weapon={item.skin.skin_weapon}
             />
-            <TransactionCard.Actions>
-              <TransactionCard.Button
-                modal
-                modalOptions={{ action: 'accept', id: index + 1 }}
-                buttonStyle="full"
-                text={
-                  item.buyer_id === steamid ? 'Item Obtido' : 'Item Enviado'
-                }
-              />
-              <TransactionCard.Button
-                modal
-                modalOptions={{ action: 'decline', id: index + 1 }}
-                buttonStyle="opaque"
-                text={item.buyer_id === steamid ? 'Não Obtido' : 'Não Enviado'}
-              />
-            </TransactionCard.Actions>
-          </TransactionCard.Root>
-        </>
+          </div>
+          <TransactionCard.Content
+            text={item.skin.status_float}
+            subtext={item.skin.skin_float}
+            textIsCurrency={false}
+          />
+          <TransactionCard.Content
+            text={item.skin.skin_price}
+            textIsCurrency
+            subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
+          />
+          <TransactionCard.Actions>
+            <TransactionCard.Button
+              modal
+              modalOptions={{
+                action: 'accept',
+                id: item.id,
+                type: isABuyer ? 'buyer' : 'seller',
+              }}
+              buttonStyle="full"
+              text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
+            />
+            <TransactionCard.Button
+              modal
+              modalOptions={{
+                action: 'decline',
+                id: item.id,
+                type: isABuyer ? 'buyer' : 'seller',
+              }}
+              buttonStyle="opaque"
+              text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
+            />
+          </TransactionCard.Actions>
+        </TransactionCard.Root>
       )
     }
     return null

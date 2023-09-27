@@ -4,6 +4,7 @@ import { ButtonHTMLAttributes, ElementType } from 'react'
 
 type ModalType = {
   action: 'accept' | 'decline'
+  type: 'buyer' | 'seller'
   id: string | number
 }
 
@@ -23,12 +24,12 @@ export function TransactionButton({
   text,
   onClick,
   modalOptions,
-  ...rest
 }: IProps) {
   const withModal = (
     <ModalNotificationPopup
       id={modalOptions?.id}
-      type={modalOptions?.action}
+      type={modalOptions?.type!}
+      action={modalOptions?.action}
       activator={
         <Common.Button
           onClick={onClick}
