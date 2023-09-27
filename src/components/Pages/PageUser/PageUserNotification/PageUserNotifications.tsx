@@ -71,6 +71,9 @@ export default function PageUserNotifications() {
       return allNotifications
     },
     enabled: status === 'authenticated',
+    cacheTime: 0,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
   })
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
