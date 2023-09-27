@@ -93,7 +93,7 @@ export default function PageUserNotifications() {
   return (
     <>
       <Common.Title size="3xl" bold={700} color="white">
-        Notificação
+        Notificações
       </Common.Title>
       <div className="mt-5 flex items-center justify-between">
         <div className="flex items-center gap-6">
