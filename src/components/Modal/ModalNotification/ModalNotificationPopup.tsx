@@ -1,13 +1,18 @@
 'use client'
 import Common from '@/components/Common'
+import { LayoutLoading } from '@/components/Layout/LayoutLoading'
+import TransactionsService from '@/services/transactions.service'
+import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useEffect } from 'react'
 
 interface IProps {
   activator?: React.ReactNode
-  action: 'accept' | 'decline' | undefined
+  action: 'Aceito' | 'Recusado' | undefined
   type: 'buyer' | 'seller'
   id: string | number | undefined
+  token: string
 }
 
 export function ModalNotificationPopup({
@@ -15,7 +20,33 @@ export function ModalNotificationPopup({
   type,
   action,
   id,
+  token,
 }: IProps) {
+  const { data, refetch: updateStatus } = useQuery({
+    queryKey: [type, action, id],
+    queryFn: () =>
+      TransactionsService.updateUserTransaction(
+        String(id),
+        type,
+        action!,
+        token,
+      ),
+    cacheTime: 0,
+    enabled: false,
+  })
+
+  useEffect(() => {
+    if (data) {
+      if (data?.request.status === 200) {
+        window.location.reload()
+      } else {
+        Toast.Error(
+          'Erro ao atualizar o status do item. Tente novamente mais tarde.',
+        )
+      }
+    }
+  }, [data])
+
   const acceptOption = (
     <div className="flex h-full flex-col justify-between">
       <div className="flex h-full flex-col items-center gap-6">
@@ -60,8 +91,18 @@ export function ModalNotificationPopup({
         >
           Voltar
         </Dialog.Close>
-        <Common.Button className="self-end font-bold" color="green">
-          Confirmar
+        <Common.Button
+          className="self-end font-bold"
+          color="green"
+          onClick={() => updateStatus()}
+        >
+          <LayoutLoading
+            className="h-10 w-10"
+            enabled={data !== undefined && data !== null}
+            label={undefined}
+          >
+            Confirmar
+          </LayoutLoading>
         </Common.Button>
       </div>
     </div>
@@ -117,12 +158,22 @@ export function ModalNotificationPopup({
           Voltar
         </Dialog.Close>
         <Common.Button
-          className="border-mesh-color-rarity-lowest
-        bg-mesh-color-rarity-lowest
-          font-bold text-white"
+          className={`${
+            data !== undefined && data !== null
+              ? 'border-mesh-color-neutral-400 bg-mesh-color-neutral-400'
+              : 'border-mesh-color-rarity-lowest bg-mesh-color-rarity-lowest '
+          }
+          font-bold text-white`}
           color="green"
+          onClick={() => updateStatus()}
         >
-          Confirmar
+          <LayoutLoading
+            className="h-10 w-10"
+            enabled={data !== undefined && data !== null}
+            label={undefined}
+          >
+            Confirmar
+          </LayoutLoading>
         </Common.Button>
       </div>
     </div>
@@ -135,7 +186,7 @@ export function ModalNotificationPopup({
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all" />
         <Dialog.Content className="fixed left-1/2 top-1/2 z-30 flex h-2/5 w-1/3 -translate-x-1/2 -translate-y-1/2 ">
           <div className="flex flex-col justify-between gap-2 rounded-2xl bg-mesh-color-neutral-700 px-8 py-6">
-            {action === 'accept' ? acceptOption : cancelOption}
+            {action === 'Aceito' ? acceptOption : cancelOption}
           </div>
         </Dialog.Content>
       </Dialog.Portal>

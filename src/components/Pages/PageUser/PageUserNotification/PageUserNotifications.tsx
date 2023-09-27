@@ -19,10 +19,11 @@ const PageNotificationHistoric = dynamic<{
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
   ).then((module) => module.default),
 )
-const PageNotificationTransaction = dynamic<{ steamid: string }>(() =>
-  import(
-    '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
-  ).then((module) => module.default),
+const PageNotificationTransaction = dynamic<{ steamid: string; token: string }>(
+  () =>
+    import(
+      '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
+    ).then((module) => module.default),
 )
 
 export default function PageUserNotifications() {
@@ -144,6 +145,7 @@ export default function PageUserNotifications() {
       {searchParams.get('type') === 'transactions' && (
         <PageNotificationTransaction
           steamid={trueSession.user?.steam?.steamid!}
+          token={trueSession.user?.token!}
         />
       )}
     </>

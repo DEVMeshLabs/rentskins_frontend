@@ -13,10 +13,15 @@ export default class TransactionsService {
     id: string,
     type: 'buyer' | 'seller',
     response: 'Aceito' | 'Recusado',
+    token: string,
   ) {
-    return (await Api.patch(`/transaction/${id}?query=${type}`, {
-      status: response,
-    })
+    return (await Api.patch(
+      `/transaction/${id}?query=${type}`,
+      {
+        status: response,
+      },
+      { headers: { Authorization: 'Bearer ' + token } },
+    )
       .then((response) => response)
       .catch((e) => e)) as AxiosPromise<ITransaction[]>
   }

@@ -3,13 +3,14 @@ import { ModalNotificationPopup } from '@/components/Modal/ModalNotification/Mod
 import { ButtonHTMLAttributes, ElementType } from 'react'
 
 type ModalType = {
-  action: 'accept' | 'decline'
+  action: 'Aceito' | 'Recusado'
   type: 'buyer' | 'seller'
   id: string | number
 }
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   buttonStyle: 'opaque' | 'full'
+  token: string
   icon?: ElementType
   text?: string | number
   modal: boolean
@@ -24,12 +25,14 @@ export function TransactionButton({
   text,
   onClick,
   modalOptions,
+  token,
 }: IProps) {
   const withModal = (
     <ModalNotificationPopup
       id={modalOptions?.id}
       type={modalOptions?.type!}
       action={modalOptions?.action}
+      token={token}
       activator={
         <Common.Button
           onClick={onClick}

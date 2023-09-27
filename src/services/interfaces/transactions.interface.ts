@@ -3,8 +3,8 @@ export interface ITransaction {
   skin_id: string
   buyer_id: string
   seller_id: string
-  seller_confirm: string
-  buyer_confirm: string
+  seller_confirm: 'Pendente' | 'Aceito' | 'Recusado'
+  buyer_confirm: 'Pendente' | 'Aceito' | 'Recusado'
   balance: number
   status: 'Em andamento' | 'Falhou' | 'Concluído'
   createdAt: Date

@@ -7,8 +7,12 @@ import { useQuery } from '@tanstack/react-query'
 
 interface IProps {
   steamid: string
+  token: string
 }
-export default function PageNotificationTransaction({ steamid }: IProps) {
+export default function PageNotificationTransaction({
+  steamid,
+  token,
+}: IProps) {
   const { data: transactions, isLoading } = useQuery({
     queryKey: ['Transactions', steamid],
     queryFn: () => TransactionsService.getUserTransactions(steamid),
@@ -19,52 +23,58 @@ export default function PageNotificationTransaction({ steamid }: IProps) {
     if (item.status === 'Em andamento') {
       const isABuyer = item.buyer_id === steamid
 
-      return (
-        <TransactionCard.Root key={'transactions-' + index}>
-          <div className="flex items-center gap-4">
-            <TransactionCard.Image
-              image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
-              alt={item.skin.skin_name}
-            />
-            <TransactionCard.Label
-              name={item.skin.skin_name}
-              weapon={item.skin.skin_weapon}
-            />
-          </div>
-          <TransactionCard.Content
-            text={item.skin.status_float}
-            subtext={item.skin.skin_float}
-            textIsCurrency={false}
-          />
-          <TransactionCard.Content
-            text={item.skin.skin_price}
-            textIsCurrency
-            subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
-          />
-          <TransactionCard.Actions>
-            <TransactionCard.Button
-              modal
-              modalOptions={{
-                action: 'accept',
-                id: item.id,
-                type: isABuyer ? 'buyer' : 'seller',
-              }}
-              buttonStyle="full"
-              text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
-            />
-            <TransactionCard.Button
-              modal
-              modalOptions={{
-                action: 'decline',
-                id: item.id,
-                type: isABuyer ? 'buyer' : 'seller',
-              }}
-              buttonStyle="opaque"
-              text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
-            />
-          </TransactionCard.Actions>
-        </TransactionCard.Root>
+      if (
+        (isABuyer && item.buyer_confirm !== 'Pendente') ||
+        (!isABuyer && item.seller_confirm !== 'Pendente') // ALTERAR
       )
+        return (
+          <TransactionCard.Root key={'transactions-' + index}>
+            <div className="flex items-center gap-4">
+              <TransactionCard.Image
+                image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+                alt={item.skin.skin_name}
+              />
+              <TransactionCard.Label
+                name={item.skin.skin_name}
+                weapon={item.skin.skin_weapon}
+              />
+            </div>
+            <TransactionCard.Content
+              text={item.skin.status_float}
+              subtext={item.skin.skin_float}
+              textIsCurrency={false}
+            />
+            <TransactionCard.Content
+              text={item.skin.skin_price}
+              textIsCurrency
+              subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
+            />
+            <TransactionCard.Actions>
+              <TransactionCard.Button
+                token={token}
+                modal
+                modalOptions={{
+                  action: 'Aceito',
+                  id: item.id,
+                  type: isABuyer ? 'buyer' : 'seller',
+                }}
+                buttonStyle="full"
+                text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
+              />
+              <TransactionCard.Button
+                token={token}
+                modal
+                modalOptions={{
+                  action: 'Recusado',
+                  id: item.id,
+                  type: isABuyer ? 'buyer' : 'seller',
+                }}
+                buttonStyle="opaque"
+                text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
+              />
+            </TransactionCard.Actions>
+          </TransactionCard.Root>
+        )
     }
     return null
   })
