@@ -8,11 +8,13 @@ export interface IAllSkinsProps {
   skinsCategories: ISkins[] | undefined
   itemsPerPage?: number
   center?: boolean
+  itsRent?: boolean
 }
 
 export default function AllSkins({
   skinsCategories,
   center = false,
+  itsRent,
 }: IAllSkinsProps) {
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-start ">
@@ -25,37 +27,13 @@ export default function AllSkins({
           },
         )}
       >
-        {skinsCategories?.map(
-          (
-            {
-              skin_name,
-              skin_color,
-              skin_image,
-              skin_float,
-              skin_price,
-              skin_weapon,
-              deletedAt,
-              id,
-            }: ISkins,
-            index: number,
-          ) => {
-            return (
-              <div className="flex w-[17.5rem]" key={`skin-card-${index}`}>
-                <OtherCard
-                  id={id}
-                  skinImage={skin_image}
-                  sellerName={skin_name}
-                  skinColor={skin_color}
-                  skinWeapon={skin_weapon}
-                  skinFloat={skin_float}
-                  skinPrice={skin_price}
-                  deletedAt={deletedAt}
-                  key={id}
-                />
-              </div>
-            )
-          },
-        )}
+        {skinsCategories?.map((item, index: number) => {
+          return (
+            <div className="flex w-[17.5rem]" key={`skin-card-${index}`}>
+              <OtherCard itsRent={itsRent} item={item} key={item.id} />
+            </div>
+          )
+        })}
       </div>
     </div>
   )

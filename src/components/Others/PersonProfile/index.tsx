@@ -14,7 +14,7 @@ interface Props {
   steamLevel?: string
   isLoading?: boolean
   userState?: string
-  totalExchanges?: string
+  totalExchanges?: number
   deliveryTime?: string
   deliveryFee?: number
 }
@@ -117,10 +117,7 @@ export default function PersonProfile({
         />
         <ProfileInfo
           title="Total de Transações"
-          value={
-            (totalExchanges && totalExchanges.replace(' no momento', '')) ||
-            'Não Obtido'
-          }
+          value={totalExchanges || 'Não Obtido'}
         />
         <ProfileInfo title="Taxa de Entrega" isPercent value={deliveryFee} />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />
