@@ -1,6 +1,5 @@
 import LayoutQueryProvider from '@/components/Layout/LayoutQueryProvider'
 import { LayoutRoot } from '@/components/Layout/LayoutRoot'
-import 'aos/dist/aos.css'
 import { Inter } from 'next/font/google'
 import { Metadata } from 'next/types'
 import { Toaster } from 'react-hot-toast'

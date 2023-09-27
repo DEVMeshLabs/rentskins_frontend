@@ -35,12 +35,12 @@ export function TransactionsTable({ data, steamid }: IProps) {
   }
 
   return data.length > 0 ? (
-    <div>
+    <div className="max-h-[40rem] min-h-[10rem] scroll-p-24 overflow-y-auto overflow-x-hidden">
       {data.map((item, index) => (
         <div
           key={index}
           className={
-            'grid grid-cols-6 items-center py-4 last:rounded-b-lg odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
+            'grid grid-cols-6 items-center py-4 first:rounded-t-md last:rounded-b-md odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
           }
         >
           <div className="flex items-center justify-center">

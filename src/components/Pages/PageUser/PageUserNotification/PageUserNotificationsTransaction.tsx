@@ -87,13 +87,15 @@ export default function PageNotificationTransaction({ steamid }: IProps) {
           <span className="text-center">Preço</span>
           <span className="text-center">Tipo</span>
         </div>
-        <div className="mb-16 mt-4 w-full text-center">
+        <div className="mb-16 mt-4 w-full rounded-md text-center">
           {!isLoading ? (
             <TransactionsTable data={transactions?.data!} steamid={steamid} />
           ) : (
-            <LayoutLoading enabled label="Carregando...">
-              {null}
-            </LayoutLoading>
+            <div className="h-full w-full bg-mesh-color-neutral-800 py-8">
+              <LayoutLoading enabled label="Carregando...">
+                {null}
+              </LayoutLoading>
+            </div>
           )}
         </div>
       </div>
