@@ -4,36 +4,29 @@ import React from 'react'
 
 interface IProps {
   label: {
+    title: string
     subtitle: string
-    value: number
   }[]
   className?: string
   classNameSubtitle?: string
   classNameTitle?: string
-  children?: React.ReactNode
 }
 
-export function ModalInfoSkin({
+export function ModalInfoRent({
   label,
   className,
   classNameSubtitle,
   classNameTitle,
-  children,
 }: IProps) {
   return (
-    <div
-      className={classNames(
-        'flex w-2/3 flex-col justify-between gap-6',
-        className,
-      )}
-    >
-      <div className="flex flex-col gap-4">
-        {label.map(({ subtitle, value }, idx) => (
+    <div className={classNames('w-2/3 justify-between gap-6', className)}>
+      <div className="flex gap-16">
+        {label.map(({ title, subtitle }, idx) => (
           <div key={`${label}-${idx}`}>
             <Common.Subtitle
-              size="lg"
+              size="xs"
               bold={600}
-              label={subtitle}
+              label={title}
               className={classNames(
                 'text-mesh-color-neutral-200',
                 classNameSubtitle,
@@ -41,18 +34,16 @@ export function ModalInfoSkin({
             />
             <Common.Title
               bold={700}
-              className={classNames('text-3xl text-white', classNameTitle)}
+              className={classNames(
+                'text-xs text-mesh-color-neutral-200',
+                classNameTitle,
+              )}
             >
-              {value.toLocaleString('pt-br', {
-                currency: 'BRL',
-                style: 'currency',
-                minimumFractionDigits: 2,
-              })}
+              {subtitle}
             </Common.Title>
           </div>
         ))}
       </div>
-      <div className={classNames('text-white')}>{children}</div>
     </div>
   )
 }
