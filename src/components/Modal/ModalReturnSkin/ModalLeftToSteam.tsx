@@ -1,10 +1,10 @@
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons'
-// import useModalStore from '@/stores/modal.store'
+import useModalStore from '@/stores/modal.store'
 import * as Dialog from '@radix-ui/react-dialog'
 
 export default function ModalLeftToSteam() {
-  // const { setOpenModalReturnSkin } = useModalStore()
+  const { setWhatModalOpenToReturnSkin } = useModalStore()
 
   return (
     <Dialog.Content
@@ -14,6 +14,7 @@ export default function ModalLeftToSteam() {
       <div>
         <Dialog.Close
           className="absolute right-8 top-5 z-10 cursor-pointer"
+          onClick={() => setWhatModalOpenToReturnSkin(0)}
           asChild
         >
           <Common.Button className="border-transparent">
@@ -32,6 +33,7 @@ export default function ModalLeftToSteam() {
         <div className="flex gap-8 self-end">
           <Common.Button
             color="invisible"
+            onClick={() => setWhatModalOpenToReturnSkin(0)}
             className="border-none font-bold text-mesh-color-neutral-200"
           >
             Voltar
@@ -39,6 +41,7 @@ export default function ModalLeftToSteam() {
           <Common.Button
             type="button"
             className="h-11 w-3/4 border-mesh-color-primary-1200 bg-mesh-color-primary-1200 px-4 py-3 text-lg font-bold text-mesh-color-others-black disabled:border-mesh-color-neutral-500 disabled:bg-mesh-color-neutral-500 disabled:text-mesh-color-neutral-300"
+            onClick={() => setWhatModalOpenToReturnSkin(2)}
           >
             Ir para Steam
           </Common.Button>

@@ -10,6 +10,7 @@ interface IProps {
   className?: string
   classNameSubtitle?: string
   classNameTitle?: string
+  classNameDivTitles?: string
 }
 
 export function ModalInfoRent({
@@ -17,26 +18,30 @@ export function ModalInfoRent({
   className,
   classNameSubtitle,
   classNameTitle,
+  classNameDivTitles,
 }: IProps) {
   return (
     <div className={classNames('w-2/3 justify-between gap-6', className)}>
       <div className="flex gap-16">
         {label.map(({ title, subtitle }, idx) => (
-          <div key={`${label}-${idx}`}>
+          <div
+            key={`${label}-${idx}`}
+            className={classNames(classNameDivTitles)}
+          >
             <Common.Subtitle
               size="xs"
               bold={600}
               label={title}
               className={classNames(
                 'text-mesh-color-neutral-200',
-                classNameSubtitle,
+                classNameTitle,
               )}
             />
             <Common.Title
               bold={700}
               className={classNames(
                 'text-xs text-mesh-color-neutral-200',
-                classNameTitle,
+                classNameSubtitle,
               )}
             >
               {subtitle}

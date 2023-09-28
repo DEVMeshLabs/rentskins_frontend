@@ -4,6 +4,9 @@ import * as Dialog from '@radix-ui/react-dialog'
 import React from 'react'
 import { ModalReturnSkin } from './ModalReturnSkin'
 import ModalLeftToSteam from './ModalLeftToSteam'
+import ModalChoiceRetrievePayment from './ModalChoiceRetrievePayment'
+import ModalReturnKYC from './ModalReturnKYC'
+import { ModalProcessing } from '../ModalProcessing'
 
 export function ModalReturnMain() {
   const {
@@ -14,6 +17,7 @@ export function ModalReturnMain() {
   } = useModalStore()
   const onOpenChange = () => {
     setOpenModalReturnSkin(false)
+    setWhatModalOpenToReturnSkin(0)
   }
 
   return (
@@ -24,6 +28,9 @@ export function ModalReturnMain() {
             <ModalReturnSkin onClick={() => setWhatModalOpenToReturnSkin(1)} />
           )}
           {whatModalOpenToReturnSkin === 1 && <ModalLeftToSteam />}
+          {whatModalOpenToReturnSkin === 2 && <ModalChoiceRetrievePayment />}
+          {whatModalOpenToReturnSkin === 3 && <ModalReturnKYC />}
+          {whatModalOpenToReturnSkin === 4 && <ModalProcessing />}
         </Dialog.Overlay>
       </Dialog.Portal>
     </Dialog.Root>
