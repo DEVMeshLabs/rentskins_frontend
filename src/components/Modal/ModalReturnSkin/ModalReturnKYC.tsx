@@ -2,8 +2,8 @@
 import Common from '@/components/Common'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ModalTitleSkin } from '../ModalBuy/ModalTitleSkin'
-import { IconShield } from '@/components/Icons'
 import useModalStore from '@/stores/modal.store'
+import IconShieldGreen from '@/components/Icons/IconShieldGreen'
 
 export default function ModalReturnKYC() {
   const { setWhatModalOpenToReturnSkin } = useModalStore()
@@ -19,7 +19,7 @@ export default function ModalReturnKYC() {
 
         <div className="flex h-full w-full flex-col items-center gap-4">
           <div className="flex items-center gap-2 rounded-lg bg-[#333F24] p-2">
-            <IconShield />
+            <IconShieldGreen />
             <Common.Title color="white" size="lg" bold={600}>
               Segurança KYC (conheça seu cliente)
             </Common.Title>
