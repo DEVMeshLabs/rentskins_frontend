@@ -3,6 +3,7 @@ import useModalStore from '@/stores/modal.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import React from 'react'
 import { ModalReturnSkin } from './ModalReturnSkin'
+import ModalLeftToSteam from './ModalLeftToSteam'
 
 export function ModalReturnMain() {
   const {
@@ -22,7 +23,7 @@ export function ModalReturnMain() {
           {whatModalOpenToReturnSkin === 0 && (
             <ModalReturnSkin onClick={() => setWhatModalOpenToReturnSkin(1)} />
           )}
-          {whatModalOpenToReturnSkin === 1 && <div>adf</div>}
+          {whatModalOpenToReturnSkin === 1 && <ModalLeftToSteam />}
         </Dialog.Overlay>
       </Dialog.Portal>
     </Dialog.Root>
