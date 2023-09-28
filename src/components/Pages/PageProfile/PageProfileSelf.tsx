@@ -2,6 +2,7 @@
 
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
+import { ModalReturnMain } from '@/components/Modal/ModalReturnSkin/ModalReturnMain'
 import ChoiceItems from '@/components/Others/ChoiceItems'
 import PerfilPerson from '@/components/Others/PersonProfile'
 import PersonProfileSkeleton from '@/components/Others/PersonProfile/PersonProfileSkeleton'
@@ -72,6 +73,7 @@ export default function PageProfileSelf() {
 
   return (
     <>
+      <ModalReturnMain />
       {status === 'authenticated' ? (
         <PerfilPerson
           totalExchanges={totalExchanges}

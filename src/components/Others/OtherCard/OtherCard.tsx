@@ -8,6 +8,7 @@ import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
 import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
 import { ISkins } from '@/interfaces/ISkins'
+import useModalStore from '@/stores/modal.store'
 
 interface Props {
   itsRent?: boolean
@@ -19,6 +20,7 @@ export function OtherCard({ itsRent, item }: Props) {
     ? item.skin_name.split('™')
     : item.skin_name
 
+  const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
   return (
     <article className="relative">
       {item.deletedAt !== null && (
@@ -103,12 +105,34 @@ export function OtherCard({ itsRent, item }: Props) {
         </div>
         <ColoredLine position={item.skin_float} />
         <div className="flex select-none items-center justify-end">
-          <Link
-            href={`/detalhes/${item.id}`}
-            className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
-          >
-            Comprar
-          </Link>
+          {itsRent ? (
+            <Common.Button
+              type="button"
+              onClick={() => {
+                setSkinToReturn({
+                  skinColor: item.skin_color,
+                  skinFloat: item.skin_float,
+                  skinId: item.id,
+                  skinImage: item.skin_image,
+                  skinName: item.skin_name,
+                  skinPrice: item.skin_price,
+                  skinWeapon: item.skin_weapon,
+                  statusFloat: item.status_float,
+                })
+                setOpenModalReturnSkin(true)
+              }}
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+            >
+              Devolução
+            </Common.Button>
+          ) : (
+            <Link
+              href={`/detalhes/${item.id}`}
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+            >
+              Comprar
+            </Link>
+          )}
         </div>
       </div>
     </article>

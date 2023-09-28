@@ -44,7 +44,7 @@ export function ModalBuySkin({ onClick }: IProps) {
             label={[
               {
                 subtitle: 'Valor total da Skin',
-                value: Number(skinToBuy?.skinPrice!),
+                value: skinToBuy?.skinPrice!,
               },
             ]}
           >

@@ -10,7 +10,7 @@ interface IProps {
   className?: string
   classNameSubtitle?: string
   classNameTitle?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export function ModalInfoSkin({
