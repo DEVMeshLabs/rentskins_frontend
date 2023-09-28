@@ -3,8 +3,8 @@ import useModalStore from '@/stores/modal.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ModalTitleSkin } from '../ModalBuy/ModalTitleSkin'
 import { ModalInfoRent } from './ModalInfoRent'
-import { IconShield } from '@/components/Icons'
 import ModalReturnRefundMethod from './ModalRefundMethod/ModalReturnRefundMethod'
+import IconShieldGreen from '@/components/Icons/IconShieldGreen'
 
 export default function ModalChoiceRetrievePayment() {
   const { setWhatModalOpenToReturnSkin } = useModalStore()
@@ -30,7 +30,7 @@ export default function ModalChoiceRetrievePayment() {
             label={[{ title: 'Reembolso', subtitle: 'R$742,50' }]}
           />
           <div className="flex items-center gap-2">
-            <IconShield />
+            <IconShieldGreen />
             <p className="text-[12px] font-normal text-mesh-color-neutral-200">
               Segurança KYC
             </p>
