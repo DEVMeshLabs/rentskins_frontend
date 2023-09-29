@@ -6,22 +6,26 @@ interface IProps {
 
 export function NotificationTime({ timestamp }: IProps) {
   const handleTimestamp = () => {
-    if (timestamp < 0.5) {
+    if (timestamp < 1) {
       return 'Há alguns segundos'
-    } else if (timestamp < 1) {
-      return `Há ${timestamp} segundos`
     } else if (timestamp < 60) {
-      return `Há ${Math.floor(60 / timestamp)} minutos`
-    } else if (timestamp < 120) {
-      return `Há ${Math.floor(120 / timestamp)} horas`
-    } else if (timestamp < 1440) {
-      return `Há ${Math.floor(1440 / timestamp)} dias`
-    } else if (timestamp < 10080) {
-      return `Há ${Math.floor(10080 / timestamp)} semanas`
-    } else if (timestamp < 525600) {
-      return `Há ${Math.floor(525600 / timestamp)} meses`
-    } else if (timestamp < 1051200) {
-      return `Há ${Math.floor(1051200 / timestamp)} anos`
+      const minutes = Math.floor(timestamp)
+      return `Há ${minutes} minuto${minutes < 2 ? '' : 's'}`
+    } else if (timestamp >= 60 && timestamp < 1440) {
+      const hours = Math.floor(timestamp / 60)
+      return `Há ${hours} hora${hours < 2 ? '' : 's'}`
+    } else if (timestamp >= 1440 && timestamp < 10080) {
+      const days = Math.floor(timestamp / 1440)
+      return `Há ${days} dia${days < 2 ? '' : 's'}`
+    } else if (timestamp >= 10080 && timestamp < 43200) {
+      const weeks = Math.floor(timestamp / 10080)
+      return `Há ${weeks} semana${weeks < 2 ? '' : 's'}`
+    } else if (timestamp >= 43200 && timestamp < 525600) {
+      const months = Math.floor(timestamp / 10080)
+      return `Há ${months} ${months < 2 ? 'mês' : 'meses'}`
+    } else if (timestamp >= 525600) {
+      const years = Math.floor(timestamp / 525600)
+      return `Há ${years} ano${years < 2 ? '' : 's'}`
     }
   }
   return (
