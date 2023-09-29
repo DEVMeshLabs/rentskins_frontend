@@ -23,6 +23,8 @@ export default function PageNotificationHistoric({
 
               const diffMilliseconds = currentTimestamp - timestamp.getTime()
               const diffMinutes = Math.floor(diffMilliseconds / (1000 * 60))
+              console.log(diffMilliseconds)
+              console.log(diffMinutes)
               return (
                 <NotificationCard.Root
                   key={'notification-' + index}
