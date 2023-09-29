@@ -78,7 +78,9 @@ export function ModalInfoItem({
         onClick()
         Toast.Success('O item foi atualizado com sucesso. Reinicie a página.')
       } else {
-        Toast.Error('Infelizmente algo deu errado. Tente novamente mais tarde.')
+        Toast.Error(
+          'Infelizmente algo de errado não está certo. Tente novamente mais tarde.',
+        )
       }
     }
   }, [data, isRefetching])
