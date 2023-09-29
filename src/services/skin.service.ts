@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   ISkins,
   ISkinsAvailability,
@@ -132,6 +133,28 @@ export default class SkinService {
       {
         buyer_id: userId,
         buyer_name: userName,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
+
+  public static async updateEditSkin(
+    skinId: string,
+    skin_price: number,
+    token: string,
+  ) {
+    const result: AxiosResponse<any> = await Api.put(
+      `/skins/${skinId}`,
+      {
+        skin_price,
       },
       {
         headers: {
