@@ -3,7 +3,7 @@
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
 import * as Dialog from '@radix-ui/react-dialog'
-import React from 'react'
+import React, { useState } from 'react'
 import { ModalItemShow } from './ModalItemShow'
 import { ISkins } from '@/interfaces/ISkins'
 import { ModalInfoItem } from './ModalInfoItem'
@@ -14,8 +14,10 @@ interface IProps {
 }
 
 export function ModalEditionItemMain({ activator, item }: IProps) {
+  const [modalOpen, setModalOpen] = useState(false)
+  const handleOpen = () => setModalOpen((state) => !state)
   return (
-    <Dialog.Root>
+    <Dialog.Root open={modalOpen} onOpenChange={handleOpen}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all" />
@@ -44,19 +46,11 @@ export function ModalEditionItemMain({ activator, item }: IProps) {
                 float={item.skin_float}
               />
               <ModalInfoItem
+                onClick={handleOpen}
                 skin_price={item.skin_price}
-                asset_id={item.asset_id}
                 id={item.id}
                 skin_name={item.skin_name}
                 skin_weapon={item.skin_weapon}
-                sale_type={'sale'}
-                skin_category={item.skin_category}
-                skin_color={item.skin_color}
-                skin_float={item.skin_float}
-                skin_image={item.skin_image}
-                skin_link_game={item.skin_link_game}
-                skin_link_steam={`${item.skin_link_steam}inventory#730_2_${item.asset_id}`}
-                status_float={item.status_float}
                 statusFloatText={item.status_float}
               />
             </div>

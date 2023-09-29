@@ -3,29 +3,23 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 
-import * as Dialog from '@radix-ui/react-dialog'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from '../ModalSkinShowcase/info.schema'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
+import ISteamUser from '@/interfaces/steam.interface'
+import { useSession } from 'next-auth/react'
+import { ColorRing } from 'react-loader-spinner'
+import Toast from '@/tools/toast.tool'
 
-type Props = {
+interface IProps {
   statusFloatText: string
-  sale_type?: string
-  skin_category: string
-  skin_color: string
-  skin_float: string
-  skin_image: string
-  skin_link_game: string
-  skin_link_steam: string
   skin_name: string
   skin_price: number
   skin_weapon: string
-  status?: string
-  status_float: string
   id: string
-  asset_id: string
+  onClick: () => void
 }
 
 export function ModalInfoItem({
@@ -33,17 +27,17 @@ export function ModalInfoItem({
   skin_name,
   skin_weapon,
   statusFloatText,
-}: Props) {
+  id,
+  onClick,
+}: IProps) {
   const [disabled, setDisabled] = useState(true)
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
   const { data: averagePrice } = useQuery({
     queryKey: ['test', skin_name],
-    queryFn: () => {
-      console.log(skin_name)
-      return SkinService.getItemAveragePrice([skin_name])
-    },
+    queryFn: () => SkinService.getItemAveragePrice([skin_name]),
     enabled: !!skin_name,
   })
-  console.log(averagePrice)
 
   const {
     register,
@@ -66,6 +60,31 @@ export function ModalInfoItem({
   const watchSell = watch('rent')
   const watchRent = watch('sell')
 
+  const { data, isRefetching, refetch } = useQuery({
+    queryKey: ['updateSkin', trueSession.user?.token, id, watchValue],
+    queryFn: () => {
+      return SkinService.updateEditSkin(
+        id,
+        Number(watchValue!.replace(/[^\d.,]/g, '')),
+        trueSession.user?.token!,
+      )
+    },
+    enabled: false,
+  })
+
+  useEffect(() => {
+    if (isRefetching) {
+      if (data?.request.status === 204) {
+        onClick()
+        Toast.Success('O item foi atualizado com sucesso. Reinicie a página.')
+      } else {
+        Toast.Error(
+          'Infelizmente algo de errado não está certo. Tente novamente mais tarde.',
+        )
+      }
+    }
+  }, [data, isRefetching])
+
   const formattedValue = (value: string): number => {
     let newFormattedValue
     newFormattedValue = value.replace(/\./g, '')
@@ -86,7 +105,11 @@ export function ModalInfoItem({
     )
   }, [watchValue, watchTerms, watchSell, watchRent])
 
-  const onSubmit = (data: any) => {}
+  const onSubmit = () => {
+    if (watchValue) {
+      refetch()
+    }
+  }
 
   return (
     <div className="flex h-full w-[40%] flex-col">
@@ -188,16 +211,23 @@ export function ModalInfoItem({
         {/* ---------INPUT FIM -------------  */}
 
         <div className="space-y-6">
-          <Dialog.Close className="w-full">
-            <Common.Button
-              disabled={disabled}
-              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-            >
+          <Common.Button
+            type="submit"
+            disabled={disabled}
+            className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+          >
+            {isRefetching ? (
+              <ColorRing
+                width={30}
+                height={30}
+                colors={['black', 'black', 'black', 'black', 'black']}
+              />
+            ) : (
               <Common.Title bold={600} className="rounded-xl">
                 Editar
               </Common.Title>
-            </Common.Button>
-          </Dialog.Close>
+            )}
+          </Common.Button>
           <Form.Input.Checkbox
             name="terms"
             wrapperClassname="gap-4"
@@ -214,23 +244,3 @@ export function ModalInfoItem({
     </div>
   )
 }
-
-// {
-//   id,
-//   sale_type,
-//   seller_id: trueSession.user?.steam?.steamid as string,
-//   seller_name: trueSession.user?.name as string,
-//   skin_category,
-//   skin_color,
-//   skin_float,
-//   skin_image,
-//   skin_link_game: inspectLink,
-//   skin_link_steam,
-//   skin_name,
-//   skin_weapon,
-//   status,
-//   status_float,
-//   asset_id,
-//   median_price: removeSign(recomended_price),
-//   skin_price: formattedValue(String(watchValue)),
-// }
