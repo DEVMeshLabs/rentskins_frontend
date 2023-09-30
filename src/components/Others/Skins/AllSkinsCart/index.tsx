@@ -1,12 +1,13 @@
 /* eslint-disable camelcase */
 'use client'
+import { LayoutLoading } from '@/components/Layout/LayoutLoading'
+import ISteamUser from '@/interfaces/steam.interface'
+import CartService from '@/services/cart.service'
+import useCartStore from '@/stores/cart.store'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import CartSkinCard from '../../CartSkinCard'
-import { useQuery } from '@tanstack/react-query'
-import CartService from '@/services/cart.service'
-import ISteamUser from '@/interfaces/steam.interface'
-import { useSession } from 'next-auth/react'
-import useCartStore from '@/stores/cart.store'
 
 export default function AllSkinsCart() {
   const { setSkinsFromCart, skinsFromCart, deleteSkinFromCart } = useCartStore()
@@ -29,15 +30,22 @@ export default function AllSkinsCart() {
 
   useEffect(() => {
     if (dataSkinsCart?.data) {
-      setSkinsFromCart(dataSkinsCart.data.SkinToCart)
+      const skinsFiltred = dataSkinsCart.data.SkinToCart.filter(
+        ({ skin: { deletedAt } }) => deletedAt === null,
+      )
+      setSkinsFromCart(skinsFiltred)
     }
-  }, [dataSkinsCart?.data])
+  }, [dataSkinsCart?.data, setSkinsFromCart])
 
   return (
-    <div className="flex w-[798px] flex-col items-start gap-6">
-      {!isLoading ? (
+    <div className="flex h-full w-[798px] flex-col items-center gap-6">
+      <LayoutLoading
+        enabled={isLoading}
+        label="Carregando..."
+        className="flex h-full items-center justify-center"
+      >
         <div
-          className={`flex w-full flex-col justify-center gap-6 ${
+          className={`flex w-full flex-col items-center justify-center gap-6 ${
             skinsFromCart.length === 0 && 'pt-60'
           }`}
         >
@@ -52,6 +60,7 @@ export default function AllSkinsCart() {
                     skin_image,
                     id,
                     skin_weapon,
+                    deletedAt,
                   },
                   id: modelId,
                 },
@@ -77,9 +86,7 @@ export default function AllSkinsCart() {
             <h1 className="text-xl text-white">Carrinho vazio.</h1>
           )}
         </div>
-      ) : (
-        <div>Carregando...</div>
-      )}
+      </LayoutLoading>
     </div>
   )
 }

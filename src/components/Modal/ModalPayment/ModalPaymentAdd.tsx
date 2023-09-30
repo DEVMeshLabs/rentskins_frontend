@@ -1,4 +1,5 @@
-import ImageMastercard from '@/../public/payment/mastercard.png'
+'use client'
+import ImageCard from '@/../public/payment/card.png'
 import ImagePIX from '@/../public/payment/pix.png'
 import ImageTicket from '@/../public/payment/ticket.png'
 import Common from '@/components/Common'
@@ -6,12 +7,17 @@ import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons/IconClose'
 import { IconMoneyBag } from '@/components/Icons/IconMoneyBag'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
-import usePaymentStore from '@/stores/payment.store'
+import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
+import StripeService from '@/services/stripe.service'
+import Toast from '@/tools/toast.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import Image, { StaticImageData } from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { redirect, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './add.schema'
 
@@ -20,8 +26,11 @@ interface IProps {
 }
 
 export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
+  const { data: session } = useSession()
+  const [payment, setPayment] = useState({ value: 5, method: 'card' })
+  const [startPayment, setStartPayment] = useState(false)
+  const trueSession = session as ISteamUser
   const router = useRouter()
-  const { setPaymentAdd } = usePaymentStore()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -33,35 +42,88 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   } = useForm({
     resolver: formResolver,
     defaultValues: {
-      method: 'mastercard',
-      value: '',
+      method: 'card',
+      value: undefined,
       valueButtons: 'R$ 5,00',
     },
   })
 
+  const { data: userConfigurations } = useQuery({
+    queryKey: ['UserConfig', trueSession.user?.steam?.steamid],
+    queryFn: async () =>
+      ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+  })
+
+  const { data: createdPayment, refetch: createPayment } = useQuery({
+    queryKey: ['Payment'],
+    queryFn: () =>
+      StripeService.createPayment(
+        {
+          owner_id: trueSession.user?.steam?.steamid!,
+          email: userConfigurations?.data.owner_email!,
+          success_url: ('https://rentskins-testing.vercel.app' +
+            '/pagamento/recarregar') as string,
+          cancel_url: ('https://rentskins-testing.vercel.app' +
+            '/pagamento/recarregar') as string,
+          amount: Number(payment.value),
+          payment_method: payment.method as 'card' | 'boleto' | 'pix',
+        },
+        trueSession.user?.token!,
+      ),
+    cacheTime: 0,
+    enabled: false,
+  })
+
+  useEffect(() => {
+    Toast.Icon(
+      'O pagamento por PIX se encontra desativado no momento.',
+      '⚠️',
+      3000,
+    )
+  }, [])
+
+  useEffect(() => {
+    if (payment && startPayment) {
+      createPayment()
+      afterFormSubmit()
+      setStartPayment(false)
+    }
+  }, [payment, startPayment, afterFormSubmit, createPayment])
+
+  useEffect(() => {
+    if (createdPayment?.request.status === 200) {
+      redirect(createdPayment.data.url)
+    }
+  }, [createdPayment])
+
   const watchValue = watch('value')
+
+  useEffect(() => console.log(watchValue), [watchValue])
 
   const onSubmit = (data: any) => {
     setIsLoading(true)
 
-    if (data.value === '') {
+    if (data.value === '' || data.value === undefined) {
       let currencyToNumber
       currencyToNumber = data?.valueButtons.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
       currencyToNumber = currencyToNumber.replace(',', '.')
 
-      setPaymentAdd({ method: data.method, value: currencyToNumber })
+      setPayment({ method: data.method, value: currencyToNumber })
     } else {
       let currencyToNumber
+      console.log(currencyToNumber)
       currencyToNumber = data?.value.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
       currencyToNumber = currencyToNumber.replace(',', '.')
 
-      setPaymentAdd({ method: data.method, value: currencyToNumber })
+      setPayment({ method: data.method, value: Number(currencyToNumber) })
     }
 
-    router.push(`/pagamento/recarregar/${data.method}`)
-    afterFormSubmit()
+    setStartPayment(true)
   }
 
   return (
@@ -82,7 +144,7 @@ rounded-2xl bg-mesh-color-neutral-700"
           <Form.Input.Radio.Default
             name="method"
             wrapperClassname="h-24 w-full"
-            labelClassName="transition-all bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
+            labelClassName="transition-all peer-disabled:opacity-20 bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
           hover:cursor-pointer hover:border-mesh-color-primary-600/50 peer-checked:border-mesh-color-primary-600 text-white"
             containerClassname="mt-4 grid grid-cols-2 items-center justify-start gap-1 w-full"
             items={renderRadioMethodOptions()}
@@ -125,7 +187,11 @@ rounded-2xl bg-mesh-color-neutral-700"
                   <Form.Input.Radio.Default
                     name="value"
                     wrapperClassname="h-16 w-full"
-                    disabled={watchValue !== ''}
+                    disabled={
+                      watchValue !== 'R$ 0,00' &&
+                      watchValue !== undefined &&
+                      watchValue !== ''
+                    }
                     labelClassName="transition-all bg-mesh-color-neutral-500 rounded-md border-2 border-transparent bg-green-500 h-full w-full flex items-center justify-center w-full
                     hover:cursor-pointer hover:border-mesh-color-primary-600/50 peer-checked:border-mesh-color-primary-600 text-white peer-disabled:border-transparent
                     peer-disabled:bg-mesh-color-neutral-800 peer-disabled:text-mesh-color-neutral-500 peer-disabled:cursor-default "
@@ -143,7 +209,7 @@ rounded-2xl bg-mesh-color-neutral-700"
                   Ao prosseguir para finalizar o pagamento, você concorda com os
                   nossos{' '}
                   <a
-                    href=""
+                    href="/termos-de-uso"
                     target="_blank"
                     className="hover:text-inherit/50 text-mesh-color-primary-1000"
                   >
@@ -151,7 +217,7 @@ rounded-2xl bg-mesh-color-neutral-700"
                   </a>
                   ,{' '}
                   <a
-                    href=""
+                    href="/privacidade"
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
@@ -191,12 +257,13 @@ const renderRadioMethodOptions = () => {
 
   return [
     {
-      label: renderImage(ImageMastercard, 'mastercard'),
-      value: 'mastercard',
+      label: renderImage(ImageCard, 'mastercard'),
+      value: 'card',
     },
     {
       label: renderImage(ImagePIX, 'pix'),
       value: 'pix',
+      disabled: true,
     },
     {
       label: renderImage(ImageTicket, 'boleto'),

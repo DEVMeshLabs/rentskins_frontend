@@ -12,7 +12,7 @@ export default function PageHomeHero() {
         <span>
           Descubra o mundo das skins{' '}
           <strong className="bg-mesh-gradient-green-pattern bg-clip-text text-transparent">
-            CS:GO
+            Counter-Strike
           </strong>
         </span>
       </p>

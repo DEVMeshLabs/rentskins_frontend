@@ -54,7 +54,7 @@ export default function PageSuspendedActivities({ session }: IProps) {
         <br />
         <p>Agradecemos pela sua compreensão e colaboração.</p>
         <br />
-        <p>Atenciosamente, A Equipe de Suporte RentSkins.</p>
+        <p>Atenciosamente, a Equipe de Suporte Rentskins.</p>
       </div>
       <button
         onClick={() => signOut({ callbackUrl: '/' })}

@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { IConfig, IOptionalConfig } from '@/interfaces/IConfig'
 import { Api } from '@/providers'
+import { AxiosPromise } from 'axios'
 
 export default class ConfigService {
   public static async findByConfigUserId(id: string, token: string) {
@@ -8,7 +9,7 @@ export default class ConfigService {
       headers: { Authorization: 'Bearer ' + token },
     })
       .then((response) => response)
-      .catch((e) => e)
+      .catch((e) => e) as AxiosPromise<IConfig>
   }
 
   public static async updateConfig({

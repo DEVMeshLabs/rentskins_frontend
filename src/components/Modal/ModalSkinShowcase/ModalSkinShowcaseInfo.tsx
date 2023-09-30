@@ -2,17 +2,18 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import useSkinsStore from '@/stores/skins.store'
-import { useEffect, useState } from 'react'
-
 import ISteamUser from '@/interfaces/steam.interface'
+
+import useSkinsStore from '@/stores/skins.store'
+import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  recommendedPrice?: string
+  recomended_price: string
   sale_type?: string
   skin_category: string
   skin_color: string
@@ -26,6 +27,7 @@ type Props = {
   status_float: string
   id: string
   isSelected: boolean
+  asset_id: string
 }
 
 export function ModalSkinShowcaseInfo({
@@ -41,14 +43,15 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  recommendedPrice = '2.000,00',
+  recomended_price,
   isSelected,
+  asset_id,
   id,
 }: Props) {
   const { data: session } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const [disabled, setDisabled] = useState(true)
-  const [savePrice, setSavePrice] = useState('')
+  const [savePrice, setSavePrice] = useState<null | number>(null)
   const {
     setSkinsToAdvertise,
     removeSkinToAdvertise,
@@ -60,12 +63,23 @@ export function ModalSkinShowcaseInfo({
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
     )
-    console.log(savedSkin)
+
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
       console.log(savePrice)
     }
   }, [])
+
+  console.log(recomended_price)
+
+  const removeSign = (value: string) => {
+    const response = value
+      .replace('R$ ', '')
+      .replaceAll('.', '')
+      .replace(',', '.')
+
+    return Number(response)
+  }
 
   const {
     register,
@@ -93,6 +107,7 @@ export function ModalSkinShowcaseInfo({
     newFormattedValue = value.replace(/\./g, '')
     newFormattedValue = newFormattedValue.replace('R$ ', '')
     newFormattedValue = newFormattedValue.replace(',', '.')
+
     return Number(newFormattedValue)
   }
 
@@ -107,8 +122,13 @@ export function ModalSkinShowcaseInfo({
     )
   }, [watchValue, watchTerms, watchSell, watchRent])
 
+  const inspectLink = skin_link_game
+    .replace('%owner_steamid%', trueSession.user?.steam?.steamid!)
+    .replace('%assetid%', asset_id)
+
   const handleAddSkinsToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
+      console.log(formattedValue(String(watchValue)))
       setSkinsToAdvertise({
         id,
         sale_type,
@@ -118,25 +138,26 @@ export function ModalSkinShowcaseInfo({
         skin_color,
         skin_float,
         skin_image,
-        skin_link_game,
+        skin_link_game: inspectLink,
         skin_link_steam,
         skin_name,
         skin_weapon,
         status,
         status_float,
-        skin_price: String(formattedValue(watchValue)),
+        asset_id,
+        median_price: removeSign(recomended_price),
+        skin_price: formattedValue(String(watchValue)),
       })
     }
   }
 
   const handleChangeSkinToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
-      changeSkinToAdvertise(id, watchValue)
+      changeSkinToAdvertise(id, formattedValue(String(watchValue)))
     }
   }
 
   const onSubmit = (data: any) => {
-    console.log(data)
     handleAddSkinsToAdvertise()
   }
 
@@ -158,10 +179,10 @@ export function ModalSkinShowcaseInfo({
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado
+              Preço recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
-              R$: {recommendedPrice}
+              {recomended_price}
             </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
@@ -171,38 +192,50 @@ export function ModalSkinShowcaseInfo({
         </div>
 
         {/* ---------INPUT -------------  */}
-        <div className="mt-5 flex w-full gap-4">
-          <div className="">
+        <div className="mt-5 flex w-full max-w-[100%] gap-4">
+          <div className="w-1/2 max-w-[50%]">
             <Form.Input.Currency
               name="value"
               control={control}
+              maxLength={10}
               label="Preço de Venda"
-              placeHolder={savePrice ? `R$ ${savePrice}` : 'R$ 2.000,00'}
+              placeHolder={
+                savePrice
+                  ? `${formattedValue(String(savePrice)).toLocaleString(
+                      'pt-br',
+                      {
+                        currency: 'BRL',
+                        style: 'currency',
+                        minimumFractionDigits: 2,
+                      },
+                    )}`
+                  : 'R$ 2.000,00'
+              }
               register={register('value')}
               errors={errors.value}
             />
           </div>
 
-          <div className="flex w-full flex-col">
+          <div className="flex w-1/2 max-w-[50%] flex-col">
             <Common.Title bold={500} color="white" size="lg">
               Você irá receber
             </Common.Title>
             <div
-              className="transitions-all rounded-md border-[2px]
-              border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-3 py-3 ring-mesh-color-primary-1900
-                duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
+              className="transitions-all max-w-[100%] overflow-hidden text-ellipsis rounded-md
+              border-[2px] border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-1 py-3
+                ring-mesh-color-primary-1900 duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
             >
               <Common.Title
-                className="ml-2 opacity-60"
+                className="w-max-[200px] relative ml-2 w-fit text-ellipsis opacity-60"
                 bold={500}
                 color="white"
                 size="lg"
               >
                 {(
-                  (formattedValue(watchValue || '') ||
-                    formattedValue(savePrice)) -
-                  (formattedValue(watchValue || '') ||
-                    formattedValue(savePrice)) *
+                  (formattedValue(watchValue ? String(watchValue) : '') ||
+                    formattedValue(savePrice ? String(savePrice) : '')) -
+                  (formattedValue(watchValue ? String(watchValue) : '') ||
+                    formattedValue(savePrice ? String(savePrice) : '')) *
                     0.05
                 ).toLocaleString('pt-br', {
                   style: 'currency',
@@ -213,7 +246,7 @@ export function ModalSkinShowcaseInfo({
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-4">
           <Form.Input.Checkbox
             name="sell-rent"
             register={register('sell')}
@@ -231,15 +264,17 @@ export function ModalSkinShowcaseInfo({
         <div className="space-y-6">
           {isSelected ? (
             <div className="flex gap-4">
-              <Common.Button
-                disabled={disabled}
-                onClick={handleChangeSkinToAdvertise}
-                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400"
-              >
-                <Common.Title bold={600} className="rounded-xl">
-                  Alterar
-                </Common.Title>
-              </Common.Button>
+              <Dialog.Close className="w-full">
+                <Common.Button
+                  disabled={disabled}
+                  onClick={handleChangeSkinToAdvertise}
+                  className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+                >
+                  <Common.Title bold={600} className="rounded-xl">
+                    Alterar
+                  </Common.Title>
+                </Common.Button>
+              </Dialog.Close>
               <Common.Button
                 onClick={() => removeSkinToAdvertise(id)}
                 className="mt-4 h-11 w-3/5 border-mesh-color-neutral-200"
@@ -250,14 +285,16 @@ export function ModalSkinShowcaseInfo({
               </Common.Button>
             </div>
           ) : (
-            <Form.Button
-              disabled={disabled}
-              buttonStyle={undefined}
-              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-              onClick={handleAddSkinsToAdvertise}
-            >
-              Anunciar
-            </Form.Button>
+            <Dialog.Close className="w-full">
+              <Form.Button
+                disabled={disabled}
+                buttonStyle={undefined}
+                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+                onClick={handleAddSkinsToAdvertise}
+              >
+                Anunciar
+              </Form.Button>
+            </Dialog.Close>
           )}
           <Form.Input.Checkbox
             name="terms"

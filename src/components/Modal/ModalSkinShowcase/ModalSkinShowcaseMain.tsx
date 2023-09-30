@@ -2,7 +2,9 @@
 'use client'
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
+import SkinService from '@/services/skin.service'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { ModalSkinShowcaseInfo } from './ModalSkinShowcaseInfo'
 import { ModalSkinShowcaseSkin } from './ModalSkinShowcaseSkin'
@@ -15,10 +17,14 @@ interface IProps {
   skinImage: string
   skinWeapon: string
   statusFloat: string
+  marketName: string
   skinColor: string
   skinCategory: string
   id: string
   isSelected: boolean
+  asset_id: string
+  linkForPreviewSkin: string
+  linkForProfile: string
 }
 
 export function ModalSkinShowcaseMain({
@@ -29,11 +35,21 @@ export function ModalSkinShowcaseMain({
   statusFloat,
   float,
   skinCategory,
+  marketName,
   skinColor,
   skinName,
   isSelected,
+  asset_id,
+  linkForPreviewSkin,
+  linkForProfile,
   id,
 }: IProps) {
+  const { data: averagePrice } = useQuery({
+    queryKey: ['GetItemAveragePrice', marketName],
+    queryFn: () => SkinService.getItemAveragePrice([marketName]),
+    enabled: !!marketName,
+  })
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
@@ -66,18 +82,19 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                asset_id={asset_id}
                 isSelected={isSelected}
                 id={id}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
-                recommendedPrice={''}
+                recomended_price={averagePrice?.data[0] || 'Não encontrado'}
                 sale_type={'sale'}
                 skin_category={skinCategory}
                 skin_color={skinColor}
                 skin_float={float}
                 skin_image={skinImage}
-                skin_link_game={''}
-                skin_link_steam={''}
+                skin_link_game={linkForPreviewSkin}
+                skin_link_steam={`${linkForProfile}inventory#730_2_${asset_id}`}
                 status_float={statusFloat}
                 statusFloatText={statusFloat}
               />

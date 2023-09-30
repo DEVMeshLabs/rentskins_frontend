@@ -10,8 +10,7 @@ export async function generateMetadata({
 }: IMetadata): Promise<Metadata> {
   return {
     title: `${searchParams.search || 'Loja'} - RentSkins`,
-    description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
-    Encontre skins raras e exclusivas para personalizar seu jogo.`,
+    description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
   }
 }
 

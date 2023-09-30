@@ -2,11 +2,13 @@
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
 import { ModalSkinShowcaseMain } from '@/components/Modal/ModalSkinShowcase/ModalSkinShowcaseMain'
+import { ISteamItens } from '@/interfaces/ISkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import useSkinsStore from '@/stores/skins.store'
+import { filterSkinsToInventory } from '@/utils/filterSkinsToInvetory'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
@@ -21,6 +23,17 @@ export function CardSkinInventory() {
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
+  const [steamItens, setSteamItens] = useState<ISteamItens[]>([])
+
+  const { data: skinsProfile, refetch: refetchSkinsProfile } = useQuery({
+    queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
+    queryFn: () =>
+      SkinService.findAllSkinsByIdSeller(
+        trueSession?.user?.steam?.steamid!,
+        page,
+      ),
+    keepPreviousData: true,
+  })
 
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
@@ -36,8 +49,24 @@ export function CardSkinInventory() {
     keepPreviousData: true,
   })
 
+  console.log(data?.data.inventory)
+
+  useEffect(() => {
+    if (
+      data?.data &&
+      data.data.inventory &&
+      skinsProfile?.data &&
+      skinsProfile.data.skins
+    ) {
+      setSteamItens(
+        filterSkinsToInventory(data.data.inventory, skinsProfile.data.skins),
+      )
+    }
+  }, [data, skinsProfile])
+
   useEffect(() => {
     refetch()
+    refetchSkinsProfile()
   }, [page, inventoryTypeFilter, refetch])
 
   useEffect(() => {
@@ -58,7 +87,6 @@ export function CardSkinInventory() {
       selectedType = 'Não existem estes items em seu inventário.'
     }
 
-    console.log(data?.data)
     return (
       <div className="flex h-[50vh] items-center justify-center font-semibold text-white">
         {inventoryTypeFilter.length ? (
@@ -84,12 +112,20 @@ export function CardSkinInventory() {
       <div className="ml-2 flex flex-wrap justify-center gap-4">
         {isLoading || isRefetching ? (
           <CardSkin.Skeleton quantity={16} />
-        ) : data?.data &&
-          data.data.inventory &&
-          data.data.inventory.length > 0 ? (
-          data.data.inventory.map(
+        ) : steamItens.length > 0 ? (
+          steamItens.map(
             (
-              { icon_url, name, name_color, market_name, tags, type, assetid },
+              {
+                icon_url,
+                name,
+                name_color,
+                market_name,
+                market_hash_name,
+                tags,
+                type,
+                assetid,
+                actions,
+              },
               index: number,
             ) => {
               const primeiroName = name.split('|')[0]
@@ -104,17 +140,23 @@ export function CardSkinInventory() {
               const isSelected = skinsToAdvertise.some(
                 ({ id }) => assetid === id,
               )
+              const linkForPreviewSkin = actions[0].link
 
+              console.log(linkForPreviewSkin)
               return (
                 <ModalSkinShowcaseMain
                   key={assetid}
+                  asset_id={assetid}
                   skinImage={icon_url}
-                  skinName={name}
+                  marketName={market_hash_name}
+                  skinName={market_name}
                   skinCategory={category}
                   skinWeapon={weapon}
                   statusFloat={statusFloat as string}
                   skinColor={name_color}
                   float={'0.2555'}
+                  linkForPreviewSkin={linkForPreviewSkin}
+                  linkForProfile={trueSession.user?.steam?.profileurl!}
                   id={assetid}
                   isSelected={isSelected}
                   activator={

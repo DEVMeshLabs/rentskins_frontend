@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   ISkins,
   ISkinsAvailability,
@@ -5,8 +6,8 @@ import {
   ISkinsToAdvertise,
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
-import { AxiosResponse } from 'axios'
-import { IInventory } from './interfaces/inventoryy.interface'
+import { AxiosPromise, AxiosResponse } from 'axios'
+import { IInventory } from './interfaces/inventory.interface'
 
 export default class SkinService {
   public static findByAll(page?: number | string) {
@@ -62,26 +63,39 @@ export default class SkinService {
     }
   }
 
+  public static async getItemAveragePrice(items: string[]) {
+    return (await Api.post(`/skins/median/price`, {
+      names: items,
+    })
+      .then((response) => response)
+      .catch((e) => e)) as AxiosPromise<string[]>
+  }
+
   public static findBySearchParameter(param: string, page?: number | string) {
     return Api.get<ISkinsResponse>(`/skins/search/${param}?page=${page || 1}`)
   }
 
-  public static postAllSkinsToAdvertise(
+  public static async postAllSkinsToAdvertise(
     allSkinsAdvertise: ISkinsToAdvertise[],
     token: string,
   ) {
+    console.log(allSkinsAdvertise)
     const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
       delete skin.id
       return skin
     })
 
-    return Api.post<{ status: number }>('/skins', skinsWithoutId, {
+    const result: AxiosResponse<{ status: number }> = await Api.post<{
+      status: number
+    }>('/skins', skinsWithoutId, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response)
       .catch((err) => err)
+
+    return result
   }
 
   public static async postCheckItemAvailability(
@@ -102,6 +116,52 @@ export default class SkinService {
 
   public static async deleteById(id: string) {
     const result: AxiosResponse<any> = await Api.delete(`/skins/${id}`)
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
+
+  public static async updateSkin(
+    userName: string,
+    userId: string,
+    skinId: string,
+    token: string,
+  ) {
+    const result: AxiosResponse<any> = await Api.put(
+      `/skins/${skinId}`,
+      {
+        buyer_id: userId,
+        buyer_name: userName,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
+
+  public static async updateEditSkin(
+    skinId: string,
+    skin_price: number,
+    token: string,
+  ) {
+    const result: AxiosResponse<any> = await Api.put(
+      `/skins/${skinId}`,
+      {
+        skin_price,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
       .then((response) => response)
       .catch((e) => e)
 

@@ -4,7 +4,6 @@ import * as yup from 'yup'
 const formSchema = yup.object({
   'trade-link': yup
     .string()
-    .required('Campo necessário.')
     .test(
       'trade-link-test',
       'O campo deve ser um link válido da Steam.',

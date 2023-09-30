@@ -3,6 +3,7 @@ import { InputHTMLAttributes } from 'react'
 interface IItem {
   value: any
   label: any
+  disabled?: boolean
 }
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -33,18 +34,16 @@ export function FormInputRadioDefault({
   errorsClassname,
   items,
   onChange,
-  ...rest
 }: IProps) {
   const renderItems = items.map((item, index) => (
     <div key={item.value + index} className={`${wrapperClassname} flex`}>
       <input
         type="radio"
         id={item.value}
-        disabled={disabled}
+        disabled={disabled || item.disabled}
         value={item.value}
         className={`peer absolute appearance-none ${inputClassName}`}
         {...register}
-        {...rest}
       />
       <label htmlFor={item.value} className={labelClassName}>
         {item.label}
@@ -53,7 +52,7 @@ export function FormInputRadioDefault({
   ))
 
   return (
-    <div className={containerClassname}>
+    <div className={containerClassname + ' select-none'}>
       {renderItems}
       <span className={errorsClassname}>{errors && errors?.message}</span>
     </div>

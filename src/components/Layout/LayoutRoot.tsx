@@ -1,12 +1,12 @@
 'use client'
 import { SessionProvider } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
-// import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
 import { LayoutHeaderBottom } from './Header/LayoutHeaderBottom'
 import { LayoutHeaderRoot } from './Header/LayoutHeaderRoot'
 import { LayoutHeaderTop } from './Header/LayoutHeaderTop'
 import { LayoutFooter } from './LayoutFooter'
+import Toast from '@/tools/toast.tool'
 
 type IProps = {
   children: React.ReactNode
@@ -15,10 +15,17 @@ type IProps = {
 
 export function LayoutRoot({ children, session }: IProps) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (pathname === '/' || pathname === '/home') {
       console.log('Made with 💙 by Mesh LABS team: https://www.meshlabs.site.')
+    }
+    if (searchParams.get('error')?.includes('OAuthCallback')) {
+      Toast.Error(
+        'Infelizmente não foi possivel logar com a sua Steam no momento. Verifique o horário do seu dispositivo e tente novamente mais tarde.',
+        7000,
+      )
     }
   }, [pathname])
 

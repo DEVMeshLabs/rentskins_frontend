@@ -4,6 +4,7 @@ import Common from '@/components/Common'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
@@ -15,30 +16,55 @@ export default function PageInventorySummary() {
 
   const { skinsToAdvertise, changeSkinToAdvertise, cleanSkinsToAdvertise } =
     useSkinsStore()
-  const [subtotal, setSubtotal] = useState(0)
+  const [subtotal, setSubtotal] = useState<number>(0)
   const [disabled, setDisabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const { refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['createdSkins'],
     queryFn: async () => {
       setIsLoading(true)
-      cleanSkinsToAdvertise()
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
         trueSession.user?.token!,
       )
+
+      if (announcedSkins.request.status !== 409) {
+        cleanSkinsToAdvertise()
+      }
+
       setIsLoading(false)
       return announcedSkins
     },
     enabled: false,
+    cacheTime: 0,
   })
 
   useEffect(() => {
-    const subtotal = skinsToAdvertise.reduce(
-      (acc, { skin_price }) => acc + Number(skin_price.replace(/[^0-9]/g, '')),
-      0,
-    )
+    if (data) {
+      if (data?.request.status === 201) {
+        Toast.Success('Anúncio adicionado com sucesso!')
+      } else if (data?.request.status === 409) {
+        const itemName = data.request.response
+          .split('"')[3]
+          .replace('Skin', '')
+          .replace(' Already Exist', '')
+        Toast.Error(`O item ${itemName} já existe no seu perfil.`)
+      } else {
+        console.log(data)
+        Toast.Error(
+          'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
+        )
+      }
+    }
+  }, [data])
+
+  useEffect(() => {
+    console.log(skinsToAdvertise)
+    const subtotal = skinsToAdvertise.reduce((acc, { skin_price }) => {
+      console.log(skin_price)
+      return acc + skin_price
+    }, 0)
     setSubtotal(subtotal)
   }, [skinsToAdvertise, changeSkinToAdvertise])
 

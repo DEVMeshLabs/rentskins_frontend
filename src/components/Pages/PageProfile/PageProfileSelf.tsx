@@ -2,6 +2,7 @@
 
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
+import { ModalReturnMain } from '@/components/Modal/ModalReturnSkin/ModalReturnMain'
 import ChoiceItems from '@/components/Others/ChoiceItems'
 import PerfilPerson from '@/components/Others/PersonProfile'
 import PersonProfileSkeleton from '@/components/Others/PersonProfile/PersonProfileSkeleton'
@@ -24,10 +25,10 @@ export default function PageProfileSelf() {
   }
 
   const [page, setPage] = useState(1)
-  const [accountDate, setAccountDate] = useState('Data não obtida')
-  const [steamLevel, setSteamLevel] = useState('Não obtido')
-  const [userState, setUserState] = useState('Não obtido')
-  const [totalExchanges, setTotalExchanges] = useState('')
+  const [accountDate, setAccountDate] = useState('Data Não Obtida')
+  const [steamLevel, setSteamLevel] = useState('Não Obtido')
+  const [userState, setUserState] = useState('Não Obtido')
+  const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState(0)
 
@@ -40,8 +41,6 @@ export default function PageProfileSelf() {
       ),
     keepPreviousData: true,
   })
-
-  console.log(data?.data.skins)
 
   useEffect(() => {
     refetch()
@@ -74,6 +73,7 @@ export default function PageProfileSelf() {
 
   return (
     <>
+      <ModalReturnMain />
       {status === 'authenticated' ? (
         <PerfilPerson
           totalExchanges={totalExchanges}
@@ -93,7 +93,7 @@ export default function PageProfileSelf() {
       {isLoading || isRefetching ? (
         <AllSkeletonSkins />
       ) : data?.data.skins.length! > 0 ? (
-        <AllSkins skinsCategories={data?.data?.skins} />
+        <AllSkins itsRent={true} skinsCategories={data?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil"
