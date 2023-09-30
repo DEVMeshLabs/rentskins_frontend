@@ -10,6 +10,7 @@ export interface ISkins {
   skin_price: string
   skin_float: string
   status: string
+  median_price: number
   sale_type: string
   seller_id: string
   skin_link_game: string
