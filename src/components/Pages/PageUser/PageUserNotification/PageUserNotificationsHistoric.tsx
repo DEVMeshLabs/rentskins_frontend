@@ -30,9 +30,9 @@ export default function PageNotificationHistoric({
                   newCard={notifs.new}
                 >
                   <div className="flex items-center gap-4">
-                    <NotificationCard.Image
-                      image={notifs.skin?.skin_image || ''}
-                    />
+                    {notifs.skin?.skin_image && (
+                      <NotificationCard.Image image={notifs.skin?.skin_image} />
+                    )}
                     <NotificationCard.Content>
                       {notifs.description}
                     </NotificationCard.Content>
