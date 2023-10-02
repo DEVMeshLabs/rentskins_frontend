@@ -12,6 +12,7 @@ export default class NotificationServices {
   public static async getAllNotifsByUser(
     userId: string,
     time?: ITime,
+    pageSize?: number,
     token?: string,
   ) {
     const result: AxiosPromise<INotification[]> = await Api.post<
@@ -20,6 +21,7 @@ export default class NotificationServices {
       `/notification/userAll/${userId}`,
       {
         tempo: time || 'tudo',
+        pageSize,
       },
       { headers: { Authorization: 'Bearer ' + token } },
     )

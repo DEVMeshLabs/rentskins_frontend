@@ -6,14 +6,16 @@ import { INotification } from '@/services/interfaces/notification.interface'
 export interface INotificationHistoricProps {
   data: INotification[] | undefined
   loading: boolean
+  onClick: () => void
 }
 
 export default function PageNotificationHistoric({
   data,
   loading,
+  onClick,
 }: INotificationHistoricProps) {
   return (
-    <div className="mt-4 h-fit gap-4 overflow-y-scroll pr-4">
+    <div className="mb-4 mt-4 h-fit gap-4 overflow-y-scroll pr-4">
       <div className="flex flex-col gap-4" data-aos="fade-up">
         {!loading ? (
           data?.length ? (
@@ -48,6 +50,12 @@ export default function PageNotificationHistoric({
         ) : (
           <NotificationCard.Skeleton quantity={8} />
         )}
+        <Common.Button
+          onClick={onClick}
+          className="border-none text-mesh-color-neutral-200"
+        >
+          Exibir mais notificações...
+        </Common.Button>
       </div>
     </div>
   )
