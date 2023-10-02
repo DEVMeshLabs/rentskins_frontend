@@ -52,6 +52,7 @@ export default function PageProfileSelf() {
   })
 
   useEffect(() => {
+    console.log(dataGettedUser?.data)
     if (dataGettedUser?.data) {
       const accountDate = new Date(dataGettedUser?.data.steam_created_date)
       setAccountDate(
