@@ -12,8 +12,8 @@ export default class NotificationServices {
   public static async getAllNotifsByUser(
     userId: string,
     time?: ITime,
-    pageSize?: number,
     token?: string,
+    pageSize?: number,
   ) {
     const result: AxiosPromise<INotification[]> = await Api.post<
       INotification[]

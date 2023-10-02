@@ -65,8 +65,8 @@ export default function PageUserNotifications() {
       const allNotifications = NotificationServices.getAllNotifsByUser(
         trueSession.user?.steam?.steamid!,
         notificationFilter,
-        pageSize,
         trueSession.user?.token!,
+        pageSize,
       )
       if ((await allNotifications).data.length > 0) {
         NotificationServices.readingAllNotifications(
@@ -78,8 +78,6 @@ export default function PageUserNotifications() {
     },
     enabled: status === 'authenticated',
   })
-
-  console.log(data?.data.length)
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
