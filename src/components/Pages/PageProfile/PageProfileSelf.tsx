@@ -26,7 +26,7 @@ export default function PageProfileSelf() {
 
   const [page, setPage] = useState(1)
   const [accountDate, setAccountDate] = useState('Data Não Obtida')
-  const [steamLevel, setSteamLevel] = useState('Não Obtido')
+  const [reliability, setReliability] = useState('')
   const [userState, setUserState] = useState('Não Obtido')
   const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
@@ -51,9 +51,8 @@ export default function PageProfileSelf() {
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),
   })
 
-  console.log(dataGettedUser)
-
   useEffect(() => {
+    console.log(dataGettedUser?.data)
     if (dataGettedUser?.data) {
       const accountDate = new Date(dataGettedUser?.data.steam_created_date)
       setAccountDate(
@@ -63,7 +62,7 @@ export default function PageProfileSelf() {
           .toString()
           .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
-      setSteamLevel(dataGettedUser.data.steam_level)
+      setReliability(dataGettedUser.data.reliability)
       setUserState(dataGettedUser.data.status_member)
       setTotalExchanges(dataGettedUser.data.total_exchanges)
       setDeliveryTime(dataGettedUser.data.delivery_time)
@@ -81,7 +80,7 @@ export default function PageProfileSelf() {
           deliveryFee={deliveryFee}
           isLoading={isLoadingGetUser}
           userState={userState}
-          steamLevel={steamLevel}
+          reliability={reliability}
           accountDate={accountDate}
           picture={trueSession?.user?.image!}
           name={trueSession?.user?.name!}

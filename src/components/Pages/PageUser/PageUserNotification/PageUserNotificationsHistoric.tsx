@@ -51,12 +51,14 @@ export default function PageNotificationHistoric({
         ) : (
           <NotificationCard.Skeleton quantity={8} />
         )}
-        <Common.Button
-          onClick={onClick}
-          className="border-none text-mesh-color-neutral-200"
-        >
-          Exibir mais notificações...
-        </Common.Button>
+        {!loading && data?.length ? (
+          <Common.Button
+            onClick={onClick}
+            className="border-none text-mesh-color-neutral-200"
+          >
+            Exibir mais notificações...
+          </Common.Button>
+        ) : null}
       </div>
     </div>
   )

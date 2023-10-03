@@ -20,7 +20,7 @@ export default function PageProfileUser() {
   const trueSession = session as ISteamUser
   const [accountDate, setAccountDate] = useState('Data não obtida')
   const [page, setPage] = useState(1)
-  const [steamLevel, setSteamLevel] = useState('Não obtido')
+  const [reliability, setReliability] = useState('Não Obtido')
   const [userState, setUserState] = useState('')
   const [picture, setPicture] = useState('')
   const [name, setName] = useState('')
@@ -56,8 +56,6 @@ export default function PageProfileUser() {
     refetch()
   }, [page, refetch])
 
-  console.log(dataAllSkins?.data.skins)
-
   useEffect(() => {
     if (data?.data) {
       const accountDate = new Date(data?.data.steam_created_date)
@@ -68,7 +66,7 @@ export default function PageProfileUser() {
           .toString()
           .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
-      setSteamLevel(data?.data.steam_level)
+      setReliability(data?.data.reliability)
       setPicture(data?.data.picture)
       setName(data?.data.owner_name)
       setUserState(data?.data.status_member)
@@ -90,7 +88,7 @@ export default function PageProfileUser() {
           userState={userState}
           name={name}
           picture={picture}
-          steamLevel={steamLevel}
+          reliability={reliability}
           isSeller={false}
         />
       ) : (
