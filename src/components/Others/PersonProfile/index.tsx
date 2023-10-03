@@ -115,9 +115,7 @@ export default function PersonProfile({
                   },
                 )}
               >
-                {!isLoading && reliability === 'NaN'
-                  ? 'Membro Novo'
-                  : reliability}
+                {!isLoading && reliability && reliability}
               </p>
             </h1>
             {isSeller ?? (

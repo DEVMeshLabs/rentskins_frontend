@@ -26,7 +26,7 @@ export default function PageProfileSelf() {
 
   const [page, setPage] = useState(1)
   const [accountDate, setAccountDate] = useState('Data Não Obtida')
-  const [reliability, setReliability] = useState('Não Obtido')
+  const [reliability, setReliability] = useState('')
   const [userState, setUserState] = useState('Não Obtido')
   const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
