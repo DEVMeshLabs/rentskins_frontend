@@ -1,9 +1,8 @@
 'use client'
-import { transactionsMock } from '@/Mock/notification.transaction.mock'
 import Common from '@/components/Common'
 import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
 import { INotificationHistoricProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
-import { INotificationTransactionProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
+import { IProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
 import ISteamUser from '@/interfaces/steam.interface'
 import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
@@ -19,7 +18,7 @@ const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
   ).then((module) => module.default),
 )
-const PageNotificationTransaction = dynamic<INotificationTransactionProps>(() =>
+const PageNotificationTransaction = dynamic<IProps>(() =>
   import(
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
   ).then((module) => module.default),
@@ -156,8 +155,7 @@ export default function PageUserNotifications() {
       )}
       {searchParams.get('type') === 'transactions' && (
         <PageNotificationTransaction
-          data={transactionsMock.pending}
-          loading={isLoading}
+          steamid={trueSession.user && trueSession.user?.steam?.steamid}
         />
       )}
     </>
