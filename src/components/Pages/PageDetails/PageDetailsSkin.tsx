@@ -206,6 +206,7 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations])
 
   useEffect(() => {
+    console.log(resultAvailability?.data)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(watchRentTime!)
@@ -219,10 +220,16 @@ export function PageDetailsSkin({
       setRentTime(watchRentTime!)
       setWhatModalOpenToBuySkin(1)
       setItemAvailable(true)
-    } else if (resultAvailability?.request.status === 404) {
+    } else if (
+      resultAvailability?.request.status === 404 ||
+      resultAvailability?.request.status === 409
+    ) {
       setLoading(false)
       setItemAvailable(false)
-      Toast.Error('Desculpe, infelizmente esse item não está mais disponível.')
+      Toast.Error(
+        'Desculpe, infelizmente esse item não está mais disponível.',
+        7000,
+      )
     }
   }, [resultAvailability])
 
@@ -456,12 +463,12 @@ export function PageDetailsSkin({
               </Common.Button>,
             )}
             <ModalBuyMain
-              updateSkin={{
+              createTransaction={{
                 skinPrice: Number(skinPrice),
                 skinId,
                 token,
                 userId,
-                userName,
+                sellerId,
               }}
             />
             {renderButton(

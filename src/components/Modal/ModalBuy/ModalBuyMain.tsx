@@ -7,22 +7,22 @@ import { ModalExchangeSkin } from './ModalExchange'
 import { ModalProcessing } from '../ModalProcessing'
 import ModalPaymentMade from './ModalPamentMade'
 import ModalPaymentRefused from './ModalPaymentRefused'
-import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
-import useUserStore from '@/stores/user.store'
+import TransactionsService from '@/services/transactions.service'
+import Toast from '@/tools/toast.tool'
 
 interface IProps {
-  updateSkin: {
-    userName: string
+  createTransaction: {
     userId: string
     skinId: string
     skinPrice: number
     token: string
+    sellerId: string
   }
 }
 
 export function ModalBuyMain({
-  updateSkin: { skinId, token, userId, userName, skinPrice },
+  createTransaction: { skinId, token, userId, skinPrice, sellerId },
 }: IProps) {
   const {
     openModalBuySkin,
@@ -30,33 +30,38 @@ export function ModalBuyMain({
     whatModalOpenToBuySkin,
     setWhatModalOpenToBuySkin,
   } = useSkinsStore()
-  const { wallet } = useUserStore()
 
   const onOpenChange = () => {
     setOpenModalBuySkin(!openModalBuySkin)
   }
 
-  const { data: updatedSkin, refetch: refetchUpdatedSkin } = useQuery({
-    queryKey: ['updatedSkin'],
-    queryFn: () => SkinService.updateSkin(userName, userId, skinId, token),
-    enabled: false,
-    cacheTime: 0,
-  })
+  const { data: createTrasaction, refetch: refetchCreateTrasaction } = useQuery(
+    {
+      queryKey: ['createTrasaction'],
+      queryFn: () =>
+        TransactionsService.createTransaction(skinId, sellerId, userId, token),
+      enabled: false,
+      cacheTime: 0,
+    },
+  )
 
   useEffect(() => {
-    if (wallet.value && wallet.value < skinPrice) {
-      setWhatModalOpenToBuySkin(4)
-    } else if (updatedSkin?.status === 204) {
+    if (createTrasaction?.data && createTrasaction?.status === 201) {
       setWhatModalOpenToBuySkin(3)
+    } else if (createTrasaction?.request.status === 400) {
+      setWhatModalOpenToBuySkin(4)
+    } else if (createTrasaction?.request.status === 409) {
+      setWhatModalOpenToBuySkin(0)
+      Toast.Error('Essa skin já foi vendida.', 7000)
     }
-  }, [updatedSkin, refetchUpdatedSkin])
+  }, [createTrasaction, refetchCreateTrasaction])
 
   return (
     <Dialog.Root open={openModalBuySkin} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all">
           {whatModalOpenToBuySkin === 0 && (
-            <ModalBuySkin onClick={() => refetchUpdatedSkin()} />
+            <ModalBuySkin onClick={() => refetchCreateTrasaction()} />
           )}
           {whatModalOpenToBuySkin === 1 && <ModalExchangeSkin />}
           {whatModalOpenToBuySkin === 2 && <ModalProcessing />}
