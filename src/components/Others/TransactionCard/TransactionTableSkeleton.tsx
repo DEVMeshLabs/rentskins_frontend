@@ -28,7 +28,7 @@ export function TransactionTableSkeleton({ quantity = 4 }: IProps) {
       {Array.from({ length: quantity }).map((item, index) => (
         <div
           key={'transactions-skeleton-' + index}
-          className="grid grid-cols-6 items-center justify-start py-4 last:rounded-b-lg odd:bg-mesh-color-neutral-900 even:bg-mesh-color-neutral-800"
+          className="grid grid-cols-6 items-center justify-start py-4 first:rounded-t-lg last:rounded-b-lg odd:bg-mesh-color-neutral-900 even:bg-mesh-color-neutral-800"
         >
           <div className="flex w-full justify-center">
             <div
