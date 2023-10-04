@@ -2,7 +2,7 @@
 // import fallen from '@/assets/fallen.svg'
 import blankProfile from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import Image from 'next/image'
@@ -12,19 +12,19 @@ interface IProps {
   id: string
   picture: string
   owner_name: string
-  delivery_fee: number
+  reliability: string
   delivery_time: string
   account_date: string
   status_member: string
   steam_level: string
-  total_exchanges: string
+  total_exchanges: number
 }
 
 export function PageDetailsPerfil({
   id,
   picture,
   owner_name,
-  delivery_fee,
+  reliability,
   delivery_time,
   account_date,
   status_member,
@@ -35,6 +35,7 @@ export function PageDetailsPerfil({
     account_date === undefined
       ? 'Indefinido'
       : moment(account_date).locale('pt-br').format('MMM D, YYYY')
+  const percentReliability = Number(reliability?.replace('%', ''))
   return (
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="flex flex-col justify-between gap-8 p-4">
@@ -58,7 +59,7 @@ export function PageDetailsPerfil({
               {owner_name}
             </Common.Title>
             <span
-              className={classnames(
+              className={classNames(
                 'mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none bg-mesh-color-others-green px-3 text-sm capitalize text-mesh-color-accent-600',
                 {
                   'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
@@ -94,8 +95,31 @@ export function PageDetailsPerfil({
             <Common.Title className="text-mesh-color-neutral-200">
               Taxa de Entrega
             </Common.Title>
-            <span className="font-medium text-mesh-color-primary-1400">
-              {delivery_fee}%
+            <span
+              className={classNames(
+                { 'font-medium text-white': reliability === 'Sem informações' },
+                {
+                  'text-mesh-color-rarity-low': percentReliability < 20,
+                },
+                {
+                  'text-mesh-color-rarity-medium':
+                    percentReliability >= 20 && percentReliability < 40,
+                },
+                {
+                  'text-white':
+                    percentReliability >= 40 && percentReliability < 60,
+                },
+                {
+                  'text-mesh-color-rarity-high':
+                    percentReliability >= 60 && percentReliability < 80,
+                },
+                {
+                  'text-mesh-color-rarity-highest':
+                    percentReliability >= 80 && percentReliability < 101,
+                },
+              )}
+            >
+              {reliability && reliability}
             </span>
           </div>
 

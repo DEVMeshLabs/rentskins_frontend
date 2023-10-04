@@ -22,7 +22,7 @@ type PropsTypes = {
   userConfiguration: IOptionalConfig
   skinName: string
   skinImage: string
-  skinPrice: string
+  skinPrice: number
   skinFloat: string
   skinCategory: string
   skinWeapon: string
@@ -331,14 +331,14 @@ export function PageDetailsSkin({
         >
           <div className="flex items-center">
             <Common.Title className="text-2xl font-extrabold text-white">
-              {(parseFloat(skinPrice) * (rentPercentage / 100)).toLocaleString(
-                'PT-BR',
-                {
-                  style: 'currency',
-                  currency: 'BRL',
-                  minimumFractionDigits: 2,
-                },
-              )}
+              {(
+                parseFloat(String(skinPrice)) *
+                (rentPercentage / 100)
+              ).toLocaleString('PT-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+              })}
             </Common.Title>
             <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
               {rentPercentage}%

@@ -149,7 +149,7 @@ export function CardSkinInventory() {
                   asset_id={assetid}
                   skinImage={icon_url}
                   marketName={market_hash_name}
-                  skinName={name}
+                  skinName={market_name}
                   skinCategory={category}
                   skinWeapon={weapon}
                   statusFloat={statusFloat as string}

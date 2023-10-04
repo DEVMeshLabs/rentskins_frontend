@@ -2,6 +2,7 @@
 
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
+import { ModalReturnMain } from '@/components/Modal/ModalReturnSkin/ModalReturnMain'
 import ChoiceItems from '@/components/Others/ChoiceItems'
 import PerfilPerson from '@/components/Others/PersonProfile'
 import PersonProfileSkeleton from '@/components/Others/PersonProfile/PersonProfileSkeleton'
@@ -25,9 +26,9 @@ export default function PageProfileSelf() {
 
   const [page, setPage] = useState(1)
   const [accountDate, setAccountDate] = useState('Data Não Obtida')
-  const [steamLevel, setSteamLevel] = useState('Não Obtido')
+  const [reliability, setReliability] = useState('')
   const [userState, setUserState] = useState('Não Obtido')
-  const [totalExchanges, setTotalExchanges] = useState('')
+  const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState(0)
 
@@ -50,9 +51,8 @@ export default function PageProfileSelf() {
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),
   })
 
-  console.log(dataGettedUser)
-
   useEffect(() => {
+    console.log(dataGettedUser?.data)
     if (dataGettedUser?.data) {
       const accountDate = new Date(dataGettedUser?.data.steam_created_date)
       setAccountDate(
@@ -62,7 +62,7 @@ export default function PageProfileSelf() {
           .toString()
           .padStart(2, '0')}/${accountDate.getFullYear()}`,
       )
-      setSteamLevel(dataGettedUser.data.steam_level)
+      setReliability(dataGettedUser.data.reliability)
       setUserState(dataGettedUser.data.status_member)
       setTotalExchanges(dataGettedUser.data.total_exchanges)
       setDeliveryTime(dataGettedUser.data.delivery_time)
@@ -72,6 +72,7 @@ export default function PageProfileSelf() {
 
   return (
     <>
+      <ModalReturnMain />
       {status === 'authenticated' ? (
         <PerfilPerson
           totalExchanges={totalExchanges}
@@ -79,7 +80,7 @@ export default function PageProfileSelf() {
           deliveryFee={deliveryFee}
           isLoading={isLoadingGetUser}
           userState={userState}
-          steamLevel={steamLevel}
+          reliability={reliability}
           accountDate={accountDate}
           picture={trueSession?.user?.image!}
           name={trueSession?.user?.name!}
@@ -91,7 +92,7 @@ export default function PageProfileSelf() {
       {isLoading || isRefetching ? (
         <AllSkeletonSkins />
       ) : data?.data.skins.length! > 0 ? (
-        <AllSkins skinsCategories={data?.data?.skins} />
+        <AllSkins itsRent={true} skinsCategories={data?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil"

@@ -11,10 +11,10 @@ interface Props {
   picture?: string
   name?: string
   accountDate?: string
-  steamLevel?: string
+  reliability?: string
   isLoading?: boolean
   userState?: string
-  totalExchanges?: string
+  totalExchanges?: number
   deliveryTime?: string
   deliveryFee?: number
 }
@@ -24,13 +24,14 @@ export default function PersonProfile({
   picture,
   name,
   accountDate,
-  steamLevel,
+  reliability,
   isLoading,
   userState,
   totalExchanges,
   deliveryTime,
   deliveryFee,
 }: Props) {
+  const percentReliability = Number(reliability?.replace('%', ''))
   return (
     <section className="flex w-full justify-between font-inter">
       <div className="flex gap-6">
@@ -90,8 +91,32 @@ export default function PersonProfile({
           </div>
           <div className="flex flex-col gap-6">
             <h1 className="flex gap-1 text-lg text-white">
-              <span className="opacity-60">Steam Level:</span>
-              <strong>{!isLoading && steamLevel}</strong>
+              <span className="opacity-60">Confiabilidade:</span>
+              <p
+                className={classNames(
+                  {
+                    'text-mesh-color-rarity-low': percentReliability < 20,
+                  },
+                  {
+                    'text-mesh-color-rarity-medium':
+                      percentReliability >= 20 && percentReliability < 40,
+                  },
+                  {
+                    'text-white':
+                      percentReliability >= 40 && percentReliability < 60,
+                  },
+                  {
+                    'text-mesh-color-rarity-high':
+                      percentReliability >= 60 && percentReliability < 80,
+                  },
+                  {
+                    'text-mesh-color-rarity-highest':
+                      percentReliability >= 80 && percentReliability < 101,
+                  },
+                )}
+              >
+                {!isLoading && reliability && reliability}
+              </p>
             </h1>
             {isSeller ?? (
               <Link href={'/inventario'}>
@@ -117,10 +142,7 @@ export default function PersonProfile({
         />
         <ProfileInfo
           title="Total de Transações"
-          value={
-            (totalExchanges && totalExchanges.replace(' no momento', '')) ||
-            'Não Obtido'
-          }
+          value={totalExchanges || 'Não Obtido'}
         />
         <ProfileInfo title="Taxa de Entrega" isPercent value={deliveryFee} />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />

@@ -7,7 +7,7 @@ export interface ISkins {
   skin_color: string
   skin_category: string
   skin_weapon: string
-  skin_price: string
+  skin_price: number
   skin_float: string
   status: string
   sale_type: string
@@ -23,7 +23,7 @@ export interface ISkins {
 
 export interface ISkinsCardModal {
   skinId: string
-  skinPrice: string
+  skinPrice: number
   skinColor: string
   skinName: string
   skinImage: string

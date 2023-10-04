@@ -1,19 +1,20 @@
 'use client'
-
 import Common from '@/components/Common'
 import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
 import ISteamUser from '@/interfaces/steam.interface'
-import { ITime } from '@/services/interfaces/notification.interface'
+import { INotification } from '@/services/interfaces/notification.interface'
+import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
 import URLQuery from '@/tools/urlquery.tool'
+import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 const PageNotificationHistoric = dynamic<{
-  trueSession: ISteamUser
-  status: 'authenticated' | 'loading' | 'unauthenticated'
-  notificationFilter: ITime
+  data: INotification[] | undefined
+  loading: boolean
+  onClick: () => void
 }>(() =>
   import(
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
@@ -30,6 +31,7 @@ export default function PageUserNotifications() {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const { notificationFilter } = useFilterStore()
+  const [pageSize, setPageSize] = useState(5)
 
   const notificationLabel = () => {
     switch (notificationFilter as any) {
@@ -54,6 +56,30 @@ export default function PageUserNotifications() {
 
   const searchParams = useSearchParams()
   const router = useRouter()
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: [
+      'allNotificationsUser',
+      trueSession.user?.steam?.steamid!,
+      pageSize,
+    ],
+    queryFn: async () => {
+      const allNotifications = NotificationServices.getAllNotifsByUser(
+        trueSession.user?.steam?.steamid!,
+        notificationFilter,
+        trueSession.user?.token!,
+        pageSize,
+      )
+      if ((await allNotifications).data.length > 0) {
+        NotificationServices.readingAllNotifications(
+          trueSession.user?.steam?.steamid!,
+          trueSession.user?.token!,
+        )
+      }
+      return allNotifications
+    },
+    enabled: status === 'authenticated',
+  })
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
@@ -137,9 +163,12 @@ export default function PageUserNotifications() {
       </div>
       {searchParams.get('type') === 'historic' && (
         <PageNotificationHistoric
-          status={status}
-          trueSession={trueSession}
-          notificationFilter={notificationFilter}
+          onClick={() => {
+            setPageSize((state) => state + 5)
+            refetch()
+          }}
+          data={data?.data}
+          loading={isLoading}
         />
       )}
       {searchParams.get('type') === 'transactions' && (
