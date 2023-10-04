@@ -1,6 +1,5 @@
-import { transactionsMock } from '@/Mock/notification.transaction.mock'
 import Common from '@/components/Common'
-import { TransactionsTable } from '@/components/Others/TransactionsTable'
+// import { TransactionsTable } from '@/components/Others/TransactionsTable'
 
 export function PageSettingsTransactions() {
   return (
@@ -20,7 +19,7 @@ export function PageSettingsTransactions() {
             <span className="text-center">Tipo</span>
           </div>
           <div className="h-full w-full overflow-y-auto rounded-b-2xl bg-mesh-color-neutral-800 text-center">
-            {<TransactionsTable data={transactionsMock.finished} />}
+            {/* {<TransactionsTable data={[]} steamId="234234" />} */}
           </div>
         </div>
       </div>
