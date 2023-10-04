@@ -60,7 +60,7 @@ export default function PageNotificationTransaction({
           className="mt-4 flex h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2"
           data-aos="fade-up"
         >
-          {data ? renderPending : <TransactionCard.Skeleton quantity={3} />}
+          {!loading ? renderPending : <TransactionCard.Skeleton quantity={3} />}
         </div>
       </div>
       <div
