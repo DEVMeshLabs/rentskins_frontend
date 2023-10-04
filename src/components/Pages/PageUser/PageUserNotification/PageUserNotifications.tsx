@@ -9,7 +9,7 @@ import URLQuery from '@/tools/urlquery.tool'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 const PageNotificationHistoric = dynamic<{
   trueSession: ISteamUser
   status: 'authenticated' | 'loading' | 'unauthenticated'
@@ -30,6 +30,7 @@ export default function PageUserNotifications() {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const { notificationFilter } = useFilterStore()
+  const [pageSize, setPageSize] = useState(5)
 
   const notificationLabel = () => {
     switch (notificationFilter as any) {
@@ -54,6 +55,30 @@ export default function PageUserNotifications() {
 
   const searchParams = useSearchParams()
   const router = useRouter()
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: [
+      'allNotificationsUser',
+      trueSession.user?.steam?.steamid!,
+      pageSize,
+    ],
+    queryFn: async () => {
+      const allNotifications = NotificationServices.getAllNotifsByUser(
+        trueSession.user?.steam?.steamid!,
+        notificationFilter,
+        trueSession.user?.token!,
+        pageSize,
+      )
+      if ((await allNotifications).data.length > 0) {
+        NotificationServices.readingAllNotifications(
+          trueSession.user?.steam?.steamid!,
+          trueSession.user?.token!,
+        )
+      }
+      return allNotifications
+    },
+    enabled: status === 'authenticated',
+  })
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
@@ -140,6 +165,12 @@ export default function PageUserNotifications() {
           status={status}
           trueSession={trueSession}
           notificationFilter={notificationFilter}
+          onClick={() => {
+            setPageSize((state) => state + 5)
+            refetch()
+          }}
+          data={data?.data}
+          loading={isLoading}
         />
       )}
       {searchParams.get('type') === 'transactions' && (

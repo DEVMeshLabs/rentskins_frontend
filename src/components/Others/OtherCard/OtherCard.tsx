@@ -6,37 +6,24 @@ import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
+import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
+import { ISkins } from '@/interfaces/ISkins'
+import useModalStore from '@/stores/modal.store'
 
 interface Props {
-  id: string
-  sellerName: string
-  skinPrice: string
-  skinFloat: string
-  skinWeapon: string
-  skinColor: string
-  skinImage: string
-  deletedAt: string | null
   itsRent?: boolean
+  item: ISkins
 }
 
-export function OtherCard({
-  id,
-  sellerName,
-  skinColor,
-  skinImage,
-  skinFloat,
-  skinPrice,
-  skinWeapon,
-  deletedAt,
-  itsRent,
-}: Props) {
-  const customName = sellerName.includes('StatTrak™')
-    ? sellerName.split('™')
-    : sellerName
+export function OtherCard({ itsRent, item }: Props) {
+  const customName = item.skin_name.includes('StatTrak™')
+    ? item.skin_name.split('™')
+    : item.skin_name
 
+  const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
   return (
     <article className="relative">
-      {deletedAt !== null && (
+      {item.deletedAt !== null && (
         <div className="absolute left-1/2 top-1/3 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
           ITEM REMOVIDO
         </div>
@@ -47,7 +34,7 @@ export function OtherCard({
         )}
       >
         <Link
-          href={`/detalhes/${id}`}
+          href={`/detalhes/${item.id}`}
           className={classNames(
             'flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
             {
@@ -58,12 +45,12 @@ export function OtherCard({
         >
           <div
             className={`h-2 w-52 rounded-b-full`}
-            style={{ backgroundColor: `#${skinColor}` }}
+            style={{ backgroundColor: `#${item.skin_color}` }}
           />
           <Image
-            src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
+            src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
             className="h-[154px] w-[206px]"
-            alt={sellerName}
+            alt={item.skin_name}
             width={206}
             height={154}
             draggable={false}
@@ -76,19 +63,24 @@ export function OtherCard({
               <span className="text-mesh-color-secondary-1200 ">
                 {customName[0]}
               </span>
-              {customName[1]}
+              {customName[1].split('(')[0]}
             </h1>
           ) : (
-            customName
+            customName.split('(')[0]
           )}
         </div>
         <div className="flex items-center justify-between">
-          <h1 className="text-sm font-medium opacity-60">{skinWeapon}</h1>
+          <h1 className="text-sm font-medium opacity-60">{item.skin_weapon}</h1>
           <div className="flex gap-2">
             {itsRent && (
-              <Common.Button color="invisible">
-                <IconMagic />
-              </Common.Button>
+              <ModalEditionItemMain
+                activator={
+                  <Common.Button color="invisible">
+                    <IconMagic />
+                  </Common.Button>
+                }
+                item={item}
+              />
             )}
             <Common.Button color="invisible" className="h-9 w-9">
               <IconSteam />
@@ -100,7 +92,7 @@ export function OtherCard({
         </div>
         <div className="flex select-none items-center justify-between">
           <h1 className="text-lg font-semibold">
-            {Number(skinPrice).toLocaleString('pt-br', {
+            {Number(item.skin_price).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
@@ -108,17 +100,39 @@ export function OtherCard({
           </h1>
           <h1>
             <strong>FT / </strong>
-            <span className="opacity-60">{skinFloat}</span>
+            <span className="opacity-60">{item.skin_float}</span>
           </h1>
         </div>
-        <ColoredLine position={skinFloat} />
+        <ColoredLine position={item.skin_float} />
         <div className="flex select-none items-center justify-end">
-          <Link
-            href={`/detalhes/${id}`}
-            className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
-          >
-            Comprar
-          </Link>
+          {itsRent ? (
+            <Common.Button
+              type="button"
+              onClick={() => {
+                setSkinToReturn({
+                  skinColor: item.skin_color,
+                  skinFloat: item.skin_float,
+                  skinId: item.id,
+                  skinImage: item.skin_image,
+                  skinName: item.skin_name,
+                  skinPrice: item.skin_price,
+                  skinWeapon: item.skin_weapon,
+                  statusFloat: item.status_float,
+                })
+                setOpenModalReturnSkin(true)
+              }}
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+            >
+              Devolução
+            </Common.Button>
+          ) : (
+            <Link
+              href={`/detalhes/${item.id}`}
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+            >
+              Comprar
+            </Link>
+          )}
         </div>
       </div>
     </article>

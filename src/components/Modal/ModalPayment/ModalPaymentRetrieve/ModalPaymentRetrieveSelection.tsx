@@ -4,7 +4,6 @@ import ImageMastercard from '@/../public/payment/mastercard.png'
 import ImagePaypal from '@/../public/payment/paypal.png'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
-import { IconShield } from '@/components/Icons'
 import useComponentStore from '@/stores/components.store'
 import usePaymentStore from '@/stores/payment.store'
 import useUserStore from '@/stores/user.store'
@@ -12,6 +11,7 @@ import Image, { StaticImageData } from 'next/image'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './selection.schema'
+import IconShieldGreen from '@/components/Icons/IconShieldGreen'
 
 export function ModalPaymentRetrieveSelection() {
   const { wallet } = useUserStore()
@@ -104,12 +104,7 @@ export function ModalPaymentRetrieveSelection() {
         </div>
         <div className="flex items-center gap-2 text-mesh-color-neutral-200">
           <div className="flex items-center justify-center rounded-lg bg-mesh-color-primary-1900/20 px-2 py-2">
-            <IconShield
-              width={16}
-              height={16}
-              stroke="#C5EA56"
-              fill="#C5EA56"
-            />
+            <IconShieldGreen />
           </div>
           <span> Segurança KYC </span>
         </div>

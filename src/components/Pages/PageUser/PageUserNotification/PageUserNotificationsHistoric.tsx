@@ -50,15 +50,16 @@ export default function PageNotificationHistoric({
 
               const diffMilliseconds = currentTimestamp - timestamp.getTime()
               const diffMinutes = Math.floor(diffMilliseconds / (1000 * 60))
+
               return (
                 <NotificationCard.Root
                   key={'notification-' + index}
                   newCard={notifs.new}
                 >
                   <div className="flex items-center gap-4">
-                    <NotificationCard.Image
-                      image={notifs.skin?.skin_image || ''}
-                    />
+                    {notifs.skin?.skin_image && (
+                      <NotificationCard.Image image={notifs.skin?.skin_image} />
+                    )}
                     <NotificationCard.Content>
                       {notifs.description}
                     </NotificationCard.Content>
@@ -75,6 +76,14 @@ export default function PageNotificationHistoric({
         ) : (
           <NotificationCard.Skeleton quantity={8} />
         )}
+        {!loading && data?.length ? (
+          <Common.Button
+            onClick={onClick}
+            className="border-none text-mesh-color-neutral-200"
+          >
+            Exibir mais notificações...
+          </Common.Button>
+        ) : null}
       </div>
     </div>
   )

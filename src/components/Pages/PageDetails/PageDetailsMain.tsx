@@ -89,12 +89,12 @@ export default function PageDetailsMain({ item, seller }: IProps) {
           <PageDetailsPerfil
             id={seller.owner_id}
             account_date={seller.steam_created_date!}
-            delivery_fee={seller.delivery_fee!}
+            reliability={'30%'}
             delivery_time={seller.delivery_time!}
             owner_name={seller.owner_name!}
             picture={seller.picture!}
             status_member={seller.status_member!}
-            steam_level={seller.steam_level!}
+            steam_level={''}
             total_exchanges={seller.total_exchanges!}
           />
         </div>
