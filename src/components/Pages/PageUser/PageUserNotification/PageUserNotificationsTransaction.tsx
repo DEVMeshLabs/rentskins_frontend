@@ -97,7 +97,7 @@ export default function PageNotificationTransaction({
             renderTransactions && renderTransactions?.length > 0 ? (
               renderTransactions
             ) : (
-              <span className="rounded-md bg-mesh-color-neutral-800 py-3 text-center text-white">
+              <span className="rounded-md bg-mesh-color-neutral-800 py-3 text-center text-lg text-white">
                 Sem transações pendentes no momento.
               </span>
             )

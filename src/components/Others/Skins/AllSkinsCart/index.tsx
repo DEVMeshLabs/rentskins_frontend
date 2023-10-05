@@ -54,6 +54,8 @@ export default function AllSkinsCart() {
               (
                 {
                   skin: {
+                    seller_id,
+                    status_float,
                     skin_price,
                     skin_name,
                     name_color,
@@ -68,6 +70,12 @@ export default function AllSkinsCart() {
               ) => {
                 return (
                   <CartSkinCard
+                    sellerId={seller_id}
+                    skinId={id}
+                    userId={
+                      trueSession.user && trueSession.user?.steam?.steamid
+                    }
+                    statusFloat={status_float}
                     skinPrice={skin_price}
                     skinWeapon={skin_weapon}
                     iconUrl={skin_image}

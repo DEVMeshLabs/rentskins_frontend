@@ -5,6 +5,7 @@ import { TransactionImage } from './TransactionImage'
 import { TransactionLabel } from './TransactionLabel'
 import { TransactionSkeleton } from './TransactionSkeleton'
 import TransactionRoot from './TransactionRoot'
+import { TransactionTableSkeleton } from './TransactionTableSkeleton'
 
 const TransactionCard = {
   Root: TransactionRoot,
@@ -14,6 +15,7 @@ const TransactionCard = {
   Actions: TransactionActions,
   Button: TransactionButton,
   Skeleton: TransactionSkeleton,
+  SkeletonTable: TransactionTableSkeleton,
 }
 
 export default TransactionCard

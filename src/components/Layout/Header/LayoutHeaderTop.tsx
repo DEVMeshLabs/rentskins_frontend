@@ -46,6 +46,8 @@ export function LayoutHeaderTop() {
   const trueSession = session as ISteamUser
   const router = useRouter()
 
+  console.log(trueSession)
+
   useEffect(() => {
     if (trueSession?.user?.steam?.banned) {
       VerificationTool.suspendAccount(trueSession, true, router)
