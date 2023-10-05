@@ -34,13 +34,13 @@ export function TransactionsTable({ data, steamId }: IProps) {
     }
   }
 
-  return data.length > 0 ? (
+  return (
     <div>
       {data.map((item, index) => (
         <div
           key={index}
           className={
-            'grid grid-cols-6 items-center py-4 last:rounded-b-lg odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
+            'grid grid-cols-6 items-center py-4 first:rounded-t-lg last:rounded-b-lg odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
           }
         >
           <div className="flex items-center justify-center">
@@ -103,10 +103,6 @@ export function TransactionsTable({ data, steamId }: IProps) {
           </div>
         </div>
       ))}
-    </div>
-  ) : (
-    <div className="flex h-5/6 items-center justify-center text-mesh-color-neutral-400">
-      Histórico de transações vazio.
     </div>
   )
 }
