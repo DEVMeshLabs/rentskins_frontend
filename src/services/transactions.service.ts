@@ -3,6 +3,15 @@ import { Api } from '@/providers'
 import { AxiosPromise } from 'axios'
 import { ITransaction } from './interfaces/transaction.interface'
 
+interface IParamsCreateTransaction {
+  skinsToBuy: {
+    skin_id: string
+    seller_id: string
+    buyer_id: string
+  }[]
+  token: string
+}
+
 export default class TransactionsService {
   public static async getUserTransactions(steamid: string) {
     return (await Api.get(`/transaction/${steamid}`)
@@ -10,23 +19,13 @@ export default class TransactionsService {
       .catch((e) => e)) as AxiosPromise<ITransaction[]>
   }
 
-  public static async createTransaction(
-    skin_id: string,
-    seller_id: string,
-    buyer_id: string,
-    token: string,
-  ) {
-    return Api.post(
-      '/transaction',
-      {
-        skin_id,
-        seller_id,
-        buyer_id,
-      },
-      {
-        headers: { Authorization: 'Bearer ' + token },
-      },
-    )
+  public static async createTransaction({
+    skinsToBuy,
+    token,
+  }: IParamsCreateTransaction) {
+    return Api.post('/transaction', skinsToBuy, {
+      headers: { Authorization: 'Bearer ' + token },
+    })
       .then((response) => response)
       .catch((e) => e) as AxiosPromise<ITransaction[]>
   }
