@@ -26,6 +26,10 @@ const useCartStore = create<ICartStore>((set) => ({
       skinsToBuy: skinsToBuy.filter(({ skin_id }) => skin_id !== skinId),
     }))
   },
+
+  clearSkinsToBuy: () => {
+    set(() => ({ skinsToBuy: [] }))
+  },
 }))
 
 export default useCartStore
