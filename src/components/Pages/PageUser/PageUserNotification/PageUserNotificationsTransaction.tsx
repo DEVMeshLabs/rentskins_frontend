@@ -19,13 +19,20 @@ export default function PageNotificationTransaction({
     enabled: !!steamid,
   })
 
-  const renderTransactions = transactions?.data?.map((item, index) => {
-    if (item.status === 'Em andamento') {
+  const renderTransactions = transactions?.data
+    ?.filter((item, index) => {
+      if (item.status === 'Em andamento') {
+        return true
+      }
+      return false
+    })
+    .map((item, index) => {
+      console.log(item)
       const isABuyer = item.buyer_id === steamid
 
       if (
         (isABuyer && item.buyer_confirm !== 'Pendente') ||
-        (!isABuyer && item.seller_confirm !== 'Pendente') // ALTERAR
+        (!isABuyer && item.seller_confirm !== 'Pendente')
       )
         return (
           <TransactionCard.Root key={'transactions-' + index}>
@@ -75,9 +82,9 @@ export default function PageNotificationTransaction({
             </TransactionCard.Actions>
           </TransactionCard.Root>
         )
-    }
-    return null
-  })
+
+      return null
+    })
 
   return (
     <div>
@@ -87,7 +94,13 @@ export default function PageNotificationTransaction({
         </span>
         <div className="mt-4 flex max-h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2">
           {!isLoading ? (
-            renderTransactions
+            renderTransactions && renderTransactions?.length > 0 ? (
+              renderTransactions
+            ) : (
+              <span className="rounded-md bg-mesh-color-neutral-800 py-3 text-center text-white">
+                Sem transações pendentes no momento.
+              </span>
+            )
           ) : (
             <TransactionCard.Skeleton quantity={3} />
           )}

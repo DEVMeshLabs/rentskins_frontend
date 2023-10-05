@@ -62,12 +62,12 @@ export function TransactionsTable({ data, steamid }: IProps) {
            px-8 py-8 opacity-0
           transition-all group-hover:visible group-hover:opacity-100"
             >
-              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2">
+              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2 text-sm">
                 {item.skin.skin_name}
               </p>
             </div>
             <p
-              className={`group w-40 overflow-hidden text-ellipsis text-lg
+              className={`group h-[80px] w-40 overflow-hidden text-ellipsis text-lg
           font-medium ${
             item.skin.skin_name.includes('StatTrak')
               ? 'text-mesh-color-secondary-800'
