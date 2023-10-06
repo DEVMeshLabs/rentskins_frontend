@@ -3,6 +3,7 @@ import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
 import classNames from 'classnames'
 import Image from 'next/image'
+import Link from 'next/link'
 
 type PropsType = {
   skinImage: string
@@ -39,19 +40,19 @@ export function PageDetailsCard({
         <div className="flex h-full w-full flex-col justify-between gap-8">
           {deletedAt === null && (
             <div className="flex select-none space-x-2 p-2">
-              <a href={skinLinkSteam} target="_blank" rel="noreferrer">
+              <Link href={skinLinkSteam} target="_blank" rel="noreferrer">
                 <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
                   <IconSteam />
                   Visualizar no Mercado da Steam
                 </div>
-              </a>
+              </Link>
 
-              <a target="_blank" href={skinLinkGame} rel="noreferrer">
+              <Link target="_blank" href={skinLinkGame} rel="noreferrer">
                 <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all hover:opacity-100">
                   <IconOlho />
                   Inspecionar no Jogo
                 </div>
-              </a>
+              </Link>
             </div>
           )}
 
