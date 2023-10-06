@@ -31,24 +31,27 @@ export default function PageUserNotifications() {
   const [pageSize, setPageSize] = useState(5)
 
   const notificationLabel = () => {
-    switch (notificationFilter as any) {
-      case 'hoje':
-        return 'Hoje'
-      case 'tresdias':
-        return '1-3 Dias'
-      case 'tresmes':
-        return '3 Meses'
-      case 'tudo':
-        return 'Tudo'
-      case 'umano':
-        return '1 Ano'
-      case 'ummes':
-        return '1 Mês'
-      case 'umasemana':
-        return '1 Semana'
-      default:
-        return 'Mais Tempo'
-    }
+    console.log(notificationFilter)
+    console.log(
+      {
+        tudo: 'Tudo',
+        hoje: 'Hoje',
+        tresDias: '1-3 Dias',
+        umaSemana: '1 Semana',
+        umMes: '1 Mês',
+        tresMes: '3 Meses',
+        umAno: '1 Ano',
+      }[notificationFilter],
+    )
+    return {
+      tudo: 'Tudo',
+      hoje: 'Hoje',
+      tresDias: '1-3 Dias',
+      umaSemana: '1 Semana',
+      umMes: '1 Mês',
+      tresMes: '3 Meses',
+      umAno: '1 Ano',
+    }[notificationFilter]
   }
 
   const searchParams = useSearchParams()
@@ -59,6 +62,7 @@ export default function PageUserNotifications() {
       'allNotificationsUser',
       trueSession.user?.steam?.steamid!,
       pageSize,
+      notificationFilter,
     ],
     queryFn: async () => {
       const allNotifications = NotificationServices.getAllNotifsByUser(
@@ -77,6 +81,8 @@ export default function PageUserNotifications() {
     },
     enabled: status === 'authenticated',
   })
+
+  console.log(data)
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
