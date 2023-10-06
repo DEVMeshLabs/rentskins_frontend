@@ -49,7 +49,7 @@ export default function PageNotificationHistoric({
             </Common.Title>
           )
         ) : (
-          <NotificationCard.Skeleton quantity={8} />
+          <NotificationCard.Skeleton quantity={5} />
         )}
         {!loading && data?.length ? (
           <Common.Button
