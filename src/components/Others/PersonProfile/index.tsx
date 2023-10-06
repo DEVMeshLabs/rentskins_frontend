@@ -111,7 +111,7 @@ export default function PersonProfile({
                   },
                   {
                     'text-mesh-color-rarity-highest':
-                      percentReliability >= 80 && percentReliability < 101,
+                      percentReliability >= 80 && percentReliability <= 100,
                   },
                 )}
               >
