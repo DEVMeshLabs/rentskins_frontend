@@ -30,7 +30,7 @@ export default function PageProfileSelf() {
   const [userState, setUserState] = useState('Não Obtido')
   const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
-  const [deliveryFee, setDeliveryFee] = useState(0)
+  const [deliveryFee, setDeliveryFee] = useState<number | string>(0)
 
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
@@ -66,7 +66,14 @@ export default function PageProfileSelf() {
       setUserState(dataGettedUser.data.status_member)
       setTotalExchanges(dataGettedUser.data.total_exchanges)
       setDeliveryTime(dataGettedUser.data.delivery_time)
-      setDeliveryFee(dataGettedUser.data.delivery_fee)
+      setDeliveryFee(
+        dataGettedUser.data.total_exchanges_completed &&
+          dataGettedUser.data.total_exchanges
+          ? (dataGettedUser.data.total_exchanges_completed /
+              dataGettedUser.data.total_exchanges) *
+              100
+          : 'Membro Novo',
+      )
     }
   }, [dataGettedUser])
 

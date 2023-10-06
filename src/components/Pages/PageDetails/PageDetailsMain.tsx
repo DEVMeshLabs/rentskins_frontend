@@ -33,6 +33,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     enabled: status === 'authenticated',
   })
 
+  console.log(seller)
+
   const { data: latestSales } = useQuery({
     queryKey: ['latestSales', seller.owner_id],
     queryFn: () => UserService.getLatestSales(seller.owner_id),
@@ -89,12 +91,16 @@ export default function PageDetailsMain({ item, seller }: IProps) {
           <PageDetailsPerfil
             id={seller.owner_id}
             account_date={seller.steam_created_date!}
+            delivery_rate={
+              seller.total_exchanges_completed && seller.total_exchanges
+                ? (seller.total_exchanges_completed / seller.total_exchanges) *
+                  100
+                : 'Membro Novo'
+            }
             reliability={seller.reliability}
             delivery_time={seller.delivery_time!}
             owner_name={seller.owner_name!}
             picture={seller.picture!}
-            status_member={seller.status_member!}
-            steam_level={''}
             total_exchanges={seller.total_exchanges!}
           />
         </div>
