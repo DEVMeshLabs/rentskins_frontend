@@ -31,7 +31,7 @@ export default function PageNotificationHistoric({
                   key={'notification-' + index}
                   newCard={notifs.new}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex h-14 items-center gap-4">
                     {notifs.skin?.skin_image && (
                       <NotificationCard.Image image={notifs.skin?.skin_image} />
                     )}

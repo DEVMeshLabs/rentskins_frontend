@@ -29,6 +29,8 @@ export function NotificationTime({ timestamp }: IProps) {
     }
   }
   return (
-    <span className="p-3 text-mesh-color-neutral-400">{handleTimestamp()}</span>
+    <span className="whitespace-nowrap p-3 text-mesh-color-neutral-400">
+      {handleTimestamp()}
+    </span>
   )
 }
