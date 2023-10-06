@@ -33,11 +33,11 @@ export function ModalNotificationFilter({ activator }: IProps) {
   const filterLabels = [
     { value: 'tudo', label: 'Tudo' },
     { value: 'hoje', label: 'Hoje' },
-    { value: 'tresdias', label: '1-3 Dias' },
-    { value: 'umasemana', label: '1 Semana' },
-    { value: 'ummes', label: '1 Mês' },
-    { value: 'tresmes', label: '3 Meses' },
-    { value: 'umano', label: '1 Ano' },
+    { value: 'tresDias', label: '1-3 Dias' },
+    { value: 'umaSemana', label: '1 Semana' },
+    { value: 'umMes', label: '1 Mês' },
+    { value: 'tresMes', label: '3 Meses' },
+    { value: 'umAno', label: '1 Ano' },
   ]
 
   return (
