@@ -136,10 +136,13 @@ export function CardSkinInventory() {
                 !tags[0].name.includes('Sticker') &&
                 !tags[0].name.includes('Agent')
               const category = type.split(' ').pop()!
-              const weapon = tags[1].name
+              const weapon = name.includes('Gloves')
+                ? tags[0].name
+                : tags[1].name
               const isSelected = skinsToAdvertise.some(
                 ({ id }) => assetid === id,
               )
+
               const linkForPreviewSkin = actions[0].link
 
               console.log(linkForPreviewSkin)
