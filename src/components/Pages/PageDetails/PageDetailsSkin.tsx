@@ -372,7 +372,7 @@ export function PageDetailsSkin({
 
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
-            ID Padrão
+            Paint Seed
           </Common.Title>
           <p className="text-white">{defaultID}</p>
         </div>
