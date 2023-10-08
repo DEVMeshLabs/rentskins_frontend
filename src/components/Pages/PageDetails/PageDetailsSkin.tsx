@@ -396,13 +396,6 @@ export function PageDetailsSkin({
           </Common.Title>
           <p className="text-white">{skinCategory}</p>
         </div>
-
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            Arma
-          </Common.Title>
-          <p className="text-white">{skinWeapon}</p>
-        </div>
       </div>
 
       <div className="mt-6 flex flex-col gap-4">
