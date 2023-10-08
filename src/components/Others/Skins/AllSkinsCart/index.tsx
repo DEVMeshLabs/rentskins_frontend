@@ -38,7 +38,7 @@ export default function AllSkinsCart() {
   }, [dataSkinsCart?.data, setSkinsFromCart])
 
   return (
-    <div className="flex h-full w-[798px] flex-col items-center gap-6">
+    <div className="flex h-full min-h-screen w-[798px] flex-col items-center gap-6">
       <LayoutLoading
         enabled={isLoading}
         label="Carregando..."
@@ -54,6 +54,8 @@ export default function AllSkinsCart() {
               (
                 {
                   skin: {
+                    seller_id,
+                    status_float,
                     skin_price,
                     skin_name,
                     name_color,
@@ -68,6 +70,12 @@ export default function AllSkinsCart() {
               ) => {
                 return (
                   <CartSkinCard
+                    sellerId={seller_id}
+                    skinId={id}
+                    userId={
+                      trueSession.user && trueSession.user?.steam?.steamid
+                    }
+                    statusFloat={status_float}
                     skinPrice={skin_price}
                     skinWeapon={skin_weapon}
                     iconUrl={skin_image}
@@ -75,6 +83,7 @@ export default function AllSkinsCart() {
                     nameColor={name_color}
                     key={`${name}-${idx}`}
                     handleOnClick={() => {
+                      deleteSkinFromCart(id)
                       deleteSkinFromCart(id)
                     }}
                     modelId={modelId}

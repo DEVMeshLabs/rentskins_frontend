@@ -1,10 +1,8 @@
 'use client'
-
-import { transactionsMock } from '@/Mock/notification.transaction.mock'
 import Common from '@/components/Common'
 import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
 import { INotificationHistoricProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
-import { INotificationTransactionProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
+import { IProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
 import ISteamUser from '@/interfaces/steam.interface'
 import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
@@ -14,13 +12,13 @@ import Aos from 'aos'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
   import(
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
   ).then((module) => module.default),
 )
-const PageNotificationTransaction = dynamic<INotificationTransactionProps>(() =>
+const PageNotificationTransaction = dynamic<IProps>(() =>
   import(
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
   ).then((module) => module.default),
@@ -30,38 +28,48 @@ export default function PageUserNotifications() {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const { notificationFilter } = useFilterStore()
+  const [pageSize, setPageSize] = useState(5)
 
   const notificationLabel = () => {
-    switch (notificationFilter as any) {
-      case 'hoje':
-        return 'Hoje'
-      case 'tresdias':
-        return '1-3 Dias'
-      case 'tresmes':
-        return '3 Meses'
-      case 'tudo':
-        return 'Tudo'
-      case 'umano':
-        return '1 Ano'
-      case 'ummes':
-        return '1 Mês'
-      case 'umasemana':
-        return '1 Semana'
-      default:
-        return 'Mais Tempo'
-    }
+    console.log(notificationFilter)
+    console.log(
+      {
+        tudo: 'Tudo',
+        hoje: 'Hoje',
+        tresDias: '1-3 Dias',
+        umaSemana: '1 Semana',
+        umMes: '1 Mês',
+        tresMes: '3 Meses',
+        umAno: '1 Ano',
+      }[notificationFilter],
+    )
+    return {
+      tudo: 'Tudo',
+      hoje: 'Hoje',
+      tresDias: '1-3 Dias',
+      umaSemana: '1 Semana',
+      umMes: '1 Mês',
+      tresMes: '3 Meses',
+      umAno: '1 Ano',
+    }[notificationFilter]
   }
 
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['allNotificationsUser', trueSession.user?.steam?.steamid!],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: [
+      'allNotificationsUser',
+      trueSession.user?.steam?.steamid!,
+      pageSize,
+      notificationFilter,
+    ],
     queryFn: async () => {
       const allNotifications = NotificationServices.getAllNotifsByUser(
         trueSession.user?.steam?.steamid!,
         notificationFilter,
         trueSession.user?.token!,
+        pageSize,
       )
       if ((await allNotifications).data.length > 0) {
         NotificationServices.readingAllNotifications(
@@ -73,6 +81,8 @@ export default function PageUserNotifications() {
     },
     enabled: status === 'authenticated',
   })
+
+  console.log(data)
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
@@ -140,12 +150,18 @@ export default function PageUserNotifications() {
         )}
       </div>
       {searchParams.get('type') === 'historic' && (
-        <PageNotificationHistoric data={data?.data} loading={isLoading} />
+        <PageNotificationHistoric
+          onClick={() => {
+            setPageSize((state) => state + 5)
+            refetch()
+          }}
+          data={data?.data}
+          loading={isLoading}
+        />
       )}
       {searchParams.get('type') === 'transactions' && (
         <PageNotificationTransaction
-          data={transactionsMock.pending}
-          loading={isLoading}
+          steamid={trueSession.user && trueSession.user?.steam?.steamid}
         />
       )}
     </>

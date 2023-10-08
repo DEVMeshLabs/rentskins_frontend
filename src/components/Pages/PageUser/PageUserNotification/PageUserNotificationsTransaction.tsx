@@ -1,54 +1,65 @@
-import Common from '@/components/Common'
 import TransactionCard from '@/components/Others/TransactionCard'
-import { StaticImageData } from 'next/image'
-// import TransactionsTable from '../Settings/Transactions/table'
+import { TransactionsTable } from '@/components/Others/TransactionsTable'
+import { useQuery } from '@tanstack/react-query'
+import TransactionsService from '@/services/transactions.service'
 
-interface IData {
-  image: string | StaticImageData
-  name: string
-  weapon: string
-  condition: string
-  float: number
-  value: number
+export interface IProps {
+  steamid: string | undefined
 }
+export default function PageNotificationTransaction({ steamid }: IProps) {
+  const { data: transactions, isLoading } = useQuery({
+    queryKey: ['Transactions', steamid],
+    queryFn: () => TransactionsService.getUserTransactions(steamid!),
+    enabled: !!steamid,
+  })
 
-export interface INotificationTransactionProps {
-  data: IData[]
-  loading: boolean
-}
-
-export default function PageNotificationTransaction({
-  data,
-  loading,
-}: INotificationTransactionProps) {
-  const renderPending = data.map((item, index) => (
-    <TransactionCard.Root key={'transactions-' + index}>
-      <div className="flex items-center gap-4">
-        <TransactionCard.Image image={item.image} alt={item.name} />
-        <TransactionCard.Label name={item.name} weapon={item.weapon} />
-      </div>
-      <TransactionCard.Content
-        text={item.condition}
-        subtext={item.float}
-        textIsCurrency={false}
-      />
-      <TransactionCard.Content text={item.value} textIsCurrency />
-      <TransactionCard.Actions>
-        <TransactionCard.Button
-          modal
-          modalOptions={{ action: 'accept', id: index + 1 }}
-          buttonStyle="full"
-          text="Aceitar troca"
-        />
-        <TransactionCard.Button
-          modal
-          modalOptions={{ action: 'decline', id: index + 1 }}
-          buttonStyle="opaque"
-          text="Cancelar"
-        />
-      </TransactionCard.Actions>
-    </TransactionCard.Root>
-  ))
+  const renderTransactions = transactions?.data?.map((item, index) => {
+    if (item.status === 'Em andamento') {
+      return (
+        <>
+          <TransactionCard.Root key={'transactions-' + index}>
+            <div className="flex items-center gap-4">
+              <TransactionCard.Image
+                image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+                alt={item.skin.skin_name}
+              />
+              <TransactionCard.Label
+                name={item.skin.skin_name}
+                weapon={item.skin.skin_weapon}
+              />
+            </div>
+            <TransactionCard.Content
+              text={item.skin.status_float}
+              subtext={item.skin.skin_float}
+              textIsCurrency={false}
+            />
+            <TransactionCard.Content
+              text={item.skin.skin_price}
+              textIsCurrency
+              subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
+            />
+            <TransactionCard.Actions>
+              <TransactionCard.Button
+                modal
+                modalOptions={{ action: 'accept', id: index + 1 }}
+                buttonStyle="full"
+                text={
+                  item.buyer_id === steamid ? 'Item Obtido' : 'Item Enviado'
+                }
+              />
+              <TransactionCard.Button
+                modal
+                modalOptions={{ action: 'decline', id: index + 1 }}
+                buttonStyle="opaque"
+                text={item.buyer_id === steamid ? 'Não Obtido' : 'Não Enviado'}
+              />
+            </TransactionCard.Actions>
+          </TransactionCard.Root>
+        </>
+      )
+    }
+    return null
+  })
 
   return (
     <div>
@@ -57,10 +68,14 @@ export default function PageNotificationTransaction({
           Pendentes
         </span>
         <div
-          className="mt-4 flex h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2"
+          className="mt-4 flex w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2"
           data-aos="fade-up"
         >
-          {data ? renderPending : <TransactionCard.Skeleton quantity={3} />}
+          {!isLoading ? (
+            renderTransactions
+          ) : (
+            <TransactionCard.Skeleton quantity={3} />
+          )}
         </div>
       </div>
       <div
@@ -77,14 +92,11 @@ export default function PageNotificationTransaction({
           <span className="text-center">Tipo</span>
         </div>
         <div className="mb-16 mt-4 w-full text-center">
-          <Common.Title
-            bold={600}
-            size="xl"
-            className="flex h-32 w-full items-center justify-center rounded-md bg-mesh-color-neutral-800 text-white"
-          >
-            Vazio.
-          </Common.Title>
-          {/* {<TransactionsTable data={transactionsMock.finished} />} */}
+          {!isLoading ? (
+            <TransactionsTable data={transactions?.data!} steamId={steamid} />
+          ) : (
+            <TransactionCard.SkeletonTable />
+          )}
         </div>
       </div>
     </div>
