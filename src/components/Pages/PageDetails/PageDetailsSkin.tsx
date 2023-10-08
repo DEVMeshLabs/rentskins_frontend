@@ -68,6 +68,7 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
+  const customName = skinName.split('(')[0]
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -313,7 +314,7 @@ export function PageDetailsSkin({
       <div className="space-y-4">
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            {skinName}
+            {customName}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">{statusFloat}</p>
         </div>
