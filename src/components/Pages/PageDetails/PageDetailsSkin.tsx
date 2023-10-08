@@ -383,10 +383,6 @@ export function PageDetailsSkin({
           </Common.Title>
           <div className="flex items-center">
             <p className="text-white">{skinFloat}</p>
-            <div
-              className={`ml-2 h-[17px] w-[17px] rounded-[3px]`}
-              style={{ background: `#${skinColor}` }}
-            />
           </div>
         </div>
 
