@@ -135,7 +135,9 @@ export function CardSkinInventory() {
               const itemIsAWeapon =
                 !tags[0].name.includes('Sticker') &&
                 !tags[0].name.includes('Agent')
-              const category = type.split(' ').pop()!
+              const completeType = type.split(' ')
+              const category = completeType.pop()!
+              const rarity = completeType.join(' ')
               const weapon = name.includes('Gloves')
                 ? tags[0].name
                 : tags[1].name
@@ -156,7 +158,7 @@ export function CardSkinInventory() {
                   skinCategory={category}
                   skinWeapon={weapon}
                   statusFloat={statusFloat as string}
-                  skinColor={name_color}
+                  skinRarity={rarity}
                   float={'0.2555'}
                   linkForPreviewSkin={linkForPreviewSkin}
                   linkForProfile={trueSession.user?.steam?.profileurl!}

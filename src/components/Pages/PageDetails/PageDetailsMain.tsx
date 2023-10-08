@@ -78,7 +78,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             skinFloat={item.skin_float}
             skinCategory={item.skin_category}
             skinWeapon={item.skin_weapon}
-            skinColor={item.skin_color}
+            skinRarity={item.skin_rarity}
             skinMedianPrice={item.median_price}
             sellerId={item.seller_id}
             statusFloat={item.status_float}

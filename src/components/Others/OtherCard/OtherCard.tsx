@@ -9,6 +9,7 @@ import ColoredLine from '../ColoredLine'
 import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
 import { ISkins } from '@/interfaces/ISkins'
 import useModalStore from '@/stores/modal.store'
+import transformRarityInColor from '@/utils/transformRarityInColor'
 
 interface Props {
   itsRent?: boolean
@@ -45,7 +46,9 @@ export function OtherCard({ itsRent, item }: Props) {
         >
           <div
             className={`h-2 w-52 rounded-b-full`}
-            style={{ backgroundColor: `#${item.skin_color}` }}
+            style={{
+              backgroundColor: `#${transformRarityInColor(item.skin_rarity)}`,
+            }}
           />
           <Image
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
@@ -122,7 +125,7 @@ export function OtherCard({ itsRent, item }: Props) {
               type="button"
               onClick={() => {
                 setSkinToReturn({
-                  skinColor: item.skin_color,
+                  skinRarity: item.skin_rarity,
                   skinFloat: item.skin_float,
                   skinId: item.id,
                   skinImage: item.skin_image,

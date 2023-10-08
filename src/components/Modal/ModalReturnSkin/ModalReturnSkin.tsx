@@ -22,7 +22,7 @@ export function ModalReturnSkin({ onClick }: IProps) {
     >
       <CardSkinModal.Root>
         <CardSkinModal.Content
-          skinColor={skinToReturn?.skinColor!}
+          skinRarity={skinToReturn?.skinRarity!}
           skinFloat={skinToReturn?.skinFloat!}
           skinImage={skinToReturn?.skinImage!}
           skinName={skinToReturn?.skinName!}

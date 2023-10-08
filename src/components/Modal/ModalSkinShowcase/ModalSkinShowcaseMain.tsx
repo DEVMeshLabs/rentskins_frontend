@@ -18,7 +18,7 @@ interface IProps {
   skinWeapon: string
   statusFloat: string
   marketName: string
-  skinColor: string
+  skinRarity: string
   skinCategory: string
   id: string
   isSelected: boolean
@@ -36,7 +36,7 @@ export function ModalSkinShowcaseMain({
   float,
   skinCategory,
   marketName,
-  skinColor,
+  skinRarity,
   skinName,
   isSelected,
   asset_id,
@@ -90,7 +90,7 @@ export function ModalSkinShowcaseMain({
                 recomended_price={averagePrice?.data[0] || 'Não encontrado'}
                 sale_type={'sale'}
                 skin_category={skinCategory}
-                skin_color={skinColor}
+                skin_rarity={skinRarity}
                 skin_float={float}
                 skin_image={skinImage}
                 skin_link_game={linkForPreviewSkin}
