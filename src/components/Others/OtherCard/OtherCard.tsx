@@ -24,7 +24,7 @@ export function OtherCard({ itsRent, item }: Props) {
   return (
     <article className="relative">
       {item.deletedAt !== null && (
-        <div className="absolute left-1/2 top-1/3 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
+        <div className="absolute left-1/2 top-1/4 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
           ITEM REMOVIDO
         </div>
       )}
