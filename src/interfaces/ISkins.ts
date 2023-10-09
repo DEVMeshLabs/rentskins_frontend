@@ -13,7 +13,7 @@ export interface ISkins {
   skin_float: string
   status: string
   median_price: number
-  sale_type: string
+  sale_type: 'sale' | 'rent'
   seller_id: string
   skin_link_game: string
   skin_link_steam: string

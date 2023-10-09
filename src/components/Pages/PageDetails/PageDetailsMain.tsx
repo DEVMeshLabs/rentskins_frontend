@@ -65,6 +65,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
 
         <div className="col-span-2 grid grid-rows-2 gap-4">
           <PageDetailsSkin
+            saleType={item.sale_type}
             token={trueSession.user?.token!}
             userName={trueSession.user?.name!}
             skinImage={item.skin_image}

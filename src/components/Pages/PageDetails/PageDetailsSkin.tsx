@@ -41,6 +41,7 @@ type PropsTypes = {
   userId: string
   userName: string
   token: string
+  saleType: 'sale' | 'rent'
 }
 
 export function PageDetailsSkin({
@@ -62,7 +63,7 @@ export function PageDetailsSkin({
   assetId,
   ownerSkin,
   userId,
-  userName,
+  saleType,
   token,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
@@ -412,62 +413,67 @@ export function PageDetailsSkin({
 
       <div className="mt-6 flex flex-col gap-4">
         <div className="">
-          <Common.Title className="font-semibold text-white">
-            Selecione o período de Aluguel
-          </Common.Title>
-          <Form.Input.Radio.Default
-            containerClassname="flex gap-2 mt-2"
-            disabled={
-              (loading && hasConfigurations) || userStatus === 'loading'
-            }
-            labelClassName={classNames(
-              'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
-              {
-                'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
-              },
-            )}
-            onClick={() => {
-              setSelectedRentTime(false)
-            }}
-            name="rent-time"
-            items={[
-              { label: '7 Dias', value: 7 },
-              { label: '14 Dias', value: 14 },
-              { label: '21 Dias', value: 21 },
-            ]}
-            register={register('rent-time')}
-          />
+          {saleType === 'rent' && (
+            <>
+              <Common.Title className="font-semibold text-white">
+                Selecione o período de Aluguel
+              </Common.Title>
+              <Form.Input.Radio.Default
+                containerClassname="flex gap-2 mt-2"
+                disabled={
+                  (loading && hasConfigurations) || userStatus === 'loading'
+                }
+                labelClassName={classNames(
+                  'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
+                  {
+                    'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
+                  },
+                )}
+                onClick={() => {
+                  setSelectedRentTime(false)
+                }}
+                name="rent-time"
+                items={[
+                  { label: '7 Dias', value: 7 },
+                  { label: '14 Dias', value: 14 },
+                  { label: '21 Dias', value: 21 },
+                ]}
+                register={register('rent-time')}
+              />
+            </>
+          )}
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
-            {renderButton(
-              <Common.Button
-                onClick={async () => {
-                  if (userIsntOwnerSkin) {
-                    if (!watchRentTime) {
-                      setSelectedRentTime(true)
-                      Toast.Error(
-                        'Você deve selecionar um período para prosseguir com o aluguel.',
-                      )
+            {saleType === 'rent' &&
+              renderButton(
+                <Common.Button
+                  onClick={async () => {
+                    if (userIsntOwnerSkin) {
+                      if (!watchRentTime) {
+                        setSelectedRentTime(true)
+                        Toast.Error(
+                          'Você deve selecionar um período para prosseguir com o aluguel.',
+                        )
+                      } else {
+                        setSkinToBuy(skinToBuy)
+                        setRentTime(+watchRentTime)
+                        setWhatModalOpenToBuySkin(1)
+                        setOpenModalBuySkin(true)
+                      }
                     } else {
-                      setSkinToBuy(skinToBuy)
-                      setRentTime(+watchRentTime)
-                      setWhatModalOpenToBuySkin(1)
-                      setOpenModalBuySkin(true)
+                      Toast.Error('Você não pode alugar o seu próprio item.')
                     }
-                  } else {
-                    Toast.Error('Você não pode alugar o seu próprio item.')
+                  }}
+                  disabled={
+                    (loading && hasConfigurations) || userStatus === 'loading'
                   }
-                }}
-                disabled={
-                  (loading && hasConfigurations) || userStatus === 'loading'
-                }
-                className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-              >
-                Alugar
-              </Common.Button>,
-            )}
+                  className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                >
+                  Alugar
+                </Common.Button>,
+              )}
             <ModalBuyMain
               createTransaction={{
                 skinPrice: Number(skinPrice),
