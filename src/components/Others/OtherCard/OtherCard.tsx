@@ -27,7 +27,7 @@ export function OtherCard({ itsRent, item }: Props) {
   return (
     <article className="relative">
       {item.deletedAt !== null && (
-        <div className="absolute left-1/2 top-1/3 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
+        <div className="absolute left-1/2 top-1/4 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
           ITEM REMOVIDO
         </div>
       )}
@@ -38,13 +38,7 @@ export function OtherCard({ itsRent, item }: Props) {
       >
         <Link
           href={`/detalhes/${item.id}`}
-          className={classNames(
-            'flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
-            {
-              'border-mesh-color-secondary-1400 shadow-stattrak-glow':
-                typeof customName === 'object',
-            },
-          )}
+          className="flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
           <div
             className={`h-2 w-52 rounded-b-full`}

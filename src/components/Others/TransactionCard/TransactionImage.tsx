@@ -17,9 +17,9 @@ export function TransactionImage({
     <Image
       src={image}
       alt={alt}
-      className="w-28 rounded-lg bg-mesh-color-others-black p-4"
       width={width}
       height={height}
+      className="w-28 rounded-lg bg-mesh-color-others-black p-4"
     />
   )
 }

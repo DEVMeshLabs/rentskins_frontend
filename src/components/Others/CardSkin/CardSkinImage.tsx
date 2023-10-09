@@ -14,10 +14,9 @@ type Props = {
 export function CardSkinImage({ rarity, icon_url, primeiroName }: Props) {
   return (
     <div
-      className={classNames(
-        'relative mb-4 flex flex-col items-center justify-center rounded-lg border-[1px] border-[#5E675E] bg-mesh-gradient-black-pattern',
-      )}
+      className="relative mb-4 flex flex-col items-center justify-center rounded-lg border-[1px] border-[#5E675E] bg-mesh-gradient-black-pattern"
     >
+
       <div
         className="h-1 w-[80%] rounded-b"
         style={{

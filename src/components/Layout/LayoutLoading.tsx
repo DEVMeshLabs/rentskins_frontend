@@ -4,7 +4,7 @@ import { ColorRing } from 'react-loader-spinner'
 
 interface IProps {
   enabled: boolean
-  label: string | null
+  label: string | null | undefined
   children: React.ReactNode
   widthLoading?: number
   heightLoading?: number

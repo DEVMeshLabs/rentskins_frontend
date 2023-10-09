@@ -1,7 +1,6 @@
-/* eslint-disable camelcase */
 import { Api } from '@/providers'
 import { AxiosPromise } from 'axios'
-import { ITransaction } from './interfaces/transaction.interface'
+import { ITransaction } from './interfaces/transactions.interface'
 
 interface IParamsCreateTransaction {
   skinsToBuy: {
@@ -28,5 +27,22 @@ export default class TransactionsService {
     })
       .then((response) => response)
       .catch((e) => e) as AxiosPromise<ITransaction[]>
+  }
+
+  public static async updateUserTransaction(
+    id: string,
+    type: 'buyer' | 'seller',
+    response: 'Aceito' | 'Recusado',
+    token: string,
+  ) {
+    return (await Api.patch(
+      `/transaction/${id}?query=${type}`,
+      {
+        status: response,
+      },
+      { headers: { Authorization: 'Bearer ' + token } },
+    )
+      .then((response) => response)
+      .catch((e) => e)) as AxiosPromise<ITransaction[]>
   }
 }
