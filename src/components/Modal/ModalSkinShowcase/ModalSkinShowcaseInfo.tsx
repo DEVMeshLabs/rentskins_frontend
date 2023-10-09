@@ -16,7 +16,7 @@ type Props = {
   recomended_price: string
   sale_type?: string
   skin_category: string
-  skin_color: string
+  skin_rarity: string
   skin_float: string
   skin_image: string
   skin_link_game: string
@@ -33,7 +33,7 @@ type Props = {
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
   skin_category,
-  skin_color,
+  skin_rarity,
   skin_float,
   skin_image,
   skin_link_game,
@@ -128,14 +128,13 @@ export function ModalSkinShowcaseInfo({
 
   const handleAddSkinsToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
-      console.log(formattedValue(String(watchValue)))
       setSkinsToAdvertise({
         id,
         sale_type,
         seller_id: trueSession.user?.steam?.steamid as string,
         seller_name: trueSession.user?.name as string,
         skin_category,
-        skin_color,
+        skin_rarity,
         skin_float,
         skin_image,
         skin_link_game: inspectLink,
@@ -145,7 +144,10 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        median_price: removeSign(recomended_price),
+        median_price:
+          typeof recomended_price === 'string'
+            ? 10
+            : removeSign(recomended_price),
         skin_price: formattedValue(String(watchValue)),
       })
     }

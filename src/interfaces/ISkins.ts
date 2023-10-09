@@ -1,10 +1,12 @@
+import { TItemRarity } from '@/utils/transformRarityInColor'
+
 export interface ISkins {
   id: string
   asset_id: string
   name_color: string
   skin_image: string
   skin_name: string
-  skin_color: string
+  skin_rarity: TItemRarity
   skin_category: string
   skin_weapon: string
   skin_price: number
@@ -24,7 +26,7 @@ export interface ISkins {
 export interface ISkinsCardModal {
   skinId: string
   skinPrice: number
-  skinColor: string
+  skinRarity: TItemRarity
   skinName: string
   skinImage: string
   statusFloat: string
@@ -96,7 +98,7 @@ export interface ISkinsToAdvertise {
   skin_float: string
   seller_name: string
   seller_id: string
-  skin_color: string
+  skin_rarity: string
   status: string
   sale_type: string
   status_float: string

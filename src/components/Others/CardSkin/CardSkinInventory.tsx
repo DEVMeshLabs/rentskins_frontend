@@ -49,8 +49,6 @@ export function CardSkinInventory() {
     keepPreviousData: true,
   })
 
-  console.log(data?.data.inventory)
-
   useEffect(() => {
     if (
       data?.data &&
@@ -135,7 +133,11 @@ export function CardSkinInventory() {
               const itemIsAWeapon =
                 !tags[0].name.includes('Sticker') &&
                 !tags[0].name.includes('Agent')
-              const category = type.split(' ').pop()!
+              const completeType = type.split(' ')
+              const category = completeType.pop()!
+              const rarity = tags.filter(
+                ({ category, name }) => category === 'Rarity' && name,
+              )[0].name
               const weapon = name.includes('Gloves')
                 ? tags[0].name
                 : tags[1].name
@@ -145,7 +147,6 @@ export function CardSkinInventory() {
 
               const linkForPreviewSkin = actions[0].link
 
-              console.log(linkForPreviewSkin)
               return (
                 <ModalSkinShowcaseMain
                   key={assetid}
@@ -156,7 +157,7 @@ export function CardSkinInventory() {
                   skinCategory={category}
                   skinWeapon={weapon}
                   statusFloat={statusFloat as string}
-                  skinColor={name_color}
+                  skinRarity={rarity}
                   float={'0.2555'}
                   linkForPreviewSkin={linkForPreviewSkin}
                   linkForProfile={trueSession.user?.steam?.profileurl!}
@@ -188,7 +189,7 @@ export function CardSkinInventory() {
                         <div className="h-full">
                           <CardSkin.Image
                             icon_url={icon_url}
-                            name_color={name_color}
+                            rarity={rarity}
                             primeiroName={primeiroName}
                           />
                           {isSelected && (

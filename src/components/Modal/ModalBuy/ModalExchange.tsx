@@ -39,7 +39,7 @@ export function ModalExchangeSkin() {
     >
       <CardSkinModal.Root>
         <CardSkinModal.Content
-          skinColor={skinToBuy?.skinColor!}
+          skinRarity={skinToBuy?.skinRarity!}
           skinFloat={skinToBuy?.skinFloat!}
           skinImage={skinToBuy?.skinImage!}
           skinName={skinToBuy?.skinName!}

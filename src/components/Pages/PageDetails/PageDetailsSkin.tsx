@@ -16,6 +16,9 @@ import { toast } from 'react-hot-toast'
 import { formResolver } from './schemas/form.schema'
 import useSkinsStore from '@/stores/skins.store'
 import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
+import transformRarityInColor, {
+  TItemRarity,
+} from '@/utils/transformRarityInColor'
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
@@ -26,7 +29,7 @@ type PropsTypes = {
   skinFloat: string
   skinCategory: string
   skinWeapon: string
-  skinColor: string
+  skinRarity: TItemRarity
   sellerId: string
   statusFloat: string
   skinMedianPrice: number
@@ -52,7 +55,7 @@ export function PageDetailsSkin({
   skinWeapon,
   sellerId,
   statusFloat,
-  skinColor,
+  skinRarity,
   defaultID,
   skinId,
   cartId,
@@ -82,7 +85,7 @@ export function PageDetailsSkin({
   const skinToBuy = {
     skinId,
     skinPrice,
-    skinColor,
+    skinRarity,
     skinFloat,
     skinImage,
     skinName,
@@ -391,6 +394,19 @@ export function PageDetailsSkin({
             Tipo
           </Common.Title>
           <p className="text-white">{skinCategory}</p>
+        </div>
+
+        <div className="flex justify-between">
+          <Common.Title className="text-mesh-color-neutral-200">
+            Raridade
+          </Common.Title>
+          <div className="flex items-center justify-center">
+            <p className="text-white">{skinRarity || 'Consumer grade'}</p>
+            <div
+              className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
+              style={{ background: `#${transformRarityInColor(skinRarity)}` }}
+            />
+          </div>
         </div>
       </div>
 
