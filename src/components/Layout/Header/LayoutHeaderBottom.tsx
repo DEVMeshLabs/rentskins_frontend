@@ -129,8 +129,9 @@ export function LayoutHeaderBottom({ className }: IProps) {
           />
         </ContainerItem>
 
-        <ContainerItem title="Figurinhas" isList={false} />
+        <ContainerItem title="Adesivos" isList={false} />
         <ContainerItem title="Agentes" isList={false} />
+        <ContainerItem title="Diversos" isList={false} />
       </div>
     </div>
   )
