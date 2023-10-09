@@ -4,15 +4,55 @@ import Common from '@/components/Common'
 import LineInfosSummaryh from '@/components/Others/SummaryItem'
 import { PageSummaryInfo } from './PageSummaryInfo'
 import useCartStore from '@/stores/cart.store'
+import { useQuery } from '@tanstack/react-query'
+import TransactionsService from '@/services/transactions.service'
+import ISteamUser from '@/interfaces/steam.interface'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { LayoutLoading } from '@/components/Layout/LayoutLoading'
+import Toast from '@/tools/toast.tool'
 
 export default function PageSummaryCart() {
-  const { skinsFromCart } = useCartStore()
-  const totalPrice = String(
-    skinsFromCart.reduce(
-      (acc, { skin: { skin_price } }) => acc + Number(skin_price),
-      0,
-    ),
-  )
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
+  const { skinsFromCart, skinsToBuy } = useCartStore()
+  const [totalPrice, setTotalPrice] = useState('')
+
+  useEffect(() => {
+    const totalPrice = String(
+      skinsFromCart.reduce((acc, { skin: { skin_price, id } }) => {
+        if (skinsToBuy.some(({ skin_id }) => id === skin_id)) {
+          return acc + skin_price
+        }
+        return acc
+      }, 0),
+    )
+    setTotalPrice(totalPrice)
+  }, [skinsToBuy, skinsFromCart])
+
+  const { data, refetch, isRefetching } = useQuery({
+    queryKey: ['createTransactions'],
+    queryFn: () =>
+      TransactionsService.createTransaction({
+        skinsToBuy,
+        token: trueSession.user?.token!,
+      }),
+    enabled: false,
+  })
+
+  const handleCreateTransation = () => {
+    if (skinsToBuy.length > 0 && !isRefetching) {
+      refetch()
+    }
+  }
+
+  useEffect(() => {
+    if (data?.request.status === 400) {
+      Toast.Error('Saldo insuficiente.')
+    } else if (data?.request.status === 409) {
+      Toast.Error('O item já foi vendido.')
+    }
+  }, [data, refetch, isRefetching])
 
   return (
     <aside className="sticky top-6 flex w-[378px] flex-col gap-28 rounded-xl bg-[#222723] px-4 py-6">
@@ -40,10 +80,18 @@ export default function PageSummaryCart() {
           cash={true}
         />
         <Common.Button
-          className="w-full flex-1 text-base font-semibold"
+          onClick={handleCreateTransation}
+          className="h-32 w-full flex-1 p-28 text-base font-semibold"
+          disabled={skinsToBuy.length === 0 || isRefetching}
           color="green"
         >
-          Comprar agora
+          <LayoutLoading
+            className="h-7 w-7"
+            enabled={isRefetching}
+            label={null}
+          >
+            Comprar agora
+          </LayoutLoading>
         </Common.Button>
       </div>
     </aside>

@@ -16,7 +16,7 @@ interface Props {
   userState?: string
   totalExchanges?: number
   deliveryTime?: string
-  deliveryFee?: number
+  deliveryFee?: number | string
 }
 
 export default function PersonProfile({
@@ -111,7 +111,7 @@ export default function PersonProfile({
                   },
                   {
                     'text-mesh-color-rarity-highest':
-                      percentReliability >= 80 && percentReliability < 101,
+                      percentReliability >= 80 && percentReliability <= 100,
                   },
                 )}
               >
@@ -144,7 +144,15 @@ export default function PersonProfile({
           title="Total de Transações"
           value={totalExchanges || 'Não Obtido'}
         />
-        <ProfileInfo title="Taxa de Entrega" isPercent value={deliveryFee} />
+        <ProfileInfo
+          title="Taxa de Entrega"
+          isPercent
+          value={
+            typeof deliveryFee === 'number'
+              ? deliveryFee.toFixed(0) + '%'
+              : deliveryFee
+          }
+        />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />
       </div>
     </section>

@@ -138,6 +138,15 @@ module.exports = {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      animation: {
+        bounceImage: 'myAimation 3s infinite ease-in-out',
+      },
+      keyframes: {
+        myAimation: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(5px)' },
+        },
+      },
     },
   },
   plugins: [],

@@ -7,4 +7,5 @@ export interface ICartStore {
   addSkinsToBuy: (skinToBuy: ISkinsToBuy) => void
   deleteSkinsToBuy: (skin_id: string) => void
   deleteSkinFromCart: (id: string) => void
+  clearSkinsToBuy: () => void
 }

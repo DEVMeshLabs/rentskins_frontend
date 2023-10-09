@@ -35,13 +35,7 @@ export function OtherCard({ itsRent, item }: Props) {
       >
         <Link
           href={`/detalhes/${item.id}`}
-          className={classNames(
-            'flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
-            {
-              'border-mesh-color-secondary-1400 shadow-stattrak-glow':
-                typeof customName === 'object',
-            },
-          )}
+          className="flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
           <div
             className={`h-2 w-52 rounded-b-full`}
@@ -82,12 +76,24 @@ export function OtherCard({ itsRent, item }: Props) {
                 item={item}
               />
             )}
-            <Common.Button color="invisible" className="h-9 w-9">
+            <Link
+              target="_blank"
+              rel="noreferrer"
+              href={item.skin_link_steam}
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-mesh-color-neutral-400 bg-transparent 
+              fill-white p-1 text-lg opacity-60 transition hover:opacity-100"
+            >
               <IconSteam />
-            </Common.Button>
-            <Common.Button color="invisible" className="h-9 w-9">
+            </Link>
+            <Link
+              target="_blank"
+              rel="noreferrer"
+              href={item.skin_link_game}
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-mesh-color-neutral-400 bg-transparent 
+              fill-white p-1 text-lg opacity-60 transition hover:opacity-100"
+            >
               <IconOlho />
-            </Common.Button>
+            </Link>
           </div>
         </div>
         <div className="flex select-none items-center justify-between">

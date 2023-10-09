@@ -17,6 +17,7 @@ export interface IGetUser {
   delivery_time: string
   delivery_fee: number
   total_exchanges: number
+  total_exchanges_completed: number
   steam_created_date: string
   reliability: string
   owner_name: string

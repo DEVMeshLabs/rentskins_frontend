@@ -39,7 +39,12 @@ export function ModalBuyMain({
     {
       queryKey: ['createTrasaction'],
       queryFn: () =>
-        TransactionsService.createTransaction(skinId, sellerId, userId, token),
+        TransactionsService.createTransaction({
+          skinsToBuy: [
+            { skin_id: skinId, seller_id: sellerId, buyer_id: userId },
+          ],
+          token,
+        }),
       enabled: false,
       cacheTime: 0,
     },
