@@ -52,7 +52,6 @@ export default function PageProfileSelf() {
   })
 
   useEffect(() => {
-    console.log(dataGettedUser?.data)
     if (dataGettedUser?.data) {
       const accountDate = new Date(dataGettedUser?.data.steam_created_date)
       setAccountDate(
@@ -99,7 +98,7 @@ export default function PageProfileSelf() {
       {isLoading || isRefetching ? (
         <AllSkeletonSkins />
       ) : data?.data.skins.length! > 0 ? (
-        <AllSkins itsRent={true} skinsCategories={data?.data?.skins} />
+        <AllSkins skinsCategories={data?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil"
