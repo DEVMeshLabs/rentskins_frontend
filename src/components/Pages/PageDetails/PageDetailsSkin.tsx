@@ -68,6 +68,7 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
+  const customName = skinName.split('(')[0]
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -313,7 +314,7 @@ export function PageDetailsSkin({
       <div className="space-y-4">
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            {skinName}
+            {customName}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">{statusFloat}</p>
         </div>
@@ -371,7 +372,7 @@ export function PageDetailsSkin({
 
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
-            ID Padrão
+            Paint Seed
           </Common.Title>
           <p className="text-white">{defaultID}</p>
         </div>
@@ -382,10 +383,6 @@ export function PageDetailsSkin({
           </Common.Title>
           <div className="flex items-center">
             <p className="text-white">{skinFloat}</p>
-            <div
-              className={`ml-2 h-[17px] w-[17px] rounded-[3px]`}
-              style={{ background: `#${skinColor}` }}
-            />
           </div>
         </div>
 
@@ -394,13 +391,6 @@ export function PageDetailsSkin({
             Tipo
           </Common.Title>
           <p className="text-white">{skinCategory}</p>
-        </div>
-
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            Arma
-          </Common.Title>
-          <p className="text-white">{skinWeapon}</p>
         </div>
       </div>
 

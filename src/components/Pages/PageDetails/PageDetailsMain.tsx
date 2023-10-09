@@ -33,8 +33,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     enabled: status === 'authenticated',
   })
 
-  console.log(seller.owner_id)
-
   const { data: latestSales } = useQuery({
     queryKey: ['latestSales', seller.owner_id],
     queryFn: () => UserService.getLatestSales(seller.owner_id),
