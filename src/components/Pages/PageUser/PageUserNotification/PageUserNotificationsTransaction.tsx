@@ -21,69 +21,71 @@ export default function PageNotificationTransaction({
 
   const renderTransactions = transactions?.data
     ?.filter((item, index) => {
+      const isABuyer = item.buyer_id === steamid
+
       if (item.status === 'Em andamento') {
-        return true
+        if (isABuyer && item.buyer_confirm === 'Pendente') {
+          return true
+        }
+
+        if (!isABuyer && item.seller_confirm === 'Pendente') {
+          return true
+        }
       }
+
       return false
     })
     .map((item, index) => {
-      console.log(item)
       const isABuyer = item.buyer_id === steamid
 
-      if (
-        (isABuyer && item.buyer_confirm !== 'Pendente') ||
-        (!isABuyer && item.seller_confirm !== 'Pendente')
+      return (
+        <TransactionCard.Root key={'transactions-' + index}>
+          <div className="flex items-center gap-4">
+            <TransactionCard.Image
+              image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+              alt={item.skin.skin_name}
+            />
+            <TransactionCard.Label
+              name={item.skin.skin_name}
+              weapon={item.skin.skin_weapon}
+            />
+          </div>
+          <TransactionCard.Content
+            text={item.skin.status_float}
+            subtext={item.skin.skin_float}
+            textIsCurrency={false}
+          />
+          <TransactionCard.Content
+            text={item.skin.skin_price}
+            textIsCurrency
+            subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
+          />
+          <TransactionCard.Actions>
+            <TransactionCard.Button
+              token={token}
+              modal
+              modalOptions={{
+                action: 'Aceito',
+                id: item.id,
+                type: isABuyer ? 'buyer' : 'seller',
+              }}
+              buttonStyle="full"
+              text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
+            />
+            <TransactionCard.Button
+              token={token}
+              modal
+              modalOptions={{
+                action: 'Recusado',
+                id: item.id,
+                type: isABuyer ? 'buyer' : 'seller',
+              }}
+              buttonStyle="opaque"
+              text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
+            />
+          </TransactionCard.Actions>
+        </TransactionCard.Root>
       )
-        return (
-          <TransactionCard.Root key={'transactions-' + index}>
-            <div className="flex items-center gap-4">
-              <TransactionCard.Image
-                image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
-                alt={item.skin.skin_name}
-              />
-              <TransactionCard.Label
-                name={item.skin.skin_name}
-                weapon={item.skin.skin_weapon}
-              />
-            </div>
-            <TransactionCard.Content
-              text={item.skin.status_float}
-              subtext={item.skin.skin_float}
-              textIsCurrency={false}
-            />
-            <TransactionCard.Content
-              text={item.skin.skin_price}
-              textIsCurrency
-              subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
-            />
-            <TransactionCard.Actions>
-              <TransactionCard.Button
-                token={token}
-                modal
-                modalOptions={{
-                  action: 'Aceito',
-                  id: item.id,
-                  type: isABuyer ? 'buyer' : 'seller',
-                }}
-                buttonStyle="full"
-                text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
-              />
-              <TransactionCard.Button
-                token={token}
-                modal
-                modalOptions={{
-                  action: 'Recusado',
-                  id: item.id,
-                  type: isABuyer ? 'buyer' : 'seller',
-                }}
-                buttonStyle="opaque"
-                text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
-              />
-            </TransactionCard.Actions>
-          </TransactionCard.Root>
-        )
-
-      return null
     })
 
   return (
