@@ -1,12 +1,12 @@
-import { ITransaction } from '@/services/interfaces/transaction.interface'
+import { ITransaction } from '@/services/interfaces/transactions.interface'
 import Image from 'next/image'
 
 interface IProps {
   data: ITransaction[]
-  steamId: string | undefined
+  steamid: string
 }
 
-export function TransactionsTable({ data, steamId }: IProps) {
+export function TransactionsTable({ data, steamid }: IProps) {
   const treatStatus = (status: string) => {
     const generateElement = (className: string) => {
       return (
@@ -34,13 +34,13 @@ export function TransactionsTable({ data, steamId }: IProps) {
     }
   }
 
-  return (
-    <div>
+  return data.length > 0 ? (
+    <div className="max-h-[40rem] min-h-[10rem] scroll-p-24 overflow-y-auto overflow-x-hidden">
       {data.map((item, index) => (
         <div
           key={index}
           className={
-            'grid grid-cols-6 items-center py-4 first:rounded-t-lg last:rounded-b-lg odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
+            'grid grid-cols-6 items-center py-4 first:rounded-t-md last:rounded-b-md odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
           }
         >
           <div className="flex items-center justify-center">
@@ -48,11 +48,11 @@ export function TransactionsTable({ data, steamId }: IProps) {
               <div className="mb-1 h-1.5 w-5/6 rounded-b-2xl bg-green-500" />
               <Image
                 src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+                width={112}
+                height={64}
                 alt="Image"
                 draggable={false}
                 className="w-28"
-                width={112}
-                height={112}
               />
             </div>
           </div>
@@ -62,12 +62,12 @@ export function TransactionsTable({ data, steamId }: IProps) {
            px-8 py-8 opacity-0
           transition-all group-hover:visible group-hover:opacity-100"
             >
-              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2">
+              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2 text-sm">
                 {item.skin.skin_name}
               </p>
             </div>
             <p
-              className={`group w-40 overflow-hidden text-ellipsis text-lg
+              className={`group h-[80px] w-40 overflow-hidden text-ellipsis text-lg
           font-medium ${
             item.skin.skin_name.includes('StatTrak')
               ? 'text-mesh-color-secondary-800'
@@ -98,11 +98,14 @@ export function TransactionsTable({ data, steamId }: IProps) {
             })}
           </div>
           <div className="text-white">
-            {' '}
-            {item.buyer_id === steamId ? 'Compra' : 'Venda'}{' '}
+            {item.buyer_id === steamid ? 'Compra' : 'Venda'}
           </div>
         </div>
       ))}
     </div>
+  ) : (
+    <span className="rounded-md bg-mesh-color-neutral-800 py-3 text-center text-lg text-white">
+      Histórico de transações vazio.
+    </span>
   )
 }

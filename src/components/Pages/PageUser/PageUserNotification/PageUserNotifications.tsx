@@ -1,27 +1,30 @@
 'use client'
 import Common from '@/components/Common'
 import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
-import { INotificationHistoricProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
-import { IProps } from '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
 import ISteamUser from '@/interfaces/steam.interface'
+import { INotification } from '@/services/interfaces/notification.interface'
 import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
 import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
-import Aos from 'aos'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
-const PageNotificationHistoric = dynamic<INotificationHistoricProps>(() =>
+const PageNotificationHistoric = dynamic<{
+  data: INotification[] | undefined
+  loading: boolean
+  onClick: () => void
+}>(() =>
   import(
     '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
   ).then((module) => module.default),
 )
-const PageNotificationTransaction = dynamic<IProps>(() =>
-  import(
-    '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
-  ).then((module) => module.default),
+const PageNotificationTransaction = dynamic<{ steamid: string; token: string }>(
+  () =>
+    import(
+      '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
+    ).then((module) => module.default),
 )
 
 export default function PageUserNotifications() {
@@ -90,11 +93,6 @@ export default function PageUserNotifications() {
   }
 
   useEffect(() => {
-    Aos.init({
-      duration: 600,
-      delay: 0,
-    })
-
     const titleQuery = searchParams.get('type') as 'historic' | 'transactions'
 
     if (titleQuery !== 'historic') {
@@ -106,7 +104,7 @@ export default function PageUserNotifications() {
   return (
     <>
       <Common.Title size="3xl" bold={700} color="white">
-        Notificação
+        Notificações
       </Common.Title>
       <div className="mt-5 flex items-center justify-between">
         <div className="flex items-center gap-6">
@@ -119,10 +117,20 @@ export default function PageUserNotifications() {
               value={'transactions'}
               onChange={(event) => handleOnRadio(event)}
             />
-            <span className="text-xl font-semibold text-white/50 transition-all peer-checked:text-white">
+            <span
+              className={`text-xl font-semibold transition-all ${
+                searchParams.get('type') === 'transactions'
+                  ? 'text-white'
+                  : 'text-white/50'
+              }`}
+            >
               Transações
             </span>
-            <div className="mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all peer-checked:pl-20" />
+            <div
+              className={`mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all ${
+                searchParams.get('type') === 'transactions' && 'pl-20'
+              }`}
+            />
           </label>
           <label className="flex cursor-pointer flex-col">
             <input
@@ -133,10 +141,20 @@ export default function PageUserNotifications() {
               value={'historic'}
               onChange={(event) => handleOnRadio(event)}
             />
-            <span className="text-xl font-semibold text-white/50 transition-all peer-checked:text-white">
+            <span
+              className={`text-xl font-semibold  transition-all ${
+                searchParams.get('type') === 'historic'
+                  ? 'text-white'
+                  : 'text-white/50'
+              }`}
+            >
               Histórico
             </span>
-            <div className="mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all peer-checked:pl-16" />
+            <div
+              className={`mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all ${
+                searchParams.get('type') === 'historic' && 'pl-16'
+              }`}
+            />
           </label>
         </div>
         {searchParams.get('type') === 'historic' && (
@@ -161,7 +179,8 @@ export default function PageUserNotifications() {
       )}
       {searchParams.get('type') === 'transactions' && (
         <PageNotificationTransaction
-          steamid={trueSession.user && trueSession.user?.steam?.steamid}
+          steamid={trueSession.user?.steam?.steamid!}
+          token={trueSession.user?.token!}
         />
       )}
     </>

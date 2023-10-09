@@ -3,7 +3,7 @@ import NotificationCard from '@/components/Others/NotificationCard'
 import { INotification } from '@/services/interfaces/notification.interface'
 // import useFilterStore from '@/stores/filters.store'
 
-export interface INotificationHistoricProps {
+export interface IProps {
   data: INotification[] | undefined
   loading: boolean
   onClick: () => void
@@ -13,7 +13,7 @@ export default function PageNotificationHistoric({
   data,
   loading,
   onClick,
-}: INotificationHistoricProps) {
+}: IProps) {
   return (
     <div className="mb-4 mt-4 h-fit gap-4 overflow-y-scroll pr-4">
       <div className="flex flex-col gap-4" data-aos="fade-up">
