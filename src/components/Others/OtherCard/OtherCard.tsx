@@ -22,6 +22,8 @@ export function OtherCard({ itsRent, item }: Props) {
     : item.skin_name
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
+
+  console.log(item.skin_rarity)
   return (
     <article className="relative">
       {item.deletedAt !== null && (

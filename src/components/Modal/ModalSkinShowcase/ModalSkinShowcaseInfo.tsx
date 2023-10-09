@@ -128,7 +128,6 @@ export function ModalSkinShowcaseInfo({
 
   const handleAddSkinsToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && watchTerms) {
-      console.log(formattedValue(String(watchValue)))
       setSkinsToAdvertise({
         id,
         sale_type,
@@ -145,7 +144,10 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        median_price: removeSign(recomended_price),
+        median_price:
+          typeof recomended_price === 'string'
+            ? 10
+            : removeSign(recomended_price),
         skin_price: formattedValue(String(watchValue)),
       })
     }

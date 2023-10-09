@@ -49,8 +49,6 @@ export function CardSkinInventory() {
     keepPreviousData: true,
   })
 
-  console.log(data?.data.inventory)
-
   useEffect(() => {
     if (
       data?.data &&
@@ -137,7 +135,9 @@ export function CardSkinInventory() {
                 !tags[0].name.includes('Agent')
               const completeType = type.split(' ')
               const category = completeType.pop()!
-              const rarity = completeType.join(' ')
+              const rarity = tags.filter(
+                ({ category, name }) => category === 'Rarity' && name,
+              )[0].name
               const weapon = name.includes('Gloves')
                 ? tags[0].name
                 : tags[1].name
@@ -147,7 +147,6 @@ export function CardSkinInventory() {
 
               const linkForPreviewSkin = actions[0].link
 
-              console.log(linkForPreviewSkin)
               return (
                 <ModalSkinShowcaseMain
                   key={assetid}
@@ -190,7 +189,7 @@ export function CardSkinInventory() {
                         <div className="h-full">
                           <CardSkin.Image
                             icon_url={icon_url}
-                            name_color={name_color}
+                            rarity={rarity}
                             primeiroName={primeiroName}
                           />
                           {isSelected && (
