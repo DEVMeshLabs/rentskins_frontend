@@ -1,5 +1,4 @@
 import Common from '@/components/Common'
-import Form from '@/components/Forms'
 import { IconCarrinho } from '@/components/Icons'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { IOptionalConfig } from '@/interfaces/IConfig'
@@ -11,9 +10,7 @@ import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { formResolver } from './schemas/form.schema'
 import useSkinsStore from '@/stores/skins.store'
 import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import transformRarityInColor, {
@@ -74,6 +71,7 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
+  const [stateRentTime, setStateRentTime] = useState(7)
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -159,12 +157,6 @@ export function PageDetailsSkin({
     enabled: false,
     cacheTime: 0,
   })
-  const { register, watch } = useForm({
-    resolver: formResolver,
-    defaultValues: {
-      'rent-time': undefined,
-    },
-  })
 
   const renderButton = (child: ReactNode) => {
     if (hasConfigurations === true) {
@@ -182,10 +174,9 @@ export function PageDetailsSkin({
     }
   }
 
-  const watchRentTime = watch('rent-time')
-
   useEffect(() => {
-    switch (String(watchRentTime)) {
+    setRentTime(stateRentTime)
+    switch (String(stateRentTime)) {
       case '7':
         return setRentPercentage(10)
       case '14':
@@ -193,7 +184,7 @@ export function PageDetailsSkin({
       case '21':
         return setRentPercentage(23)
     }
-  }, [watchRentTime])
+  }, [stateRentTime])
 
   useEffect(() => {
     if (deleteResult) {
@@ -214,7 +205,7 @@ export function PageDetailsSkin({
   useEffect(() => {
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
-      setRentTime(watchRentTime!)
+      setRentTime(stateRentTime!)
       setWhatModalOpenToBuySkin(0)
       setItemAvailable(true)
     } else if (
@@ -222,7 +213,7 @@ export function PageDetailsSkin({
       resultAvailability?.status === 200
     ) {
       setLoading(false)
-      setRentTime(watchRentTime!)
+      setRentTime(stateRentTime!)
       setWhatModalOpenToBuySkin(1)
       setItemAvailable(true)
     } else if (
@@ -313,6 +304,14 @@ export function PageDetailsSkin({
     }
   }, [wasRaised, data, recreatingCart])
 
+  const items = [
+    { label: '7 Dias', value: 7 },
+    { label: '14 Dias', value: 14 },
+    { label: '21 Dias', value: 21 },
+  ]
+
+  const [rent, setRent] = useState(false)
+
   return (
     <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
       <div className="space-y-4">
@@ -336,7 +335,7 @@ export function PageDetailsSkin({
 
         <div
           className={`transition-all duration-500 ${
-            watchRentTime !== undefined && watchRentTime !== null
+            stateRentTime !== undefined && stateRentTime !== null
               ? 'opacity-100'
               : 'opacity-0'
           }`}
@@ -411,65 +410,23 @@ export function PageDetailsSkin({
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-4">
-        <div className="">
-          {saleType === 'rent' && (
-            <>
-              <Common.Title className="font-semibold text-white">
-                Selecione o período de Aluguel
-              </Common.Title>
-              <Form.Input.Radio.Default
-                containerClassname="flex gap-2 mt-2"
-                disabled={
-                  (loading && hasConfigurations) || userStatus === 'loading'
-                }
-                labelClassName={classNames(
-                  'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
-                  {
-                    'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
-                  },
-                )}
-                onClick={() => {
-                  setSelectedRentTime(false)
-                }}
-                name="rent-time"
-                items={[
-                  { label: '7 Dias', value: 7 },
-                  { label: '14 Dias', value: 14 },
-                  { label: '21 Dias', value: 21 },
-                ]}
-                register={register('rent-time')}
-              />
-            </>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between justify-self-end">
+      <div
+        className={classNames(
+          'mt-6 flex h-32 flex-col justify-end gap-4 transition-all',
+          {
+            'justify-between': rent,
+          },
+        )}
+      >
+        <div className="flex items-center justify-between">
           <div className="flex gap-2">
             {saleType === 'rent' &&
               renderButton(
                 <Common.Button
-                  onClick={async () => {
-                    if (userIsntOwnerSkin) {
-                      if (!watchRentTime) {
-                        setSelectedRentTime(true)
-                        Toast.Error(
-                          'Você deve selecionar um período para prosseguir com o aluguel.',
-                        )
-                      } else {
-                        setMethodSelected('rent')
-                        setSkinToBuy(skinToBuy)
-                        setRentTime(+watchRentTime)
-                        setWhatModalOpenToBuySkin(1)
-                        setOpenModalBuySkin(true)
-                      }
-                    } else {
-                      Toast.Error('Você não pode alugar o seu próprio item.')
-                    }
-                  }}
                   disabled={
                     (loading && hasConfigurations) || userStatus === 'loading'
                   }
+                  onClick={() => setRent(true)}
                   className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
                 >
                   Alugar
@@ -526,6 +483,45 @@ export function PageDetailsSkin({
               </Common.Button>,
             )}
           </div>
+        </div>
+        <div
+          className={`h-0 transition-all ${rent ? 'visible h-20' : 'hidden'}`}
+        >
+          {saleType === 'rent' && rent && (
+            <>
+              <Common.Title className="font-semibold text-white">
+                Selecione o período de Aluguel
+              </Common.Title>
+              <div className="flex gap-2">
+                {items.map(({ label, value }) => (
+                  <Common.Button
+                    key={label}
+                    className={classNames(
+                      'w-20 cursor-pointer rounded-lg border-2 border-mesh-color-neutral-400 p-2 font-medium text-white transition-all hover:bg-mesh-color-neutral-600 peer-checked:bg-mesh-color-primary-1200 peer-checked:text-black peer-disabled:opacity-10',
+                      {
+                        'bg-mesh-color-rarity-lowest text-white':
+                          selectedRentTime,
+                      },
+                    )}
+                    onClick={() => {
+                      setStateRentTime(value)
+                      setSelectedRentTime(false)
+                      if (userIsntOwnerSkin) {
+                        setMethodSelected('rent')
+                        setSkinToBuy(skinToBuy)
+                        setWhatModalOpenToBuySkin(1)
+                        setOpenModalBuySkin(true)
+                      } else {
+                        Toast.Error('Você não pode alugar o seu próprio item.')
+                      }
+                    }}
+                  >
+                    {label}
+                  </Common.Button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean
   items: IItem[]
   onChange?: () => void
+  onClick?: () => void
 
   register: any
   errors?: any
@@ -34,6 +35,7 @@ export function FormInputRadioDefault({
   errorsClassname,
   items,
   onChange,
+  onClick,
 }: IProps) {
   const renderItems = items.map((item, index) => (
     <div key={item.value + index} className={`${wrapperClassname} flex`}>
@@ -42,6 +44,7 @@ export function FormInputRadioDefault({
         id={item.value}
         disabled={disabled || item.disabled}
         value={item.value}
+        onClick={onClick}
         className={`peer absolute appearance-none ${inputClassName}`}
         {...register}
       />
