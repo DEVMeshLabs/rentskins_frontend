@@ -150,7 +150,7 @@ export const ContainerItem = ({
     Pistolas: 'Pistol',
     Luvas: 'Glove',
     Figurinhas: 'Sticker',
-    Agentes: 'Agent',
+    Agentes: 'Agente',
     Pesadas: 'Heavy',
   }
 
