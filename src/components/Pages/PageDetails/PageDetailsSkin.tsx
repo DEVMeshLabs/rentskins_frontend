@@ -72,7 +72,6 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
-  const customName = skinName.split('(')[0]
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -201,7 +200,6 @@ export function PageDetailsSkin({
   }, [deleteResult, router])
 
   useEffect(() => {
-    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
       setLoading(true)
       refetchAvailability()
@@ -211,7 +209,6 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations])
 
   useEffect(() => {
-    console.log(resultAvailability?.data)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(watchRentTime!)
@@ -314,11 +311,11 @@ export function PageDetailsSkin({
   }, [wasRaised, data, recreatingCart])
 
   return (
-    <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
+    <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
       <div className="space-y-4">
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            {customName}
+            {skinName}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">{statusFloat}</p>
         </div>
@@ -444,7 +441,7 @@ export function PageDetailsSkin({
           )}
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between justify-self-end">
           <div className="flex gap-2">
             {saleType === 'rent' &&
               renderButton(

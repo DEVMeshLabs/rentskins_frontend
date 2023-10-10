@@ -24,6 +24,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const defaultID = item.skin_link_game.slice(20, 37)
+  const customName = item.skin_name.split('(')[0]
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
@@ -45,7 +46,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
         <IconArrow />
         <Common.Title color="cinza">
           Home &bull; {item.skin_weapon} &bull;{' '}
-          <span className="text-[#49E671]">{item.skin_name}</span>
+          <span className="text-[#49E671]">{customName}</span>
         </Common.Title>
       </Link>
 
@@ -74,7 +75,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             defaultID={defaultID}
             userStatus={status}
             assetId={item.asset_id}
-            skinName={item.skin_name}
+            skinName={customName}
             skinPrice={item.skin_price}
             skinFloat={item.skin_float}
             skinCategory={item.skin_category}
