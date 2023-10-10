@@ -68,7 +68,9 @@ export function PageDetailsSkin({
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [rentPercentage, setRentPercentage] = useState(10)
-  const [methodSelected, setMethodSelected] = useState<any>()
+  const [methodSelected, setMethodSelected] = useState<
+    'rent' | 'buy' | 'cart' | undefined
+  >()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
@@ -79,6 +81,7 @@ export function PageDetailsSkin({
     setWhatModalOpenToBuySkin,
     setSkinToBuy,
     setRentTime,
+    itemAvailable,
     setItemAvailable,
   } = useSkinsStore()
 
@@ -200,7 +203,7 @@ export function PageDetailsSkin({
   }, [deleteResult, router])
 
   useEffect(() => {
-    if (methodSelected !== undefined) {
+    if (methodSelected !== undefined && !itemAvailable) {
       setLoading(true)
       refetchAvailability()
     } else {
@@ -454,6 +457,7 @@ export function PageDetailsSkin({
                           'Você deve selecionar um período para prosseguir com o aluguel.',
                         )
                       } else {
+                        setMethodSelected('rent')
                         setSkinToBuy(skinToBuy)
                         setRentTime(+watchRentTime)
                         setWhatModalOpenToBuySkin(1)
