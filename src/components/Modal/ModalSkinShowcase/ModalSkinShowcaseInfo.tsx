@@ -99,8 +99,8 @@ export function ModalSkinShowcaseInfo({
   })
   const watchValue = watch('value')
   const watchTerms = watch('terms')
-  const watchSell = watch('rent')
-  const watchRent = watch('sell')
+  const watchSell = watch('sell')
+  const watchRent = watch('rent')
 
   const formattedValue = (value: string): number => {
     let newFormattedValue
@@ -130,7 +130,7 @@ export function ModalSkinShowcaseInfo({
     if (watchValue && watchValue?.length > 0 && watchTerms) {
       setSkinsToAdvertise({
         id,
-        sale_type,
+        sale_type: watchRent ? 'rent' : 'sale',
         seller_id: trueSession.user?.steam?.steamid as string,
         seller_name: trueSession.user?.name as string,
         skin_category,

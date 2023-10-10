@@ -41,6 +41,7 @@ type PropsTypes = {
   userId: string
   userName: string
   token: string
+  saleType: 'sale' | 'rent'
 }
 
 export function PageDetailsSkin({
@@ -62,7 +63,7 @@ export function PageDetailsSkin({
   assetId,
   ownerSkin,
   userId,
-  userName,
+  saleType,
   token,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
@@ -73,7 +74,6 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
-  const customName = skinName.split('(')[0]
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -202,7 +202,6 @@ export function PageDetailsSkin({
   }, [deleteResult, router])
 
   useEffect(() => {
-    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
       setLoading(true)
       refetchAvailability()
@@ -212,7 +211,6 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations])
 
   useEffect(() => {
-    console.log(resultAvailability?.data)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(watchRentTime!)
@@ -315,11 +313,11 @@ export function PageDetailsSkin({
   }, [wasRaised, data, recreatingCart])
 
   return (
-    <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
+    <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
       <div className="space-y-4">
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            {customName}
+            {skinName}
           </Common.Title>
           <p className="text-mesh-color-neutral-200">{statusFloat}</p>
         </div>
@@ -414,63 +412,68 @@ export function PageDetailsSkin({
 
       <div className="mt-6 flex flex-col gap-4">
         <div className="">
-          <Common.Title className="font-semibold text-white">
-            Selecione o período de Aluguel
-          </Common.Title>
-          <Form.Input.Radio.Default
-            containerClassname="flex gap-2 mt-2"
-            disabled={
-              (loading && hasConfigurations) || userStatus === 'loading'
-            }
-            labelClassName={classNames(
-              'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
-              {
-                'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
-              },
-            )}
-            onClick={() => {
-              setSelectedRentTime(false)
-            }}
-            name="rent-time"
-            items={[
-              { label: '7 Dias', value: 7 },
-              { label: '14 Dias', value: 14 },
-              { label: '21 Dias', value: 21 },
-            ]}
-            register={register('rent-time')}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            {renderButton(
-              <Common.Button
-                onClick={async () => {
-                  if (userIsntOwnerSkin) {
-                    if (!watchRentTime) {
-                      setSelectedRentTime(true)
-                      Toast.Error(
-                        'Você deve selecionar um período para prosseguir com o aluguel.',
-                      )
-                    } else {
-                      setMethodSelected('rent')
-                      setSkinToBuy(skinToBuy)
-                      setRentTime(+watchRentTime)
-                      setWhatModalOpenToBuySkin(1)
-                      setOpenModalBuySkin(true)
-                    }
-                  } else {
-                    Toast.Error('Você não pode alugar o seu próprio item.')
-                  }
-                }}
+          {saleType === 'rent' && (
+            <>
+              <Common.Title className="font-semibold text-white">
+                Selecione o período de Aluguel
+              </Common.Title>
+              <Form.Input.Radio.Default
+                containerClassname="flex gap-2 mt-2"
                 disabled={
                   (loading && hasConfigurations) || userStatus === 'loading'
                 }
-                className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-              >
-                Alugar
-              </Common.Button>,
-            )}
+                labelClassName={classNames(
+                  'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
+                  {
+                    'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
+                  },
+                )}
+                onClick={() => {
+                  setSelectedRentTime(false)
+                }}
+                name="rent-time"
+                items={[
+                  { label: '7 Dias', value: 7 },
+                  { label: '14 Dias', value: 14 },
+                  { label: '21 Dias', value: 21 },
+                ]}
+                register={register('rent-time')}
+              />
+            </>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between justify-self-end">
+          <div className="flex gap-2">
+            {saleType === 'rent' &&
+              renderButton(
+                <Common.Button
+                  onClick={async () => {
+                    if (userIsntOwnerSkin) {
+                      if (!watchRentTime) {
+                        setSelectedRentTime(true)
+                        Toast.Error(
+                          'Você deve selecionar um período para prosseguir com o aluguel.',
+                        )
+                      } else {
+                        setMethodSelected('rent')
+                        setSkinToBuy(skinToBuy)
+                        setRentTime(+watchRentTime)
+                        setWhatModalOpenToBuySkin(1)
+                        setOpenModalBuySkin(true)
+                      }
+                    } else {
+                      Toast.Error('Você não pode alugar o seu próprio item.')
+                    }
+                  }}
+                  disabled={
+                    (loading && hasConfigurations) || userStatus === 'loading'
+                  }
+                  className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                >
+                  Alugar
+                </Common.Button>,
+              )}
             <ModalBuyMain
               createTransaction={{
                 skinPrice: Number(skinPrice),
