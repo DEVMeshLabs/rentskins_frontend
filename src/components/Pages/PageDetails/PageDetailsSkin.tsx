@@ -81,6 +81,7 @@ export function PageDetailsSkin({
     setWhatModalOpenToBuySkin,
     setSkinToBuy,
     setRentTime,
+    itemAvailable,
     setItemAvailable,
   } = useSkinsStore()
 
@@ -202,7 +203,7 @@ export function PageDetailsSkin({
   }, [deleteResult, router])
 
   useEffect(() => {
-    if (methodSelected !== undefined) {
+    if (methodSelected !== undefined && !itemAvailable) {
       setLoading(true)
       refetchAvailability()
     } else {
