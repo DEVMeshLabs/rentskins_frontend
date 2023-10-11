@@ -55,6 +55,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
           <PageDetailsCard
             skinImage={item.skin_image}
             skinName={item.skin_name}
+            skinCategory={item.skin_category}
             skinLinkGame={item.skin_link_game}
             skinLinkSteam={item.skin_link_steam}
             skinFloat={Number(item.skin_float)}

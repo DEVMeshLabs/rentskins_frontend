@@ -2,14 +2,14 @@ import IconSteam from '@/assets/IconSteam'
 import Common from '@/components/Common'
 import IconMagic from '@/components/Icons/IconMagicpen'
 import { IconOlho } from '@/components/Icons/IconOlho'
-import classNames from 'classnames'
-import Image from 'next/image'
-import Link from 'next/link'
-import ColoredLine from '../ColoredLine'
 import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
 import { ISkins } from '@/interfaces/ISkins'
 import useModalStore from '@/stores/modal.store'
 import transformRarityInColor from '@/utils/transformRarityInColor'
+import classNames from 'classnames'
+import Image from 'next/image'
+import Link from 'next/link'
+import ColoredLine from '../ColoredLine'
 
 interface Props {
   itsRent?: boolean
@@ -37,20 +37,22 @@ export function OtherCard({ itsRent, item }: Props) {
       >
         <Link
           href={`/detalhes/${item.id}`}
-          className="flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
+          className="flex h-full min-h-[165px] w-full select-none flex-col items-center justify-between
+          rounded-lg border-2 border-mesh-color-neutral-400
+          bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
           <div
-            className={`h-2 w-52 rounded-b-full`}
+            className={`top-0 h-2 w-52 rounded-b-full`}
             style={{
               backgroundColor: `#${transformRarityInColor(item.skin_rarity)}`,
             }}
           />
           <Image
+            className="m-auto p-2"
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
-            className="h-[154px] w-[206px]"
             alt={item.skin_name}
-            width={206}
-            height={154}
+            width={item.skin_category === 'Sticker' ? 103 : 206}
+            height={item.skin_category === 'Sticker' ? 77 : 154}
             draggable={false}
           />
         </Link>
