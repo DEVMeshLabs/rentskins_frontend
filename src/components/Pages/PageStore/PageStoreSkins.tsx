@@ -113,9 +113,7 @@ export default function PageStoreSkins() {
           <IconArrowLeft /> Home {nameCorrection && `• ${nameCorrection}`}
         </Common.Title>
       </Link>
-
       <SkinFilters />
-
       {isLoading || isRefetching ? (
         <AllSkeletonSkins />
       ) : data &&
@@ -138,7 +136,7 @@ export default function PageStoreSkins() {
             >
               Nenhum item relacionado a{' '}
               <span className="text-mesh-color-primary-1200">
-                {nameCorrection}
+                {nameCorrection === 'Agent' ? 'Agente' : nameCorrection}
                 <span className="text-mesh-color-neutral-200">
                   {' '}
                   foi encontrado.
@@ -156,7 +154,7 @@ export default function PageStoreSkins() {
         </div>
       )}
 
-      {data?.data?.totalPages &&
+      {data?.data &&
         data?.data?.totalPages > 1 &&
         Number(page) <= data?.data?.totalPages && (
           <LayoutPagination
