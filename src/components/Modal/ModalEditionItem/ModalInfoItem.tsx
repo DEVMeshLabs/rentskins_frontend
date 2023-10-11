@@ -65,7 +65,9 @@ export function ModalInfoItem({
     queryFn: () => {
       return SkinService.updateEditSkin(
         id,
-        Number(watchValue!.replace(/[^\d.,]/g, '')),
+        Number(
+          watchValue!.replace('R$ ', '').replace(',', '').replace('.', ''),
+        ),
         trueSession.user?.token!,
       )
     },
@@ -73,6 +75,7 @@ export function ModalInfoItem({
   })
 
   useEffect(() => {
+    console.log(data)
     if (isRefetching) {
       if (data?.request.status === 204) {
         onClick()
