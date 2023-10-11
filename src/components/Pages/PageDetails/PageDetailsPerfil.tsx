@@ -35,9 +35,6 @@ export function PageDetailsPerfil({
       : moment(account_date).locale('pt-br').format('MMM D, YYYY')
   const percentReliability = Number(reliability?.replace('%', ''))
 
-  console.log(percentReliability)
-  console.log(reliability)
-
   return (
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="flex flex-col justify-between gap-8 p-4">

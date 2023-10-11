@@ -101,8 +101,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
 
   const watchValue = watch('value')
 
-  useEffect(() => console.log(watchValue), [watchValue])
-
   const onSubmit = (data: any) => {
     setIsLoading(true)
 
@@ -115,7 +113,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
       setPayment({ method: data.method, value: currencyToNumber })
     } else {
       let currencyToNumber
-      console.log(currencyToNumber)
       currencyToNumber = data?.value.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
       currencyToNumber = currencyToNumber.replace(',', '.')

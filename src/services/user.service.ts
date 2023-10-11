@@ -4,13 +4,9 @@ import { ICreateUser, IGetUser } from './interfaces/user.interface'
 
 export default class UserService {
   public static async getUser(userSteamId: string) {
-    const result: AxiosResponse<IGetUser> = await Api.get<IGetUser>(
-      `/perfil/user/${userSteamId}`,
-    )
+    return (await Api.get<IGetUser>(`/perfil/user/${userSteamId}`)
       .then((response) => response)
-      .catch((e) => e)
-
-    return result
+      .catch((e) => e)) as AxiosResponse<IGetUser>
   }
 
   public static async getUserStatus(userSteamId: string) {
@@ -48,11 +44,8 @@ export default class UserService {
   }
 
   public static async getLatestSales(ownerID: string) {
-    console.log('chegou aqui')
-    const test = await Api.get(`/transaction/last/sales/${ownerID}`)
+    return await Api.get(`/transaction/last/sales/${ownerID}`)
       .then((response) => response)
       .catch((e) => e)
-    console.log(test)
-    return test
   }
 }

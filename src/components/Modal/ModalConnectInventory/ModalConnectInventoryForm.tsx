@@ -72,7 +72,6 @@ export function ModalConnectInventoryForm({
   })
 
   useEffect(() => {
-    console.log(data)
     if (data?.request.status) {
       return window.location.reload()
     }

@@ -1,7 +1,10 @@
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import TransactionCard from '@/components/Others/TransactionCard'
 import { TransactionsTable } from '@/components/Others/TransactionsTable'
+import ConfigService from '@/services/config.service'
 import TransactionsService from '@/services/transactions.service'
+import useComponentStore from '@/stores/components.store'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 // import TransactionsTable from '../Settings/Transactions/table'
 
@@ -13,6 +16,8 @@ export default function PageNotificationTransaction({
   steamid,
   token,
 }: IProps) {
+  const { setRedirectToSteam } = useComponentStore()
+
   const { data: transactions, isLoading } = useQuery({
     queryKey: ['Transactions', steamid],
     queryFn: () => TransactionsService.getUserTransactions(steamid),
@@ -35,7 +40,7 @@ export default function PageNotificationTransaction({
 
       return false
     })
-    .map((item, index) => {
+    .map(async (item, index) => {
       const isABuyer = item.buyer_id === steamid
 
       return (
@@ -70,7 +75,36 @@ export default function PageNotificationTransaction({
                 type: isABuyer ? 'buyer' : 'seller',
               }}
               buttonStyle="full"
-              text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
+              text={isABuyer ? 'Item Obtido' : 'Enviar Item'}
+              onClick={async () => {
+                if (!isABuyer) {
+                  setRedirectToSteam(true)
+
+                  const tradeLink = await ConfigService.findByConfigUserId(
+                    item.buyer_id,
+                    token,
+                  )
+
+                  if (tradeLink.status === 200) {
+                    Toast.Loading(
+                      'Redirecionando para a página de troca da Steam...',
+                    )
+
+                    setTimeout(() => {
+                      Object.assign(document.createElement('a'), {
+                        target: '_blank',
+                        rel: 'noopener noreferrer',
+                        href: tradeLink.data.url_trade,
+                      }).click()
+                      setRedirectToSteam(false)
+                    }, 2000)
+                  } else {
+                    Toast.Error(
+                      'Não foi possível acessar a página de troca da Steam no momento.',
+                    )
+                  }
+                }
+              }}
             />
             <TransactionCard.Button
               token={token}
@@ -81,7 +115,7 @@ export default function PageNotificationTransaction({
                 type: isABuyer ? 'buyer' : 'seller',
               }}
               buttonStyle="opaque"
-              text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
+              text={isABuyer ? 'Não Obtido' : 'Não Enviar'}
             />
           </TransactionCard.Actions>
         </TransactionCard.Root>
