@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 'use client'
-import classNames from 'classnames'
 import { ISkins } from '@/interfaces/ISkins'
+import classNames from 'classnames'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 export interface IAllSkinsProps {
