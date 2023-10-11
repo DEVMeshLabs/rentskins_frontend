@@ -51,7 +51,7 @@ export function ModalBuyMain({
   )
 
   useEffect(() => {
-    if (createTrasaction?.data && createTrasaction?.status === 201) {
+    if (createTrasaction?.status === 201) {
       setWhatModalOpenToBuySkin(3)
     } else if (createTrasaction?.request.status === 400) {
       setWhatModalOpenToBuySkin(4)
