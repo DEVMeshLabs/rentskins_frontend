@@ -72,6 +72,7 @@ export function PageDetailsSkin({
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
   const [stateRentTime, setStateRentTime] = useState(7)
+  const [rent, setRent] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -230,7 +231,9 @@ export function PageDetailsSkin({
   }, [resultAvailability])
 
   const proceedItem = useCallback(async () => {
+    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
+      console.log(wasRaised)
       if (userStatus === 'authenticated') {
         if (hasConfigurations) {
           const handleCart = async () => {
@@ -285,6 +288,7 @@ export function PageDetailsSkin({
       }
     }
   }, [
+    methodSelected,
     resultAvailability,
     refetchingAvailability,
     proceedItem,
@@ -293,6 +297,7 @@ export function PageDetailsSkin({
   ])
 
   useEffect(() => {
+    console.log(data)
     if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
         Toast.Success('Item adicionado ao carrinho!')
@@ -309,8 +314,6 @@ export function PageDetailsSkin({
     { label: '14 Dias', value: 14 },
     { label: '21 Dias', value: 21 },
   ]
-
-  const [rent, setRent] = useState(false)
 
   return (
     <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
@@ -466,7 +469,9 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
+                  console.log('OnClick')
                   if (userIsntOwnerSkin) {
+                    console.log('Entrou dentro do if')
                     setMethodSelected('cart')
                   } else {
                     Toast.Error(
