@@ -79,7 +79,6 @@ export default class SkinService {
     allSkinsAdvertise: ISkinsToAdvertise[],
     token: string,
   ) {
-    console.log(allSkinsAdvertise)
     const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
       delete skin.id
       return skin

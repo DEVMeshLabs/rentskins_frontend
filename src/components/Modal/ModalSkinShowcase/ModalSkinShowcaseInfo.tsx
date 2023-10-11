@@ -66,11 +66,8 @@ export function ModalSkinShowcaseInfo({
 
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
-      console.log(savePrice)
     }
   }, [])
-
-  console.log(recomended_price)
 
   const removeSign = (value: string) => {
     const response = value

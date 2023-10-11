@@ -50,8 +50,6 @@ export function ModalSkinShowcaseMain({
     enabled: !!marketName,
   })
 
-  console.log(averagePrice)
-
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>

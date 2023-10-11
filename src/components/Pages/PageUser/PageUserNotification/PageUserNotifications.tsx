@@ -34,18 +34,6 @@ export default function PageUserNotifications() {
   const [pageSize, setPageSize] = useState(5)
 
   const notificationLabel = () => {
-    console.log(notificationFilter)
-    console.log(
-      {
-        tudo: 'Tudo',
-        hoje: 'Hoje',
-        tresDias: '1-3 Dias',
-        umaSemana: '1 Semana',
-        umMes: '1 Mês',
-        tresMes: '3 Meses',
-        umAno: '1 Ano',
-      }[notificationFilter],
-    )
     return {
       tudo: 'Tudo',
       hoje: 'Hoje',
@@ -84,8 +72,6 @@ export default function PageUserNotifications() {
     },
     enabled: status === 'authenticated',
   })
-
-  console.log(data)
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target

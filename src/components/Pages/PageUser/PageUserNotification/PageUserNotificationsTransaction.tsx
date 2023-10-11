@@ -80,8 +80,6 @@ export default function PageNotificationTransaction({
                     token,
                   )
 
-                  console.log(tradeLink.status)
-
                   if (tradeLink.status === 200) {
                     Toast.Loading(
                       'Redirecionando para a página de troca da Steam...',
