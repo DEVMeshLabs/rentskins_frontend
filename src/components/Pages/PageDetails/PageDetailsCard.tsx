@@ -8,6 +8,7 @@ import Link from 'next/link'
 type PropsType = {
   skinImage: string
   skinName: string
+  skinCategory: string
   skinLinkGame: string
   skinLinkSteam: string
   skinFloat: number
@@ -20,6 +21,7 @@ export function PageDetailsCard({
   skinLinkGame,
   skinLinkSteam,
   skinFloat,
+  skinCategory,
   deletedAt,
 }: PropsType) {
   return (
@@ -59,10 +61,10 @@ export function PageDetailsCard({
           <Image
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
             alt={skinName}
-            width={510}
-            height={380}
+            width={skinCategory === 'Sticker' ? 170 : 510}
+            height={skinCategory === 'Sticker' ? 126 : 380}
             quality={100}
-            className="mx-auto my-auto h-full w-fit object-cover"
+            className="m-auto object-cover"
             draggable={false}
           />
 
