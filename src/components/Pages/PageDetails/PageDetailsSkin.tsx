@@ -333,30 +333,32 @@ export function PageDetailsSkin({
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
 
-        <div
-          className={`transition-all duration-500 ${
-            stateRentTime !== undefined && stateRentTime !== null
-              ? 'opacity-100'
-              : 'opacity-0'
-          }`}
-        >
-          <div className="flex items-center">
-            <Common.Title className="text-2xl font-extrabold text-white">
-              {(
-                parseFloat(String(skinPrice)) *
-                (rentPercentage / 100)
-              ).toLocaleString('PT-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-              })}
-            </Common.Title>
-            <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
-              {rentPercentage}%
-            </span>
+        {saleType === 'rent' && (
+          <div
+            className={`transition-all duration-500 ${
+              stateRentTime !== undefined && stateRentTime !== null
+                ? 'opacity-100'
+                : 'opacity-0'
+            }`}
+          >
+            <div className="flex items-center">
+              <Common.Title className="text-2xl font-extrabold text-white">
+                {(
+                  parseFloat(String(skinPrice)) *
+                  (rentPercentage / 100)
+                ).toLocaleString('PT-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 2,
+                })}
+              </Common.Title>
+              <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
+                {rentPercentage}%
+              </span>
+            </div>
+            <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
           </div>
-          <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
-        </div>
+        )}
       </div>
 
       <div className="mt-6 space-y-4">
