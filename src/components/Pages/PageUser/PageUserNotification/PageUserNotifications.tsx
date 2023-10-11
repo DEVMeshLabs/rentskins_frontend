@@ -2,30 +2,15 @@
 import Common from '@/components/Common'
 import { ModalNotificationFilter } from '@/components/Modal/ModalNotification/ModalNotificationFilter'
 import ISteamUser from '@/interfaces/steam.interface'
-import { INotification } from '@/services/interfaces/notification.interface'
 import NotificationServices from '@/services/notifications.service'
 import useFilterStore from '@/stores/filters.store'
 import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
-const PageNotificationHistoric = dynamic<{
-  data: INotification[] | undefined
-  loading: boolean
-  onClick: () => void
-}>(() =>
-  import(
-    '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsHistoric'
-  ).then((module) => module.default),
-)
-const PageNotificationTransaction = dynamic<{ steamid: string; token: string }>(
-  () =>
-    import(
-      '@/components/Pages/PageUser/PageUserNotification/PageUserNotificationsTransaction'
-    ).then((module) => module.default),
-)
+import PageNotificationHistoric from './PageUserNotificationsHistoric'
+import PageNotificationTransaction from './PageUserNotificationsTransaction'
 
 export default function PageUserNotifications() {
   const { data: session, status } = useSession()
