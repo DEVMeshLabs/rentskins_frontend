@@ -15,7 +15,6 @@ interface Props {
   itsRent?: boolean
   item: ISkins
 }
-//
 
 export function OtherCard({ itsRent, item }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
