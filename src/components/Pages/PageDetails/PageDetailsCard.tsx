@@ -61,8 +61,8 @@ export function PageDetailsCard({
           <Image
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
             alt={skinName}
-            width={skinCategory === 'Sticker' ? 170 : 510}
-            height={skinCategory === 'Sticker' ? 126 : 380}
+            width={510}
+            height={380}
             quality={100}
             className="m-auto object-cover"
             draggable={false}

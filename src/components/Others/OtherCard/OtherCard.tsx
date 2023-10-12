@@ -37,7 +37,7 @@ export function OtherCard({ itsRent, item }: Props) {
       >
         <Link
           href={`/detalhes/${item.id}`}
-          className="flex h-full min-h-[165px] w-full select-none flex-col items-center justify-between
+          className="flex h-full max-h-[170px] min-h-[170px] w-full select-none flex-col items-center justify-between
           rounded-lg border-2 border-mesh-color-neutral-400
           bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
@@ -51,8 +51,8 @@ export function OtherCard({ itsRent, item }: Props) {
             className="m-auto p-2"
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
             alt={item.skin_name}
-            width={item.skin_category === 'Sticker' ? 103 : 206}
-            height={item.skin_category === 'Sticker' ? 77 : 154}
+            width={206}
+            height={154}
             draggable={false}
           />
         </Link>
