@@ -16,6 +16,7 @@ import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import transformRarityInColor, {
   TItemRarity,
 } from '@/utils/transformRarityInColor'
+//
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
