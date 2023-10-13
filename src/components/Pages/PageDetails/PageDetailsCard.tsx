@@ -39,7 +39,7 @@ export function PageDetailsCard({
           },
         )}
       >
-        <div className="flex h-full w-full flex-col justify-between gap-8">
+        <div className="flex h-full w-full flex-col justify-between gap-8 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat">
           {deletedAt === null && (
             <div className="flex select-none space-x-2 p-2">
               <Link href={skinLinkSteam} target="_blank" rel="noreferrer">
