@@ -145,10 +145,19 @@ export function CardSkinInventory() {
                 ({ id }) => assetid === id,
               )
 
-              const linkForPreviewSkin = actions[0].link
+              const categoryType = tags.filter(
+                ({ category }) => category === 'Type',
+              )
+              const isRentable = !(
+                categoryType[0].name === 'Graffiti' ||
+                categoryType[0].name === 'Container'
+              )
+              console.log(isRentable)
+              const linkForPreviewSkin = actions ? actions[0].link : '#'
 
               return (
                 <ModalSkinShowcaseMain
+                  isRentable={isRentable}
                   key={assetid}
                   asset_id={assetid}
                   skinImage={icon_url}

@@ -25,6 +25,7 @@ interface IProps {
   asset_id: string
   linkForPreviewSkin: string
   linkForProfile: string
+  isRentable: boolean
 }
 
 export function ModalSkinShowcaseMain({
@@ -32,6 +33,7 @@ export function ModalSkinShowcaseMain({
   isEdition,
   skinImage,
   skinWeapon,
+  isRentable,
   statusFloat,
   float,
   skinCategory,
@@ -82,6 +84,7 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                isRentable={isRentable}
                 asset_id={asset_id}
                 isSelected={isSelected}
                 id={id}
