@@ -28,11 +28,13 @@ type Props = {
   id: string
   isSelected: boolean
   asset_id: string
+  isRentable: boolean
 }
 
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
   skin_category,
+  isRentable,
   skin_rarity,
   skin_float,
   skin_image,
@@ -127,7 +129,7 @@ export function ModalSkinShowcaseInfo({
     if (watchValue && watchValue?.length > 0 && watchTerms) {
       setSkinsToAdvertise({
         id,
-        sale_type: watchRent ? 'rent' : 'sale',
+        sale_type: watchRent && isRentable ? 'rent' : 'sale',
         seller_id: trueSession.user?.steam?.steamid as string,
         seller_name: trueSession.user?.name as string,
         skin_category,
@@ -252,11 +254,13 @@ export function ModalSkinShowcaseInfo({
             label="Venda"
             checked={true}
           />
-          <Form.Input.Checkbox
-            name="sell-rent"
-            register={register('rent')}
-            label="Aluguel"
-          />
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="sell-rent"
+              register={register('rent')}
+              label="Aluguel"
+            />
+          )}
         </div>
         {/* ---------INPUT FIM -------------  */}
 

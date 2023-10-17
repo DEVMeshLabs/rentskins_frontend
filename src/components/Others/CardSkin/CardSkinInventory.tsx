@@ -145,10 +145,22 @@ export function CardSkinInventory() {
                 ({ id }) => assetid === id,
               )
 
-              const linkForPreviewSkin = actions[0].link
+              const categoryType = tags.filter(
+                ({ category }) => category === 'Type',
+              )
+              console.log(name, categoryType)
+              const isRentable = !(
+                categoryType[0].name === 'Graffiti' ||
+                categoryType[0].name === 'Container' ||
+                categoryType[0].name === 'Sticker' ||
+                categoryType[0].name === 'Collectible'
+              )
+              console.log(isRentable)
+              const linkForPreviewSkin = actions ? actions[0].link : '#'
 
               return (
                 <ModalSkinShowcaseMain
+                  isRentable={isRentable}
                   key={assetid}
                   asset_id={assetid}
                   skinImage={icon_url}
@@ -200,10 +212,14 @@ export function CardSkinInventory() {
                           <CardSkin.Content
                             market_name={market_name}
                             primeiroName={primeiroName}
-                            float={itemIsAWeapon ? '0.254665' : ''}
+                            float={
+                              itemIsAWeapon && isRentable ? '0.254665' : ''
+                            }
                           />
                         </div>
-                        {itemIsAWeapon && <ColoredLine position={0.254665} />}
+                        {itemIsAWeapon && isRentable && (
+                          <ColoredLine position={0.254665} />
+                        )}
                       </CardSkin.Root>
                     </div>
                   }

@@ -19,11 +19,13 @@ export type TItemRarity =
   | 'High Grade'
   | 'Rare'
   | 'Exceptional'
+  | 'Base Grade'
 
 export default function transformRarityInColor(itemRarity: TItemRarity) {
   if (itemRarity) {
     return {
       'Consumer Grade': () => 'b0c3b7',
+      'Base Grade': () => 'b0c3b7',
       'Industrial Grade': () => '397cd9',
       'Mil-Spec Grade': () => '2e32b1',
       Distinguished: () => '2e32b1',
