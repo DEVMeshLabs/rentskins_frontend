@@ -11,10 +11,15 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
   const customName = market_name.includes('StatTrak™')
     ? market_name.split('™')
     : market_name
+
   return (
     <>
       <div>
-        <div className="h-10 text-start">
+        <div
+          className={`${
+            customName.length >= 41 ? 'h-14' : 'h-10'
+          } h-10 text-start`}
+        >
           <Common.Title
             bold={600}
             size="sm"
@@ -22,7 +27,7 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
           >
             {typeof customName === 'object' ? (
               <h1>
-                <span className="text-mesh-color-secondary-1200 ">
+                <span className="text-mesh-color-secondary-1200">
                   {customName[0]}
                 </span>
                 {customName[1]}
@@ -36,7 +41,11 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
           {primeiroName}
         </span>
       </div>
-      <p className="my-4 text-sm font-medium">
+      <p
+        className={`${
+          customName.length >= 41 ? 'my-2' : 'my-4'
+        } text-sm font-medium`}
+      >
         {float !== '' && 'FT / '}
         <span className="text-[13px] font-semibold text-mesh-color-neutral-200">
           {float}

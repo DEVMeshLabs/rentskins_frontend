@@ -39,7 +39,7 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        trueSession.user?.steam?.steamid!,
+        '76561198862407248',
         trueSession.user?.token!,
         inventoryTypeFilter,
         Number(page),
@@ -148,9 +148,12 @@ export function CardSkinInventory() {
               const categoryType = tags.filter(
                 ({ category }) => category === 'Type',
               )
+              console.log(name, categoryType)
               const isRentable = !(
                 categoryType[0].name === 'Graffiti' ||
-                categoryType[0].name === 'Container'
+                categoryType[0].name === 'Container' ||
+                categoryType[0].name === 'Sticker' ||
+                categoryType[0].name === 'Collectible'
               )
               console.log(isRentable)
               const linkForPreviewSkin = actions ? actions[0].link : '#'
@@ -209,10 +212,14 @@ export function CardSkinInventory() {
                           <CardSkin.Content
                             market_name={market_name}
                             primeiroName={primeiroName}
-                            float={itemIsAWeapon ? '0.254665' : ''}
+                            float={
+                              itemIsAWeapon && isRentable ? '0.254665' : ''
+                            }
                           />
                         </div>
-                        {itemIsAWeapon && <ColoredLine position={0.254665} />}
+                        {itemIsAWeapon && isRentable && (
+                          <ColoredLine position={0.254665} />
+                        )}
                       </CardSkin.Root>
                     </div>
                   }
