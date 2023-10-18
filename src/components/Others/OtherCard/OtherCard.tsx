@@ -115,7 +115,7 @@ export function OtherCard({ itsRent, item }: Props) {
             <span className="opacity-60">{item.skin_float}</span>
           </h1>
         </div>
-        <ColoredLine position={item.skin_float} />
+        {item.skin_float && <ColoredLine position={item.skin_float} />}
         <div className="flex select-none items-center justify-end">
           {itsRent ? (
             <Common.Button

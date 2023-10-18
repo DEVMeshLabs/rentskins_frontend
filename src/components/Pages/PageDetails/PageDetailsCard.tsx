@@ -69,7 +69,7 @@ export function PageDetailsCard({
           />
 
           <div className="w-full ">
-            <ColoredLine position={skinFloat} />
+            {skinFloat && <ColoredLine position={skinFloat} />}
           </div>
         </div>
       </div>

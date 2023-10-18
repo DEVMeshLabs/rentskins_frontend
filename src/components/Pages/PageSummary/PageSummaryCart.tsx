@@ -27,7 +27,7 @@ export default function PageSummaryCart() {
         return acc
       }, 0),
     )
-    setTotalPrice(totalPrice)
+    setTotalPrice(String(Number(totalPrice) - 0.05 * Number(totalPrice)))
   }, [skinsToBuy, skinsFromCart])
 
   const { data, refetch, isRefetching } = useQuery({
@@ -79,7 +79,7 @@ export default function PageSummaryCart() {
       <div className="flex flex-col gap-6">
         <LineInfosSummaryh
           title="Total"
-          value={String(+totalPrice - 0.05 * 100)}
+          value={totalPrice}
           size="lg"
           cash={true}
         />
