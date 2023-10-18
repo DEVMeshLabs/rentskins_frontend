@@ -6,6 +6,11 @@ const useUserStore = create<IStates>((set) => ({
   setWallet: (wallet: any) => {
     set(() => ({ wallet: { value: wallet } }))
   },
+
+  itemsSoldOrRented: 'sold',
+  setItemsSoldOrRented: (itemsSoldOrRented) => {
+    set(() => ({ itemsSoldOrRented }))
+  },
 }))
 
 export default useUserStore

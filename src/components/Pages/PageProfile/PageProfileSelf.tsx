@@ -11,6 +11,7 @@ import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
+// import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { notFound } from 'next/navigation'
@@ -31,6 +32,7 @@ export default function PageProfileSelf() {
   const [totalExchanges, setTotalExchanges] = useState(0)
   const [deliveryTime, setDeliveryTime] = useState('')
   const [deliveryFee, setDeliveryFee] = useState<number | string>(0)
+  // const { itemsSoldOrRented } = useUserStore()
 
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
