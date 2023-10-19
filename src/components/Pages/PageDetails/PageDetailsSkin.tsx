@@ -72,7 +72,7 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
-  const [stateRentTime, setStateRentTime] = useState(7)
+  const [stateRentTime, setStateRentTime] = useState(0)
   const [rent, setRent] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
@@ -337,12 +337,10 @@ export function PageDetailsSkin({
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
 
-        {saleType === 'rent' && (
+        {saleType === 'rent' && rent && stateRentTime > 0 && (
           <div
             className={`transition-all duration-500 ${
-              stateRentTime !== undefined && stateRentTime !== null
-                ? 'opacity-100'
-                : 'opacity-0'
+              stateRentTime > 0 ? 'opacity-100' : 'opacity-0'
             }`}
           >
             <div className="flex items-center">
@@ -511,6 +509,7 @@ export function PageDetailsSkin({
                           selectedRentTime,
                       },
                     )}
+                    onMouseOver={() => setStateRentTime(value)}
                     onClick={() => {
                       setStateRentTime(value)
                       setSelectedRentTime(false)
