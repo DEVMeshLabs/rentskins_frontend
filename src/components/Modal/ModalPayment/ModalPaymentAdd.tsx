@@ -69,6 +69,7 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
             '/pagamento/recarregar') as string,
           amount: Number(payment.value),
           payment_method: payment.method as 'card' | 'boleto' | 'pix',
+          cpf: userConfigurations?.data.owner_cpf!,
         },
         trueSession.user?.token!,
       ),
@@ -85,6 +86,7 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   }, [payment, startPayment, afterFormSubmit, createPayment])
 
   useEffect(() => {
+    console.log(createdPayment)
     if (createdPayment?.request.status === 200) {
       redirect(createdPayment.data.url)
     }
