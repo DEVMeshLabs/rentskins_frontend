@@ -10,7 +10,6 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import StripeService from '@/services/stripe.service'
-import Toast from '@/tools/toast.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
@@ -76,14 +75,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
     cacheTime: 0,
     enabled: false,
   })
-
-  useEffect(() => {
-    Toast.Icon(
-      'O pagamento por PIX se encontra desativado no momento.',
-      '⚠️',
-      3000,
-    )
-  }, [])
 
   useEffect(() => {
     if (payment && startPayment) {
@@ -260,7 +251,6 @@ const renderRadioMethodOptions = () => {
     {
       label: renderImage(ImagePIX, 'pix'),
       value: 'pix',
-      disabled: true,
     },
     {
       label: renderImage(ImageTicket, 'boleto'),
