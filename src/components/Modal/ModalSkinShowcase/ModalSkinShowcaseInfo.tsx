@@ -115,11 +115,11 @@ export function ModalSkinShowcaseInfo({
       !(
         watchValue &&
         watchValue?.length > 0 &&
-        watchTerms &&
+        (watchTerms || !isRentable) &&
         (watchRent || watchSell)
       ),
     )
-  }, [watchValue, watchTerms, watchSell, watchRent])
+  }, [watchValue, watchTerms, watchSell, watchRent, isRentable])
 
   const inspectLink = skin_link_game
     .replace('%owner_steamid%', trueSession.user?.steam?.steamid!)
@@ -299,17 +299,19 @@ export function ModalSkinShowcaseInfo({
               </Form.Button>
             </Dialog.Close>
           )}
-          <Form.Input.Checkbox
-            name="terms"
-            wrapperClassname="gap-4"
-            labelClassName="text-sm text-justify text-white"
-            label="Estou ciente que esta plataforma possui a modalidade de locação, e
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="terms"
+              wrapperClassname="gap-4"
+              labelClassName="text-sm text-justify text-white"
+              label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
             realizado no prazo final da transação."
-            register={register('terms')}
-            errors={errors.warning}
-          />
+              register={register('terms')}
+              errors={errors.warning}
+            />
+          )}
         </div>
       </Form.Root>
     </div>
