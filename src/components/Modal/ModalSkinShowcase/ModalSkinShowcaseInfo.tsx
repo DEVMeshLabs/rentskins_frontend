@@ -126,7 +126,7 @@ export function ModalSkinShowcaseInfo({
     .replace('%assetid%', asset_id)
 
   const handleAddSkinsToAdvertise = () => {
-    if (watchValue && watchValue?.length > 0 && watchTerms) {
+    if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
       setSkinsToAdvertise({
         id,
         sale_type: watchRent && isRentable ? 'rent' : 'sale',
