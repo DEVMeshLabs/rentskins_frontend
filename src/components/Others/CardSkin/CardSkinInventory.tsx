@@ -144,18 +144,15 @@ export function CardSkinInventory() {
               const isSelected = skinsToAdvertise.some(
                 ({ id }) => assetid === id,
               )
-
               const categoryType = tags.filter(
                 ({ category }) => category === 'Type',
               )
-              console.log(name, categoryType)
               const isRentable = !(
                 categoryType[0].name === 'Graffiti' ||
                 categoryType[0].name === 'Container' ||
                 categoryType[0].name === 'Sticker' ||
                 categoryType[0].name === 'Collectible'
               )
-              console.log(isRentable)
               const linkForPreviewSkin = actions ? actions[0].link : '#'
 
               return (
