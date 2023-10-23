@@ -24,6 +24,14 @@ export function PageDetailsCard({
   skinCategory,
   deletedAt,
 }: PropsType) {
+  const thereIsFloat = !(
+    skinCategory === 'Graffiti' ||
+    skinCategory === 'Container' ||
+    skinCategory === 'Sticker' ||
+    skinCategory === 'Collectible'
+  )
+
+  console.log(skinCategory)
   return (
     <div className="relative">
       {deletedAt !== null && (
@@ -68,9 +76,11 @@ export function PageDetailsCard({
             draggable={false}
           />
 
-          <div className="w-full ">
-            {skinFloat && <ColoredLine position={skinFloat} />}
-          </div>
+          {thereIsFloat && (
+            <div className="w-full ">
+              {skinFloat && <ColoredLine position={skinFloat} />}
+            </div>
+          )}
         </div>
       </div>
     </div>

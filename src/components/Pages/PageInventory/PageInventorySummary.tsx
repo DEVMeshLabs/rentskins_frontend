@@ -41,6 +41,7 @@ export default function PageInventorySummary() {
   })
 
   useEffect(() => {
+    console.log(data)
     if (data) {
       if (data?.request.status === 201) {
         Toast.Success('Anúncio adicionado com sucesso!')

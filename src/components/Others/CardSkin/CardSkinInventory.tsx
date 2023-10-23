@@ -165,7 +165,7 @@ export function CardSkinInventory() {
                   skinName={market_name}
                   skinCategory={category}
                   skinWeapon={weapon}
-                  statusFloat={statusFloat as string}
+                  statusFloat={statusFloat || ''}
                   skinRarity={rarity}
                   float={'0.2555'}
                   linkForPreviewSkin={linkForPreviewSkin}
