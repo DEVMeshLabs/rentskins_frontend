@@ -84,6 +84,12 @@ export function PageDetailsSkin({
     itemAvailable,
     setItemAvailable,
   } = useSkinsStore()
+  const thereIsFloat = !(
+    skinCategory === 'Graffiti' ||
+    skinCategory === 'Container' ||
+    skinCategory === 'Sticker' ||
+    skinCategory === 'Collectible'
+  )
 
   const skinToBuy = {
     skinId,
@@ -384,14 +390,16 @@ export function PageDetailsSkin({
           <p className="text-white">{defaultID}</p>
         </div>
 
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            Float
-          </Common.Title>
-          <div className="flex items-center">
-            <p className="text-white">{skinFloat}</p>
+        {thereIsFloat && (
+          <div className="flex justify-between">
+            <Common.Title className="text-mesh-color-neutral-200">
+              Float
+            </Common.Title>
+            <div className="flex items-center">
+              <p className="text-white">{skinFloat}</p>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
