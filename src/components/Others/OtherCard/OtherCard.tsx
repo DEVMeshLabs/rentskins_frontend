@@ -20,6 +20,12 @@ export function OtherCard({ itsRent, item }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
     ? item.skin_name.split('™')
     : item.skin_name
+  const thereIsFloat = !(
+    item.skin_category === 'Graffiti' ||
+    item.skin_category === 'Container' ||
+    item.skin_category === 'Sticker' ||
+    item.skin_category === 'Collectible'
+  )
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
 
@@ -51,7 +57,7 @@ export function OtherCard({ itsRent, item }: Props) {
             className="m-auto p-2"
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
             alt={item.skin_name}
-            width={206}
+            width={190}
             height={154}
             draggable={false}
           />
@@ -111,11 +117,19 @@ export function OtherCard({ itsRent, item }: Props) {
             })}
           </h1>
           <h1>
-            <strong>FT / </strong>
-            <span className="opacity-60">{item.skin_float}</span>
+            {thereIsFloat && (
+              <>
+                <strong>FT / </strong>
+                <span className="opacity-60">{item.skin_float}</span>
+              </>
+            )}
           </h1>
         </div>
-        {item.skin_float && <ColoredLine position={item.skin_float} />}
+        {item.skin_float && thereIsFloat ? (
+          <ColoredLine position={item.skin_float} />
+        ) : (
+          <div className="h-[6px] w-full" />
+        )}
         <div className="flex select-none items-center justify-end">
           {itsRent ? (
             <Common.Button
