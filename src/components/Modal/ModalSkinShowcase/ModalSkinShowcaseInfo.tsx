@@ -237,7 +237,7 @@ export function ModalSkinShowcaseInfo({
                     formattedValue(savePrice ? String(savePrice) : '')) -
                   (formattedValue(watchValue ? String(watchValue) : '') ||
                     formattedValue(savePrice ? String(savePrice) : '')) *
-                    0.05
+                    0.04
                 ).toLocaleString('pt-br', {
                   style: 'currency',
                   currency: 'BRL',

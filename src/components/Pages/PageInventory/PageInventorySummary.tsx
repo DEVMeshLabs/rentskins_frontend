@@ -99,7 +99,7 @@ export default function PageInventorySummary() {
         <div className="mt-5 flex justify-between ">
           <Common.Title>Taxa</Common.Title>
           <span>
-            {(0.05 * subtotal).toLocaleString('pt-br', {
+            {(0.04 * subtotal).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
@@ -111,7 +111,7 @@ export default function PageInventorySummary() {
         <div className="flex justify-between">
           <Common.Title>Total</Common.Title>
           <span>
-            {(subtotal - 0.05 * subtotal).toLocaleString('pt-br', {
+            {(subtotal - 0.04 * subtotal).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
