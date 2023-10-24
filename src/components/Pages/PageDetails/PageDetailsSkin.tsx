@@ -343,7 +343,7 @@ export function PageDetailsSkin({
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
 
-        {saleType === 'rent' && rent && stateRentTime > 0 && (
+        {saleType === 'rent' && stateRentTime > 0 && (
           <div
             className={`transition-all duration-500 ${
               stateRentTime > 0 ? 'opacity-100' : 'opacity-0'
@@ -438,7 +438,10 @@ export function PageDetailsSkin({
                   disabled={
                     (loading && hasConfigurations) || userStatus === 'loading'
                   }
-                  onClick={() => setRent(true)}
+                  onClick={() => {
+                    Toast.Error('A opção de aluguel ainda não está disponível.')
+                    setRent(false)
+                  }}
                   className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
                 >
                   Alugar
