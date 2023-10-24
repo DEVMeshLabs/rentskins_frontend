@@ -210,7 +210,7 @@ export function ModalSkinShowcaseInfo({
                         minimumFractionDigits: 2,
                       },
                     )}`
-                  : 'R$ 2.000,00'
+                  : 'R$ 0,00'
               }
               register={register('value')}
               errors={errors.value}
