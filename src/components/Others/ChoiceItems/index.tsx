@@ -16,7 +16,7 @@ export default function ChoiceItems({ thereIsRented = false }: Props) {
     <Form.Root>
       <div className="my-16 flex gap-16 self-start">
         <Form.Input.Radio.Choice
-          title="Items à venda"
+          title="Itens a Venda"
           value="sold"
           name="input-radio-choice"
           setState={() => {
