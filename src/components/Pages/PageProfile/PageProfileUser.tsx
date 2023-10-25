@@ -10,6 +10,7 @@ import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
+import { RoundTime } from '@/utils/roundTime'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
@@ -71,7 +72,7 @@ export default function PageProfileUser() {
       setName(data?.data.owner_name)
       setUserState(data?.data.status_member)
       setTotalExchanges(data.data.total_exchanges)
-      setDeliveryTime(data.data.delivery_time)
+      setDeliveryTime(RoundTime(data.data.delivery_time))
       setDeliveryFee(data.data.delivery_fee)
     }
   }, [data])
