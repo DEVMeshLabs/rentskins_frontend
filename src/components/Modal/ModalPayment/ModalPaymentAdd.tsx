@@ -86,7 +86,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   }, [payment, startPayment, afterFormSubmit, createPayment])
 
   useEffect(() => {
-    console.log(createdPayment)
     if (createdPayment?.request.status === 200) {
       redirect(createdPayment.data.url)
     }
