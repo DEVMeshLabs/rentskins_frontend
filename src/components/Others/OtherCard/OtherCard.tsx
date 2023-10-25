@@ -10,6 +10,7 @@ import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
+import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
 
 interface Props {
   itsRent?: boolean
@@ -153,9 +154,15 @@ export function OtherCard({ itsRent, item, itensFromUser }: Props) {
               Devolução
             </Common.Button>
           ) : itensFromUser ? (
-            <Common.Button className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100">
-              Remover
-            </Common.Button>
+            <ModalRemoveItemMain
+              skinId={item.id}
+              skinName={item.skin_name}
+              activator={
+                <Common.Button className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100">
+                  Remover
+                </Common.Button>
+              }
+            />
           ) : (
             <Link
               href={`/detalhes/${item.id}`}
