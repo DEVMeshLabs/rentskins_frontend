@@ -10,13 +10,15 @@ import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
+import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
 
 interface Props {
   itsRent?: boolean
   item: ISkins
+  itensFromUser?: boolean
 }
 
-export function OtherCard({ itsRent, item }: Props) {
+export function OtherCard({ itsRent, item, itensFromUser }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
     ? item.skin_name.split('™')
     : item.skin_name
@@ -151,6 +153,16 @@ export function OtherCard({ itsRent, item }: Props) {
             >
               Devolução
             </Common.Button>
+          ) : itensFromUser ? (
+            <ModalRemoveItemMain
+              skinId={item.id}
+              skinName={item.skin_name}
+              activator={
+                <Common.Button className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100">
+                  Remover
+                </Common.Button>
+              }
+            />
           ) : (
             <Link
               href={`/detalhes/${item.id}`}
