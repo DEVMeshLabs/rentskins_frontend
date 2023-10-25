@@ -71,8 +71,8 @@ export default class SkinService {
       .catch((e) => e)) as AxiosPromise<string[]>
   }
 
-  public static findBySearchParameter(param: string) {
-    return Api.get<ISkinsResponse>(`/skins/search/${param}`)
+  public static findBySearchParameter(param: string, type: string) {
+    return Api.get<ISkinsResponse>(`/skins/search/${param}?type=${type}`)
   }
 
   public static async postAllSkinsToAdvertise(
