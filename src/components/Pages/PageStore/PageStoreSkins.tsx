@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+//
 
 export default function PageStoreSkins() {
   const router = useRouter()
