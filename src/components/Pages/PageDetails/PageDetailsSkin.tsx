@@ -211,6 +211,7 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations])
 
   useEffect(() => {
+    console.log(resultAvailability)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)

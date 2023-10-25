@@ -38,7 +38,7 @@ export default function PageStoreSkins() {
     queryKey: ['skinsCategory'],
     queryFn: async () => {
       if (search !== null && search !== undefined && search !== '') {
-        const data = await SkinService.findBySearchParameter(search, page)
+        const data = await SkinService.findBySearchParameter(search)
         return data
       } else {
         const data = await SkinService.findByAll(page)

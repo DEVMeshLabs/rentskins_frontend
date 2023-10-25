@@ -14,6 +14,7 @@ import { PageDetailsCard } from './PageDetailsCard'
 import { PageDetailsPerfil } from './PageDetailsPerfil'
 import { PageDetailsSkin } from './PageDetailsSkin'
 import { PageDetailsVendas } from './PageDetailsVendas'
+import { RoundTime } from '@/utils/roundTime'
 
 interface IProps {
   item: ISkins
@@ -100,7 +101,11 @@ export default function PageDetailsMain({ item, seller }: IProps) {
                 : 'Membro Novo'
             }
             reliability={seller.reliability}
-            delivery_time={seller.delivery_time!}
+            delivery_time={
+              seller.delivery_time !== 'Sem informações'
+                ? RoundTime(seller.delivery_time!)
+                : 'Sem informações'
+            }
             owner_name={seller.owner_name!}
             picture={seller.picture!}
             total_exchanges={seller.total_exchanges!}
