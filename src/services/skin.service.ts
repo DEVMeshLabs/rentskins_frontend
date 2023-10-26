@@ -34,22 +34,20 @@ export default class SkinService {
     return response
   }
 
-  public static findBySkinsInventoryWithPages(
+  public static findBySkinsInventoryWithFilters(
     steamid: string,
     token: string,
     filterType?: string[],
-    page?: number,
-    itemsPerPage?: number,
   ) {
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
         filterType,
-        page,
-        itemsPerPage,
       },
       { headers: { Authorization: 'Bearer ' + token } },
     )
+      .then((response) => response)
+      .catch((e) => e)
   }
 
   public static findAllSkinsByWeapon(weapon: string) {

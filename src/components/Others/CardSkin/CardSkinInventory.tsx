@@ -34,9 +34,10 @@ export function CardSkinInventory() {
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
-      await SkinService.findBySkinsInventory(
+      await SkinService.findBySkinsInventoryWithFilters(
         trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
+        inventoryTypeFilter,
       ),
     enabled: status === 'authenticated',
     keepPreviousData: true,
@@ -55,13 +56,7 @@ export function CardSkinInventory() {
     }
   }, [data, skinsProfile])
 
-  console.log(data?.data?.length)
-  console.log(skinsProfile?.data?.skins.length)
-  console.log(steamItens.length)
-
   const maxPages = Math.ceil(steamItens.length / 16)
-
-  console.log(maxPages)
 
   useEffect(() => {
     refetch()

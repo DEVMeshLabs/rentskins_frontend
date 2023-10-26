@@ -7,10 +7,14 @@ import useSkinsStore from '@/stores/skins.store'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { ColorRing } from 'react-loader-spinner'
 
 export default function PageInventorySummary() {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
   const { data: session } = useSession()
   const trueSession = session as ISteamUser
 
@@ -41,10 +45,16 @@ export default function PageInventorySummary() {
   })
 
   useEffect(() => {
-    console.log(data)
+    if (searchParams.get('success')) {
+      Toast.Success('Anúncio(s) criado(s) com sucesso!')
+      router.push(pathname)
+    }
+  }, [])
+
+  useEffect(() => {
     if (data) {
       if (data?.request.status === 201) {
-        Toast.Success('Anúncio adicionado com sucesso!')
+        window.location.replace(pathname + '?success=true')
       } else if (data?.request.status === 409) {
         const itemName = data.request.response
           .split('"')[3]
