@@ -37,8 +37,7 @@ export default function PageInventoryMiddle() {
         label="Carregando..."
         enabled={isLoading}
       >
-        {!isLoading && configValidation ? (
-          // {!isLoading && !configValidation ? (
+        {!isLoading && !configValidation ? (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">
             <Common.Title
               bold={700}
