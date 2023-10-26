@@ -1,21 +1,21 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
+import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
+import useSkinsStore from '@/stores/skins.store'
 import Toast from '@/tools/toast.tool'
+import transformRarityInColor, {
+  TItemRarity,
+} from '@/utils/transformRarityInColor'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import useSkinsStore from '@/stores/skins.store'
-import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
 //
 
 type PropsTypes = {
@@ -30,7 +30,7 @@ type PropsTypes = {
   skinRarity: TItemRarity
   sellerId: string
   statusFloat: string
-  skinMedianPrice: number
+  itemAveragePrice: number
   defaultID: string
   skinId: string
   cartId: string
@@ -47,7 +47,7 @@ export function PageDetailsSkin({
   userConfiguration,
   skinName,
   skinImage,
-  skinMedianPrice,
+  itemAveragePrice,
   skinPrice,
   skinFloat,
   skinCategory,
@@ -372,10 +372,10 @@ export function PageDetailsSkin({
       <div className="mt-6 space-y-4">
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
-            Tendências de mercado
+            Tendências de Mercado
           </Common.Title>
           <p className="text-white">
-            {skinMedianPrice.toLocaleString('pt-br', {
+            {itemAveragePrice.toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,

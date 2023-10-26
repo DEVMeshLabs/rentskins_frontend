@@ -10,19 +10,10 @@ interface IProps {
 
 export function PageDetailsVendas({ latestSales }: IProps) {
   const [lastSalePage, setLastSalePage] = useState(1)
-  console.log(latestSales)
-  const mock = [
-    { saleAt: '2023-10-24T21:47:55.992Z', value: 1 },
-    { saleAt: '2023-10-24T21:47:55.992Z', value: 2 },
-    { saleAt: '2023-10-24T21:47:55.992Z', value: 3 },
-    { saleAt: '2023-10-24T21:47:55.992Z', value: 4 },
-    // { saleAt: '2023-10-24T21:47:55.992Z', value: 5 },
-    // { saleAt: '2023-10-24T21:47:55.992Z', value: 6 },
-  ]
 
   const changePage = (type: string) => {
     if (type === 'forward') {
-      if (lastSalePage < Math.ceil(mock.length / 4)) {
+      if (latestSales && lastSalePage < Math.ceil(latestSales.length / 4)) {
         setLastSalePage((state: number) => state + 1)
       }
     } else {
@@ -58,7 +49,7 @@ export function PageDetailsVendas({ latestSales }: IProps) {
         return null
       })
     ) : (
-      <Common.Title className="flex h-[235px] justify-center text-base font-normal text-mesh-color-neutral-300">
+      <Common.Title className="flex h-[235px] justify-center text-base font-normal text-mesh-color-neutral-400">
         Nenhuma venda do item realizada.
       </Common.Title>
     )
