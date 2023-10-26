@@ -29,10 +29,12 @@ type Props = {
   isSelected: boolean
   asset_id: string
   isRentable: boolean
+  onOpenChange: () => void
 }
 
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
+  onOpenChange,
   skin_category,
   isRentable,
   skin_rarity,
@@ -150,10 +152,12 @@ export function ModalSkinShowcaseInfo({
   }
 
   const handleChangeSkinToAdvertise = () => {
-    if (watchValue && watchValue?.length > 0 && watchTerms) {
+    if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
       changeSkinToAdvertise(id, formattedValue(String(watchValue)))
     }
   }
+
+  console.log(watchValue)
 
   const onSubmit = (data: any) => {
     handleAddSkinsToAdvertise()
@@ -288,9 +292,9 @@ export function ModalSkinShowcaseInfo({
             <Dialog.Close className="w-full">
               <Form.Button
                 disabled={disabled}
+                type="submit"
                 buttonStyle={undefined}
                 className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-                onClick={handleAddSkinsToAdvertise}
               >
                 Anunciar
               </Form.Button>

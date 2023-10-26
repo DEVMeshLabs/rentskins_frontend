@@ -5,7 +5,7 @@ import { IconClose } from '@/components/Icons/IconClose'
 import SkinService from '@/services/skin.service'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
+import React, { useState } from 'react'
 import { ModalSkinShowcaseInfo } from './ModalSkinShowcaseInfo'
 import { ModalSkinShowcaseSkin } from './ModalSkinShowcaseSkin'
 
@@ -51,9 +51,10 @@ export function ModalSkinShowcaseMain({
     queryFn: () => SkinService.getItemAveragePrice([marketName]),
     enabled: !!marketName,
   })
+  const [open, setOpen] = useState(false)
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all" />
@@ -85,6 +86,7 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                onOpenChange={() => setOpen((state) => !state)}
                 isRentable={isRentable}
                 asset_id={asset_id}
                 isSelected={isSelected}

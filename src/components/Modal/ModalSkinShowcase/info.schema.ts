@@ -8,6 +8,7 @@ const formSchema = yup.object({
       'form-value-test',
       'O campo deve conter um número positivo.',
       (item) => {
+        console.log(item)
         if (item === '' || item === undefined) {
           return true
         }
@@ -18,6 +19,26 @@ const formSchema = yup.object({
         currencyToNumber = currencyToNumber.replace(',', '.')
 
         if (Number(currencyToNumber) <= 0) {
+          return false
+        }
+
+        return true
+      },
+    )
+    .test(
+      'form-value-min-test',
+      'O campo deve conter um número positivo.',
+      (item) => {
+        if (item === '' || item === undefined) {
+          return true
+        }
+
+        let currencyToNumber
+        currencyToNumber = item.replace(/\./g, '')
+        currencyToNumber = currencyToNumber.replace('R$ ', '')
+        currencyToNumber = currencyToNumber.replace(',', '.')
+
+        if (Number(currencyToNumber) < 10) {
           return false
         }
 
