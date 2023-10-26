@@ -166,7 +166,7 @@ export function ModalSkinShowcaseInfo({
           {skin_name}
         </Common.Title>
         <p className="-mt-1 font-medium text-mesh-color-neutral-200">
-          {skin_weapon} • {statusFloatText}
+          {skin_weapon} {statusFloatText && `• ${statusFloatText}`}
         </p>
       </div>
 
