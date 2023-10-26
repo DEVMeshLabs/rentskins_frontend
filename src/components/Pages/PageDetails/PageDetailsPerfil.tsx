@@ -86,7 +86,7 @@ export function PageDetailsPerfil({
                 },
               )}
             >
-              {reliability}
+              Confiabilidade: {reliability}
             </span>
           </div>
         </div>
