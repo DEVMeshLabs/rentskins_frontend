@@ -22,28 +22,32 @@ export default class SkinService {
     return Api.get<ISkins[]>(`/skins/weapon/${weapon}`)
   }
 
-  public static findBySkinsInventory(steamid: string, token: string) {
-    return Api.get<IInventory>(`/skins/inventory/${steamid}`, {
+  public static async findBySkinsInventory(steamid: string, token: string) {
+    console.log(steamid)
+    console.log(token)
+    const response = await Api.get<IInventory>(`/skins/inventory/${steamid}`, {
       headers: { Authorization: 'Bearer ' + token },
     })
+      .then((response) => response)
+      .catch((e) => e)
+
+    return response
   }
 
   public static findBySkinsInventoryWithFilters(
     steamid: string,
     token: string,
     filterType?: string[],
-    page?: number,
-    itemsPerPage?: number,
   ) {
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
         filterType,
-        page,
-        itemsPerPage,
       },
       { headers: { Authorization: 'Bearer ' + token } },
     )
+      .then((response) => response)
+      .catch((e) => e)
   }
 
   public static findAllSkinsByWeapon(weapon: string) {

@@ -13,13 +13,9 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
     : market_name
 
   return (
-    <>
-      <div>
-        <div
-          className={`${
-            customName.length >= 41 ? 'h-14' : 'h-10'
-          } h-10 text-start`}
-        >
+    <div className="flex h-[50%] flex-col justify-between">
+      <div className="flex h-full flex-col">
+        <div className={`h-10 overflow-hidden text-ellipsis text-start`}>
           <Common.Title
             bold={600}
             size="sm"
@@ -37,20 +33,16 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
             )}
           </Common.Title>
         </div>
-        <span className="text-xs font-medium text-mesh-color-neutral-200">
+        <span className="mt-2 text-xs font-medium text-mesh-color-neutral-200">
           {primeiroName}
         </span>
       </div>
-      <p
-        className={`${
-          customName.length >= 41 ? 'my-2' : 'my-4'
-        } text-sm font-medium`}
-      >
+      <p className={`my-2 text-sm font-medium`}>
         {float !== '' && 'FT / '}
         <span className="text-[13px] font-semibold text-mesh-color-neutral-200">
           {float}
         </span>
       </p>
-    </>
+    </div>
   )
 }

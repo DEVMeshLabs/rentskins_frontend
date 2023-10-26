@@ -102,7 +102,7 @@ export function ModalConnectInventoryForm({
             rel="noopener noreferrer"
             href="https://steamcommunity.com/my/tradeoffers/privacy"
             tabIndex={-1}
-            className="h-full w-min whitespace-nowrap border-none text-mesh-color-primary-1200"
+            className="mt-3 h-full w-min place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100"
           >
             Obter URL
           </a>
@@ -180,7 +180,7 @@ export function ModalConnectInventoryForm({
               da RentSkins.
             </span>
           }
-          checkClassname="ml-[0.2rem]"
+          checkClassname="ml-[0.3rem]"
           labelClassName="text-sm text-mesh-color-neutral-200"
           inputClassName="focus:border-mesh-color-primary-800 bg-transparent border-2 border-mesh-color-neutral-500 checked:border-mesh-color-primary-1200 h-6 w-6 rounded-md transition-all"
           errorsClassname="text-sm text-red-500 absolute"
