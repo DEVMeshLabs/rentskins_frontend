@@ -16,7 +16,7 @@ export function ModalSkinShowcaseSkin({
   isRentable,
 }: Props) {
   return (
-    <div className="relative mr-6 mt-2 flex h-full w-[60%] select-none items-center justify-center rounded-lg bg-mesh-image-details bg-cover bg-no-repeat">
+    <div className="relative mr-6 mt-2 flex h-full w-[60%] select-none items-center justify-center rounded-t-lg bg-mesh-image-details bg-cover bg-no-repeat">
       <Image
         src={`https://steamcommunity-a.akamaihd.net/economy/image/${icon_url}`}
         alt={weapon}
@@ -26,7 +26,7 @@ export function ModalSkinShowcaseSkin({
         className="object-cover"
       />
       {isRentable && (
-        <div className="absolute -bottom-2 w-full">
+        <div className="absolute -bottom-1 w-full">
           <ColoredLine position={float} />
         </div>
       )}
