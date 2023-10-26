@@ -41,6 +41,7 @@ export default function PageInventorySummary() {
   })
 
   useEffect(() => {
+    console.log(data)
     if (data) {
       if (data?.request.status === 201) {
         Toast.Success('Anúncio adicionado com sucesso!')
@@ -51,7 +52,6 @@ export default function PageInventorySummary() {
           .replace(' Already Exist', '')
         Toast.Error(`O item ${itemName} já existe no seu perfil.`)
       } else {
-        console.log(data)
         Toast.Error(
           'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
         )
@@ -60,9 +60,7 @@ export default function PageInventorySummary() {
   }, [data])
 
   useEffect(() => {
-    console.log(skinsToAdvertise)
     const subtotal = skinsToAdvertise.reduce((acc, { skin_price }) => {
-      console.log(skin_price)
       return acc + skin_price
     }, 0)
     setSubtotal(subtotal)
@@ -101,7 +99,7 @@ export default function PageInventorySummary() {
         <div className="mt-5 flex justify-between ">
           <Common.Title>Taxa</Common.Title>
           <span>
-            {(0.05 * subtotal).toLocaleString('pt-br', {
+            {(0.04 * subtotal).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
@@ -113,7 +111,7 @@ export default function PageInventorySummary() {
         <div className="flex justify-between">
           <Common.Title>Total</Common.Title>
           <span>
-            {(subtotal - 0.05 * subtotal).toLocaleString('pt-br', {
+            {(subtotal - 0.04 * subtotal).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,

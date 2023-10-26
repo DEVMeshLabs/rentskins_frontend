@@ -32,11 +32,8 @@ export function PageDetailsPerfil({
   const dateFormated =
     account_date === undefined
       ? 'Indefinido'
-      : moment(account_date).locale('pt-br').format('MMM D, YYYY')
+      : moment(account_date).locale('pt-br').format('D MMM, YYYY')
   const percentReliability = Number(reliability?.replace('%', ''))
-
-  console.log(percentReliability)
-  console.log(reliability)
 
   return (
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
@@ -89,7 +86,7 @@ export function PageDetailsPerfil({
                 },
               )}
             >
-              {reliability}
+              Confiabilidade: {reliability}
             </span>
           </div>
         </div>

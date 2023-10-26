@@ -1,21 +1,22 @@
 import Common from '@/components/Common'
 import { IconCarrinho } from '@/components/Icons'
+import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
+import useSkinsStore from '@/stores/skins.store'
 import Toast from '@/tools/toast.tool'
+import transformRarityInColor, {
+  TItemRarity,
+} from '@/utils/transformRarityInColor'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import useSkinsStore from '@/stores/skins.store'
-import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
+//
 
 type PropsTypes = {
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
@@ -29,7 +30,7 @@ type PropsTypes = {
   skinRarity: TItemRarity
   sellerId: string
   statusFloat: string
-  skinMedianPrice: number
+  itemAveragePrice: number
   defaultID: string
   skinId: string
   cartId: string
@@ -46,7 +47,7 @@ export function PageDetailsSkin({
   userConfiguration,
   skinName,
   skinImage,
-  skinMedianPrice,
+  itemAveragePrice,
   skinPrice,
   skinFloat,
   skinCategory,
@@ -71,7 +72,8 @@ export function PageDetailsSkin({
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
-  const [stateRentTime, setStateRentTime] = useState(7)
+  const [stateRentTime, setStateRentTime] = useState(0)
+  const [rent, setRent] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -82,6 +84,12 @@ export function PageDetailsSkin({
     itemAvailable,
     setItemAvailable,
   } = useSkinsStore()
+  const thereIsFloat = !(
+    skinCategory === 'Graffiti' ||
+    skinCategory === 'Container' ||
+    skinCategory === 'Sticker' ||
+    skinCategory === 'Collectible'
+  )
 
   const skinToBuy = {
     skinId,
@@ -203,6 +211,7 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations])
 
   useEffect(() => {
+    console.log(resultAvailability)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)
@@ -230,7 +239,9 @@ export function PageDetailsSkin({
   }, [resultAvailability])
 
   const proceedItem = useCallback(async () => {
+    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
+      console.log(wasRaised)
       if (userStatus === 'authenticated') {
         if (hasConfigurations) {
           const handleCart = async () => {
@@ -285,6 +296,7 @@ export function PageDetailsSkin({
       }
     }
   }, [
+    methodSelected,
     resultAvailability,
     refetchingAvailability,
     proceedItem,
@@ -293,6 +305,7 @@ export function PageDetailsSkin({
   ])
 
   useEffect(() => {
+    console.log(data)
     if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
         Toast.Success('Item adicionado ao carrinho!')
@@ -309,8 +322,6 @@ export function PageDetailsSkin({
     { label: '14 Dias', value: 14 },
     { label: '21 Dias', value: 21 },
   ]
-
-  const [rent, setRent] = useState(false)
 
   return (
     <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
@@ -333,39 +344,39 @@ export function PageDetailsSkin({
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
 
-        <div
-          className={`transition-all duration-500 ${
-            stateRentTime !== undefined && stateRentTime !== null
-              ? 'opacity-100'
-              : 'opacity-0'
-          }`}
-        >
-          <div className="flex items-center">
-            <Common.Title className="text-2xl font-extrabold text-white">
-              {(
-                parseFloat(String(skinPrice)) *
-                (rentPercentage / 100)
-              ).toLocaleString('PT-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-              })}
-            </Common.Title>
-            <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
-              {rentPercentage}%
-            </span>
+        {saleType === 'rent' && stateRentTime > 0 && (
+          <div
+            className={`transition-all duration-500 ${
+              stateRentTime > 0 ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="flex items-center">
+              <Common.Title className="text-2xl font-extrabold text-white">
+                {(
+                  parseFloat(String(skinPrice)) *
+                  (rentPercentage / 100)
+                ).toLocaleString('PT-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 2,
+                })}
+              </Common.Title>
+              <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
+                {rentPercentage}%
+              </span>
+            </div>
+            <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
           </div>
-          <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
-        </div>
+        )}
       </div>
 
       <div className="mt-6 space-y-4">
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
-            Tendências de mercado
+            Tendências de Mercado
           </Common.Title>
           <p className="text-white">
-            {skinMedianPrice.toLocaleString('pt-br', {
+            {itemAveragePrice.toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
@@ -380,14 +391,16 @@ export function PageDetailsSkin({
           <p className="text-white">{defaultID}</p>
         </div>
 
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            Float
-          </Common.Title>
-          <div className="flex items-center">
-            <p className="text-white">{skinFloat}</p>
+        {thereIsFloat && (
+          <div className="flex justify-between">
+            <Common.Title className="text-mesh-color-neutral-200">
+              Float
+            </Common.Title>
+            <div className="flex items-center">
+              <p className="text-white">{skinFloat}</p>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
@@ -426,7 +439,10 @@ export function PageDetailsSkin({
                   disabled={
                     (loading && hasConfigurations) || userStatus === 'loading'
                   }
-                  onClick={() => setRent(true)}
+                  onClick={() => {
+                    Toast.Error('A opção de aluguel ainda não está disponível.')
+                    setRent(false)
+                  }}
                   className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
                 >
                   Alugar
@@ -466,7 +482,9 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
+                  console.log('OnClick')
                   if (userIsntOwnerSkin) {
+                    console.log('Entrou dentro do if')
                     setMethodSelected('cart')
                   } else {
                     Toast.Error(
@@ -503,6 +521,7 @@ export function PageDetailsSkin({
                           selectedRentTime,
                       },
                     )}
+                    onMouseOver={() => setStateRentTime(value)}
                     onClick={() => {
                       setStateRentTime(value)
                       setSelectedRentTime(false)

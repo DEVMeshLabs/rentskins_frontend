@@ -28,11 +28,13 @@ type Props = {
   id: string
   isSelected: boolean
   asset_id: string
+  isRentable: boolean
 }
 
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
   skin_category,
+  isRentable,
   skin_rarity,
   skin_float,
   skin_image,
@@ -66,11 +68,8 @@ export function ModalSkinShowcaseInfo({
 
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
-      console.log(savePrice)
     }
   }, [])
-
-  console.log(recomended_price)
 
   const removeSign = (value: string) => {
     const response = value
@@ -116,21 +115,21 @@ export function ModalSkinShowcaseInfo({
       !(
         watchValue &&
         watchValue?.length > 0 &&
-        watchTerms &&
+        (watchTerms || !isRentable) &&
         (watchRent || watchSell)
       ),
     )
-  }, [watchValue, watchTerms, watchSell, watchRent])
+  }, [watchValue, watchTerms, watchSell, watchRent, isRentable])
 
   const inspectLink = skin_link_game
     .replace('%owner_steamid%', trueSession.user?.steam?.steamid!)
     .replace('%assetid%', asset_id)
 
   const handleAddSkinsToAdvertise = () => {
-    if (watchValue && watchValue?.length > 0 && watchTerms) {
+    if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
       setSkinsToAdvertise({
         id,
-        sale_type: watchRent ? 'rent' : 'sale',
+        sale_type: watchRent && isRentable ? 'rent' : 'sale',
         seller_id: trueSession.user?.steam?.steamid as string,
         seller_name: trueSession.user?.name as string,
         skin_category,
@@ -144,10 +143,7 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        median_price:
-          typeof recomended_price === 'string'
-            ? 10
-            : removeSign(recomended_price),
+        median_price: removeSign(recomended_price) || 0,
         skin_price: formattedValue(String(watchValue)),
       })
     }
@@ -164,31 +160,31 @@ export function ModalSkinShowcaseInfo({
   }
 
   return (
-    <div className="flex h-full w-[40%] flex-col">
+    <div className="flex h-full w-[40%] flex-col justify-center ">
       <div>
         <Common.Title color="white" className="text-[24px]">
           {skin_name}
         </Common.Title>
         <p className="-mt-1 font-medium text-mesh-color-neutral-200">
-          {skin_weapon} • {statusFloatText}
+          {skin_weapon} {statusFloatText && `• ${statusFloatText}`}
         </p>
       </div>
 
       <Form.Root
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex h-full w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
+        className="mt-4 flex h-fit w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
       >
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado:
+              Preço Recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
               {recomended_price}
             </span>
           </div>
-          <p className="w-[70%] text-mesh-color-neutral-200">
-            Preço que recomendamos com base no mercado do momento
+          <p className="w-full pt-2 text-sm leading-tight text-mesh-color-neutral-200">
+            Preço que recomendamos com base no mercado do momento.
           </p>
           <div className="mt-6 rounded border-b border-mesh-color-neutral-200" />
         </div>
@@ -211,7 +207,7 @@ export function ModalSkinShowcaseInfo({
                         minimumFractionDigits: 2,
                       },
                     )}`
-                  : 'R$ 2.000,00'
+                  : 'R$ 0,00'
               }
               register={register('value')}
               errors={errors.value}
@@ -223,7 +219,7 @@ export function ModalSkinShowcaseInfo({
               Você irá receber
             </Common.Title>
             <div
-              className="transitions-all max-w-[100%] overflow-hidden text-ellipsis rounded-md
+              className="transitions-all max-w-[100%] select-none overflow-hidden text-ellipsis rounded-md
               border-[2px] border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-1 py-3
                 ring-mesh-color-primary-1900 duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
             >
@@ -238,7 +234,7 @@ export function ModalSkinShowcaseInfo({
                     formattedValue(savePrice ? String(savePrice) : '')) -
                   (formattedValue(watchValue ? String(watchValue) : '') ||
                     formattedValue(savePrice ? String(savePrice) : '')) *
-                    0.05
+                    0.04
                 ).toLocaleString('pt-br', {
                   style: 'currency',
                   currency: 'BRL',
@@ -255,11 +251,13 @@ export function ModalSkinShowcaseInfo({
             label="Venda"
             checked={true}
           />
-          <Form.Input.Checkbox
-            name="sell-rent"
-            register={register('rent')}
-            label="Aluguel"
-          />
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="sell-rent"
+              register={register('rent')}
+              label="Aluguel"
+            />
+          )}
         </div>
         {/* ---------INPUT FIM -------------  */}
 
@@ -298,17 +296,19 @@ export function ModalSkinShowcaseInfo({
               </Form.Button>
             </Dialog.Close>
           )}
-          <Form.Input.Checkbox
-            name="terms"
-            wrapperClassname="gap-4"
-            labelClassName="text-sm text-justify text-white"
-            label="Estou ciente que esta plataforma possui a modalidade de locação, e
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="terms"
+              wrapperClassname="gap-4"
+              labelClassName="text-sm text-justify text-white"
+              label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
             realizado no prazo final da transação."
-            register={register('terms')}
-            errors={errors.warning}
-          />
+              register={register('terms')}
+              errors={errors.warning}
+            />
+          )}
         </div>
       </Form.Root>
     </div>

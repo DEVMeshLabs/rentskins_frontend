@@ -23,7 +23,7 @@ export function LayoutLoading({
     if (enabled) {
       return (
         <div
-          className={`mx-auto flex w-full flex-col items-center justify-center ${className}`}
+          className={`mx-auto flex flex-col items-center justify-center ${className}`}
         >
           <ColorRing
             width={widthLoading}

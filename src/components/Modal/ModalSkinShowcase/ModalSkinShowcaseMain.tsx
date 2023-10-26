@@ -25,6 +25,7 @@ interface IProps {
   asset_id: string
   linkForPreviewSkin: string
   linkForProfile: string
+  isRentable: boolean
 }
 
 export function ModalSkinShowcaseMain({
@@ -32,6 +33,7 @@ export function ModalSkinShowcaseMain({
   isEdition,
   skinImage,
   skinWeapon,
+  isRentable,
   statusFloat,
   float,
   skinCategory,
@@ -49,8 +51,6 @@ export function ModalSkinShowcaseMain({
     queryFn: () => SkinService.getItemAveragePrice([marketName]),
     enabled: !!marketName,
   })
-
-  console.log(averagePrice)
 
   return (
     <Dialog.Root>
@@ -79,11 +79,13 @@ export function ModalSkinShowcaseMain({
             </div>
             <div className="flex h-[90%] w-11/12 items-center justify-between">
               <ModalSkinShowcaseSkin
+                isRentable={isRentable}
                 icon_url={skinImage}
                 weapon={skinWeapon}
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                isRentable={isRentable}
                 asset_id={asset_id}
                 isSelected={isSelected}
                 id={id}

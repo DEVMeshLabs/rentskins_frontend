@@ -145,11 +145,20 @@ export function CardSkinInventory() {
               const isSelected = skinsToAdvertise.some(
                 ({ id }) => assetid === id,
               )
-
-              const linkForPreviewSkin = actions[0].link
+              const categoryType = tags.filter(
+                ({ category }) => category === 'Type',
+              )
+              const isRentable = !(
+                categoryType[0].name === 'Graffiti' ||
+                categoryType[0].name === 'Container' ||
+                categoryType[0].name === 'Sticker' ||
+                categoryType[0].name === 'Collectible'
+              )
+              const linkForPreviewSkin = actions ? actions[0].link : '#'
 
               return (
                 <ModalSkinShowcaseMain
+                  isRentable={isRentable}
                   key={assetid}
                   asset_id={assetid}
                   skinImage={icon_url}
@@ -157,7 +166,7 @@ export function CardSkinInventory() {
                   skinName={market_name}
                   skinCategory={category}
                   skinWeapon={weapon}
-                  statusFloat={statusFloat as string}
+                  statusFloat={statusFloat || ''}
                   skinRarity={rarity}
                   float={'0.2555'}
                   linkForPreviewSkin={linkForPreviewSkin}
@@ -201,10 +210,14 @@ export function CardSkinInventory() {
                           <CardSkin.Content
                             market_name={market_name}
                             primeiroName={primeiroName}
-                            float={itemIsAWeapon ? '0.254665' : ''}
+                            float={
+                              itemIsAWeapon && isRentable ? '0.254665' : ''
+                            }
                           />
                         </div>
-                        {itemIsAWeapon && <ColoredLine position={0.254665} />}
+                        {itemIsAWeapon && isRentable && (
+                          <ColoredLine position={0.254665} />
+                        )}
                       </CardSkin.Root>
                     </div>
                   }

@@ -134,6 +134,8 @@ module.exports = {
         // IMAGES
         'mesh-image-hero': "url('/hero.png')",
         'mesh-image-details': "url('/details-item.png')",
+        'mesh-image-details-pattern': "url('/detail-wallpaper.png')",
+        'mesh-image-details-pattern-2': "url('/detail-wallpaper-2.png')",
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],

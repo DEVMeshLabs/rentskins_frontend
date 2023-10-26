@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+//
 
 export default function PageStoreSkins() {
   const router = useRouter()
@@ -38,7 +39,7 @@ export default function PageStoreSkins() {
     queryKey: ['skinsCategory'],
     queryFn: async () => {
       if (search !== null && search !== undefined && search !== '') {
-        const data = await SkinService.findBySearchParameter(search, page)
+        const data = await SkinService.findBySearchParameter(search, 'name')
         return data
       } else {
         const data = await SkinService.findByAll(page)

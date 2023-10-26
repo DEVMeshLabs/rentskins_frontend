@@ -2,6 +2,7 @@
 import Common from '@/components/Common'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import TransactionsService from '@/services/transactions.service'
+import useComponentStore from '@/stores/components.store'
 import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
@@ -22,6 +23,7 @@ export function ModalNotificationPopup({
   id,
   token,
 }: IProps) {
+  const { redirectToSteam } = useComponentStore()
   const { data, refetch: updateStatus } = useQuery({
     queryKey: [type, action, id],
     queryFn: () =>
@@ -65,46 +67,50 @@ export function ModalNotificationPopup({
               <p>Você tem certeza de que deseja confirmar o recibo do item?</p>
             </span>
           ) : (
-            <span className="flex h-full flex-col items-center justify-evenly gap-4">
-              <p>
-                Você está prestes a
-                <b className="font-bold text-mesh-color-primary-1200">
-                  {' '}
-                  confirmar que enviou o item com sucesso
-                </b>
-                . Após a confirmação, não será mais possível trocar o status de
-                troca do item.
-              </p>
-              <p>Você tem certeza de que deseja confirmar o envio do item?</p>
-              <p className="text-center text-sm text-mesh-color-neutral-300">
-                Caso seja comprovado que o item não foi recebido ou enviado,
-                <br /> sua conta receberá uma punição.
-              </p>
+            <span className="flex h-full min-w-[550px] flex-col items-center justify-evenly gap-4">
+              <LayoutLoading enabled={redirectToSteam} label="Processando...">
+                <p>
+                  Você está prestes a
+                  <b className="font-bold text-mesh-color-primary-1200">
+                    {' '}
+                    confirmar que enviou o item com sucesso
+                  </b>
+                  . Após a confirmação, não será mais possível trocar o status
+                  de troca do item.
+                </p>
+                <p>Você tem certeza de que deseja confirmar o envio do item?</p>
+                <p className="text-center text-sm text-mesh-color-neutral-300">
+                  Caso seja comprovado que o item não foi recebido ou enviado,
+                  <br /> sua conta receberá uma punição.
+                </p>
+              </LayoutLoading>
             </span>
           )}
         </p>
       </div>
-      <div className="flex gap-8 self-end">
-        <Dialog.Close
-          className="text-lg font-medium text-mesh-color-neutral-200
+      {!redirectToSteam && (
+        <div className="flex gap-8 self-end">
+          <Dialog.Close
+            className="text-lg font-medium text-mesh-color-neutral-200
         opacity-70 transition-all hover:opacity-100"
-        >
-          Voltar
-        </Dialog.Close>
-        <Common.Button
-          className="self-end font-bold"
-          color="green"
-          onClick={() => updateStatus()}
-        >
-          <LayoutLoading
-            className="h-10 w-10"
-            enabled={data !== undefined && data !== null}
-            label={undefined}
           >
-            Confirmar
-          </LayoutLoading>
-        </Common.Button>
-      </div>
+            Voltar
+          </Dialog.Close>
+          <Common.Button
+            className="self-end font-bold"
+            color="green"
+            onClick={() => updateStatus()}
+          >
+            <LayoutLoading
+              className="h-10 w-10"
+              enabled={data !== undefined && data !== null}
+              label={undefined}
+            >
+              Confirmar
+            </LayoutLoading>
+          </Common.Button>
+        </div>
+      )}
     </div>
   )
 

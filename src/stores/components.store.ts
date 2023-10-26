@@ -28,6 +28,9 @@ interface IStates {
 
   isInventoryFetching: boolean
   setIsInventoryFetching: (isInventoryFetching: boolean) => void
+
+  redirectToSteam: boolean
+  setRedirectToSteam: (redirectToSteam: boolean) => void
 }
 
 const useComponentStore = create<IStates>((set) => ({
@@ -79,6 +82,11 @@ const useComponentStore = create<IStates>((set) => ({
   isInventoryFetching: false,
   setIsInventoryFetching: (isInventoryFetching: boolean) => {
     set(() => ({ isInventoryFetching }))
+  },
+
+  redirectToSteam: false,
+  setRedirectToSteam(redirectToSteam) {
+    set(() => ({ redirectToSteam }))
   },
 }))
 

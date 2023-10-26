@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 'use client'
-import classNames from 'classnames'
 import { ISkins } from '@/interfaces/ISkins'
+import classNames from 'classnames'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 export interface IAllSkinsProps {
@@ -9,12 +9,14 @@ export interface IAllSkinsProps {
   itemsPerPage?: number
   center?: boolean
   itsRent?: boolean
+  itensFromUser?: boolean
 }
 
 export default function AllSkins({
   skinsCategories,
   center = false,
   itsRent,
+  itensFromUser,
 }: IAllSkinsProps) {
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-start ">
@@ -30,7 +32,12 @@ export default function AllSkins({
         {skinsCategories?.map((item, index: number) => {
           return (
             <div className="flex w-[17.5rem]" key={`skin-card-${index}`}>
-              <OtherCard itsRent={itsRent} item={item} key={item.id} />
+              <OtherCard
+                itensFromUser={itensFromUser}
+                itsRent={itsRent}
+                item={item}
+                key={item.id}
+              />
             </div>
           )
         })}

@@ -27,7 +27,7 @@ export default function PageSummaryCart() {
         return acc
       }, 0),
     )
-    setTotalPrice(totalPrice)
+    setTotalPrice(String(Number(totalPrice) - 0.05 * Number(totalPrice)))
   }, [skinsToBuy, skinsFromCart])
 
   const { data, refetch, isRefetching } = useQuery({
@@ -50,7 +50,11 @@ export default function PageSummaryCart() {
     if (data?.request.status === 400) {
       Toast.Error('Saldo insuficiente.')
     } else if (data?.request.status === 409) {
-      Toast.Error('O item já foi vendido.')
+      Toast.Error(
+        `O item ${data?.request.response
+          .split('#!%')[1]
+          .replace('"}', '')} já foi vendido.`,
+      )
     }
   }, [data, refetch, isRefetching])
 
@@ -75,7 +79,7 @@ export default function PageSummaryCart() {
       <div className="flex flex-col gap-6">
         <LineInfosSummaryh
           title="Total"
-          value={String(+totalPrice - 0.05 * 100)}
+          value={totalPrice}
           size="lg"
           cash={true}
         />

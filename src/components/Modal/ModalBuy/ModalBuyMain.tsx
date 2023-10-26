@@ -1,15 +1,15 @@
 'use client'
+import TransactionsService from '@/services/transactions.service'
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
-import React, { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { ModalProcessing } from '../ModalProcessing'
 import { ModalBuySkin } from './ModalBuySkin'
 import { ModalExchangeSkin } from './ModalExchange'
-import { ModalProcessing } from '../ModalProcessing'
 import ModalPaymentMade from './ModalPamentMade'
 import ModalPaymentRefused from './ModalPaymentRefused'
-import { useQuery } from '@tanstack/react-query'
-import TransactionsService from '@/services/transactions.service'
-import Toast from '@/tools/toast.tool'
 
 interface IProps {
   createTransaction: {

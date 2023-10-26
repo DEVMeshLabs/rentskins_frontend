@@ -10,7 +10,6 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import StripeService from '@/services/stripe.service'
-import Toast from '@/tools/toast.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
@@ -70,20 +69,13 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
             '/pagamento/recarregar') as string,
           amount: Number(payment.value),
           payment_method: payment.method as 'card' | 'boleto' | 'pix',
+          cpf: userConfigurations?.data.owner_cpf!,
         },
         trueSession.user?.token!,
       ),
     cacheTime: 0,
     enabled: false,
   })
-
-  useEffect(() => {
-    Toast.Icon(
-      'O pagamento por PIX se encontra desativado no momento.',
-      '⚠️',
-      3000,
-    )
-  }, [])
 
   useEffect(() => {
     if (payment && startPayment) {
@@ -101,8 +93,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
 
   const watchValue = watch('value')
 
-  useEffect(() => console.log(watchValue), [watchValue])
-
   const onSubmit = (data: any) => {
     setIsLoading(true)
 
@@ -115,7 +105,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
       setPayment({ method: data.method, value: currencyToNumber })
     } else {
       let currencyToNumber
-      console.log(currencyToNumber)
       currencyToNumber = data?.value.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
       currencyToNumber = currencyToNumber.replace(',', '.')
@@ -263,7 +252,6 @@ const renderRadioMethodOptions = () => {
     {
       label: renderImage(ImagePIX, 'pix'),
       value: 'pix',
-      disabled: true,
     },
     {
       label: renderImage(ImageTicket, 'boleto'),

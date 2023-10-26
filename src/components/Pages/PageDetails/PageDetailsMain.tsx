@@ -14,6 +14,7 @@ import { PageDetailsCard } from './PageDetailsCard'
 import { PageDetailsPerfil } from './PageDetailsPerfil'
 import { PageDetailsSkin } from './PageDetailsSkin'
 import { PageDetailsVendas } from './PageDetailsVendas'
+import { RoundTime } from '@/utils/roundTime'
 
 interface IProps {
   item: ISkins
@@ -51,10 +52,11 @@ export default function PageDetailsMain({ item, seller }: IProps) {
       </Link>
 
       <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4">
-        <div className="col-span-3 grid grid-rows-2 gap-4">
+        <div className="col-span-3 grid grid-rows-1 gap-4">
           <PageDetailsCard
             skinImage={item.skin_image}
             skinName={item.skin_name}
+            skinCategory={item.skin_category}
             skinLinkGame={item.skin_link_game}
             skinLinkSteam={item.skin_link_steam}
             skinFloat={Number(item.skin_float)}
@@ -64,7 +66,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
           <PageDetailsVendas latestSales={latestSales?.data} />
         </div>
 
-        <div className="col-span-2 grid grid-rows-2 gap-4">
+        <div className="col-span-2 grid grid-rows-1 gap-4">
           <PageDetailsSkin
             saleType={item.sale_type}
             token={trueSession.user?.token!}
@@ -81,7 +83,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             skinCategory={item.skin_category}
             skinWeapon={item.skin_weapon}
             skinRarity={item.skin_rarity}
-            skinMedianPrice={item.median_price}
+            itemAveragePrice={item.median_price}
             sellerId={item.seller_id}
             statusFloat={item.status_float}
             skinId={item.id}
@@ -98,7 +100,11 @@ export default function PageDetailsMain({ item, seller }: IProps) {
                 : 'Membro Novo'
             }
             reliability={seller.reliability}
-            delivery_time={seller.delivery_time!}
+            delivery_time={
+              seller.delivery_time !== 'Sem informações'
+                ? RoundTime(seller.delivery_time!)
+                : 'Sem informações'
+            }
             owner_name={seller.owner_name!}
             picture={seller.picture!}
             total_exchanges={seller.total_exchanges!}

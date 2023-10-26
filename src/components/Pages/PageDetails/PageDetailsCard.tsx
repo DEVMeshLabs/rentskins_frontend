@@ -8,6 +8,7 @@ import Link from 'next/link'
 type PropsType = {
   skinImage: string
   skinName: string
+  skinCategory: string
   skinLinkGame: string
   skinLinkSteam: string
   skinFloat: number
@@ -20,8 +21,16 @@ export function PageDetailsCard({
   skinLinkGame,
   skinLinkSteam,
   skinFloat,
+  skinCategory,
   deletedAt,
 }: PropsType) {
+  const thereIsFloat = !(
+    skinCategory === 'Graffiti' ||
+    skinCategory === 'Container' ||
+    skinCategory === 'Sticker' ||
+    skinCategory === 'Collectible'
+  )
+
   return (
     <div className="relative">
       {deletedAt !== null && (
@@ -37,7 +46,7 @@ export function PageDetailsCard({
           },
         )}
       >
-        <div className="flex h-full w-full flex-col justify-between gap-8">
+        <div className="flex h-full w-full flex-col justify-between gap-8 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat">
           {deletedAt === null && (
             <div className="flex select-none space-x-2 p-2">
               <Link href={skinLinkSteam} target="_blank" rel="noreferrer">
@@ -62,13 +71,15 @@ export function PageDetailsCard({
             width={510}
             height={380}
             quality={100}
-            className="mx-auto my-auto h-full w-fit object-cover"
+            className="m-auto object-cover"
             draggable={false}
           />
 
-          <div className="w-full ">
-            <ColoredLine position={skinFloat} />
-          </div>
+          {thereIsFloat && (
+            <div className="w-full ">
+              {skinFloat && <ColoredLine position={skinFloat} />}
+            </div>
+          )}
         </div>
       </div>
     </div>

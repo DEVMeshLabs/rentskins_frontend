@@ -2,24 +2,32 @@ import IconSteam from '@/assets/IconSteam'
 import Common from '@/components/Common'
 import IconMagic from '@/components/Icons/IconMagicpen'
 import { IconOlho } from '@/components/Icons/IconOlho'
-import classNames from 'classnames'
-import Image from 'next/image'
-import Link from 'next/link'
-import ColoredLine from '../ColoredLine'
 import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
 import { ISkins } from '@/interfaces/ISkins'
 import useModalStore from '@/stores/modal.store'
 import transformRarityInColor from '@/utils/transformRarityInColor'
+import classNames from 'classnames'
+import Image from 'next/image'
+import Link from 'next/link'
+import ColoredLine from '../ColoredLine'
+import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
 
 interface Props {
   itsRent?: boolean
   item: ISkins
+  itensFromUser?: boolean
 }
 
-export function OtherCard({ itsRent, item }: Props) {
+export function OtherCard({ itsRent, item, itensFromUser }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
     ? item.skin_name.split('™')
     : item.skin_name
+  const thereIsFloat = !(
+    item.skin_category === 'Graffiti' ||
+    item.skin_category === 'Container' ||
+    item.skin_category === 'Sticker' ||
+    item.skin_category === 'Collectible'
+  )
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
 
@@ -37,19 +45,21 @@ export function OtherCard({ itsRent, item }: Props) {
       >
         <Link
           href={`/detalhes/${item.id}`}
-          className="flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
+          className="flex h-full max-h-[170px] min-h-[170px] w-full select-none flex-col items-center justify-between
+          rounded-lg border-2 border-mesh-color-neutral-400
+          bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
           <div
-            className={`h-2 w-52 rounded-b-full`}
+            className={`top-0 h-2 w-52 rounded-b-full`}
             style={{
               backgroundColor: `#${transformRarityInColor(item.skin_rarity)}`,
             }}
           />
           <Image
+            className="m-auto p-2"
             src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
-            className="h-[154px] w-[206px]"
             alt={item.skin_name}
-            width={206}
+            width={190}
             height={154}
             draggable={false}
           />
@@ -109,11 +119,19 @@ export function OtherCard({ itsRent, item }: Props) {
             })}
           </h1>
           <h1>
-            <strong>FT / </strong>
-            <span className="opacity-60">{item.skin_float}</span>
+            {thereIsFloat && (
+              <>
+                <strong>FT / </strong>
+                <span className="opacity-60">{item.skin_float}</span>
+              </>
+            )}
           </h1>
         </div>
-        <ColoredLine position={item.skin_float} />
+        {item.skin_float && thereIsFloat ? (
+          <ColoredLine position={item.skin_float} />
+        ) : (
+          <div className="h-[6px] w-full" />
+        )}
         <div className="flex select-none items-center justify-end">
           {itsRent ? (
             <Common.Button
@@ -135,6 +153,16 @@ export function OtherCard({ itsRent, item }: Props) {
             >
               Devolução
             </Common.Button>
+          ) : itensFromUser ? (
+            <ModalRemoveItemMain
+              skinId={item.id}
+              skinName={item.skin_name}
+              activator={
+                <Common.Button className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100">
+                  Remover
+                </Common.Button>
+              }
+            />
           ) : (
             <Link
               href={`/detalhes/${item.id}`}
