@@ -61,6 +61,8 @@ export function ModalSkinShowcaseInfo({
     skinsToAdvertise,
   } = useSkinsStore()
 
+  console.log(skinsToAdvertise)
+
   useEffect(() => {
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
@@ -79,6 +81,8 @@ export function ModalSkinShowcaseInfo({
 
     return Number(response)
   }
+
+  console.log(recomended_price)
 
   const {
     register,
@@ -143,10 +147,7 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        median_price:
-          typeof recomended_price === 'string'
-            ? 10
-            : removeSign(recomended_price),
+        median_price: removeSign(recomended_price) || 0,
         skin_price: formattedValue(String(watchValue)),
       })
     }
