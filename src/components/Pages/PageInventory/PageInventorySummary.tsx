@@ -49,7 +49,7 @@ export default function PageInventorySummary() {
       Toast.Success('Anúncio(s) criado(s) com sucesso!')
       router.push(pathname)
     }
-  }, [])
+  }, [pathname, searchParams, router])
 
   useEffect(() => {
     if (data) {
