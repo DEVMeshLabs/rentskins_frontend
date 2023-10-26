@@ -25,10 +25,8 @@ export function ModalRemoveItemMain({ skinId, skinName, activator }: IProps) {
   useEffect(() => {
     if (data?.request.status === 204) {
       setOpen(false)
-      Toast.Success(
-        `O anúncio do item ${skinName} foi removido. Por favor, reinicie a página`,
-        7000,
-      )
+      Toast.Success(`O anúncio do item ${skinName} foi removido.`, 7000)
+      window.location.reload()
     } else if (data?.request.status === 404) {
       Toast.Error(
         `O anúncio do item ${skinName} já foi removido. Por favor, reinicie a página`,
