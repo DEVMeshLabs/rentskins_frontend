@@ -31,7 +31,6 @@ export function PageDetailsCard({
     skinCategory === 'Collectible'
   )
 
-  console.log(skinCategory)
   return (
     <div className="relative">
       {deletedAt !== null && (

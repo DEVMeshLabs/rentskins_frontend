@@ -25,23 +25,23 @@ export default function SkinsSemelhantes({
   )
 
   return (
-    <>
-      <Common.Title color="white" bold={700} className="mb-6  text-[28px]">
+    <div className="min-h-[300px] pb-16 pt-8">
+      <Common.Title color="white" bold={700} className="mb-6 text-[28px]">
         Semelhantes
       </Common.Title>
-      <div className="w-full pb-16">
+      <div className="w-full">
         <div className="flex gap-4 overflow-x-auto pb-3">
           {find && find?.length > 0 ? (
             find.map((item: ISkins, index: number) => {
               return <OtherCard item={item} key={item.id} />
             })
           ) : (
-            <Common.Title color="white">
-              Não há nenhuma skin semelhante
+            <Common.Title className="flex h-[100px] w-full justify-center text-mesh-color-neutral-400">
+              Sem itens semelhantes do momento.
             </Common.Title>
           )}
         </div>
       </div>
-    </>
+    </div>
   )
 }
