@@ -32,7 +32,7 @@ export function PageDetailsPerfil({
   const dateFormated =
     account_date === undefined
       ? 'Indefinido'
-      : moment(account_date).locale('pt-br').format('MMM D, YYYY')
+      : moment(account_date).locale('pt-br').format('D MMM, YYYY')
   const percentReliability = Number(reliability?.replace('%', ''))
 
   return (

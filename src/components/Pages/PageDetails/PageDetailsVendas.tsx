@@ -34,9 +34,9 @@ export function PageDetailsVendas({ latestSales }: IProps) {
 
   const renderLatestSales =
     latestSales && latestSales.length > 0 ? (
-      mock.map(({ saleAt, value }, index) => {
+      latestSales.map(({ saleAt, value }, index) => {
         if (index < lastSalePage * 4 && index >= lastSalePage * 4 - 4) {
-          const refactorDate = moment(saleAt).format('DD MMM YYYY • HH:mm')
+          const refactorDate = moment(saleAt).format('DD MMM, YYYY • HH:mm')
           return (
             <div
               key={`${saleAt}-${index}`}
@@ -58,8 +58,8 @@ export function PageDetailsVendas({ latestSales }: IProps) {
         return null
       })
     ) : (
-      <Common.Title className="text-base font-normal text-white">
-        Nenhuma venda realizada
+      <Common.Title className="flex h-[235px] justify-center text-base font-normal text-mesh-color-neutral-300">
+        Nenhuma venda do item realizada.
       </Common.Title>
     )
 
@@ -71,7 +71,7 @@ export function PageDetailsVendas({ latestSales }: IProps) {
         </Common.Title>
         <div className="flex h-[90%] flex-col justify-between">
           <div className="mt-4 space-y-6">{renderLatestSales}</div>
-          {mock.length > 4 && (
+          {latestSales && latestSales.length > 4 && (
             <div className="mt-8 flex items-center justify-end space-x-4">
               <Common.Button
                 className="flex border-none text-end"
