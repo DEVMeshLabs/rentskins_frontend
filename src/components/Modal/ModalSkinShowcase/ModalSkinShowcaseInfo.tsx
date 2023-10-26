@@ -61,8 +61,6 @@ export function ModalSkinShowcaseInfo({
     skinsToAdvertise,
   } = useSkinsStore()
 
-  console.log(skinsToAdvertise)
-
   useEffect(() => {
     const savedSkin = skinsToAdvertise.filter(
       ({ id: skinId }) => skinId && id === skinId,
@@ -81,8 +79,6 @@ export function ModalSkinShowcaseInfo({
 
     return Number(response)
   }
-
-  console.log(recomended_price)
 
   const {
     register,
@@ -164,7 +160,7 @@ export function ModalSkinShowcaseInfo({
   }
 
   return (
-    <div className="flex h-full w-[40%] flex-col">
+    <div className="flex h-full w-[40%] flex-col justify-center ">
       <div>
         <Common.Title color="white" className="text-[24px]">
           {skin_name}
@@ -176,19 +172,19 @@ export function ModalSkinShowcaseInfo({
 
       <Form.Root
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex h-full w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
+        className="mt-4 flex h-fit w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
       >
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado:
+              Preço Recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
               {recomended_price}
             </span>
           </div>
-          <p className="w-[70%] text-mesh-color-neutral-200">
-            Preço que recomendamos com base no mercado do momento
+          <p className="w-full pt-2 text-sm leading-tight text-mesh-color-neutral-200">
+            Preço que recomendamos com base no mercado do momento.
           </p>
           <div className="mt-6 rounded border-b border-mesh-color-neutral-200" />
         </div>
@@ -223,7 +219,7 @@ export function ModalSkinShowcaseInfo({
               Você irá receber
             </Common.Title>
             <div
-              className="transitions-all max-w-[100%] overflow-hidden text-ellipsis rounded-md
+              className="transitions-all max-w-[100%] select-none overflow-hidden text-ellipsis rounded-md
               border-[2px] border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-1 py-3
                 ring-mesh-color-primary-1900 duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
             >
