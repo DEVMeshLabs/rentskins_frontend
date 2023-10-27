@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ISteamUser from '@/interfaces/steam.interface'
 import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
@@ -37,17 +38,30 @@ async function handler(
       async session({ session, token }) {
         if ('steam' in token) {
           const newToken = JsonWebToken.create(session)
-          // @ts-ignore
           session.user!.token = newToken
-          // @ts-expect-error
           session.user!.steam = token.steam
 
           const verifyVAC = await UserService.verifyAccountStatus(
-            // @ts-expect-error
             session?.user?.steam?.steamid!,
           )
 
-          // @ts-expect-error
+          const userAlreadyExists = await UserService.getUser(
+            session?.user?.steam?.steamid!,
+          )
+
+          if (!userAlreadyExists) {
+            UserService.createUser(
+              {
+                owner_id: session?.user?.steam?.steamid!,
+                owner_name: session?.user?.name!,
+                picture: session?.user?.image!,
+                owner_country: session?.user?.steam?.loccountrycode!,
+                steam_url: session?.user?.steam?.profileurl!,
+              },
+              session?.user?.token!,
+            )
+          }
+
           session.user!.steam.banned = verifyVAC.data
         }
 
