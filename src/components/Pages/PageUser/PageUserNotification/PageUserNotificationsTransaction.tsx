@@ -126,11 +126,15 @@ export default function PageNotificationTransaction({
 
   return (
     <div>
-      <div className="mb-12 mt-4 pr-4">
+      <div className="mb-12 mt-4">
         <span className="text-lg font-medium text-mesh-color-neutral-200">
           Pendentes
         </span>
-        <div className="mt-4 flex max-h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll">
+        <div
+          className={`mt-4 flex max-h-[24rem] w-full flex-col gap-4 overflow-y-scroll ${
+            renderTransactions && renderTransactions.length > 3 && 'pr-4'
+          }`}
+        >
           {!isLoading ? (
             renderTransactions && renderTransactions?.length > 0 ? (
               renderTransactions
