@@ -104,7 +104,7 @@ export function TransactionsTable({ data, steamid }: IProps) {
       ))}
     </div>
   ) : (
-    <span className="rounded-md bg-mesh-color-neutral-800 py-3 text-center text-lg text-white">
+    <span className="h-full w-full rounded-md py-3 text-center text-lg text-mesh-color-neutral-400">
       Histórico de transações vazio.
     </span>
   )
