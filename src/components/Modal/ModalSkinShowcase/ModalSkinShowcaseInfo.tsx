@@ -5,7 +5,6 @@ import Form from '@/components/Forms'
 import ISteamUser from '@/interfaces/steam.interface'
 
 import useSkinsStore from '@/stores/skins.store'
-import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -29,10 +28,12 @@ type Props = {
   isSelected: boolean
   asset_id: string
   isRentable: boolean
+  onOpenChange: () => void
 }
 
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
+  onOpenChange,
   skin_category,
   isRentable,
   skin_rarity,
@@ -54,6 +55,9 @@ export function ModalSkinShowcaseInfo({
   const trueSession = (session as ISteamUser) || {}
   const [disabled, setDisabled] = useState(true)
   const [savePrice, setSavePrice] = useState<null | number>(null)
+  const [whatFunctionExecute, setWhatFunctionExecute] = useState<
+    'add' | 'change'
+  >('add')
   const {
     setSkinsToAdvertise,
     removeSkinToAdvertise,
@@ -146,17 +150,23 @@ export function ModalSkinShowcaseInfo({
         median_price: removeSign(recomended_price) || 0,
         skin_price: formattedValue(String(watchValue)),
       })
+      onOpenChange()
     }
   }
 
   const handleChangeSkinToAdvertise = () => {
-    if (watchValue && watchValue?.length > 0 && watchTerms) {
+    if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
       changeSkinToAdvertise(id, formattedValue(String(watchValue)))
+      onOpenChange()
     }
   }
 
   const onSubmit = (data: any) => {
-    handleAddSkinsToAdvertise()
+    if (whatFunctionExecute === 'add') {
+      handleAddSkinsToAdvertise()
+    } else {
+      handleChangeSkinToAdvertise()
+    }
   }
 
   return (
@@ -264,17 +274,15 @@ export function ModalSkinShowcaseInfo({
         <div className="space-y-6">
           {isSelected ? (
             <div className="flex gap-4">
-              <Dialog.Close className="w-full">
-                <Common.Button
-                  disabled={disabled}
-                  onClick={handleChangeSkinToAdvertise}
-                  className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-                >
-                  <Common.Title bold={600} className="rounded-xl">
-                    Alterar
-                  </Common.Title>
-                </Common.Button>
-              </Dialog.Close>
+              <Form.Button
+                disabled={disabled}
+                onClick={() => setWhatFunctionExecute('change')}
+                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 text-center font-bold disabled:bg-mesh-color-neutral-400"
+              >
+                <Common.Title bold={600} className="rounded-xl">
+                  Alterar
+                </Common.Title>
+              </Form.Button>
               <Common.Button
                 onClick={() => removeSkinToAdvertise(id)}
                 className="mt-4 h-11 w-3/5 border-mesh-color-neutral-200"
@@ -285,16 +293,13 @@ export function ModalSkinShowcaseInfo({
               </Common.Button>
             </div>
           ) : (
-            <Dialog.Close className="w-full">
-              <Form.Button
-                disabled={disabled}
-                buttonStyle={undefined}
-                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-                onClick={handleAddSkinsToAdvertise}
-              >
-                Anunciar
-              </Form.Button>
-            </Dialog.Close>
+            <Form.Button
+              disabled={disabled}
+              buttonStyle={undefined}
+              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+            >
+              Anunciar
+            </Form.Button>
           )}
           {isRentable && (
             <Form.Input.Checkbox

@@ -37,7 +37,10 @@ export default function PageInventoryMiddle() {
         label="Carregando..."
         enabled={isLoading}
       >
-        {!isLoading && !configValidation ? (
+        {!isLoading && configValidation ? (
+          // {!isLoading && !configValidation ? (
+          <CardSkinInventory />
+        ) : (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">
             <Common.Title
               bold={700}
@@ -56,8 +59,6 @@ export default function PageInventoryMiddle() {
               }
             />
           </div>
-        ) : (
-          <CardSkinInventory />
         )}
       </LayoutLoading>
     </div>
