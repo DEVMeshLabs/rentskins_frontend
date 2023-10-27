@@ -8,7 +8,6 @@ const formSchema = yup.object({
       'form-value-test',
       'O campo deve conter um número positivo.',
       (item) => {
-        console.log(item)
         if (item === '' || item === undefined) {
           return true
         }
@@ -27,7 +26,7 @@ const formSchema = yup.object({
     )
     .test(
       'form-value-min-test',
-      'O campo deve conter um número positivo.',
+      'O campo deve conter um valor maior ou igual a R$ 10,00.',
       (item) => {
         if (item === '' || item === undefined) {
           return true
