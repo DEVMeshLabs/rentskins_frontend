@@ -11,7 +11,6 @@ import { ModalPaymentMain } from '@/components/Modal/ModalPayment/ModalPaymentMa
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import NotificationServices from '@/services/notifications.service'
-import UserService from '@/services/user.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
@@ -135,35 +134,6 @@ export function LayoutHeaderTop() {
       setWallet(walletCreated.data.value)
     }
   }, [walletRetrieved, walletCreated, setWallet])
-
-  const { data: userRetrieved } = useQuery({
-    queryKey: ['ifProfile', trueSession?.user?.steam?.steamid!],
-    queryFn: () => {
-      return UserService.getUser(trueSession?.user?.steam?.steamid!)
-    },
-    enabled: status === 'authenticated',
-  })
-
-  const { data: userCreated } = useQuery({
-    queryKey: ['CreateProfile', trueSession?.user?.name!],
-    queryFn: async () => {
-      return UserService.createUser(
-        {
-          owner_id: trueSession?.user?.steam?.steamid!,
-          owner_name: trueSession?.user?.name!,
-          picture: trueSession?.user?.image!,
-          owner_country: trueSession?.user?.steam?.loccountrycode!,
-          steam_url: trueSession?.user?.steam?.profileurl!,
-        },
-        trueSession?.user?.token!,
-      )
-    },
-    enabled:
-      status === 'authenticated' && userRetrieved?.request.status === 404,
-  })
-
-  console.log(userRetrieved)
-  console.log(userCreated)
 
   const handleOnProfileClick = () => {
     setShowProfileDropdown((state) => !state)
