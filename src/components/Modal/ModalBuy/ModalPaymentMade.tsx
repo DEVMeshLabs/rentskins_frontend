@@ -21,16 +21,6 @@ export default function ModalPaymentMade({ sellerId, token }: IProps) {
     w-2/3 min-w-[700px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center
     gap-8 rounded-md bg-mesh-color-neutral-800 px-28 pb-8 pt-5 xl:w-[790px]"
     >
-      {/* <Dialog.Close
-        className="absolute right-8 top-5 z-10 cursor-pointer"
-        asChild
-        onClick={() => setOpenModalBuySkin(false)}
-      >
-        <Common.Button className="border-transparent">
-          <IconClose />
-        </Common.Button>
-      </Dialog.Close> */}
-
       <div className="flex flex-col items-center gap-8">
         <IconCheckPayment />
         <p className="text-center text-xl font-medium text-white">
@@ -48,8 +38,6 @@ export default function ModalPaymentMade({ sellerId, token }: IProps) {
             sellerId,
             token,
           )
-
-          console.log(tradeLink)
 
           if (tradeLink.status === 200) {
             Toast.Loading('Redirecionando para a página de troca da Steam...')

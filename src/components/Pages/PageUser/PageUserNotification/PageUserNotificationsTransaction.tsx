@@ -66,6 +66,37 @@ export default function PageNotificationTransaction({
             subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
           />
           <TransactionCard.Actions>
+            {isABuyer && (
+              <TransactionCard.Button
+                modal={false}
+                token={token}
+                onClick={async () => {
+                  Toast.Loading(
+                    'Redirecionando para a página de troca da Steam...',
+                  )
+
+                  const tradeLink = await ConfigService.findByConfigUserId(
+                    item.buyer_id,
+                    token,
+                  )
+
+                  if (tradeLink.status === 200) {
+                    Object.assign(document.createElement('a'), {
+                      target: '_blank',
+                      rel: 'noopener noreferrer',
+                      href: tradeLink.data.url_trade,
+                    }).click()
+                    setRedirectToSteam(false)
+                  } else {
+                    Toast.Error(
+                      'Não foi possível acessar a página de troca da Steam no momento.',
+                    )
+                  }
+                }}
+                buttonStyle="full"
+                text="Abrir Trade"
+              />
+            )}
             <TransactionCard.Button
               token={token}
               modal
@@ -76,35 +107,6 @@ export default function PageNotificationTransaction({
               }}
               buttonStyle="full"
               text={isABuyer ? 'Item Obtido' : 'Enviar Item'}
-              onClick={async () => {
-                if (!isABuyer) {
-                  setRedirectToSteam(true)
-
-                  const tradeLink = await ConfigService.findByConfigUserId(
-                    item.buyer_id,
-                    token,
-                  )
-
-                  if (tradeLink.status === 200) {
-                    Toast.Loading(
-                      'Redirecionando para a página de troca da Steam...',
-                    )
-
-                    setTimeout(() => {
-                      Object.assign(document.createElement('a'), {
-                        target: '_blank',
-                        rel: 'noopener noreferrer',
-                        href: tradeLink.data.url_trade,
-                      }).click()
-                      setRedirectToSteam(false)
-                    }, 2000)
-                  } else {
-                    Toast.Error(
-                      'Não foi possível acessar a página de troca da Steam no momento.',
-                    )
-                  }
-                }
-              }}
             />
             <TransactionCard.Button
               token={token}
@@ -128,7 +130,7 @@ export default function PageNotificationTransaction({
         <span className="text-lg font-medium text-mesh-color-neutral-200">
           Pendentes
         </span>
-        <div className="mt-4 flex max-h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll pr-2">
+        <div className="mt-4 flex max-h-[24rem] w-full scroll-p-24 flex-col gap-4 overflow-y-scroll">
           {!isLoading ? (
             renderTransactions && renderTransactions?.length > 0 ? (
               renderTransactions
