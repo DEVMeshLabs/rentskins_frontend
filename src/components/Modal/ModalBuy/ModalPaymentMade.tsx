@@ -4,6 +4,7 @@ import ConfigService from '@/services/config.service'
 import useSkinsStore from '@/stores/skins.store'
 import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useRouter } from 'next/navigation'
 
 interface IProps {
   sellerId: string
@@ -11,6 +12,7 @@ interface IProps {
 }
 
 export default function ModalPaymentMade({ sellerId, token }: IProps) {
+  const router = useRouter()
   const { setOpenModalBuySkin } = useSkinsStore()
 
   return (
@@ -50,12 +52,17 @@ export default function ModalPaymentMade({ sellerId, token }: IProps) {
               }).click()
 
               setOpenModalBuySkin(false)
+              router.push('/')
             }, 2000)
           } else {
             Toast.Error(
               'Não foi possível acessar a página de troca da Steam no momento. Acesse novamente pela página de Transações nas Notificações.',
             )
-            setOpenModalBuySkin(false)
+
+            setTimeout(() => {
+              setOpenModalBuySkin(false)
+              router.push('/')
+            }, 2000)
           }
         }}
         type="button"
