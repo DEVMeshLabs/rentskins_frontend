@@ -144,7 +144,7 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
-  useQuery({
+  const { data: userCreated } = useQuery({
     queryKey: ['CreateProfile', trueSession?.user?.name!],
     queryFn: async () => {
       return UserService.createUser(
@@ -161,6 +161,9 @@ export function LayoutHeaderTop() {
     enabled:
       status === 'authenticated' && userRetrieved?.request.status === 404,
   })
+
+  console.log(userRetrieved)
+  console.log(userCreated)
 
   const handleOnProfileClick = () => {
     setShowProfileDropdown((state) => !state)

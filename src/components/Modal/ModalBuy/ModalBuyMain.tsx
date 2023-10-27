@@ -4,11 +4,12 @@ import useSkinsStore from '@/stores/skins.store'
 import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { ModalProcessing } from '../ModalProcessing'
 import { ModalBuySkin } from './ModalBuySkin'
 import { ModalExchangeSkin } from './ModalExchange'
-import ModalPaymentMade from './ModalPamentMade'
+import ModalPaymentMade from './ModalPaymentMade'
 import ModalPaymentRefused from './ModalPaymentRefused'
 
 interface IProps {
@@ -24,6 +25,7 @@ interface IProps {
 export function ModalBuyMain({
   createTransaction: { skinId, token, userId, skinPrice, sellerId },
 }: IProps) {
+  const router = useRouter()
   const {
     openModalBuySkin,
     setOpenModalBuySkin,
@@ -57,7 +59,9 @@ export function ModalBuyMain({
       setWhatModalOpenToBuySkin(4)
     } else if (createTrasaction?.request.status === 409) {
       setWhatModalOpenToBuySkin(0)
-      Toast.Error('Essa skin já foi vendida.', 7000)
+      Toast.Error('Desculpe, esse item já foi vendido.', 2000)
+
+      setTimeout(() => router.replace('/'), 2000)
     }
   }, [createTrasaction, refetchCreateTrasaction])
 
@@ -70,7 +74,9 @@ export function ModalBuyMain({
           )}
           {whatModalOpenToBuySkin === 1 && <ModalExchangeSkin />}
           {whatModalOpenToBuySkin === 2 && <ModalProcessing />}
-          {whatModalOpenToBuySkin === 3 && <ModalPaymentMade />}
+          {whatModalOpenToBuySkin === 3 && (
+            <ModalPaymentMade sellerId={sellerId} token={token} />
+          )}
           {whatModalOpenToBuySkin === 4 && <ModalPaymentRefused />}
         </Dialog.Overlay>
       </Dialog.Portal>
