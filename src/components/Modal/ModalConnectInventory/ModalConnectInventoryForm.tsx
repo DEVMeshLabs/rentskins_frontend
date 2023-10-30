@@ -10,7 +10,7 @@ import { ColorRing } from 'react-loader-spinner'
 import { formResolver } from './form.schema'
 
 interface IProps {
-  onFormSubmit: () => void
+  onFormSubmit: (isLoading: boolean) => void
   userConfig: any
 }
 
@@ -25,6 +25,7 @@ export function ModalConnectInventoryForm({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: formResolver,
@@ -36,6 +37,12 @@ export function ModalConnectInventoryForm({
       email: userConfig?.owner_email || undefined,
     },
   })
+
+  const cpfWatch = watch('cpf')
+  const emailWatch = watch('email')
+  const phoneWatch = watch('phone')
+  const tradelinkWatch = watch('trade-link')
+  const notificationsWatch = watch('receive-notifications')
 
   useEffect(() => {
     if (userConfig) {
@@ -50,36 +57,80 @@ export function ModalConnectInventoryForm({
 
   const [formData, setFormData] = useState<any>(undefined)
 
-  const { data } = useQuery({
+  const { data, refetch, isRefetching, isLoading, fetchStatus } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
     queryFn: async () => {
       const sellLink = `https://rentskins/?sellerid=${trueSession?.user?.steam?.steamid}`
       const params = {
         owner_id: trueSession?.user?.steam?.steamid as string,
         owner_name: trueSession?.user?.name as string,
-        owner_email: formData.email,
-        owner_phone: formData.phone,
-        owner_cpf: formData.cpf,
+        owner_email: emailWatch,
+        owner_phone: phoneWatch,
+        owner_cpf: cpfWatch,
         url_sell: sellLink,
-        url_trade: formData['trade-link'],
-        agreed_with_emails: formData['receive-notifications'],
+        url_trade: tradelinkWatch,
+        agreed_with_emails: notificationsWatch,
         agreed_with_terms: true,
         token: trueSession?.user?.token!,
       }
       return ConfigService.updateConfig(params)
     },
-    enabled: !!formData,
+    enabled: false,
+    cacheTime: 0,
   })
 
+  console.log(fetchStatus)
+
+  console.log(isRefetching)
+  console.log(isLoading)
+
+  console.log(data)
+  console.log(data?.request?.status)
+  console.log(data?.response?.status)
+  console.log(data?.response?.data)
+  console.log(data?.status)
+  console.log(data?.data)
+  console.log(data?.config?.data)
+
+  const cpfError = {
+    message:
+      data?.response?.data?.errors?.includes('CPF') &&
+      data?.config?.data?.includes(cpfWatch) &&
+      data?.response?.data?.errors,
+  }
+
+  const emailError = {
+    message:
+      data?.response?.data?.errors?.includes('Email') &&
+      data?.config?.data?.includes(emailWatch) &&
+      data?.response?.data?.errors,
+  }
+
+  const phoneError = {
+    message:
+      data?.response?.data?.errors?.includes('Telefone') &&
+      data?.config?.data?.includes(phoneWatch) &&
+      data?.response?.data?.errors,
+  }
+
+  const tradelinkError = {
+    message:
+      data?.response?.data?.errors?.includes('Trade Link') &&
+      data?.config?.data?.includes(tradelinkWatch) &&
+      data?.response?.data?.errors,
+  }
+
+  console.log(cpfError)
+  // Error == 409
   useEffect(() => {
-    if (data?.request.status) {
+    if (data?.request.status === 204) {
       return window.location.reload()
     }
   }, [data])
 
-  const onSubmit = (data: any) => {
-    setFormData(data)
-    onFormSubmit()
+  const onSubmit = () => {
+    refetch()
+    onFormSubmit(isRefetching)
   }
 
   return (
@@ -95,7 +146,7 @@ export function ModalConnectInventoryForm({
             placeholder="https://steamcommunity.com/tradeoffer/new/?partner=000000&token=abcdef"
             labelClassName="w-10/12 text-white"
             register={register('trade-link')}
-            errors={errors['trade-link']}
+            errors={errors['trade-link'] || tradelinkError}
           />
           <a
             target="_blank"
@@ -115,7 +166,7 @@ export function ModalConnectInventoryForm({
         placeholder="exemplo@email.com"
         labelClassName="w-8/12 text-white"
         register={register('email')}
-        errors={errors.email}
+        errors={errors.email || emailError}
       />
 
       <Form.Input.Phone
@@ -124,7 +175,7 @@ export function ModalConnectInventoryForm({
         placeholder="(00) 00000-0000"
         labelClassName="w-8/12 text-white"
         register={register('phone')}
-        errors={errors.phone}
+        errors={errors.phone || phoneError}
       />
 
       <Form.Input.CPF
@@ -133,7 +184,7 @@ export function ModalConnectInventoryForm({
         placeholder="000.000.000-00"
         labelClassName="w-8/12 text-white"
         register={register('cpf')}
-        errors={errors.cpf}
+        errors={errors.cpf || cpfError}
       />
 
       <div className="mt-4 flex flex-col gap-2">
@@ -191,10 +242,10 @@ export function ModalConnectInventoryForm({
 
       <Form.Button
         buttonStyle={undefined}
-        disabled={formData}
+        disabled={fetchStatus === 'fetching'}
         className="mt-8 flex w-48 items-center justify-center border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
       >
-        {formData ? buttonLoading : 'Concluir'}
+        {fetchStatus === 'fetching' ? buttonLoading : 'Concluir'}
       </Form.Button>
     </Form.Root>
   )

@@ -18,8 +18,8 @@ export function ModalConnectInventoryMain({
 }: IProps) {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
-  const onFormSubmit = () => {
-    setFormSubmitted(true)
+  const onFormSubmit = (isLoading: boolean) => {
+    setFormSubmitted(isLoading)
   }
 
   return (
