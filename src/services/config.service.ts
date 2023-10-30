@@ -43,5 +43,7 @@ export default class ConfigService {
         headers: { Authorization: 'Bearer ' + token },
       },
     )
+      .then((response) => response)
+      .catch((e) => e)
   }
 }
