@@ -8,6 +8,7 @@ import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
@@ -46,15 +47,26 @@ export function CardSkinInventory() {
   useEffect(() => {
     if (data?.data && skinsProfile?.data && skinsProfile.data.skins) {
       setSteamItens(
-        data?.data.filter(
-          ({ assetid }: any) =>
-            !skinsProfile?.data?.skins.some(
-              ({ asset_id }) => asset_id === assetid,
-            ),
-        ),
+        data &&
+          data?.data &&
+          !data?.data?.message &&
+          data?.data?.filter(
+            ({ assetid }: any) =>
+              !skinsProfile?.data?.skins.some(
+                ({ asset_id }) => asset_id === assetid,
+              ),
+          ),
       )
     }
   }, [data, skinsProfile])
+
+  useEffect(() => {
+    if (data?.data?.message?.includes('Error')) {
+      Toast.Error(
+        'Oops, tivemos um problema renderizando o seu inventário. Tente novamente mais tarde',
+      )
+    }
+  }, [data])
 
   const maxPages = Math.ceil(steamItens.length / 16)
 

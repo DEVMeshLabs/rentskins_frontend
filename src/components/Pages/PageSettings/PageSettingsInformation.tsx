@@ -4,6 +4,7 @@ import Form from '@/components/Forms'
 import { IconClose } from '@/components/Icons'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
@@ -106,36 +107,51 @@ export function PageSettingsInformation() {
     })
   }
 
-  const onSubmitEmail = (data: any) => {
+  const onSubmitEmail = async (data: any) => {
     setEditEmail(false)
     if (data.email !== '') {
-      ConfigService.updateConfig({
+      const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
         owner_id: trueSession.user?.steam?.steamid!,
         owner_email: data.email,
       })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('Email já cadastrado no sistema.', 2000)
+        setEditEmail(true)
+      }
     }
   }
 
-  const onSubmitPhone = (data: any) => {
+  const onSubmitPhone = async (data: any) => {
     setEditPhone(false)
     if (data.phone !== '') {
-      ConfigService.updateConfig({
+      const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
         owner_id: trueSession.user?.steam?.steamid!,
         owner_phone: data.phone,
       })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('Telefone já cadastrado no sistema.', 2000)
+        setEditPhone(true)
+      }
     }
   }
 
-  const onSubmitCPF = (data: any) => {
+  const onSubmitCPF = async (data: any) => {
     setEditCPF(false)
     if (data.cpf !== '') {
-      ConfigService.updateConfig({
+      const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
         owner_id: trueSession.user?.steam?.steamid!,
         owner_cpf: data.cpf,
       })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('CPF já cadastrado no sistema.', 2000)
+        setEditCPF(true)
+      }
     }
   }
 
