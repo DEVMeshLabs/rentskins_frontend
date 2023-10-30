@@ -160,7 +160,7 @@ export const ContainerItem = ({
     <div className={classNames('group relative z-20 ', className)}>
       {isList ? (
         <div className="flex items-center">
-          <Link href={`/loja?search=${hrefQuery}&page=1`}>
+          <Link href={`/loja?category=${hrefQuery}&page=1`}>
             <Common.Title color="white">{title}</Common.Title>
           </Link>
           <span className="ml-2 transition duration-300 ease-in-out group-hover:rotate-180">
@@ -169,7 +169,7 @@ export const ContainerItem = ({
         </div>
       ) : (
         <Common.Title color="white">
-          <Link href={`/loja?search=${hrefQuery}`}>{title}</Link>
+          <Link href={`/loja?category=${hrefQuery}`}>{title}</Link>
         </Common.Title>
       )}
 

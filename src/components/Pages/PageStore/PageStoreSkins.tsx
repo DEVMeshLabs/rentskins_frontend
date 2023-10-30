@@ -17,14 +17,19 @@ import { useEffect, useState } from 'react'
 export default function PageStoreSkins() {
   const router = useRouter()
   const search = useSearchParams().get('search') || ''
+  const category = useSearchParams().get('category') || ''
   const pageQuery = useSearchParams().get('page') || '1'
   const [page, setPage] = useState(pageQuery)
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
   const { selectedFilters, typeFilter } = useFilterStore()
 
+  console.log(category)
+
   useEffect(() => {
-    router.push(`/loja?search=${search}&page=${page}`)
-  }, [page, router, search])
+    if (!category) {
+      router.push(`/loja?search=${search}&page=${page}`)
+    }
+  }, [page, router, search, category])
 
   useEffect(() => {
     setPage(pageQuery)
@@ -36,11 +41,14 @@ export default function PageStoreSkins() {
     isRefetching,
     isLoading,
   } = useQuery({
-    queryKey: ['skinsCategory'],
+    queryKey: ['skinsCategory', category],
     queryFn: async () => {
+      console.log(category)
       if (search !== null && search !== undefined && search !== '') {
         const data = await SkinService.findBySearchParameter(search, 'name')
         return data
+      } else if (category) {
+        return SkinService.findBySearchParameter(category, 'category')
       } else {
         const data = await SkinService.findByAll(page)
         return data

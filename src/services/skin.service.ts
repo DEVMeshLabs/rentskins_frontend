@@ -75,7 +75,10 @@ export default class SkinService {
       .catch((e) => e)) as AxiosPromise<string[]>
   }
 
-  public static findBySearchParameter(param: string, type: string) {
+  public static findBySearchParameter(
+    param: string,
+    type: 'name' | 'category' | 'weapon',
+  ) {
     return Api.get<ISkinsResponse>(`/skins/search/${param}?type=${type}`)
   }
 
