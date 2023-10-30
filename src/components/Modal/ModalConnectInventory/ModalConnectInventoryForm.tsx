@@ -55,7 +55,7 @@ export function ModalConnectInventoryForm({
     }
   }, [userConfig, setValue])
 
-  const { data, refetch, isRefetching, isLoading, fetchStatus } = useQuery({
+  const { data, refetch, isRefetching, fetchStatus } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
     queryFn: async () => {
       const sellLink = `https://rentskins/?sellerid=${trueSession?.user?.steam?.steamid}`
@@ -76,19 +76,6 @@ export function ModalConnectInventoryForm({
     enabled: false,
     cacheTime: 0,
   })
-
-  console.log(fetchStatus)
-
-  console.log(isRefetching)
-  console.log(isLoading)
-
-  console.log(data)
-  console.log(data?.request?.status)
-  console.log(data?.response?.status)
-  console.log(data?.response?.data)
-  console.log(data?.status)
-  console.log(data?.data)
-  console.log(data?.config?.data)
 
   const cpfError = {
     message:
