@@ -4,7 +4,7 @@ import ConfigService from '@/services/config.service'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { ColorRing } from 'react-loader-spinner'
 import { formResolver } from './form.schema'
@@ -54,8 +54,6 @@ export function ModalConnectInventoryForm({
       setValue('trade-link', userConfig.url_trade)
     }
   }, [userConfig, setValue])
-
-  const [formData, setFormData] = useState<any>(undefined)
 
   const { data, refetch, isRefetching, isLoading, fetchStatus } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
