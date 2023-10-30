@@ -49,7 +49,7 @@ async function handler(
             session?.user?.steam?.steamid!,
           )
 
-          if (!userAlreadyExists) {
+          if (userAlreadyExists?.response?.status === 404) {
             UserService.createUser(
               {
                 owner_id: session?.user?.steam?.steamid!,
