@@ -35,7 +35,7 @@ export function ModalBuySkin({ onClick }: IProps) {
     if (inventory && inventory?.data && inventory?.data?.length > 0) return true
 
     Toast.Error(
-      'Não foi possível comprar o item. Verifique se o seu inventário se encontra visível e tente novamente.',
+      'Não foi possível comprar o item. Verifique se o seu inventário se encontra público e tente novamente.',
     )
     return false
   }
