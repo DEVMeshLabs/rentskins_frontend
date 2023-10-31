@@ -9,7 +9,7 @@ export interface ISkinsSemelhantesProps {
   data: ISkins
   weaponName: string | null
 }
-
+//
 export default function SkinsSemelhantes({
   weaponName,
   data,
