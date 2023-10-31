@@ -15,6 +15,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Image, { StaticImageData } from 'next/image'
+import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -197,29 +198,32 @@ rounded-2xl bg-mesh-color-neutral-700"
                 <span className="leading text-white">
                   Ao prosseguir para finalizar o pagamento, você concorda com os
                   nossos{' '}
-                  <a
+                  <Link
                     href="/termos-de-uso"
+                    tabIndex={-1}
                     target="_blank"
                     className="hover:text-inherit/50 text-mesh-color-primary-1000"
                   >
                     Termos de Serviço
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a
+                  <Link
                     href="/privacidade"
+                    tabIndex={-1}
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
                     Política de Privacidade
-                  </a>{' '}
+                  </Link>{' '}
                   e{' '}
-                  <a
+                  <Link
                     href="/termos-de-uso"
+                    tabIndex={-1}
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
                     Política de Reembolso
-                  </a>
+                  </Link>
                   .
                 </span>
                 <Form.Button
