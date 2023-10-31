@@ -24,6 +24,7 @@ export function LayoutFooter() {
           <nav className="flex gap-12">
             <Link
               href="/termos-de-uso"
+              tabIndex={-1}
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -31,6 +32,7 @@ export function LayoutFooter() {
             </Link>
             <Link
               href="/privacidade"
+              tabIndex={-1}
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -38,6 +40,7 @@ export function LayoutFooter() {
             </Link>
             <Link
               href="/sobre"
+              tabIndex={-1}
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -45,6 +48,7 @@ export function LayoutFooter() {
             </Link>
             <Link
               href="/suporte"
+              tabIndex={-1}
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >
@@ -52,6 +56,7 @@ export function LayoutFooter() {
             </Link>
             <Link
               href="/faq"
+              tabIndex={-1}
               className="text-white transition-colors hover:text-white/50"
               rel="noopener noreferrer"
             >

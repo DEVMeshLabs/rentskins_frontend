@@ -37,9 +37,9 @@ export function ModalBuyMain({
     setOpenModalBuySkin(!openModalBuySkin)
   }
 
-  const { data: createTrasaction, refetch: refetchCreateTrasaction } = useQuery(
-    {
-      queryKey: ['createTrasaction'],
+  const { data: createTransaction, refetch: refetchCreateTransaction } =
+    useQuery({
+      queryKey: ['createTransaction'],
       queryFn: () =>
         TransactionsService.createTransaction({
           skinsToBuy: [
@@ -49,28 +49,27 @@ export function ModalBuyMain({
         }),
       enabled: false,
       cacheTime: 0,
-    },
-  )
+    })
 
   useEffect(() => {
-    if (createTrasaction?.status === 201) {
+    if (createTransaction?.status === 201) {
       setWhatModalOpenToBuySkin(3)
-    } else if (createTrasaction?.request.status === 400) {
+    } else if (createTransaction?.request.status === 400) {
       setWhatModalOpenToBuySkin(4)
-    } else if (createTrasaction?.request.status === 409) {
+    } else if (createTransaction?.request.status === 409) {
       setWhatModalOpenToBuySkin(0)
       Toast.Error('Desculpe, esse item já foi vendido.', 2000)
 
       setTimeout(() => router.replace('/'), 2000)
     }
-  }, [createTrasaction, refetchCreateTrasaction])
+  }, [createTransaction, refetchCreateTransaction])
 
   return (
     <Dialog.Root open={openModalBuySkin} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all">
           {whatModalOpenToBuySkin === 0 && (
-            <ModalBuySkin onClick={() => refetchCreateTrasaction()} />
+            <ModalBuySkin onClick={() => refetchCreateTransaction()} />
           )}
           {whatModalOpenToBuySkin === 1 && <ModalExchangeSkin />}
           {whatModalOpenToBuySkin === 2 && <ModalProcessing />}

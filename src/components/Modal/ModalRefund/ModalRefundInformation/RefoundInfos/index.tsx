@@ -52,9 +52,19 @@ export default function RefoundInfos() {
         <p className="w-[70%] px-2 text-[#A7B0A0]">
           Ao prosseguir para solicitação de devolução, você concorda com os
           nossos
-          <Link href="/" className="text-dark-lime-green">
+          <Link href="/termos-de-uso" className="text-dark-lime-green">
             {' '}
-            Termos de Serviço, Política de Privacidade,Política de Reembolso.
+            Termos de Serviço
+          </Link>
+          ,
+          <Link href={'/privacidade'} className="text-dark-lime-green">
+            {' '}
+            Política de Privacidade
+          </Link>
+          e
+          <Link href={'/termos-de-uso'} className="text-dark-lime-green">
+            {' '}
+            Política de Reembolso.
           </Link>
         </p>
         <Common.Button

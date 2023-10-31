@@ -23,8 +23,6 @@ export default class SkinService {
   }
 
   public static async findBySkinsInventory(steamid: string, token: string) {
-    console.log(steamid)
-    console.log(token)
     const response = await Api.get<IInventory>(`/skins/inventory/${steamid}`, {
       headers: { Authorization: 'Bearer ' + token },
     })

@@ -76,7 +76,7 @@ export default function PageNotificationTransaction({
                   )
 
                   const tradeLink = await ConfigService.findByConfigUserId(
-                    item.buyer_id,
+                    item.seller_id,
                     token,
                   )
 

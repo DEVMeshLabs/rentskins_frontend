@@ -1,23 +1,44 @@
 'use client'
 import { IconGift } from '@/components/Icons/IconGift'
 import { CardSkinModal } from '@/components/Others/CardSkinModal'
+import ISteamUser from '@/interfaces/steam.interface'
+import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useSession } from 'next-auth/react'
+import { ModalConfirm } from './ModalComfirm'
 import { ModalInfoSkin } from './ModalInfoSkin'
 import { ModalTitleSkin } from './ModalTitleSkin'
-import { ModalConfirm } from './ModalComfirm'
 
 interface IProps {
   onClick: () => void
 }
 
 export function ModalBuySkin({ onClick }: IProps) {
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
+
   const {
     setOpenModalBuySkin,
     skinToBuy,
     itemAvailable,
     setWhatModalOpenToBuySkin,
   } = useSkinsStore()
+
+  const checkInventoryAvailability = async (): Promise<boolean> => {
+    const inventory = await SkinService.findBySkinsInventory(
+      trueSession.user?.steam?.steamid!,
+      trueSession.user?.token!,
+    )
+
+    if (inventory && inventory?.data && inventory?.data?.length > 0) return true
+
+    Toast.Error(
+      'Não foi possível comprar o item. Verifique se o seu inventário se encontra público e tente novamente.',
+    )
+    return false
+  }
 
   return (
     <Dialog.Content
@@ -37,19 +58,19 @@ export function ModalBuySkin({ onClick }: IProps) {
       <div className="flex flex-col gap-5 rounded-b-2xl rounded-t-xl bg-mesh-color-neutral-700 px-8 py-6">
         <ModalTitleSkin
           onClick={() => setOpenModalBuySkin(false)}
-          label="Comprar skin"
+          label="Comprar Item"
         />
         <div className="mb-[10px] flex justify-between">
           <ModalInfoSkin
             label={[
               {
-                subtitle: 'Valor total da Skin',
+                subtitle: 'Valor total',
                 value: skinToBuy?.skinPrice!,
               },
             ]}
           >
             <p className="text-mesh-color-neutral-0">
-              Após a conclusão bem-sucedida da compra e a entrega da skin
+              Após a conclusão bem-sucedida da compra e a entrega do item
               conforme o esperado, o valor total será confirmado e a transação
               será finalizada com sucesso.
             </p>
@@ -61,7 +82,11 @@ export function ModalBuySkin({ onClick }: IProps) {
         <hr className="w-full border-mesh-color-neutral-200" />
         <ModalConfirm
           itemAvailable={itemAvailable}
-          onClick={() => {
+          onClick={async () => {
+            if (!(await checkInventoryAvailability())) {
+              return null
+            }
+
             onClick()
             setWhatModalOpenToBuySkin(2)
           }}
