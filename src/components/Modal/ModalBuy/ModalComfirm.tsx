@@ -14,13 +14,15 @@ export function ModalConfirm({ label, onClick, itemAvailable }: IProps) {
         Ao prosseguir para finalizar o pagamento, você concorda com os nossos{' '}
         <Link
           href={'/termos-de-uso'}
+          target="_blank"
           className="text-mesh-color-primary-1200 hover:underline"
         >
           Termos de Serviço
-        </Link>
-        <span className="text-mesh-color-primary-1200">, </span>
+        </Link>{' '}
+        e{' '}
         <Link
           href={'/privacidade'}
+          target="_blank"
           className="text-mesh-color-primary-1200 hover:underline"
         >
           Política de Privacidade.

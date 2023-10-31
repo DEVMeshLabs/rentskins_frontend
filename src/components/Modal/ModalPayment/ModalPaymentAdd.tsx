@@ -211,10 +211,10 @@ rounded-2xl bg-mesh-color-neutral-700"
                     className="text-mesh-color-primary-1000"
                   >
                     Política de Privacidade
-                  </a>
-                  ,{' '}
+                  </a>{' '}
+                  e{' '}
                   <a
-                    href=""
+                    href="/termos-de-uso"
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
