@@ -116,6 +116,8 @@ export function PageDetailsSkin({
     userConfiguration?.agreed_with_terms !== false &&
     userConfiguration?.url_trade !== undefined
 
+  console.log(userConfiguration)
+
   useEffect(() => {
     if (loading && userStatus === 'authenticated' && hasConfigurations) {
       Toast.Loading(
@@ -461,10 +463,16 @@ export function PageDetailsSkin({
               <Common.Button
                 onClick={async () => {
                   if (userIsntOwnerSkin) {
-                    setMethodSelected('buy')
-                    setSkinToBuy(skinToBuy)
-                    setWhatModalOpenToBuySkin(0)
-                    setOpenModalBuySkin(true)
+                    if (hasConfigurations) {
+                      setMethodSelected('buy')
+                      setSkinToBuy(skinToBuy)
+                      setWhatModalOpenToBuySkin(0)
+                      setOpenModalBuySkin(true)
+                    } else {
+                      Toast.Blank(
+                        'Você deve adicionar seus dados antes de proceder.',
+                      )
+                    }
                   } else {
                     Toast.Error('Você não pode comprar o seu próprio item.')
                   }

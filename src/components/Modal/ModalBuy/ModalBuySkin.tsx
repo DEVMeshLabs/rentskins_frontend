@@ -3,9 +3,9 @@ import { IconGift } from '@/components/Icons/IconGift'
 import { CardSkinModal } from '@/components/Others/CardSkinModal'
 import useSkinsStore from '@/stores/skins.store'
 import * as Dialog from '@radix-ui/react-dialog'
+import { ModalConfirm } from './ModalComfirm'
 import { ModalInfoSkin } from './ModalInfoSkin'
 import { ModalTitleSkin } from './ModalTitleSkin'
-import { ModalConfirm } from './ModalComfirm'
 
 interface IProps {
   onClick: () => void
@@ -37,19 +37,19 @@ export function ModalBuySkin({ onClick }: IProps) {
       <div className="flex flex-col gap-5 rounded-b-2xl rounded-t-xl bg-mesh-color-neutral-700 px-8 py-6">
         <ModalTitleSkin
           onClick={() => setOpenModalBuySkin(false)}
-          label="Comprar skin"
+          label="Comprar Item"
         />
         <div className="mb-[10px] flex justify-between">
           <ModalInfoSkin
             label={[
               {
-                subtitle: 'Valor total da Skin',
+                subtitle: 'Valor total',
                 value: skinToBuy?.skinPrice!,
               },
             ]}
           >
             <p className="text-mesh-color-neutral-0">
-              Após a conclusão bem-sucedida da compra e a entrega da skin
+              Após a conclusão bem-sucedida da compra e a entrega do item
               conforme o esperado, o valor total será confirmado e a transação
               será finalizada com sucesso.
             </p>

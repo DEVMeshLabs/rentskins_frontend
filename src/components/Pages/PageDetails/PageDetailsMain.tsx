@@ -7,6 +7,7 @@ import { ISkins } from '@/interfaces/ISkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
+import { RoundTime } from '@/utils/roundTime'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -14,7 +15,6 @@ import { PageDetailsCard } from './PageDetailsCard'
 import { PageDetailsPerfil } from './PageDetailsPerfil'
 import { PageDetailsSkin } from './PageDetailsSkin'
 import { PageDetailsVendas } from './PageDetailsVendas'
-import { RoundTime } from '@/utils/roundTime'
 
 interface IProps {
   item: ISkins
@@ -34,6 +34,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     },
     enabled: status === 'authenticated',
   })
+
+  console.log(userRetrieved)
 
   const { data: latestSales } = useQuery({
     queryKey: ['latestSales', seller.owner_id],
