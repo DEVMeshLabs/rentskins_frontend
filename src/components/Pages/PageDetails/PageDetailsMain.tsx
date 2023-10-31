@@ -113,7 +113,10 @@ export default function PageDetailsMain({ item, seller }: IProps) {
           />
         </div>
       </div>
-      <SkinsSemelhantes weaponName={item.skin_weapon || null} data={item} />
+      <SkinsSemelhantes
+        weaponName={item.skin_weapon || null}
+        currentItem={item}
+      />
     </main>
   )
 }
