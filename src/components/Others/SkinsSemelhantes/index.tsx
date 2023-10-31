@@ -23,12 +23,6 @@ export default function SkinsSemelhantes({
     (item: ISkins) => currentItem.asset_id !== item.asset_id,
   )
 
-  console.log(weaponName)
-
-  console.log(sameItems)
-  console.log(similarItem)
-  console.log(currentItem)
-
   return (
     <div className="min-h-[300px] pb-16 pt-8">
       <Common.Title color="white" bold={700} className="mb-6 text-[28px]">
