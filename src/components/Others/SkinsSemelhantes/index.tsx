@@ -36,7 +36,7 @@ export default function SkinsSemelhantes({
             })
           ) : (
             <Common.Title className="flex h-[100px] w-full justify-center text-mesh-color-neutral-400">
-              Sem itens semelhantes do momento.
+              Sem itens semelhantes no momento.
             </Common.Title>
           )}
         </div>
