@@ -90,7 +90,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             statusFloat={item.status_float}
             skinId={item.id}
             cartId={userRetrieved?.data?.cart?.id as string}
-            userConfiguration={userRetrieved?.data?.configuration!}
+            userConfiguration={userRetrieved?.data?.Configuration!}
           />
           <PageDetailsPerfil
             id={seller.owner_id}

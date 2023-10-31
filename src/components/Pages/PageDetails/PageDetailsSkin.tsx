@@ -116,8 +116,6 @@ export function PageDetailsSkin({
     userConfiguration?.agreed_with_terms !== false &&
     userConfiguration?.url_trade !== undefined
 
-  console.log(userConfiguration)
-
   useEffect(() => {
     if (loading && userStatus === 'authenticated' && hasConfigurations) {
       Toast.Loading(
