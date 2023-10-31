@@ -1,8 +1,12 @@
 'use client'
 import { IconGift } from '@/components/Icons/IconGift'
 import { CardSkinModal } from '@/components/Others/CardSkinModal'
+import ISteamUser from '@/interfaces/steam.interface'
+import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useSession } from 'next-auth/react'
 import { ModalConfirm } from './ModalComfirm'
 import { ModalInfoSkin } from './ModalInfoSkin'
 import { ModalTitleSkin } from './ModalTitleSkin'
@@ -12,12 +16,29 @@ interface IProps {
 }
 
 export function ModalBuySkin({ onClick }: IProps) {
+  const { data: session } = useSession()
+  const trueSession = session as ISteamUser
+
   const {
     setOpenModalBuySkin,
     skinToBuy,
     itemAvailable,
     setWhatModalOpenToBuySkin,
   } = useSkinsStore()
+
+  const checkInventoryAvailability = async (): Promise<boolean> => {
+    const inventory = await SkinService.findBySkinsInventory(
+      trueSession.user?.steam?.steamid!,
+      trueSession.user?.token!,
+    )
+
+    if (inventory && inventory?.data && inventory?.data?.length > 0) return true
+
+    Toast.Error(
+      'Não foi possível comprar o item. Verifique se o seu inventário se encontra visível e tente novamente.',
+    )
+    return false
+  }
 
   return (
     <Dialog.Content
@@ -61,7 +82,11 @@ export function ModalBuySkin({ onClick }: IProps) {
         <hr className="w-full border-mesh-color-neutral-200" />
         <ModalConfirm
           itemAvailable={itemAvailable}
-          onClick={() => {
+          onClick={async () => {
+            if (!(await checkInventoryAvailability())) {
+              return null
+            }
+
             onClick()
             setWhatModalOpenToBuySkin(2)
           }}

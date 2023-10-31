@@ -19,9 +19,9 @@ export default function ModalPaymentMade({ sellerId, token }: IProps) {
     <Dialog.Content
       onPointerDownOutside={(event) => event.preventDefault()}
       onEscapeKeyDown={(event) => event.preventDefault()}
-      className="fixed left-1/2 top-1/2 z-30 flex h-1/2
-    w-2/3 min-w-[700px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center
-    gap-8 rounded-md bg-mesh-color-neutral-800 px-28 pb-8 pt-5 xl:w-[790px]"
+      className="fixed left-1/2 top-1/2 z-30 flex h-2/5
+    w-2/5 min-w-[500px] -translate-x-1/2 -translate-y-1/2 select-none flex-col items-center
+    justify-center gap-8 rounded-md bg-mesh-color-neutral-800"
     >
       <div className="flex flex-col items-center gap-8">
         <IconCheckPayment />
