@@ -56,6 +56,7 @@ export default function PageUserNotifications() {
       return allNotifications
     },
     enabled: status === 'authenticated',
+    cacheTime: 0,
   })
 
   const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {

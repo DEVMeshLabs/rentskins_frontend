@@ -16,13 +16,13 @@ export default class UserService {
   }
 
   public static async createUser(userCreate: ICreateUser, token: string) {
-    return Api.post(`/perfil`, userCreate, {
+    return (await Api.post(`/perfil`, userCreate, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response)
-      .catch((e) => e) as AxiosPromise<any>
+      .catch((e) => e)) as AxiosPromise<any>
   }
 
   public static async suspendUser(steamId: string, token: string) {

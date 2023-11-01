@@ -26,7 +26,7 @@ export default class ConfigService {
     url_trade,
   }: IOptionalConfig) {
     return Api.put<IConfig>(
-      `/configuration/${owner_id}`,
+      `/configuration`,
       {
         agreed_with_emails,
         agreed_with_terms,

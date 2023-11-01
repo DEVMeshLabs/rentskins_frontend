@@ -63,7 +63,7 @@ export function CardSkinInventory() {
   useEffect(() => {
     if (data?.data?.message?.includes('Error')) {
       Toast.Error(
-        'Oops, tivemos um problema renderizando o seu inventário. Tente novamente mais tarde',
+        'Não foi possível solicitar o inventário. Verifique se o seu inventário se encontra público e tente novamente mais tarde.',
       )
     }
   }, [data])
@@ -101,10 +101,14 @@ export function CardSkinInventory() {
               ? selectedType
               : 'Não existem armas desse tipo no seu inventário.'}
           </span>
-        ) : data?.data?.err?.code === 429 ? (
+        ) : data?.data?.err?.code === 429 ||
+          data?.data?.message?.includes('Error') ? (
           <span className="text-center">
             <p>Ocorreu um problema ao solicitar o seu inventário.</p>
-            <p>Tente novamente mais tarde.</p>
+            <p className="px-16">
+              Verifique se o seu inventário se encontra público e tente
+              novamente mais tarde.
+            </p>
           </span>
         ) : (
           <span> Inventário vazio. </span>

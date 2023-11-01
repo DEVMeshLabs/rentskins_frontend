@@ -71,6 +71,7 @@ export function LayoutHeaderTop() {
         trueSession?.user?.token,
       ),
     enabled: status === 'authenticated',
+    cacheTime: 0,
   })
 
   const { data: userHasConfig, isLoading } = useQuery({

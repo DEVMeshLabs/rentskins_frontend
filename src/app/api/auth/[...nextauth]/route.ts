@@ -4,6 +4,7 @@ import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
 import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
+import { signOut } from 'next-auth/react'
 import { NextRequest } from 'next/server'
 
 async function handler(
@@ -54,7 +55,7 @@ async function handler(
           )
 
           if (userAlreadyExists?.response?.status === 404) {
-            UserService.createUser(
+            const userCreated = await UserService.createUser(
               {
                 owner_id: session?.user?.steam?.steamid!,
                 owner_name: session?.user?.name!,
@@ -64,6 +65,10 @@ async function handler(
               },
               session?.user?.token!,
             )
+
+            if (userCreated?.status !== 201) {
+              await signOut()
+            }
           }
 
           session.user!.steam.banned = verifyVAC.data
