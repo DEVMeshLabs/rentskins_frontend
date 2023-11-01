@@ -105,7 +105,6 @@ export function ModalConnectInventoryForm({
       data?.response?.data?.errors,
   }
 
-  console.log(cpfError)
   // Error == 409
   useEffect(() => {
     if (data?.request.status === 204) {

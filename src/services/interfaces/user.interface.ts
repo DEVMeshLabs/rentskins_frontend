@@ -23,7 +23,7 @@ export interface IGetUser {
   owner_name: string
   picture: string
   cart: IGetUserCart
-  Configuration: IOptionalConfig
+  configuration: IOptionalConfig
 }
 
 export interface ICreateUser {
