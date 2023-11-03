@@ -4,6 +4,7 @@ import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
+import NotificationServices from '@/services/notifications.service'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
 import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
@@ -299,6 +300,12 @@ export function PageDetailsSkin({
       if (resultAvailability?.request?.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request?.status === 404) {
+        NotificationServices.createNewNotification(
+          sellerId,
+          token,
+          `O anúncio do item ${skinName} foi removido da loja. Durante a compra de um usuário o item não foi encontrado em seu inventário.`,
+          skinId,
+        )
         deleteItem()
         setOpenModalBuySkin(false)
       } else if (resultAvailability?.request?.status === 500) {
@@ -309,6 +316,12 @@ export function PageDetailsSkin({
           router.push('/')
           setOpenModalBuySkin(false)
         } else {
+          NotificationServices.createNewNotification(
+            sellerId,
+            token,
+            `O anúncio do item ${skinName} foi removido. Verifique se o seu inventário se encontra público e anuncie novamente.`,
+            skinId,
+          )
           deleteItem()
           setOpenModalBuySkin(false)
         }
