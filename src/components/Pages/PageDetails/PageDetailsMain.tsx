@@ -7,7 +7,8 @@ import { ISkins } from '@/interfaces/ISkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
-import { RoundTime } from '@/utils/roundTime'
+
+import Time from '@/tools/time.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -36,6 +37,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   })
 
   console.log(userRetrieved)
+  console.log(seller)
 
   const { data: latestSales } = useQuery({
     queryKey: ['latestSales', seller.owner_id],
@@ -99,12 +101,12 @@ export default function PageDetailsMain({ item, seller }: IProps) {
               seller.total_exchanges_completed && seller.total_exchanges
                 ? (seller.total_exchanges_completed / seller.total_exchanges) *
                   100
-                : 'Membro Novo'
+                : 'Sem informações'
             }
             reliability={seller.reliability}
             delivery_time={
               seller.delivery_time !== 'Sem informações'
-                ? RoundTime(seller.delivery_time!)
+                ? Time.roundTime(seller.delivery_time!)
                 : 'Sem informações'
             }
             owner_name={seller.owner_name!}

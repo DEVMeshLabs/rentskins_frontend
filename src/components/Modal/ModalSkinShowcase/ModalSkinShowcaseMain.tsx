@@ -53,6 +53,8 @@ export function ModalSkinShowcaseMain({
   })
   const [open, setOpen] = useState(false)
 
+  console.log(averagePrice?.data)
+
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
@@ -93,7 +95,12 @@ export function ModalSkinShowcaseMain({
                 id={id}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
-                recomended_price={averagePrice?.data[0] || 'Não encontrado'}
+                recomended_price={
+                  (averagePrice?.data &&
+                    averagePrice?.data?.length > 0 &&
+                    averagePrice?.data[0]) ||
+                  'Não encontrado'
+                }
                 sale_type={'sale'}
                 skin_category={skinCategory}
                 skin_rarity={skinRarity}

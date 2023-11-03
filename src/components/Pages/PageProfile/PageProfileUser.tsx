@@ -10,7 +10,6 @@ import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
-import { RoundTime } from '@/utils/roundTime'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
@@ -19,15 +18,7 @@ import { useEffect, useState } from 'react'
 export default function PageProfileUser() {
   const { data: session, status } = useSession()
   const trueSession = session as ISteamUser
-  const [accountDate, setAccountDate] = useState('Data não obtida')
   const [page, setPage] = useState(1)
-  const [reliability, setReliability] = useState('Não Obtido')
-  const [userState, setUserState] = useState('')
-  const [picture, setPicture] = useState('')
-  const [name, setName] = useState('')
-  const [totalExchanges, setTotalExchanges] = useState(0)
-  const [deliveryTime, setDeliveryTime] = useState('')
-  const [deliveryFee, setDeliveryFee] = useState(0)
   const { userSteamId } = useParams()
   const router = useRouter()
 
@@ -37,14 +28,14 @@ export default function PageProfileUser() {
     }
   }, [userSteamId, trueSession?.user?.steam?.steamid, router])
 
-  const { data, isLoading: isLoadingGetUser } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ['OtherProfile', userSteamId],
     queryFn: () => UserService.getUser(userSteamId),
   })
 
   const {
-    data: dataAllSkins,
-    isLoading,
+    data: itens,
+    isLoading: isLoadingItens,
     isRefetching,
     refetch,
   } = useQuery({
@@ -57,57 +48,57 @@ export default function PageProfileUser() {
     refetch()
   }, [page, refetch])
 
-  useEffect(() => {
-    if (data?.data) {
-      const accountDate = new Date(data?.data.steam_created_date)
-      setAccountDate(
-        `${accountDate.getDate().toString().padStart(2, '0')}/${(
-          accountDate.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, '0')}/${accountDate.getFullYear()}`,
-      )
-      setReliability(data?.data.reliability)
-      setPicture(data?.data.picture)
-      setName(data?.data.owner_name)
-      setUserState(data?.data.status_member)
-      setTotalExchanges(data.data.total_exchanges)
-      setDeliveryTime(RoundTime(data.data.delivery_time))
-      setDeliveryFee(data.data.delivery_fee)
-    }
-  }, [data])
+  const steamCreatedDate = `${new Date(user?.data?.steam_created_date!)
+    .getDate()
+    .toString()
+    .padStart(2, '0')}/${(
+    new Date(user?.data?.steam_created_date!).getMonth() + 1
+  )
+    .toString()
+    .padStart(2, '0')}/${new Date(
+    user?.data?.steam_created_date!,
+  ).getFullYear()}`
+
+  const deliveryFee =
+    user?.data?.total_exchanges_completed && user?.data?.total_exchanges
+      ? (user?.data?.total_exchanges_completed / user?.data?.total_exchanges) *
+        100
+      : 'Sem informações'
 
   return (
     <>
-      {status === 'authenticated' ? (
+      {status === 'authenticated' && user?.data ? (
         <PersonProfile
-          totalExchanges={totalExchanges}
-          deliveryTime={deliveryTime}
+          totalExchanges={user?.data?.total_exchanges}
+          deliveryTime={user?.data?.delivery_time}
           deliveryFee={deliveryFee}
-          isLoading={isLoadingGetUser}
-          accountDate={accountDate}
-          userState={userState}
-          name={name}
-          picture={picture}
-          reliability={reliability}
+          isLoading={isLoadingUser}
+          accountDate={steamCreatedDate}
+          userState={user?.data?.status_member}
+          name={user?.data?.owner_name}
+          picture={user?.data?.picture}
+          reliability={user?.data?.reliability}
           isSeller={false}
         />
       ) : (
         <PersonProfileSkeleton />
       )}
       <ChoiceItems />
-      {isLoading || isRefetching ? (
+      {isLoadingItens || isRefetching || isLoadingUser ? (
         <AllSkeletonSkins />
-      ) : dataAllSkins?.data.skins.length! > 0 ? (
-        <AllSkins skinsCategories={dataAllSkins?.data?.skins} />
+      ) : itens?.data.skins.length! > 0 ? (
+        <AllSkins skinsCategories={itens?.data?.skins} />
       ) : (
-        <Common.SearchFeedback content="ao perfil de" title={name} />
+        <Common.SearchFeedback
+          content="ao perfil de"
+          title={user?.data?.owner_name! || 'Usuário'}
+        />
       )}
-      {dataAllSkins?.data?.totalPages &&
-        dataAllSkins?.data?.totalPages > 1 &&
-        Number(page) <= dataAllSkins?.data?.totalPages && (
+      {itens?.data &&
+        itens?.data?.totalPages > 1 &&
+        Number(page) <= itens?.data?.totalPages && (
           <LayoutPagination
-            maxPages={dataAllSkins?.data?.totalPages}
+            maxPages={itens?.data?.totalPages}
             pageState={page}
             setPageState={setPage}
           />

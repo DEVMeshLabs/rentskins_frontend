@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
 import Image from 'next/image'
 
 type Props = {
@@ -16,7 +14,7 @@ export function CardSkinImage({ rarity, icon_url, primeiroName }: Props) {
       <div
         className="h-1 w-[80%] rounded-b"
         style={{
-          background: `#${transformRarityInColor(rarity as TItemRarity)}`,
+          background: `#${ColorRarity.transform(rarity as TItemRarity)}`,
         }}
       />
       <Image

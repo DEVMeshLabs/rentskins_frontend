@@ -137,7 +137,7 @@ export default function PersonProfile({
           title="Tempo de Entrega"
           value={
             (deliveryTime && deliveryTime.replace(' no momento', '')) ||
-            'Não Obtido'
+            'Sem informações'
           }
         />
         <ProfileInfo
@@ -148,9 +148,11 @@ export default function PersonProfile({
           title="Taxa de Entrega"
           isPercent
           value={
-            typeof deliveryFee === 'number'
-              ? deliveryFee.toFixed(0) + '%'
-              : deliveryFee
+            deliveryFee
+              ? typeof deliveryFee === 'number'
+                ? deliveryFee.toFixed(0) + '%'
+                : deliveryFee
+              : 'Sem informações'
           }
         />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />

@@ -6,10 +6,8 @@ import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
 import Toast from '@/tools/toast.tool'
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
@@ -285,15 +283,21 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (resultAvailability?.request && !refetchingAvailability) {
+      console.log(resultAvailability)
+
       if (resultAvailability?.request.status === 200) {
         proceedItem()
       } else if (resultAvailability?.request.status === 404) {
         deleteItem()
         setOpenModalBuySkin(false)
       } else {
-        Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
-        router.push('/')
+        deleteItem()
+        setOpenModalBuySkin(false)
       }
+      // else {
+      //   Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
+      //   router.push('/')
+      // }
     }
   }, [
     methodSelected,
@@ -417,7 +421,7 @@ export function PageDetailsSkin({
             <p className="text-white">{skinRarity || 'Consumer grade'}</p>
             <div
               className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
-              style={{ background: `#${transformRarityInColor(skinRarity)}` }}
+              style={{ background: `#${ColorRarity.transform(skinRarity)}` }}
             />
           </div>
         </div>

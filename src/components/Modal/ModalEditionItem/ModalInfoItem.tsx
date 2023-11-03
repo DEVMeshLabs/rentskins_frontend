@@ -3,15 +3,15 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 
+import ISteamUser from '@/interfaces/steam.interface'
+import SkinService from '@/services/skin.service'
+import Toast from '@/tools/toast.tool'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { formResolver } from '../ModalSkinShowcase/info.schema'
-import SkinService from '@/services/skin.service'
-import { useQuery } from '@tanstack/react-query'
-import ISteamUser from '@/interfaces/steam.interface'
-import { useSession } from 'next-auth/react'
 import { ColorRing } from 'react-loader-spinner'
-import Toast from '@/tools/toast.tool'
+import { formResolver } from '../ModalSkinShowcase/info.schema'
 
 interface IProps {
   statusFloatText: string
@@ -114,6 +114,9 @@ export function ModalInfoItem({
     }
   }
 
+  console.log(averagePrice?.data)
+  console.log(averagePrice)
+
   return (
     <div className="flex h-full w-[40%] flex-col">
       <div>
@@ -135,7 +138,10 @@ export function ModalInfoItem({
               Preço recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
-              {averagePrice?.data[0] || 'Não encontrado'}
+              {(averagePrice?.data &&
+                averagePrice?.data?.length > 0 &&
+                averagePrice?.data[0]) ||
+                'Não encontrado'}
             </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">
