@@ -106,7 +106,7 @@ export default function PageNotificationTransaction({
                 type: isABuyer ? 'buyer' : 'seller',
               }}
               buttonStyle="full"
-              text={isABuyer ? 'Item Obtido' : 'Enviar Item'}
+              text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
             />
             <TransactionCard.Button
               token={token}
@@ -117,7 +117,7 @@ export default function PageNotificationTransaction({
                 type: isABuyer ? 'buyer' : 'seller',
               }}
               buttonStyle="opaque"
-              text={isABuyer ? 'Não Obtido' : 'Não Enviar'}
+              text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
             />
           </TransactionCard.Actions>
         </TransactionCard.Root>
