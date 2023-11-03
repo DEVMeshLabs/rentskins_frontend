@@ -6,10 +6,8 @@ import { IOptionalConfig } from '@/interfaces/IConfig'
 import CartService from '@/services/cart.service'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
 import Toast from '@/tools/toast.tool'
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
@@ -192,7 +190,7 @@ export function PageDetailsSkin({
       case '21':
         return setRentPercentage(23)
     }
-  }, [stateRentTime])
+  }, [stateRentTime, setRentTime])
 
   useEffect(() => {
     if (deleteResult) {
@@ -208,10 +206,9 @@ export function PageDetailsSkin({
     } else {
       setLoading(false)
     }
-  }, [methodSelected, refetchAvailability, hasConfigurations])
+  }, [methodSelected, refetchAvailability, hasConfigurations, itemAvailable])
 
   useEffect(() => {
-    console.log(resultAvailability)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)
@@ -236,7 +233,14 @@ export function PageDetailsSkin({
         7000,
       )
     }
-  }, [resultAvailability])
+  }, [
+    resultAvailability,
+    methodSelected,
+    stateRentTime,
+    setItemAvailable,
+    setRentTime,
+    setWhatModalOpenToBuySkin,
+  ])
 
   const proceedItem = useCallback(async () => {
     console.log(methodSelected !== undefined)
@@ -281,23 +285,43 @@ export function PageDetailsSkin({
         return Toast.Error('Tente novamente após alguns segundos.')
       }
     }
-  }, [methodSelected, createCart, userStatus, pathname, hasConfigurations])
+  }, [
+    methodSelected,
+    createCart,
+    userStatus,
+    pathname,
+    hasConfigurations,
+    wasRaised,
+  ])
 
   useEffect(() => {
     if (resultAvailability?.request && !refetchingAvailability) {
-      if (resultAvailability?.request.status === 200) {
+      if (resultAvailability?.request?.status === 200) {
         proceedItem()
-      } else if (resultAvailability?.request.status === 404) {
+      } else if (resultAvailability?.request?.status === 404) {
         deleteItem()
         setOpenModalBuySkin(false)
+      } else if (resultAvailability?.request?.status === 500) {
+        if (resultAvailability?.request?.response?.includes('HTTP error 429')) {
+          Toast.Error(
+            'Problemas de conexão com a Steam. Tente novamente mais tarde!',
+          )
+          router.push('/')
+          setOpenModalBuySkin(false)
+        } else {
+          deleteItem()
+          setOpenModalBuySkin(false)
+        }
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
+        setOpenModalBuySkin(false)
       }
     }
   }, [
     methodSelected,
     resultAvailability,
+    setOpenModalBuySkin,
     refetchingAvailability,
     proceedItem,
     router,
@@ -415,8 +439,8 @@ export function PageDetailsSkin({
           </Common.Title>
           <div className="flex items-center justify-center">
             <div
-              className={`ml-2 h-[17px] w-[34px] rounded-[3px]`}
-              style={{ background: `#${transformRarityInColor(skinRarity)}` }}
+              className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
+              style={{ background: `#${ColorRarity.transform(skinRarity)}` }}
             />
           </div>
         </div>

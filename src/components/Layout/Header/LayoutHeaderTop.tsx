@@ -14,8 +14,8 @@ import NotificationServices from '@/services/notifications.service'
 import WalletService from '@/services/wallet.service'
 import useFilterStore from '@/stores/filters.store'
 import useUserStore from '@/stores/user.store'
+import Notifications from '@/tools/notification.tool'
 import VerificationTool from '@/tools/verification.tool'
-import { thereIsNotification } from '@/utils/notification'
 import { useQuery } from '@tanstack/react-query'
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -98,7 +98,7 @@ export function LayoutHeaderTop() {
       refetch() // Refaz a requisição a cada 1 segundo
     }
     // }, 10 * 60 * 1000)
-    setHasNotifications(thereIsNotification(data?.data))
+    setHasNotifications(Notifications.hasNotification(data?.data))
   }, [pathname])
 
   const { data: walletRetrieved } = useQuery({

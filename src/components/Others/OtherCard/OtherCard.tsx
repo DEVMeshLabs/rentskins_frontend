@@ -3,14 +3,14 @@ import Common from '@/components/Common'
 import IconMagic from '@/components/Icons/IconMagicpen'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
+import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
 import { ISkins } from '@/interfaces/ISkins'
 import useModalStore from '@/stores/modal.store'
-import transformRarityInColor from '@/utils/transformRarityInColor'
+import ColorRarity from '@/tools/colorRarity'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
-import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
 
 interface Props {
   itsRent?: boolean
@@ -52,7 +52,7 @@ export function OtherCard({ itsRent, item, itensFromUser }: Props) {
           <div
             className={`top-0 h-2 w-52 rounded-b-full`}
             style={{
-              backgroundColor: `#${transformRarityInColor(item.skin_rarity)}`,
+              backgroundColor: `#${ColorRarity.transform(item.skin_rarity)}`,
             }}
           />
           <Image

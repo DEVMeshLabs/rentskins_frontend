@@ -11,8 +11,6 @@ import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import ISteamUser from '@/interfaces/steam.interface'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
-import { RoundTime } from '@/utils/roundTime'
-// import useUserStore from '@/stores/user.store'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { notFound } from 'next/navigation'
@@ -27,15 +25,13 @@ export default function PageProfileSelf() {
   }
 
   const [page, setPage] = useState(1)
-  const [accountDate, setAccountDate] = useState('Data Não Obtida')
-  const [reliability, setReliability] = useState('')
-  const [userState, setUserState] = useState('Não Obtido')
-  const [totalExchanges, setTotalExchanges] = useState(0)
-  const [deliveryTime, setDeliveryTime] = useState('')
-  const [deliveryFee, setDeliveryFee] = useState<number | string>(0)
-  // const { itemsSoldOrRented } = useUserStore()
 
-  const { data, isLoading, isRefetching, refetch } = useQuery({
+  const {
+    data: itens,
+    isLoading: isLoadingItens,
+    isRefetching,
+    refetch,
+  } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
       SkinService.findAllSkinsByIdSeller(
@@ -49,74 +45,62 @@ export default function PageProfileSelf() {
     refetch()
   }, [page, refetch])
 
-  const { data: dataGettedUser, isLoading: isLoadingGetUser } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ['myProfile', trueSession?.user?.steam?.steamid!],
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),
   })
 
-  useEffect(() => {
-    if (dataGettedUser?.data) {
-      const accountDate = new Date(dataGettedUser?.data.steam_created_date)
-      setAccountDate(
-        `${accountDate.getDate().toString().padStart(2, '0')}/${(
-          accountDate.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, '0')}/${accountDate.getFullYear()}`,
-      )
-      setReliability(dataGettedUser.data.reliability)
-      setUserState(dataGettedUser.data.status_member)
-      setTotalExchanges(dataGettedUser.data.total_exchanges)
-      setDeliveryTime(
-        dataGettedUser.data.delivery_time !== 'Sem informações'
-          ? RoundTime(dataGettedUser.data.delivery_time)
-          : 'Sem informações',
-      )
-      setDeliveryFee(
-        dataGettedUser.data.total_exchanges_completed &&
-          dataGettedUser.data.total_exchanges
-          ? (dataGettedUser.data.total_exchanges_completed /
-              dataGettedUser.data.total_exchanges) *
-              100
-          : 'Membro Novo',
-      )
-    }
-  }, [dataGettedUser])
+  const steamCreatedDate = `${new Date(user?.data?.steam_created_date!)
+    .getDate()
+    .toString()
+    .padStart(2, '0')}/${(
+    new Date(user?.data?.steam_created_date!).getMonth() + 1
+  )
+    .toString()
+    .padStart(2, '0')}/${new Date(
+    user?.data?.steam_created_date!,
+  )!.getFullYear()}`
+
+  const deliveryFee =
+    user?.data?.total_exchanges_completed && user?.data?.total_exchanges
+      ? (user?.data?.total_exchanges_completed / user?.data?.total_exchanges) *
+        100
+      : 'Sem informações'
 
   return (
     <>
       <ModalReturnMain />
-      {status === 'authenticated' ? (
+      {status === 'authenticated' && user?.data ? (
         <PerfilPerson
-          totalExchanges={totalExchanges}
-          deliveryTime={deliveryTime}
+          totalExchanges={user?.data?.total_exchanges}
+          deliveryTime={user?.data?.delivery_time}
           deliveryFee={deliveryFee}
-          isLoading={isLoadingGetUser}
-          userState={userState}
-          reliability={reliability}
-          accountDate={accountDate}
-          picture={trueSession?.user?.image!}
-          name={trueSession?.user?.name!}
+          isLoading={isLoadingUser}
+          accountDate={steamCreatedDate}
+          userState={user?.data?.status_member}
+          name={user?.data?.owner_name}
+          picture={user?.data?.picture}
+          reliability={user?.data?.reliability}
         />
       ) : (
         <PersonProfileSkeleton />
       )}
       <ChoiceItems thereIsRented={true} />
-      {isLoading || isRefetching ? (
+      {isLoadingItens || isRefetching || isLoadingUser ? (
         <AllSkeletonSkins />
-      ) : data?.data.skins.length! > 0 ? (
-        <AllSkins itensFromUser skinsCategories={data?.data?.skins} />
+      ) : itens?.data?.skins?.length! > 0 ? (
+        <AllSkins itensFromUser skinsCategories={itens?.data?.skins} />
       ) : (
         <Common.SearchFeedback
-          content="ao perfil"
-          title={trueSession?.user?.name!}
+          content="ao perfil de"
+          title={trueSession?.user?.name! || 'Usuário'}
         />
       )}
-      {data?.data?.totalPages &&
-        data?.data?.totalPages > 1 &&
-        Number(page) <= data?.data?.totalPages && (
+      {itens?.data?.totalPages &&
+        itens?.data?.totalPages > 1 &&
+        Number(page) <= itens?.data?.totalPages && (
           <LayoutPagination
-            maxPages={data?.data?.totalPages}
+            maxPages={itens?.data?.totalPages}
             pageState={page}
             setPageState={setPage}
           />

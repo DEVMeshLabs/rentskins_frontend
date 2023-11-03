@@ -15,10 +15,10 @@ export interface IGetUser {
   owner_id: string
   status_member: string
   delivery_time: string
-  delivery_fee: number
   total_exchanges: number
   total_exchanges_completed: number
-  steam_created_date: string
+  steam_created_date: Date
+  steam_url: string
   reliability: string
   owner_name: string
   picture: string

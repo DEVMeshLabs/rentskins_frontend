@@ -15,7 +15,7 @@ interface IProps {
   reliability: string
   delivery_rate: string | number
   delivery_time: string
-  account_date: string
+  account_date: Date
   total_exchanges: number
 }
 
@@ -97,7 +97,9 @@ export function PageDetailsPerfil({
             </Common.Title>
             <span
               className={classNames(
-                { 'font-medium text-white': delivery_rate === 'Membro Novo' },
+                {
+                  'font-medium text-white': delivery_rate === 'Sem informações',
+                },
                 {
                   'text-mesh-color-rarity-low':
                     typeof delivery_rate === 'number' && delivery_rate < 20,

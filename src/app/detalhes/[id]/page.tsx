@@ -38,13 +38,13 @@ const fetchSeller = cache(async (sellerid?: string) => {
   }
 })
 
-const deleteItem = cache(async (id: string) => {
+const deleteItem = async (id: string) => {
   try {
     return await SkinService.deleteById(id)
   } catch (err) {
     return undefined
   }
-})
+}
 
 export async function generateMetadata({
   params: { id },
@@ -59,7 +59,7 @@ export async function generateMetadata({
 
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
-  const seller = await fetchSeller(item && item.seller_id)
+  const seller = await fetchSeller(item?.seller_id)
 
   if (item) {
     if (!seller) {

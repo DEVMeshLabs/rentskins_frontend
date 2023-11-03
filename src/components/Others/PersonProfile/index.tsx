@@ -31,6 +31,7 @@ export default function PersonProfile({
   deliveryTime,
   deliveryFee,
 }: Props) {
+  console.log(deliveryFee)
   const percentReliability = Number(reliability?.replace('%', ''))
   return (
     <section className="flex w-full justify-between font-inter">
@@ -137,7 +138,7 @@ export default function PersonProfile({
           title="Tempo de Entrega"
           value={
             (deliveryTime && deliveryTime.replace(' no momento', '')) ||
-            'Não Obtido'
+            'Sem informações'
           }
         />
         <ProfileInfo
@@ -146,11 +147,12 @@ export default function PersonProfile({
         />
         <ProfileInfo
           title="Taxa de Entrega"
-          isPercent
           value={
-            typeof deliveryFee === 'number'
-              ? deliveryFee.toFixed(0) + '%'
-              : deliveryFee
+            deliveryFee
+              ? typeof deliveryFee === 'number'
+                ? deliveryFee.toFixed(0) + '%'
+                : deliveryFee
+              : 'Sem informações'
           }
         />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />

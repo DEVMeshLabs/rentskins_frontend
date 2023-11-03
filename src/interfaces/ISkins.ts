@@ -1,4 +1,4 @@
-import { TItemRarity } from '@/utils/transformRarityInColor'
+import { TItemRarity } from '@/tools/colorRarity'
 
 export interface ISkins {
   id: string

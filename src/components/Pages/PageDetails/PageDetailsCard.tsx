@@ -1,9 +1,7 @@
 import { IconSteam } from '@/components/Icons'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -53,9 +51,7 @@ export function PageDetailsCard({
       >
         <div
           style={{
-            borderColor: `#${transformRarityInColor(
-              skinRarity as TItemRarity,
-            )}`,
+            borderColor: `#${ColorRarity.transform(skinRarity as TItemRarity)}`,
           }}
           className="flex h-full w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
         >

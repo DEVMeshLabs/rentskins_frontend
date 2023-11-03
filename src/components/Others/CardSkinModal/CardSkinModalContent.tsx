@@ -1,8 +1,6 @@
 /* eslint-disable camelcase */
 import Common from '@/components/Common'
-import transformRarityInColor, {
-  TItemRarity,
-} from '@/utils/transformRarityInColor'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
 import classNames from 'classnames'
 import Image from 'next/image'
 
@@ -40,7 +38,7 @@ export function CardSkinModalContent({
           <div
             className={`h-1 w-4/5 rounded-b-full`}
             style={{
-              backgroundColor: `#${transformRarityInColor(skinRarity)}`,
+              backgroundColor: `#${ColorRarity.transform(skinRarity)}`,
             }}
           />
           <Image
