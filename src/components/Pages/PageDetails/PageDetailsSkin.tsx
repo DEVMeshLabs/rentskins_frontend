@@ -414,9 +414,8 @@ export function PageDetailsSkin({
             Raridade
           </Common.Title>
           <div className="flex items-center justify-center">
-            <p className="text-white">{skinRarity || 'Consumer grade'}</p>
             <div
-              className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
+              className={`ml-2 h-[17px] w-[34px] rounded-[3px]`}
               style={{ background: `#${transformRarityInColor(skinRarity)}` }}
             />
           </div>
