@@ -19,6 +19,7 @@ export interface IGetUser {
   total_exchanges: number
   total_exchanges_completed: number
   steam_created_date: string
+  steam_url: string
   reliability: string
   owner_name: string
   picture: string

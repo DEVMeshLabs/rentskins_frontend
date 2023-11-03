@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Api } from '@/providers'
 import { AxiosPromise, AxiosResponse } from 'axios'
 import { ICreateUser, IGetUser } from './interfaces/user.interface'
@@ -23,6 +24,28 @@ export default class UserService {
     })
       .then((response) => response)
       .catch((e) => e)) as AxiosPromise<any>
+  }
+
+  public static async updateUserById(
+    id: string,
+    token: string,
+    {
+      owner_name,
+      steam_url,
+      picture,
+    }: { owner_name: string; steam_url: string; picture: string },
+  ) {
+    return await Api.put(
+      `/perfil/${id}`,
+      {
+        owner_name,
+        steam_url,
+        picture,
+      },
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+      .then((response) => response)
+      .catch((e) => e)
   }
 
   public static async suspendUser(steamId: string, token: string) {

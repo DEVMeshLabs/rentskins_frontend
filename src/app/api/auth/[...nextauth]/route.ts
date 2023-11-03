@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // @ts-nocheck
 import ISteamUser from '@/interfaces/steam.interface'
 import UserService from '@/services/user.service'
@@ -62,8 +63,24 @@ async function handler(
               session?.user?.token!,
             )
 
+            console.log(userCreated)
             if (userCreated?.status !== 201) {
               await signOut()
+            }
+          } else if (userAlreadyExists?.status === 200) {
+            const { owner_name, picture, steam_url, id } =
+              userAlreadyExists?.data
+
+            if (
+              owner_name !== session?.user?.name ||
+              picture !== session?.user?.image ||
+              steam_url !== session?.user?.steam?.profileurl
+            ) {
+              await UserService.updateUserById(id, session?.user?.token, {
+                owner_name: session?.user?.name,
+                steam_url: session?.user?.steam?.profileurl,
+                picture: session?.user?.image,
+              })
             }
           }
 
