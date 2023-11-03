@@ -30,6 +30,23 @@ export default class NotificationServices {
     return result
   }
 
+  public static async createNewNotification(
+    owner_id: string,
+    token: string,
+    description: string,
+    skin_id?: string,
+  ) {
+    return await Api.post(
+      `/notification`,
+      {
+        owner_id,
+        description,
+        skin_id,
+      },
+      { headers: { Authorization: 'Bearer ' + token } },
+    )
+  }
+
   public static async readingAllNotifications(ownerId: string, token: string) {
     return await Api.put(
       `/notification/${ownerId}`,
