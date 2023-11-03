@@ -190,7 +190,7 @@ export function PageDetailsSkin({
       case '21':
         return setRentPercentage(23)
     }
-  }, [stateRentTime])
+  }, [stateRentTime, setRentTime])
 
   useEffect(() => {
     if (deleteResult) {
@@ -206,10 +206,9 @@ export function PageDetailsSkin({
     } else {
       setLoading(false)
     }
-  }, [methodSelected, refetchAvailability, hasConfigurations])
+  }, [methodSelected, refetchAvailability, hasConfigurations, itemAvailable])
 
   useEffect(() => {
-    console.log(resultAvailability)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)
@@ -234,7 +233,14 @@ export function PageDetailsSkin({
         7000,
       )
     }
-  }, [resultAvailability])
+  }, [
+    resultAvailability,
+    methodSelected,
+    stateRentTime,
+    setItemAvailable,
+    setRentTime,
+    setWhatModalOpenToBuySkin,
+  ])
 
   const proceedItem = useCallback(async () => {
     console.log(methodSelected !== undefined)
