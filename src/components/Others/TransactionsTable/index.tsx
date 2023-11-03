@@ -40,7 +40,7 @@ export function TransactionsTable({ data, steamid }: IProps) {
         <div
           key={index}
           className={
-            'grid grid-cols-6 items-center py-4 first:rounded-t-md last:rounded-b-md odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
+            'grid max-h-[8rem] grid-cols-6 items-center py-4 first:rounded-t-md last:rounded-b-md odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
           }
         >
           <div className="flex items-center justify-center">
@@ -56,18 +56,9 @@ export function TransactionsTable({ data, steamid }: IProps) {
               />
             </div>
           </div>
-          <div className="group text-start">
-            <div
-              className="invisible relative -left-8 -top-8 z-20 -mb-[5.5rem] w-fit flex-wrap whitespace-nowrap
-           px-8 py-8 opacity-0
-          transition-all group-hover:visible group-hover:opacity-100"
-            >
-              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2 text-sm">
-                {item.skin.skin_name}
-              </p>
-            </div>
+          <div className="flex flex-col justify-between gap-1 text-start">
             <p
-              className={`group h-[80px] w-40 overflow-hidden text-ellipsis text-lg
+              className={`text-md w-48 overflow-hidden text-ellipsis
           font-medium ${
             item.skin.skin_name.includes('StatTrak')
               ? 'text-mesh-color-secondary-800'
@@ -76,13 +67,13 @@ export function TransactionsTable({ data, steamid }: IProps) {
             >
               {item.skin.skin_name}
             </p>
-            <p className="text-mesh-color-neutral-300 ">
+            <p className="text-sm text-mesh-color-neutral-300">
               {' '}
               {item.skin.skin_weapon}{' '}
             </p>
           </div>
           <div className="w-48 text-start">
-            <p className="text-lg font-medium text-white">
+            <p className="text-md font-medium text-white">
               {item.skin.status_float}
             </p>
             <p className="text-mesh-color-neutral-300">
