@@ -40,7 +40,11 @@ async function handler(
       async session({ session, token }) {
         if ('steam' in token) {
           const newToken = JsonWebToken.create(session)
-          session.user!.token = newToken
+          const decodeToken = JsonWebToken.decode(newToken)
+          session.user!.token = JsonWebToken.create({
+            ...decodeToken,
+            ownerId: token.steam?.steamid!,
+          })
           session.user!.steam = token.steam
 
           const verifyVAC = await UserService.verifyAccountStatus(

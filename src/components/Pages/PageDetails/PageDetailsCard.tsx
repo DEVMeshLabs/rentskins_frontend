@@ -1,6 +1,7 @@
 import { IconSteam } from '@/components/Icons'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,6 +12,7 @@ type PropsType = {
   skinCategory: string
   skinLinkGame: string
   skinLinkSteam: string
+  skinRarity: string
   skinFloat: number
   deletedAt: string | null
 }
@@ -20,6 +22,7 @@ export function PageDetailsCard({
   skinName,
   skinLinkGame,
   skinLinkSteam,
+  skinRarity,
   skinFloat,
   skinCategory,
   deletedAt,
@@ -46,7 +49,12 @@ export function PageDetailsCard({
           },
         )}
       >
-        <div className="flex h-full w-full flex-col justify-between gap-8 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat">
+        <div
+          style={{
+            borderColor: `#${ColorRarity.transform(skinRarity as TItemRarity)}`,
+          }}
+          className="flex h-full w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
+        >
           {deletedAt === null && (
             <div className="flex select-none space-x-2 p-2">
               <Link href={skinLinkSteam} target="_blank" rel="noreferrer">

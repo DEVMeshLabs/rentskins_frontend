@@ -38,13 +38,13 @@ const fetchSeller = cache(async (sellerid?: string) => {
   }
 })
 
-const deleteItem = cache(async (id: string) => {
+const deleteItem = async (id: string) => {
   try {
     return await SkinService.deleteById(id)
   } catch (err) {
     return undefined
   }
-})
+}
 
 export async function generateMetadata({
   params: { id },

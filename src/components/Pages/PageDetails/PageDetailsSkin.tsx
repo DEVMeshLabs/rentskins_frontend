@@ -279,29 +279,43 @@ export function PageDetailsSkin({
         return Toast.Error('Tente novamente após alguns segundos.')
       }
     }
-  }, [methodSelected, createCart, userStatus, pathname, hasConfigurations])
+  }, [
+    methodSelected,
+    createCart,
+    userStatus,
+    pathname,
+    hasConfigurations,
+    wasRaised,
+  ])
 
   useEffect(() => {
     if (resultAvailability?.request && !refetchingAvailability) {
-      console.log(resultAvailability)
-
-      if (resultAvailability?.request.status === 200) {
+      if (resultAvailability?.request?.status === 200) {
         proceedItem()
-      } else if (resultAvailability?.request.status === 404) {
+      } else if (resultAvailability?.request?.status === 404) {
         deleteItem()
         setOpenModalBuySkin(false)
+      } else if (resultAvailability?.request?.status === 500) {
+        if (resultAvailability?.request?.response?.includes('HTTP error 429')) {
+          Toast.Error(
+            'Problemas de conexão com a Steam. Tente novamente mais tarde!',
+          )
+          router.push('/')
+          setOpenModalBuySkin(false)
+        } else {
+          deleteItem()
+          setOpenModalBuySkin(false)
+        }
       } else {
-        deleteItem()
+        Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
+        router.push('/')
         setOpenModalBuySkin(false)
       }
-      // else {
-      //   Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
-      //   router.push('/')
-      // }
     }
   }, [
     methodSelected,
     resultAvailability,
+    setOpenModalBuySkin,
     refetchingAvailability,
     proceedItem,
     router,
@@ -418,7 +432,6 @@ export function PageDetailsSkin({
             Raridade
           </Common.Title>
           <div className="flex items-center justify-center">
-            <p className="text-white">{skinRarity || 'Consumer grade'}</p>
             <div
               className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
               style={{ background: `#${ColorRarity.transform(skinRarity)}` }}
