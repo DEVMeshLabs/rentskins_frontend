@@ -52,7 +52,7 @@ export default function ModalPaymentMade({ sellerId, token }: IProps) {
               }).click()
 
               setOpenModalBuySkin(false)
-              router.push('/')
+              router.push('/usuario/notificacoes?type=transactions')
             }, 2000)
           } else {
             Toast.Error(
