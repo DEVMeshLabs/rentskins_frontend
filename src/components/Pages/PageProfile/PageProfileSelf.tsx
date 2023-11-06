@@ -77,7 +77,6 @@ export default function PageProfileSelf() {
           deliveryFee={deliveryFee}
           isLoading={isLoadingUser}
           accountDate={steamCreatedDate}
-          userState={user?.data?.status_member}
           name={user?.data?.owner_name}
           picture={user?.data?.picture}
           reliability={user?.data?.reliability}

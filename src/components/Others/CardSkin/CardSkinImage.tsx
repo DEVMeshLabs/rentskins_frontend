@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
 import Image from 'next/image'
 
 type Props = {
