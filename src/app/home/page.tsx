@@ -1,8 +1,8 @@
 import {
-  IconDevolution,
-  IconMagnifyingGlass,
-  IconPhone,
-  IconShield,
+    IconDevolution,
+    IconMagnifyingGlass,
+    IconPhone,
+    IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
 import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'
@@ -12,7 +12,7 @@ import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Página Inicial - RentSkins',
-  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
+  description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 
 interface ISearchParams {
