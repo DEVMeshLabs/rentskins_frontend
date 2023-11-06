@@ -22,6 +22,8 @@ export default function PageNotificationTransaction({
     queryKey: ['Transactions', steamid],
     queryFn: () => TransactionsService.getUserTransactions(steamid),
     enabled: !!steamid,
+    cacheTime: 0,
+    keepPreviousData: false,
   })
 
   const renderTransactions = transactions?.data
@@ -94,7 +96,7 @@ export default function PageNotificationTransaction({
                   }
                 }}
                 buttonStyle="full"
-                text="Abrir Trade"
+                text="Solicitar Item"
               />
             )}
             <TransactionCard.Button
@@ -108,17 +110,19 @@ export default function PageNotificationTransaction({
               buttonStyle="full"
               text={isABuyer ? 'Item Obtido' : 'Item Enviado'}
             />
-            <TransactionCard.Button
-              token={token}
-              modal
-              modalOptions={{
-                action: 'Recusado',
-                id: item.id,
-                type: isABuyer ? 'buyer' : 'seller',
-              }}
-              buttonStyle="opaque"
-              text={isABuyer ? 'Não Obtido' : 'Não Enviado'}
-            />
+            {!isABuyer && (
+              <TransactionCard.Button
+                token={token}
+                modal
+                modalOptions={{
+                  action: 'Recusado',
+                  id: item.id,
+                  type: 'seller',
+                }}
+                buttonStyle="opaque"
+                text={'Não Enviado'}
+              />
+            )}
           </TransactionCard.Actions>
         </TransactionCard.Root>
       )
