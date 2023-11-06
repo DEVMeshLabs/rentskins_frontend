@@ -153,12 +153,14 @@ export default class SkinService {
   public static async updateEditSkin(
     skinId: string,
     skin_price: number,
+    sale_type: string,
     token: string,
   ) {
     const result: AxiosResponse<any> = await Api.put(
       `/skins/${skinId}`,
       {
         skin_price,
+        sale_type,
       },
       {
         headers: {

@@ -48,6 +48,7 @@ export function ModalEditionItemMain({ activator, item }: IProps) {
               <ModalInfoItem
                 onClick={handleOpen}
                 skin_price={item.skin_price}
+                sale_type={item.sale_type}
                 id={item.id}
                 skin_name={item.skin_name}
                 skin_weapon={item.skin_weapon}

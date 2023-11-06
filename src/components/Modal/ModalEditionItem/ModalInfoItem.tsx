@@ -17,6 +17,7 @@ interface IProps {
   statusFloatText: string
   skin_name: string
   skin_price: number
+  sale_type: 'sale' | 'rent'
   skin_weapon: string
   id: string
   onClick: () => void
@@ -25,6 +26,7 @@ interface IProps {
 export function ModalInfoItem({
   skin_price,
   skin_name,
+  sale_type,
   skin_weapon,
   statusFloatText,
   id,
@@ -38,6 +40,7 @@ export function ModalInfoItem({
     queryFn: () => SkinService.getItemAveragePrice([skin_name]),
     enabled: !!skin_name,
   })
+  console.log(disabled)
 
   const {
     register,
@@ -48,26 +51,38 @@ export function ModalInfoItem({
   } = useForm({
     resolver: formResolver,
     defaultValues: {
-      value: undefined,
+      value: String(skin_price),
       warning: undefined,
       terms: false,
-      rent: false,
+      rent: sale_type === 'rent',
       sell: false,
     },
   })
   const watchValue = watch('value')
   const watchTerms = watch('terms')
-  const watchSell = watch('rent')
-  const watchRent = watch('sell')
+  const watchRent = watch('rent')
+  const saleType = watchRent ? 'rent' : 'sale'
 
   const { data, isRefetching, refetch } = useQuery({
-    queryKey: ['updateSkin', trueSession.user?.token, id, watchValue],
+    queryKey: [
+      'updateSkin',
+      trueSession.user?.token,
+      id,
+      watchValue,
+      saleType,
+      skin_price,
+    ],
     queryFn: () => {
+      const skinPrice =
+        watchValue && watchValue?.length > 0
+          ? Number(
+              watchValue!.replace('R$ ', '').replace(',', '').replace('.', ''),
+            )
+          : skin_price
       return SkinService.updateEditSkin(
         id,
-        Number(
-          watchValue!.replace('R$ ', '').replace(',', '').replace('.', ''),
-        ),
+        skinPrice,
+        saleType,
         trueSession.user?.token!,
       )
     },
@@ -80,6 +95,7 @@ export function ModalInfoItem({
       if (data?.request.status === 204) {
         onClick()
         Toast.Success('O item foi atualizado com sucesso. Reinicie a página.')
+        window.location.reload()
       } else {
         Toast.Error(
           'Infelizmente algo de errado não está certo. Tente novamente mais tarde.',
@@ -98,24 +114,22 @@ export function ModalInfoItem({
   }
 
   useEffect(() => {
-    setDisabled(
-      !(
-        watchValue &&
-        watchValue?.length > 0 &&
-        watchTerms &&
-        (watchRent || watchSell)
-      ),
-    )
-  }, [watchValue, watchTerms, watchSell, watchRent])
+    if (watchTerms) {
+      setDisabled(
+        sale_type === saleType &&
+          skin_price ===
+            Number(
+              watchValue!.replace('R$ ', '').replace(',', '').replace('.', ''),
+            ),
+      )
+    }
+  }, [saleType, watchTerms, sale_type, watchValue])
 
   const onSubmit = () => {
-    if (watchValue) {
+    if (watchValue && !disabled) {
       refetch()
     }
   }
-
-  console.log(averagePrice?.data)
-  console.log(averagePrice)
 
   return (
     <div className="flex h-full w-[40%] flex-col">
