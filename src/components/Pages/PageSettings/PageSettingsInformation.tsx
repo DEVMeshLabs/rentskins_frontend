@@ -179,7 +179,7 @@ export function PageSettingsInformation() {
           <Common.Title size={'lg'} color="white" className="-mt-4 mb-2">
             URL de Troca
           </Common.Title>
-          <div className="flex gap-4">
+          <div className="flex justify-between gap-4">
             <div className="flex w-full items-center">
               <Form.Input.Text
                 name="trade-link"
@@ -211,12 +211,12 @@ export function PageSettingsInformation() {
                   </Common.Button>
                 )}
             </div>
-            <div className="-mt-3 flex w-3/12 items-center justify-evenly">
+            <div className="-mt-3 flex w-3/12 items-center justify-end gap-4">
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href="http://steamcommunity.com/my/tradeoffers/privacy"
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:opacity-70"
+                href="http://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
+                className="w-fit rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center opacity-70 hover:opacity-100 disabled:opacity-70"
               >
                 Obter URL
               </a>
@@ -224,18 +224,18 @@ export function PageSettingsInformation() {
                 <Form.Button
                   buttonStyle={undefined}
                   disabled={isLoading}
-                  className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  className="border-none bg-mesh-color-primary-1200 px-4 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                 >
                   Aplicar
                 </Form.Button>
               ) : (
-                <button
+                <Common.Button
                   disabled={isLoading}
                   onClick={() => setEditTradeLink(true)}
-                  className="border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  className="border-none bg-mesh-color-primary-1200 px-5 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                 >
                   Editar
-                </button>
+                </Common.Button>
               )}
             </div>
           </div>
@@ -251,7 +251,7 @@ export function PageSettingsInformation() {
             <span className="pl-3 text-mesh-color-neutral-200">
               {status === 'authenticated'
                 ? `
-              https://RentSkins/?sellerid=${
+              https://rentskins/?sellerid=${
                 trueSession.user?.steam?.steamid! || 'ERROR'
               }
               `
@@ -259,10 +259,10 @@ export function PageSettingsInformation() {
             </span>
             <Common.Button
               disabled={status !== 'authenticated'}
-              className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+              className=" border-none bg-mesh-color-primary-1200 px-3 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
               onClick={() =>
                 navigator.clipboard.writeText(
-                  `https://RentSkins/?sellerid=${trueSession.user?.steam
+                  `https://rentskins/?sellerid=${trueSession.user?.steam
                     ?.steamid!}` || 'Problema ao copiar o link...',
                 )
               }
@@ -298,12 +298,12 @@ export function PageSettingsInformation() {
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
 
-              <div className="flex w-1/12">
+              <div className="flex w-1/12 justify-end">
                 {editEmail ? (
                   <Form.Button
                     buttonStyle={undefined}
                     disabled={isLoading}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Salvar
                   </Form.Button>
@@ -311,7 +311,7 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditEmail(true)}
-                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
                   </button>
@@ -339,12 +339,12 @@ export function PageSettingsInformation() {
                 errors={errorsPhone.phone}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              <div className="flex w-1/12">
+              <div className="flex w-1/12 justify-end">
                 {editPhone ? (
                   <Form.Button
                     buttonStyle={undefined}
                     disabled={isLoading}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Salvar
                   </Form.Button>
@@ -352,7 +352,7 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditPhone(true)}
-                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
                   </button>
@@ -380,12 +380,12 @@ export function PageSettingsInformation() {
                 errors={errorsCPF.cpf}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              <div className="flex w-1/12">
+              <div className="flex w-1/12 justify-end">
                 {editCPF ? (
                   <Form.Button
                     buttonStyle={undefined}
                     disabled={isLoading}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Salvar
                   </Form.Button>
@@ -399,7 +399,7 @@ export function PageSettingsInformation() {
                       userConfig?.data?.owner_cpf !== undefined
                         ? 'hidden opacity-0'
                         : 'visible opacity-100'
-                    } -mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70`}
+                    } -mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70`}
                   >
                     Editar
                   </button>
