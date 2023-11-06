@@ -165,7 +165,7 @@ export function PageSettingsInformation() {
             Informações Pessoais
           </Common.Title>
           <span className="text-mesh-color-neutral-200">
-            Aqui você encontra informações sobre a sua conta RentsSkins.
+            Aqui você encontra informações sobre a sua conta RentSkins.
             Recomendamos que você mantenha a sua URL de Troca e outras
             informações importantes atualizadas para não ter problema na hora da
             negociação.
@@ -251,7 +251,7 @@ export function PageSettingsInformation() {
             <span className="pl-3 text-mesh-color-neutral-200">
               {status === 'authenticated'
                 ? `
-              https://rentskins/?sellerid=${
+              https://RentSkins/?sellerid=${
                 trueSession.user?.steam?.steamid! || 'ERROR'
               }
               `
@@ -262,7 +262,7 @@ export function PageSettingsInformation() {
               className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
               onClick={() =>
                 navigator.clipboard.writeText(
-                  `https://rentskins/?sellerid=${trueSession.user?.steam
+                  `https://RentSkins/?sellerid=${trueSession.user?.steam
                     ?.steamid!}` || 'Problema ao copiar o link...',
                 )
               }
