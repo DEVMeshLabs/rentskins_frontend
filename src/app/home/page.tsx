@@ -1,8 +1,8 @@
 import {
-    IconDevolution,
-    IconMagnifyingGlass,
-    IconPhone,
-    IconShield,
+  IconDevolution,
+  IconMagnifyingGlass,
+  IconPhone,
+  IconShield,
 } from '@/components/Icons'
 import { HeroInformation } from '@/components/Others/HeroInformation'
 import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'

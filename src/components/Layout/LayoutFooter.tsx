@@ -1,8 +1,8 @@
 import {
-    IconFacebook,
-    IconInstagram,
-    IconPinterest,
-    IconTwitter,
+  IconFacebook,
+  IconInstagram,
+  IconPinterest,
+  IconTwitter,
 } from '@/components/Icons'
 import IconLogo from '@/components/Icons/IconLogo'
 import Link from 'next/link'
