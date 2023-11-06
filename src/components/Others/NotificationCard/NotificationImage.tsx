@@ -8,7 +8,7 @@ export function NotificationImage({ image }: IProps) {
   return (
     <div className="flex items-center gap-4">
       <Image
-        className="h-16 w-20 rounded-lg bg-mesh-color-neutral-1000 p-2"
+        className="h-16 min-h-[64px] w-20 min-w-[80px] rounded-lg bg-mesh-color-neutral-1000 p-2"
         src={`https://steamcommunity-a.akamaihd.net/economy/image/${image}`}
         alt={String(image)}
         width={20}
