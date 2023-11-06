@@ -60,7 +60,7 @@ export function PageDetailsPerfil({
             <Image
               src={Rank.retrieveRank(reliability!) as StaticImageData}
               alt="Rank"
-              width={60}
+              width={80}
             />
           </div>
         </div>

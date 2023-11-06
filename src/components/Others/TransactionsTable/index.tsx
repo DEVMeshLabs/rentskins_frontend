@@ -1,4 +1,5 @@
 import { ITransaction } from '@/services/interfaces/transactions.interface'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
 import Image from 'next/image'
 
 interface IProps {
@@ -45,7 +46,14 @@ export function TransactionsTable({ data, steamid }: IProps) {
         >
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-center justify-between overflow-hidden rounded-md border border-mesh-color-neutral-500 bg-mesh-gradient-black-pattern px-2">
-              <div className="mb-1 h-1.5 w-5/6 rounded-b-2xl bg-green-500" />
+              <div
+                className="mb-1 h-1.5 w-5/6 rounded-b-2xl bg-green-500"
+                style={{
+                  backgroundColor: `#${ColorRarity.transform(
+                    item.skin.skin_rarity as TItemRarity,
+                  )}`,
+                }}
+              />
               <Image
                 src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
                 width={112}
