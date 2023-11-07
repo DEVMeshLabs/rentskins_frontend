@@ -62,33 +62,37 @@ export default function AllSkinsCart() {
                     skin_image,
                     id,
                     skin_weapon,
+                    saleAt,
                     deletedAt,
                   },
                   id: modelId,
                 },
                 idx: number,
               ) => {
-                return (
-                  <CartSkinCard
-                    sellerId={seller_id}
-                    skinId={id}
-                    userId={
-                      trueSession.user && trueSession.user?.steam?.steamid
-                    }
-                    statusFloat={status_float}
-                    skinPrice={skin_price}
-                    skinWeapon={skin_weapon}
-                    iconUrl={skin_image}
-                    name={skin_name}
-                    nameColor={name_color}
-                    key={`${name}-${idx}`}
-                    handleOnClick={() => {
-                      deleteSkinFromCart(id)
-                      deleteSkinFromCart(id)
-                    }}
-                    modelId={modelId}
-                  />
-                )
+                if (!saleAt) {
+                  return (
+                    <CartSkinCard
+                      sellerId={seller_id}
+                      skinId={id}
+                      userId={
+                        trueSession.user && trueSession.user?.steam?.steamid
+                      }
+                      statusFloat={status_float}
+                      skinPrice={skin_price}
+                      skinWeapon={skin_weapon}
+                      iconUrl={skin_image}
+                      name={skin_name}
+                      nameColor={name_color}
+                      key={`${name}-${idx}`}
+                      handleOnClick={() => {
+                        deleteSkinFromCart(id)
+                        deleteSkinFromCart(id)
+                      }}
+                      modelId={modelId}
+                    />
+                  )
+                }
+                return false
               },
             )
           ) : (
