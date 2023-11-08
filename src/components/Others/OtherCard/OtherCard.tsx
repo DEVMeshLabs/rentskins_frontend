@@ -80,14 +80,16 @@ export function OtherCard({ itsRent, item, itensFromUser }: Props) {
         <div className="flex items-center justify-between">
           <h1 className="text-sm font-medium opacity-60">{item.skin_weapon}</h1>
           <div className="flex gap-2">
-            <ModalEditionItemMain
-              activator={
-                <Common.Button color="invisible">
-                  <IconMagic />
-                </Common.Button>
-              }
-              item={item}
-            />
+            {itsRent && (
+              <ModalEditionItemMain
+                activator={
+                  <Common.Button color="invisible">
+                    <IconMagic />
+                  </Common.Button>
+                }
+                item={item}
+              />
+            )}
             <Link
               target="_blank"
               rel="noreferrer"

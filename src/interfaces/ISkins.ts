@@ -21,6 +21,7 @@ export interface ISkins {
   buyer_name: string
   buyer_id: string
   deletedAt: string | null
+  saleAt: string | null
 }
 
 export interface ISkinsCardModal {
