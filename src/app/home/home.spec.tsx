@@ -42,7 +42,7 @@ describe('<Home />', () => {
 
     expect(image).toBeDefined()
     expect(image.className).toContain(
-      'bg-mesh-image-hero' && 'bg-cover' && 'bg-center' && 'bg-no-repeat',
+      'bg-mesh-image-hero' && 'bg-cover' && 'bg-center' && 'bg-no-repeats',
     )
   })
 
