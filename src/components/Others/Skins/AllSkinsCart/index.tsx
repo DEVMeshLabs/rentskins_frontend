@@ -62,14 +62,13 @@ export default function AllSkinsCart() {
                     skin_image,
                     id,
                     skin_weapon,
-                    saleAt,
-                    deletedAt,
+                    status,
                   },
                   id: modelId,
                 },
                 idx: number,
               ) => {
-                if (!saleAt) {
+                if (status === null || status === 'Falhou') {
                   return (
                     <CartSkinCard
                       sellerId={seller_id}
