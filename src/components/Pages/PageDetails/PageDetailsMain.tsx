@@ -37,10 +37,12 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   })
 
   const { data: latestSales } = useQuery({
-    queryKey: ['latestSales', seller.owner_id],
-    queryFn: () => UserService.getLatestSales(seller.owner_id),
+    queryKey: ['lastSales', item.skin_name],
+    queryFn: () => UserService.getLatestSales(item.skin_name),
     enabled: status === 'authenticated',
   })
+
+  console.log(latestSales)
 
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">

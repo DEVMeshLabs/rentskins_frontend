@@ -66,8 +66,8 @@ export default class UserService {
       .then((e) => e) as AxiosPromise<boolean>
   }
 
-  public static async getLatestSales(ownerID: string) {
-    return await Api.get(`/transaction/last/sales/${ownerID}`)
+  public static async getLatestSales(name: string) {
+    return await Api.post(`/skins/lastsales`, { name })
       .then((response) => response)
       .catch((e) => e)
   }
