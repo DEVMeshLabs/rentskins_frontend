@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Política de Privacidade - RentSkins',
-  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
+  description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 
 export default function Privacidade() {
@@ -34,7 +34,7 @@ export default function Privacidade() {
               (“Lojista” ou “nós”) leva a sua privacidade a sério e zela pela
               segurança e proteção de dados de todos os seus clientes,
               parceiros, fornecedores e usuários (“Usuários” ou “você”) do site
-              “rentskins.com.br” e qualquer outro site, Loja, aplicativo operado
+              “RentSkins.com.br” e qualquer outro site, Loja, aplicativo operado
               pelo Lojista (aqui designados, simplesmente, “Loja”).
             </p>
             <br />
@@ -130,7 +130,7 @@ export default function Privacidade() {
             <br />
             <p>
               Em nosso primeiro contato com o público, desde já agradecemos pela
-              confiança ao escolher utilizar os serviços da RENTSKINS. A
+              confiança ao escolher utilizar os serviços da RentSkins. A
               privacidade dos nossos usuários é prioritária, não somente pelas
               questões legais, mas pelo intuito de proteger nosso maior
               patrimônio: o utilizador.
@@ -312,7 +312,7 @@ export default function Privacidade() {
               </p>
               <br />
               <p>
-                Quando não houver nenhuma obrigatoriedade legal, a RENTSKINS não
+                Quando não houver nenhuma obrigatoriedade legal, a RentSkins não
                 compartilhará dados dos utilizadores para terceiros, exceto nos
                 seguintes casos:{' '}
               </p>

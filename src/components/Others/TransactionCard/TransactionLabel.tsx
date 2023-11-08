@@ -5,15 +5,9 @@ interface IProps {
 
 export function TransactionLabel({ name, weapon }: IProps) {
   return (
-    <div className="group flex h-16 w-64 flex-col justify-center">
+    <div className="group relative flex h-20 w-64 flex-col justify-center">
       <span
-        className="relative -top-3 -mb-10 w-fit select-none flex-wrap whitespace-nowrap rounded-lg
-          bg-mesh-color-neutral-300 px-2 text-black opacity-0 transition-all group-hover:opacity-100"
-      >
-        {name}
-      </span>
-      <span
-        className={`group w-64 overflow-hidden text-ellipsis text-lg font-medium transition-all group-hover:opacity-0 ${
+        className={`group w-64 overflow-hidden text-ellipsis text-lg font-medium transition-all ${
           name.includes('StatTrak') && 'text-mesh-color-secondary-800'
         }`}
       >

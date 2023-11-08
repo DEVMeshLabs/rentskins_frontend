@@ -1,7 +1,7 @@
 import { IconSteam } from '@/components/Icons'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
-import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'

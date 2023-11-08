@@ -13,7 +13,6 @@ export interface IGetUserCart {
 export interface IGetUser {
   id: string
   owner_id: string
-  status_member: string
   delivery_time: string
   total_exchanges: number
   total_exchanges_completed: number

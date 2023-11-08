@@ -86,7 +86,7 @@ export default function PageInventorySummary() {
   }, [subtotal])
 
   return (
-    <div className="flex min-h-[400px] flex-col justify-between rounded-xl bg-mesh-color-others-eerie-black px-6 py-6">
+    <div className="sticky top-10 flex min-h-[400px] flex-col justify-between rounded-xl bg-mesh-color-others-eerie-black px-6 py-6">
       <div className="text-white">
         <Common.Title color="white" className="text-[28px] font-bold">
           Resumo

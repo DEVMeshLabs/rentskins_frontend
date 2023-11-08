@@ -24,6 +24,7 @@ export interface ITransaction {
     skin_link_game: string
     skin_link_steam: string
     median_price: number
+    skin_rarity: string
     seller_name: string
     seller_id: string
     status: 'Pending'

@@ -83,7 +83,7 @@ export function LayoutFooter() {
             </a>
 
             <a
-              href="https://www.instagram.com/rentskinsbr/"
+              href="https://www.instagram.com/RentSkinsbr/"
               target="_blank"
               className="flex h-10 w-10 items-center justify-center rounded-full bg-mesh-color-neutral-500"
               rel="noopener noreferrer"

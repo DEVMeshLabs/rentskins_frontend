@@ -77,7 +77,6 @@ export default function PageProfileSelf() {
           deliveryFee={deliveryFee}
           isLoading={isLoadingUser}
           accountDate={steamCreatedDate}
-          userState={user?.data?.status_member}
           name={user?.data?.owner_name}
           picture={user?.data?.picture}
           reliability={user?.data?.reliability}
@@ -89,7 +88,7 @@ export default function PageProfileSelf() {
       {isLoadingItens || isRefetching || isLoadingUser ? (
         <AllSkeletonSkins />
       ) : itens?.data?.skins?.length! > 0 ? (
-        <AllSkins itensFromUser skinsCategories={itens?.data?.skins} />
+        <AllSkins itsRent itensFromUser skinsCategories={itens?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil de"

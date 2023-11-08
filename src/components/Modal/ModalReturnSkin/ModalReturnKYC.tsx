@@ -1,9 +1,9 @@
 'use client'
 import Common from '@/components/Common'
+import IconShieldGreen from '@/components/Icons/IconShieldGreen'
+import useModalStore from '@/stores/modal.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ModalTitleSkin } from '../ModalBuy/ModalTitleSkin'
-import useModalStore from '@/stores/modal.store'
-import IconShieldGreen from '@/components/Icons/IconShieldGreen'
 
 export default function ModalReturnKYC() {
   const { setWhatModalOpenToReturnSkin } = useModalStore()

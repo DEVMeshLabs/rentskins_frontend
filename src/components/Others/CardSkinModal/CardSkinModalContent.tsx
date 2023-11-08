@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import Common from '@/components/Common'
-import ColorRarity, { TItemRarity } from '@/tools/colorRarity'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
 import Image from 'next/image'
 

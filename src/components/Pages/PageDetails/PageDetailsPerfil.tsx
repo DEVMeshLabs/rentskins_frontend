@@ -2,10 +2,11 @@
 // import fallen from '@/assets/fallen.svg'
 import blankProfile from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
+import { Rank } from '@/tools/rank.tool'
 import classNames from 'classnames'
 import moment from 'moment'
 import 'moment/locale/pt-br'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
 
 interface IProps {
@@ -33,7 +34,6 @@ export function PageDetailsPerfil({
     account_date === undefined
       ? 'Indefinido'
       : moment(account_date).locale('pt-br').format('D MMM, YYYY')
-  const percentReliability = Number(reliability?.replace('%', ''))
 
   return (
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
@@ -57,37 +57,11 @@ export function PageDetailsPerfil({
             <Common.Title color="white" className="text-2xl font-semibold">
               {owner_name}
             </Common.Title>
-            <span
-              className={classNames(
-                'mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none px-3 text-sm capitalize text-mesh-color-accent-600',
-                {
-                  'bg-mesh-color-neutral-500 text-white':
-                    reliability === 'Sem informações',
-                },
-                {
-                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
-                    percentReliability < 20,
-                },
-                {
-                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
-                    percentReliability >= 20 && percentReliability < 40,
-                },
-                {
-                  'bg-white/20 text-white':
-                    percentReliability >= 40 && percentReliability < 60,
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
-                    percentReliability >= 60 && percentReliability < 80,
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
-                    percentReliability >= 80 && percentReliability <= 100,
-                },
-              )}
-            >
-              Confiabilidade: {reliability}
-            </span>
+            <Image
+              src={Rank.retrieveRank(reliability!) as StaticImageData}
+              alt="Rank"
+              width={80}
+            />
           </div>
         </div>
         <div className="space-y-3">

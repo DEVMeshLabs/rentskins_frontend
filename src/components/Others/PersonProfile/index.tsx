@@ -1,8 +1,8 @@
 'use client'
 import Common from '@/components/Common'
 import { IconSend } from '@/components/Icons/IconSend'
-import classNames from 'classnames'
-import Image from 'next/image'
+import { Rank } from '@/tools/rank.tool'
+import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
 import ProfileInfo from '../ProfileInfo'
 
@@ -31,8 +31,6 @@ export default function PersonProfile({
   deliveryTime,
   deliveryFee,
 }: Props) {
-  console.log(deliveryFee)
-  const percentReliability = Number(reliability?.replace('%', ''))
   return (
     <section className="flex w-full justify-between font-inter">
       <div className="flex gap-6">
@@ -53,72 +51,13 @@ export default function PersonProfile({
             >
               {name || 'Usuário'}
             </Common.Title>
-            <div
-              className={classNames(
-                'w-32 rounded-3xl p-1 text-center text-base font-normal capitalize',
-                {
-                  'h-8': isLoading === true,
-                },
-                {
-                  'bg-white/20 text-white': userState === 'Não Obtido',
-                },
-                {
-                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
-                    userState === 'Risco',
-                },
-                {
-                  'bg-mesh-color-rarity-low/20 text-mesh-color-rarity-low':
-                    userState === 'Questionável',
-                },
-                {
-                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
-                    userState === 'Atenção',
-                },
-                {
-                  'bg-white/20 text-white': userState === 'Membro novo',
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
-                    userState === 'Frequente',
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
-                    userState === 'Confiável',
-                },
-              )}
-            >
-              {!isLoading && userState}
-            </div>
+            <Image
+              src={Rank.retrieveRank(reliability!) as StaticImageData}
+              alt="Rank"
+              width={100}
+            />
           </div>
           <div className="flex flex-col gap-6">
-            <h1 className="flex gap-1 text-lg text-white">
-              <span className="opacity-60">Confiabilidade:</span>
-              <p
-                className={classNames(
-                  {
-                    'text-mesh-color-rarity-low': percentReliability < 20,
-                  },
-                  {
-                    'text-mesh-color-rarity-medium':
-                      percentReliability >= 20 && percentReliability < 40,
-                  },
-                  {
-                    'text-white':
-                      percentReliability >= 40 && percentReliability < 60,
-                  },
-                  {
-                    'text-mesh-color-rarity-high':
-                      percentReliability >= 60 && percentReliability < 80,
-                  },
-                  {
-                    'text-mesh-color-rarity-highest':
-                      percentReliability >= 80 && percentReliability <= 100,
-                  },
-                )}
-              >
-                {!isLoading && reliability && reliability}
-              </p>
-            </h1>
             {isSeller ?? (
               <Link href={'/inventario'}>
                 <Common.Button

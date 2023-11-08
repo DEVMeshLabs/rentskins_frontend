@@ -135,7 +135,7 @@ export function ModalConnectInventoryForm({
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://steamcommunity.com/my/tradeoffers/privacy"
+            href="http://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
             tabIndex={-1}
             className="mt-3 h-full w-min place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100"
           >

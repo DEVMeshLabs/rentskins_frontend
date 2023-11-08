@@ -6,7 +6,7 @@ import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalE
 import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
 import { ISkins } from '@/interfaces/ISkins'
 import useModalStore from '@/stores/modal.store'
-import ColorRarity from '@/tools/colorRarity'
+import ColorRarity from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
