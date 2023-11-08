@@ -20,11 +20,11 @@ interface ISearchParams {
 }
 
 interface IProps {
-  searchParams: ISearchParams
+  searchParams?: ISearchParams
 }
 
 export default function Home({ searchParams }: IProps) {
-  if (searchParams.sellerid) {
+  if (searchParams?.sellerid) {
     redirect(`/perfil/${searchParams.sellerid}`)
   }
 
