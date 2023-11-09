@@ -38,7 +38,6 @@ export default function PageInventoryMiddle() {
         enabled={isLoading}
       >
         {!isLoading && configValidation ? (
-          // {!isLoading && !configValidation ? (
           <CardSkinInventory />
         ) : (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">

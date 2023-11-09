@@ -74,7 +74,7 @@ export function LayoutHeaderTop() {
     cacheTime: 0,
   })
 
-  const { data: userHasConfig, isLoading } = useQuery({
+  const { data: userConfig, isLoading: isLoadingUserConfig } = useQuery({
     queryKey: ['config'],
     queryFn: async () =>
       ConfigService.findByConfigUserId(
@@ -84,13 +84,15 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
+  console.log(userConfig)
+
   const configValidation =
-    userHasConfig &&
-    userHasConfig.data &&
-    userHasConfig!.data?.owner_email !== '' &&
-    userHasConfig!.data?.owner_phone !== '' &&
-    userHasConfig!.data?.owner_cpf !== '' &&
-    userHasConfig!.data?.url_trade !== ''
+    userConfig &&
+    userConfig.data &&
+    userConfig!.data?.owner_email !== '' &&
+    userConfig!.data?.owner_phone !== '' &&
+    userConfig!.data?.owner_cpf !== '' &&
+    userConfig!.data?.url_trade !== ''
 
   useEffect(() => {
     // const interval = setInterval(() => {
@@ -111,8 +113,12 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
+  console.log(walletRetrieved)
+
   const disableAddButton =
-    pathname.includes('/pagamento') || pathname.includes('/oops') || isLoading
+    pathname.includes('/pagamento') ||
+    pathname.includes('/oops') ||
+    isLoadingUserConfig
 
   const { data: walletCreated } = useQuery({
     queryKey: ['WalletService.createEmptyWallet'],
@@ -247,9 +253,9 @@ export function LayoutHeaderTop() {
                   </div>
                 )}
               </Common.Title>
-              {!isLoading && !configValidation ? (
+              {!isLoadingUserConfig && !configValidation ? (
                 <ModalConnectInventoryMain
-                  userConfig={userHasConfig?.data}
+                  userConfig={userConfig?.data}
                   activator={
                     <button
                       disabled={disableAddButton}

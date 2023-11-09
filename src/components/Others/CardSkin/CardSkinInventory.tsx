@@ -23,20 +23,33 @@ export function CardSkinInventory() {
   const { inventoryTypeFilter } = useFilterStore()
   const { setIsInventoryFetching } = useComponentStore()
   const { skinsToAdvertise } = useSkinsStore()
-  const [steamItens, setSteamItens] = useState<ISteamItens[]>([])
+  const [itemsLeftOnInventory, setItemsLeftOnInventory] = useState<
+    ISteamItens[]
+  >([])
 
-  const { data: skinsProfile, refetch: refetchSkinsProfile } = useQuery({
+  const STEAMID = '76561198862407248'
+
+  const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
-      SkinService.findAllSkinsByIdSeller(trueSession?.user?.steam?.steamid!),
+      SkinService.findAllSkinsByIdSeller(
+        // trueSession?.user?.steam?.steamid!
+        STEAMID,
+      ),
     keepPreviousData: true,
   })
 
-  const { data, isLoading, isRefetching, refetch } = useQuery({
+  const {
+    data: itemsOnInventory,
+    isLoading: isInventoryLoading,
+    isRefetching: isInventoryRefetching,
+    refetch: refetchInventory,
+  } = useQuery({
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       await SkinService.findBySkinsInventoryWithFilters(
-        trueSession.user?.steam?.steamid!,
+        // trueSession.user?.steam?.steamid!,
+        STEAMID,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -45,39 +58,43 @@ export function CardSkinInventory() {
   })
 
   useEffect(() => {
-    if (data?.data && skinsProfile?.data && skinsProfile.data.skins) {
-      setSteamItens(
-        data &&
-          data?.data &&
-          !data?.data?.message &&
-          data?.data?.filter(
+    if (
+      itemsOnInventory?.data &&
+      itemsOnProfile?.data &&
+      itemsOnProfile.data.skins
+    ) {
+      setItemsLeftOnInventory(
+        itemsOnInventory &&
+          itemsOnInventory?.data &&
+          !itemsOnInventory?.data?.message &&
+          itemsOnInventory?.data?.filter(
             ({ assetid }: any) =>
-              !skinsProfile?.data?.skins.some(
+              !itemsOnProfile?.data?.skins.some(
                 ({ asset_id }) => asset_id === assetid,
               ),
           ),
       )
     }
-  }, [data, skinsProfile])
+  }, [itemsOnInventory, itemsOnProfile])
 
   useEffect(() => {
-    if (data?.data?.message?.includes('Error')) {
+    if (itemsOnInventory?.data?.message?.includes('Error')) {
       Toast.Error(
         'Não foi possível solicitar o inventário. Verifique se o seu inventário se encontra público e tente novamente mais tarde.',
       )
     }
-  }, [data])
+  }, [itemsOnInventory])
 
-  const maxPages = Math.ceil(steamItens.length / 16)
-
-  useEffect(() => {
-    refetch()
-    refetchSkinsProfile()
-  }, [page, inventoryTypeFilter, refetch, refetchSkinsProfile])
+  const maxPages = Math.ceil(itemsLeftOnInventory.length / 16)
 
   useEffect(() => {
-    setIsInventoryFetching(isLoading || isRefetching)
-  }, [isLoading, isRefetching, setIsInventoryFetching])
+    refetchInventory()
+    refetchItemsOnProfile()
+  }, [page, inventoryTypeFilter, refetchInventory, refetchItemsOnProfile])
+
+  useEffect(() => {
+    setIsInventoryFetching(isInventoryLoading || isInventoryRefetching)
+  }, [isInventoryLoading, isInventoryRefetching, setIsInventoryFetching])
 
   const renderEmptyMessage = () => {
     const types = {
@@ -101,8 +118,8 @@ export function CardSkinInventory() {
               ? selectedType
               : 'Não existem armas desse tipo no seu inventário.'}
           </span>
-        ) : data?.data?.err?.code === 429 ||
-          data?.data?.message?.includes('Error') ? (
+        ) : itemsOnInventory?.data?.err?.code === 429 ||
+          itemsOnInventory?.data?.message?.includes('Error') ? (
           <span className="text-center">
             <p>Ocorreu um problema ao solicitar o seu inventário.</p>
             <p className="px-16">
@@ -117,13 +134,17 @@ export function CardSkinInventory() {
     )
   }
 
+  console.log(itemsOnInventory)
+  console.log(itemsOnProfile)
+  console.log(itemsLeftOnInventory)
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="ml-2 flex flex-wrap justify-center gap-4">
-        {isLoading || isRefetching ? (
+        {isInventoryLoading || isInventoryRefetching ? (
           <CardSkin.Skeleton quantity={16} />
-        ) : steamItens.length > 0 ? (
-          steamItens.map(
+        ) : itemsLeftOnInventory.length > 0 ? (
+          itemsLeftOnInventory.map(
             (
               {
                 icon_url,
@@ -243,12 +264,12 @@ export function CardSkinInventory() {
           renderEmptyMessage()
         )}
       </div>
-      {!isLoading && data?.data && maxPages > 0 && (
+      {!isInventoryLoading && itemsOnInventory?.data && maxPages > 0 && (
         <LayoutPagination
           maxPages={maxPages}
           pageState={page}
           setPageState={setPage}
-          disabled={isLoading || isRefetching}
+          disabled={isInventoryLoading || isInventoryRefetching}
         />
       )}
     </div>
