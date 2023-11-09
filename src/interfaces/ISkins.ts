@@ -48,11 +48,37 @@ export interface ISteamItens {
   background_color: string
   icon_url: string
   icon_url_large: string
-  descriptions: Array<{
-    type: string
-    value: string
-    color?: string
-  }>
+  descriptions: [
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+      color: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+  ]
   tradable: boolean
   actions: Array<{
     link: string

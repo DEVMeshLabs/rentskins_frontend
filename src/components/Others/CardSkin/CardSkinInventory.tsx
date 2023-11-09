@@ -8,6 +8,7 @@ import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import useSkinsStore from '@/stores/skins.store'
+import { Stickers } from '@/tools/stickers.tool'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
@@ -27,6 +28,9 @@ export function CardSkinInventory() {
     ISteamItens[]
   >([])
 
+  const DERICK_STEAMID = '76561198862407248'
+  // const MEU_STEAMID = '76561198862407248'
+
   const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
@@ -44,7 +48,8 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       await SkinService.findBySkinsInventoryWithFilters(
-        trueSession.user?.steam?.steamid!,
+        DERICK_STEAMID,
+        // trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -162,6 +167,7 @@ export function CardSkinInventory() {
                 type,
                 assetid,
                 actions,
+                descriptions,
               },
               index: number,
             ) => {
@@ -195,9 +201,17 @@ export function CardSkinInventory() {
                 )
                 const linkForPreviewSkin = actions ? actions[0].link : '#'
 
+                console.log(name)
+                console.log(assetid)
+
+                const stickers = Stickers.extractStickersFromString(
+                  descriptions[6]?.value,
+                )
+
                 return (
                   <ModalSkinShowcaseMain
                     isRentable={isRentable}
+                    stickers={stickers}
                     key={assetid}
                     asset_id={assetid}
                     skinImage={icon_url}
@@ -237,6 +251,7 @@ export function CardSkinInventory() {
                         <CardSkin.Root classname="flex relative flex-col h-[245px] justify-between">
                           <div className="h-full">
                             <CardSkin.Image
+                              stickers={stickers}
                               icon_url={icon_url}
                               rarity={rarity}
                               primeiroName={primeiroName}

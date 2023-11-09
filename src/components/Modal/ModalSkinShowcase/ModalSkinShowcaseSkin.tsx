@@ -7,6 +7,7 @@ type Props = {
   weapon: string
   float: string
   isRentable: boolean
+  stickers: Array<{ url: string; name: string }>
 }
 
 export function ModalSkinShowcaseSkin({
@@ -14,7 +15,23 @@ export function ModalSkinShowcaseSkin({
   weapon,
   float,
   isRentable,
+  stickers,
 }: Props) {
+  const stickersElement =
+    stickers.length > 0 &&
+    stickers.map((sticker, index: number) => (
+      <>
+        <Image
+          src={sticker.url}
+          alt={sticker.name}
+          key={'sticker' + index}
+          width={100}
+          draggable={false}
+          height={100}
+        />
+      </>
+    ))
+
   return (
     <div className="relative mr-6 mt-2 flex h-full w-[60%] select-none items-center justify-center rounded-t-lg bg-mesh-image-details bg-cover bg-no-repeat">
       <Image
@@ -25,6 +42,9 @@ export function ModalSkinShowcaseSkin({
         draggable={false}
         className="object-cover"
       />
+      <div className="absolute bottom-4 flex w-full justify-center gap-2">
+        {stickersElement}
+      </div>
       {isRentable && (
         <div className="absolute -bottom-1 w-full">
           <ColoredLine position={float} />
