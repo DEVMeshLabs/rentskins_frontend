@@ -244,12 +244,12 @@ export function PageDetailsSkin({
   ])
 
   const proceedItem = useCallback(async () => {
-    console.log(methodSelected !== undefined)
     if (methodSelected !== undefined) {
       console.log(wasRaised)
       if (userStatus === 'authenticated') {
         if (hasConfigurations) {
           const handleCart = async () => {
+            console.log('asdf')
             setMethodSelected(undefined)
             await createCart()
             setWasRaised(true)
@@ -349,6 +349,11 @@ export function PageDetailsSkin({
         setWasRaised(false)
       } else if (data && data.request.status === 409) {
         Toast.Error('Item já adicionado em seu carrinho.')
+        setWasRaised(false)
+      } else {
+        Toast.Error(
+          'Infelizmente algo de errado aconteceu. Tente novamente mais tarde.',
+        )
         setWasRaised(false)
       }
     }
@@ -524,9 +529,7 @@ export function PageDetailsSkin({
             {renderButton(
               <Common.Button
                 onClick={() => {
-                  console.log('OnClick')
                   if (userIsntOwnerSkin) {
-                    console.log('Entrou dentro do if')
                     setMethodSelected('cart')
                   } else {
                     Toast.Error(

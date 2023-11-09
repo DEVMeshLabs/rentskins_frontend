@@ -98,7 +98,7 @@ export function ModalInfoItem({
         window.location.reload()
       } else {
         Toast.Error(
-          'Infelizmente algo de errado não está certo. Tente novamente mais tarde.',
+          'Infelizmente algo de errado aconteceu. Tente novamente mais tarde.',
         )
       }
     }

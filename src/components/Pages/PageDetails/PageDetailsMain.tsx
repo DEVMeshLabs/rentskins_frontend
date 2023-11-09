@@ -28,6 +28,8 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   const defaultID = item.skin_link_game.slice(20, 37)
   const customName = item.skin_name.split('(')[0]
 
+  console.log(seller.owner_id)
+
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
     queryFn: () => {
