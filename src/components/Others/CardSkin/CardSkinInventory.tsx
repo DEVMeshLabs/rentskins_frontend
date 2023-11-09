@@ -27,9 +27,6 @@ export function CardSkinInventory() {
     ISteamItens[]
   >([])
 
-  const DERICK_STEAMID = '76561198862407248'
-  // const MEU_STEAMID = '76561198862407248'
-
   const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
@@ -47,8 +44,7 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       await SkinService.findBySkinsInventoryWithFilters(
-        DERICK_STEAMID,
-        // trueSession.user?.steam?.steamid!,
+        trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
