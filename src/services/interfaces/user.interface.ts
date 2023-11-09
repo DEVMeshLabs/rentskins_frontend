@@ -13,16 +13,25 @@ export interface IGetUserCart {
 export interface IGetUser {
   id: string
   owner_id: string
+  owner_name: string
+  owner_type: string
+  owner_country: string
+  stripe_id: string
+  account_status: string
+  steam_url: string
+  picture: string
   delivery_time: string
   total_exchanges: number
   total_exchanges_completed: number
-  steam_created_date: Date
-  steam_url: string
   reliability: string
-  owner_name: string
-  picture: string
-  cart: IGetUserCart
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date
+  steam_created_date: Date
+  configurationId: string
+  cart_id: string
   configuration: IOptionalConfig
+  cart: IGetUserCart
 }
 
 export interface ICreateUser {

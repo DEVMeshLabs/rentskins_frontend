@@ -54,6 +54,7 @@ export function ModalSkinShowcaseMain({
   const [open, setOpen] = useState(false)
 
   console.log(averagePrice?.data)
+  console.log(marketName)
 
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>
@@ -99,7 +100,7 @@ export function ModalSkinShowcaseMain({
                   (averagePrice?.data &&
                     averagePrice?.data?.length > 0 &&
                     averagePrice?.data[0]) ||
-                  'Não encontrado'
+                  'Indisponível'
                 }
                 sale_type={'sale'}
                 skin_category={skinCategory}

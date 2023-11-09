@@ -29,7 +29,7 @@ type PropsTypes = {
   skinRarity: TItemRarity
   sellerId: string
   statusFloat: string
-  itemAveragePrice: number
+  itemAveragePrice: number | null | string
   defaultID: string
   skinId: string
   cartId: string
@@ -418,11 +418,13 @@ export function PageDetailsSkin({
             Tendências de Mercado
           </Common.Title>
           <p className="text-white">
-            {itemAveragePrice.toLocaleString('pt-br', {
-              currency: 'BRL',
-              style: 'currency',
-              minimumFractionDigits: 2,
-            })}
+            {itemAveragePrice
+              ? itemAveragePrice.toLocaleString('pt-br', {
+                  currency: 'BRL',
+                  style: 'currency',
+                  minimumFractionDigits: 2,
+                })
+              : 'Indisponível'}
           </p>
         </div>
 
