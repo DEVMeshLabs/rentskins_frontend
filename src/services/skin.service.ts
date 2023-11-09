@@ -53,15 +53,16 @@ export default class SkinService {
   }
 
   public static findAllSkinsByIdSeller(
-    sellerId: string,
+    steamId: string,
     page?: number | string,
   ) {
+    console.log(steamId)
     if (page) {
       return Api.get<ISkinsResponse>(
-        `/skins/seller/user/${sellerId}?page=${page}`,
+        `/skins/seller/user/${steamId}?page=${page}`,
       )
     } else {
-      return Api.get<ISkinsResponse>(`/skins/seller/user/${sellerId}`)
+      return Api.get<ISkinsResponse>(`/skins/seller/user/${steamId}`)
     }
   }
 
@@ -85,7 +86,6 @@ export default class SkinService {
     token: string,
   ) {
     const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
-      delete skin.id
       return skin
     })
 

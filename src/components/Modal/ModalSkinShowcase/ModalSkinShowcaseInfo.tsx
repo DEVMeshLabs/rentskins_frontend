@@ -67,7 +67,7 @@ export function ModalSkinShowcaseInfo({
 
   useEffect(() => {
     const savedSkin = skinsToAdvertise.filter(
-      ({ id: skinId }) => skinId && id === skinId,
+      ({ asset_id }) => asset_id && id === asset_id,
     )
 
     if (savedSkin.length) {
@@ -132,7 +132,6 @@ export function ModalSkinShowcaseInfo({
   const handleAddSkinsToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
       setSkinsToAdvertise({
-        id,
         sale_type: watchRent && isRentable ? 'rent' : 'sale',
         seller_id: trueSession.user?.steam?.steamid as string,
         seller_name: trueSession.user?.name as string,
