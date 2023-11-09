@@ -8,6 +8,7 @@ import ISteamUser from '@/interfaces/steam.interface'
 import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
 
+import SkinService from '@/services/skin.service'
 import Time from '@/tools/time.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
@@ -35,6 +36,14 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     },
     enabled: status === 'authenticated',
   })
+
+  const { data: averagePrice } = useQuery({
+    queryKey: ['averagePrice', item.skin_name],
+    queryFn: () => SkinService.getItemAveragePrice([item.skin_name]),
+    enabled: !!item.skin_name,
+  })
+
+  console.log(averagePrice)
 
   const { data: latestSales } = useQuery({
     queryKey: ['lastSales', item.skin_name],
@@ -85,7 +94,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             skinCategory={item.skin_category}
             skinWeapon={item.skin_weapon}
             skinRarity={item.skin_rarity}
-            itemAveragePrice={item.median_price}
+            itemAveragePrice={averagePrice?.data[0]!}
             sellerId={item.seller_id}
             statusFloat={item.status_float}
             skinId={item.id}

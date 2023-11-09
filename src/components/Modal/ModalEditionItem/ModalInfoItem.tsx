@@ -36,7 +36,7 @@ export function ModalInfoItem({
   const { data: session } = useSession()
   const trueSession = session as ISteamUser
   const { data: averagePrice } = useQuery({
-    queryKey: ['test', skin_name],
+    queryKey: ['averagePrice', skin_name],
     queryFn: () => SkinService.getItemAveragePrice([skin_name]),
     enabled: !!skin_name,
   })
@@ -155,7 +155,7 @@ export function ModalInfoItem({
               {(averagePrice?.data &&
                 averagePrice?.data?.length > 0 &&
                 averagePrice?.data[0]) ||
-                'Não encontrado'}
+                'Indisponível'}
             </span>
           </div>
           <p className="w-[70%] text-mesh-color-neutral-200">

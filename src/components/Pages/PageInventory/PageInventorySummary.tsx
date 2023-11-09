@@ -13,19 +13,23 @@ import { ColorRing } from 'react-loader-spinner'
 
 export default function PageInventorySummary() {
   const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = useSession()
   const trueSession = session as ISteamUser
 
-  const { skinsToAdvertise, changeSkinToAdvertise, cleanSkinsToAdvertise } =
-    useSkinsStore()
+  const {
+    skinsToAdvertise,
+    removeSkinToAdvertise,
+    changeSkinToAdvertise,
+    cleanSkinsToAdvertise,
+  } = useSkinsStore()
   const [subtotal, setSubtotal] = useState<number>(0)
   const [disabled, setDisabled] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['createdSkins'],
+  const { data: itemAnnounced, refetch: announceItem } = useQuery({
+    queryKey: ['announcedItems'],
     queryFn: async () => {
       setIsLoading(true)
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
@@ -38,6 +42,7 @@ export default function PageInventorySummary() {
       }
 
       setIsLoading(false)
+
       return announcedSkins
     },
     enabled: false,
@@ -52,23 +57,26 @@ export default function PageInventorySummary() {
   }, [pathname, searchParams, router])
 
   useEffect(() => {
-    console.log(data)
-    if (data) {
-      if (data?.request.status === 201) {
+    if (itemAnnounced) {
+      if (itemAnnounced?.request.status === 201) {
         window.location.replace(pathname + '?success=true')
-      } else if (data?.request.status === 409) {
-        const itemName = data.request.response
-          .split('"')[3]
-          .replace('Skin', '')
-          .replace(' Already Exist', '')
-        Toast.Error(`O item ${itemName} já existe no seu perfil.`)
+      } else if (itemAnnounced?.request.status === 409) {
+        const responseObject: { error: string; asset_id: string } = JSON.parse(
+          itemAnnounced?.request?.response,
+        )
+
+        if (responseObject.asset_id) {
+          removeSkinToAdvertise(responseObject.asset_id)
+        }
+
+        Toast.Error(responseObject.error)
       } else {
         Toast.Error(
-          'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
+          'Ocorreu um problema ao anunciar o inventário. Tente novamente mais tarde.',
         )
       }
     }
-  }, [data])
+  }, [itemAnnounced, pathname, removeSkinToAdvertise])
 
   useEffect(() => {
     const subtotal = skinsToAdvertise.reduce((acc, { skin_price }) => {
@@ -130,15 +138,15 @@ export default function PageInventorySummary() {
           </span>
         </div>
         <Common.Button
-          onClick={() => refetch()}
+          onClick={() => announceItem()}
           disabled={disabled}
-          className="h-[53px]"
+          className="h-[53px] border-mesh-color-primary-1200 bg-mesh-color-primary-1200 font-bold text-black disabled:border-mesh-color-neutral-400 disabled:bg-transparent disabled:text-mesh-color-neutral-200"
         >
           {isLoading ? (
             <ColorRing
               width={50}
               height={50}
-              colors={['#A6CF2B', '#A6CF2B', '#A6CF2B', '#A6CF2B', '#A6CF2B']}
+              colors={['#000000', '#000000', '#000000', '#000000', '#000000']}
             />
           ) : (
             <Common.Title>Vender</Common.Title>

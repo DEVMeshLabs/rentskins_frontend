@@ -27,16 +27,15 @@ export function CardSkinInventory() {
     ISteamItens[]
   >([])
 
-  const STEAMID = '76561198862407248'
+  const DERICK_STEAMID = '76561198862407248'
+  // const MEU_STEAMID = '76561198862407248'
 
   const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
-      SkinService.findAllSkinsByIdSeller(
-        // trueSession?.user?.steam?.steamid!
-        STEAMID,
-      ),
-    keepPreviousData: true,
+      SkinService.findAllSkinsByIdSeller(trueSession?.user?.steam?.steamid!),
+    keepPreviousData: false,
+    cacheTime: 0,
   })
 
   const {
@@ -48,8 +47,8 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory'],
     queryFn: async () =>
       await SkinService.findBySkinsInventoryWithFilters(
+        DERICK_STEAMID,
         // trueSession.user?.steam?.steamid!,
-        STEAMID,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -134,9 +133,20 @@ export function CardSkinInventory() {
     )
   }
 
+  console.log(itemsLeftOnInventory)
   console.log(itemsOnInventory)
   console.log(itemsOnProfile)
-  console.log(itemsLeftOnInventory)
+
+  const stickers = [
+    { name: 'Sticker 1', url: 'link1.com' },
+    { name: 'Sticker 2', url: 'link2.com' },
+    { name: 'Sticker 3', url: 'link3.com' },
+    { name: 'Sticker 4', url: 'link4.com' },
+  ]
+
+  console.log(stickers)
+
+  console.log(JSON.stringify(stickers))
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -176,7 +186,7 @@ export function CardSkinInventory() {
                   ? tags[0].name
                   : tags[1].name
                 const isSelected = skinsToAdvertise.some(
-                  ({ id }) => assetid === id,
+                  ({ asset_id }) => assetid === asset_id,
                 )
                 const categoryType = tags.filter(
                   ({ category }) => category === 'Type',
