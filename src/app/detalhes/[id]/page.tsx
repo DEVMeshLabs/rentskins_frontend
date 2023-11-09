@@ -62,7 +62,7 @@ export default async function Details({ params }: IProps) {
   const seller = await fetchSeller(item?.seller_id)
 
   if (item) {
-    if (!seller) {
+    if (!seller || seller.deletedAt) {
       await deleteItem(item.id)
     }
   } else {
