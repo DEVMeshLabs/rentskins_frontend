@@ -1,6 +1,7 @@
 import { IconSteam } from '@/components/Icons'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
+import StickerHoverCard from '@/components/Others/StickerHoverCard'
 import { ISkins } from '@/interfaces/ISkins'
 import ColorRarity from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
@@ -23,14 +24,16 @@ export function PageDetailsCard({ item }: PropsType) {
     item?.stickers.length > 0 &&
     item?.stickers.map((sticker, index: number) => (
       <>
-        <Image
-          src={sticker.url}
-          alt={sticker.name}
-          key={'sticker' + index}
-          width={120}
-          draggable={false}
-          height={120}
-        />
+        <StickerHoverCard name={sticker.name}>
+          <Image
+            src={sticker.url}
+            alt={sticker.name}
+            key={'sticker' + index}
+            width={120}
+            draggable={false}
+            height={120}
+          />
+        </StickerHoverCard>
       </>
     ))
 
