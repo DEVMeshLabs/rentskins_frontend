@@ -17,9 +17,9 @@ export default function HoverCardInfo({
       <HoverCard.Trigger asChild>
         {customTrigger || (
           <div
-            className="flex h-8 w-8 select-none items-center
-          justify-center rounded-full border-2 border-mesh-color-primary-1200 bg-mesh-color-others-eerie-black
-          font-bold text-white opacity-60 transition-all hover:opacity-100"
+            className="flex h-8 w-8 select-none items-center justify-center
+          rounded-full border-2 border-mesh-color-primary-1200 bg-mesh-color-others-eerie-black font-bold
+          text-white opacity-60 transition-all hover:cursor-help hover:opacity-100"
           >
             ?
           </div>

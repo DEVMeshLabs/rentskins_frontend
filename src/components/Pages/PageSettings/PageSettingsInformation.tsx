@@ -316,29 +316,21 @@ export function PageSettingsInformation() {
                 placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-transparent`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              <HoverCardInfo
-                customTrigger={
-                  <div
-                    className="relative -top-2 flex h-8 w-8 select-none items-center
-                        justify-center rounded-full border-2 border-mesh-color-primary-1200 bg-mesh-color-others-eerie-black
-                        font-bold text-white opacity-60 transition-all hover:opacity-100"
-                  >
-                    ?
+              <div className="relative -top-2">
+                <HoverCardInfo>
+                  <div>
+                    <p>
+                      Negociações de <span className="font-bold">alugueis</span>{' '}
+                      requerem que os usuários forneçam uma Chave de API para
+                      detecção da proposta de negociação. A chave será utilizada{' '}
+                      <span className="font-bold">
+                        apenas para verificação e validação das trocas
+                      </span>
+                      , mas nunca para confirma-las ou altera-las.
+                    </p>
                   </div>
-                }
-              >
-                <div>
-                  <p>
-                    Negociações de <span className="font-bold">alugueis</span>{' '}
-                    requerem que os usuários forneçam uma Chave de API para
-                    detecção da proposta de negociação. A chave será utilizada{' '}
-                    <span className="font-bold">
-                      apenas para verificação e validação das trocas
-                    </span>
-                    , mas nunca para confirma-las ou altera-las.
-                  </p>
-                </div>
-              </HoverCardInfo>
+                </HoverCardInfo>
+              </div>
             </div>
             <div className="-mt-3 flex w-3/12 items-center justify-end gap-4">
               <HoverCardInfo

@@ -25,7 +25,6 @@ export function ModalConnectInventoryForm({
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
   } = useForm({
@@ -36,6 +35,7 @@ export function ModalConnectInventoryForm({
       'trade-link': userConfig?.url_trade || undefined,
       cpf: userConfig?.owner_cpf || undefined,
       email: userConfig?.owner_email || undefined,
+      'api-key': userConfig?.key || undefined,
     },
   })
 
@@ -45,17 +45,6 @@ export function ModalConnectInventoryForm({
   const tradelinkWatch = watch('trade-link')
   const notificationsWatch = watch('receive-notifications')
   const apikeyWatch = watch('api-key')
-
-  useEffect(() => {
-    if (userConfig) {
-      setValue('accept-terms', userConfig.agreed_with_terms)
-      setValue('cpf', userConfig.owner_cpf)
-      setValue('email', userConfig.owner_email)
-      setValue('phone', userConfig.owner_phone)
-      setValue('receive-notifications', userConfig.agreed_with_emails)
-      setValue('trade-link', userConfig.url_trade)
-    }
-  }, [userConfig, setValue])
 
   const { data, refetch, isRefetching, fetchStatus } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
@@ -201,19 +190,21 @@ export function ModalConnectInventoryForm({
             errors={errors['api-key'] || apikeyError}
             maxLength={32}
           />
-          <HoverCardInfo>
-            <div>
-              <p>
-                Negociações de <span className="font-bold">alugueis</span>{' '}
-                requerem que os usuários forneçam uma Chave de API para detecção
-                da proposta de negociação. A chave será utilizada{' '}
-                <span className="font-bold">
-                  apenas para verificação e validação das trocas
-                </span>
-                , mas nunca para confirma-las ou altera-las.
-              </p>
-            </div>
-          </HoverCardInfo>
+          <div className="relative top-2">
+            <HoverCardInfo>
+              <div>
+                <p>
+                  Negociações de <span className="font-bold">alugueis</span>{' '}
+                  requerem que os usuários forneçam uma Chave de API para
+                  detecção da proposta de negociação. A chave será utilizada{' '}
+                  <span className="font-bold">
+                    apenas para verificação e validação das trocas
+                  </span>
+                  , mas nunca para confirma-las ou altera-las.
+                </p>
+              </div>
+            </HoverCardInfo>
+          </div>
         </div>
         <HoverCardInfo
           customTrigger={
