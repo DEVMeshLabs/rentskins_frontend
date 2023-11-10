@@ -8,6 +8,7 @@ export interface IConfig {
   url_sell: string
   agreed_with_emails: boolean
   agreed_with_terms: boolean
+  key?: string
 }
 
 export interface IOptionalConfig {
@@ -15,6 +16,7 @@ export interface IOptionalConfig {
   owner_name?: string
   owner_id?: string
   owner_cpf?: string
+  key?: string
   owner_email?: string
   owner_phone?: string
   url_trade?: string

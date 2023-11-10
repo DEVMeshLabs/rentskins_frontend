@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
+import HoverCardSticker from '@/components/HoverCard/StickerHoverCard'
 import ColoredLine from '@/components/Others/ColoredLine'
-import StickerHoverCard from '@/components/Others/StickerHoverCard'
 import Image from 'next/image'
 
 type Props = {
@@ -22,7 +22,7 @@ export function ModalSkinShowcaseSkin({
     stickers?.length > 0 &&
     stickers?.map((sticker, index: number) => (
       <>
-        <StickerHoverCard name={sticker.name}>
+        <HoverCardSticker name={sticker.name}>
           <Image
             src={sticker.url}
             alt={sticker.name}
@@ -31,7 +31,7 @@ export function ModalSkinShowcaseSkin({
             draggable={false}
             height={120}
           />
-        </StickerHoverCard>
+        </HoverCardSticker>
       </>
     ))
 

@@ -35,7 +35,7 @@ export default function PageHomeSkins() {
       ) : (
         <div className="flex h-[30vh] w-full items-center justify-center">
           <Common.Title bold={600} size="2xl" className="text-white">
-            Sem items disponíveis no momento.
+            Sem itens disponíveis no momento.
           </Common.Title>
         </div>
       )}

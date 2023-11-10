@@ -1,4 +1,5 @@
 import Form from '@/components/Forms'
+import HoverCardInfo from '@/components/HoverCard/HoverCardInfo'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import { useQuery } from '@tanstack/react-query'
@@ -43,6 +44,7 @@ export function ModalConnectInventoryForm({
   const phoneWatch = watch('phone')
   const tradelinkWatch = watch('trade-link')
   const notificationsWatch = watch('receive-notifications')
+  const apikeyWatch = watch('api-key')
 
   useEffect(() => {
     if (userConfig) {
@@ -105,6 +107,13 @@ export function ModalConnectInventoryForm({
       data?.response?.data?.errors,
   }
 
+  const apikeyError = {
+    message:
+      data?.response?.data?.errors?.includes('API') &&
+      data?.config?.data?.includes(apikeyWatch) &&
+      data?.response?.data?.errors,
+  }
+
   // Error == 409
   useEffect(() => {
     if (data?.request.status === 204) {
@@ -132,15 +141,24 @@ export function ModalConnectInventoryForm({
             register={register('trade-link')}
             errors={errors['trade-link'] || tradelinkError}
           />
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="http://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
-            tabIndex={-1}
-            className="mt-3 h-full w-min place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100"
+          <HoverCardInfo
+            side="bottom"
+            customTrigger={
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
+                tabIndex={-1}
+                className="mt-3 h-full w-min place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100"
+              >
+                Obter URL
+              </a>
+            }
           >
-            Obter URL
-          </a>
+            Para iniciar o fluxo de transação, precisamos do seu link de trocas.
+            Isso possibilitará que outros usuários iniciem negociações com você
+            de maneira mais eficiente.
+          </HoverCardInfo>
         </div>
       </div>
 
@@ -170,6 +188,69 @@ export function ModalConnectInventoryForm({
         register={register('cpf')}
         errors={errors.cpf || cpfError}
       />
+
+      <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center gap-4">
+          <Form.Input.Text
+            name="api-key"
+            label="Chave da API"
+            optional
+            placeholder="A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5"
+            labelClassName="w-8/12 text-white"
+            register={register('api-key')}
+            errors={errors['api-key'] || apikeyError}
+            maxLength={32}
+          />
+          <HoverCardInfo>
+            <div>
+              <p>
+                Negociações de <span className="font-bold">alugueis</span>{' '}
+                requerem que os usuários forneçam uma Chave de API para detecção
+                da proposta de negociação. A chave será utilizada{' '}
+                <span className="font-bold">
+                  apenas para verificação e validação das trocas
+                </span>
+                , mas nunca para confirma-las ou altera-las.
+              </p>
+            </div>
+          </HoverCardInfo>
+        </div>
+        <HoverCardInfo
+          customTrigger={
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://steamcommunity.com/dev/apikey"
+              tabIndex={-1}
+              className="mt-3 h-full place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100"
+            >
+              Obter Chave
+            </a>
+          }
+        >
+          <div>
+            <span className="italice font-bold">Passo a Passo:</span>
+            <ul>
+              <li>
+                <span className="font-bold">1.</span> Insira um domínio,
+                concorde com os termos e se registre.
+              </li>
+              <li>
+                <span className="font-bold">2.</span> Copie a chave fornecida.
+              </li>
+              <li>
+                <span className="font-bold">3.</span> Cole a chave fornecida no
+                campo &quot;Chave da API&quot; no formulário.
+              </li>
+            </ul>
+            <br />
+            <span className="text-justify text-sm italic">
+              Obs: Se você já possuir uma chave que não foi registrada por você,
+              recomendamos revoga-la por motivos de segurança.
+            </span>
+          </div>
+        </HoverCardInfo>
+      </div>
 
       <div className="mt-4 flex flex-col gap-2">
         <Form.Input.Checkbox
