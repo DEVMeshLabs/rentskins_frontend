@@ -59,7 +59,7 @@ export function PageDetailsCard({ item }: PropsType) {
           className="flex h-full w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
         >
           {item.deletedAt === null && (
-            <div className="flex select-none space-x-2 p-2">
+            <div className="absolute flex select-none space-x-2 p-2">
               <Link
                 href={item.skin_link_steam}
                 target="_blank"
@@ -80,12 +80,12 @@ export function PageDetailsCard({ item }: PropsType) {
             </div>
           )}
 
-          <div>
+          <div className="flex h-full items-center justify-center">
             <Image
               src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
               alt={item.skin_name}
-              width={510}
-              height={380}
+              width={item.skin_category === 'Sticker' ? 408 : 510}
+              height={item.skin_category === 'Sticker' ? 408 : 510}
               quality={100}
               className="m-auto object-cover"
               draggable={false}

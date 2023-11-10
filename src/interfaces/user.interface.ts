@@ -7,6 +7,6 @@ export interface IUser {
 }
 
 export interface ILatestSales {
-  saleAt: string
-  value: number
+  date: string
+  price: number
 }

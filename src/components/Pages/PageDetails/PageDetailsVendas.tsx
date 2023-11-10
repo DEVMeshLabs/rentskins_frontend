@@ -23,21 +23,23 @@ export function PageDetailsVendas({ latestSales }: IProps) {
     }
   }
 
+  console.log(latestSales)
+
   const renderLatestSales =
     latestSales && latestSales.length > 0 ? (
-      latestSales.map(({ saleAt, value }, index) => {
+      latestSales.map(({ date, price }, index) => {
         if (index < lastSalePage * 4 && index >= lastSalePage * 4 - 4) {
-          const refactorDate = moment(saleAt).format('DD MMM, YYYY • HH:mm')
+          const refactorDate = moment(date).format('DD MMM, YYYY • HH:mm')
           return (
             <div
-              key={`${saleAt}-${index}`}
+              key={`${date}-${index}`}
               className="flex justify-between border-b border-mesh-color-others-black-olive pb-1"
             >
               <Common.Title className="text-mesh-color-neutral-0">
                 {refactorDate}
               </Common.Title>
               <span className="text-mesh-color-primary-1400">
-                {value.toLocaleString('pt-br', {
+                {price?.toLocaleString('pt-br', {
                   currency: 'BRL',
                   style: 'currency',
                   minimumFractionDigits: 2,
