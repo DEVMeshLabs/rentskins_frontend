@@ -39,7 +39,7 @@ export default function Home({ searchParams }: IProps) {
 
           <div className="flex h-full items-center justify-center">
             <HeroInformation icon={<IconShield />} title="Pagamento seguro">
-              Realize seus pagamentos com tranquilidade!
+              Realize seus pagamentos com tranquilidade.
             </HeroInformation>
 
             <HeroInformation icon={<IconPhone />} title="Suporte rápido">
