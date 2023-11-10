@@ -40,7 +40,7 @@ export function ModalInfoItem({
     queryFn: () => SkinService.getItemAveragePrice([skin_name]),
     enabled: !!skin_name,
   })
-  console.log(disabled)
+  console.log(averagePrice)
 
   const {
     register,

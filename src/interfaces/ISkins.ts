@@ -15,6 +15,7 @@ export interface ISkins {
   median_price: number
   sale_type: 'sale' | 'rent'
   seller_id: string
+  stickers: Array<{ url: string; name: string }>
   skin_link_game: string
   skin_link_steam: string
   status_float: string
@@ -48,11 +49,37 @@ export interface ISteamItens {
   background_color: string
   icon_url: string
   icon_url_large: string
-  descriptions: Array<{
-    type: string
-    value: string
-    color?: string
-  }>
+  descriptions: [
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+      color: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+  ]
   tradable: boolean
   actions: Array<{
     link: string
@@ -99,6 +126,7 @@ export interface ISkinsToAdvertise {
   seller_name: string
   seller_id: string
   skin_rarity: string
+  stickers: Array<{ url: string; name: string }>
   status: string
   sale_type: string
   status_float: string

@@ -15,10 +15,10 @@ import ColoredLine from '../ColoredLine'
 interface Props {
   itsRent?: boolean
   item: ISkins
-  itensFromUser?: boolean
+  userItems?: boolean
 }
 
-export function OtherCard({ itsRent, item, itensFromUser }: Props) {
+export function OtherCard({ itsRent, item, userItems }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
     ? item.skin_name.split('™')
     : item.skin_name
@@ -30,6 +30,21 @@ export function OtherCard({ itsRent, item, itensFromUser }: Props) {
   )
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
+
+  const stickersElement =
+    item?.stickers?.length > 0 &&
+    item?.stickers?.map((sticker, index: number) => (
+      <>
+        <Image
+          src={sticker.url}
+          alt={sticker.name}
+          key={'sticker' + item.asset_id + index}
+          width={50}
+          height={50}
+          draggable={false}
+        />
+      </>
+    ))
 
   return (
     <article className="relative">
@@ -49,20 +64,25 @@ export function OtherCard({ itsRent, item, itensFromUser }: Props) {
           rounded-lg border-2 border-mesh-color-neutral-400
           bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
-          <div
-            className={`top-0 h-2 w-52 rounded-b-full`}
-            style={{
-              backgroundColor: `#${ColorRarity.transform(item.skin_rarity)}`,
-            }}
-          />
-          <Image
-            className="m-auto p-2"
-            src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
-            alt={item.skin_name}
-            width={190}
-            height={154}
-            draggable={false}
-          />
+          <div>
+            <div
+              className={`top-0 h-2 w-52 rounded-b-full`}
+              style={{
+                backgroundColor: `#${ColorRarity.transform(item.skin_rarity)}`,
+              }}
+            />
+            <Image
+              className="m-auto p-2"
+              src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
+              alt={item.skin_name}
+              width={190}
+              height={154}
+              draggable={false}
+            />
+            <div className="relative top-5 -mt-[50px] flex justify-center">
+              {stickersElement}
+            </div>
+          </div>
         </Link>
 
         <div className="flex h-11 flex-col gap-3">
@@ -153,7 +173,7 @@ export function OtherCard({ itsRent, item, itensFromUser }: Props) {
             >
               Devolução
             </Common.Button>
-          ) : itensFromUser ? (
+          ) : userItems ? (
             <ModalRemoveItemMain
               skinId={item.id}
               skinName={item.skin_name}

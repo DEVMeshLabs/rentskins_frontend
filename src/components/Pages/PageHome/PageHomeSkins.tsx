@@ -2,24 +2,14 @@
 
 import Common from '@/components/Common'
 import AllSkeletonSkins from '@/components/Others/Skins/AllSkeletonSkins'
-import { IAllSkinsProps } from '@/components/Others/Skins/AllSkins'
+import AllSkins from '@/components/Others/Skins/AllSkins'
 import SkinService from '@/services/skin.service'
 import { useQuery } from '@tanstack/react-query'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
-const AllSkins = dynamic<IAllSkinsProps>(
-  () =>
-    import('@/components/Others/Skins/AllSkins').then(
-      (module) => module.default,
-    ),
-  {
-    ssr: false,
-  },
-)
 
 export default function PageHomeSkins() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['allSkins'],
+  const { data: allItems, isLoading: isLoadingAllItems } = useQuery({
+    queryKey: ['allItems'],
     queryFn: () => SkinService.findByAll(),
     cacheTime: 0,
     refetchOnMount: true,
@@ -29,13 +19,13 @@ export default function PageHomeSkins() {
   console.log(data)
   return (
     <>
-      {isLoading ? (
+      {isLoadingAllItems ? (
         <AllSkeletonSkins quantitySkeletons={20} />
-      ) : data?.data && data?.data?.skins.length > 0 ? (
+      ) : allItems?.data && allItems?.data?.skins.length > 0 ? (
         <div className="flex h-full w-full flex-col items-center">
-          <AllSkins skinsCategories={data?.data?.skins} />
+          <AllSkins items={allItems?.data?.skins} />
           <Link
-            href={`/loja?page=${data?.data.totalPages > 1 ? 2 : 1}`}
+            href={`/loja?page=${allItems?.data.totalPages > 1 ? 2 : 1}`}
             className="flex items-center justify-center rounded-md border border-mesh-color-primary-1200 bg-mesh-color-primary-1200 p-1 px-4 py-3 text-lg font-bold text-mesh-color-others-black
         opacity-60 transition enabled:hover:opacity-100 disabled:border-mesh-color-neutral-500 
         disabled:bg-mesh-color-neutral-500 disabled:text-mesh-color-neutral-300"

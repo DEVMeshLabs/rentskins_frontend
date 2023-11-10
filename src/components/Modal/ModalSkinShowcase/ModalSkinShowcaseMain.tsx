@@ -26,6 +26,7 @@ interface IProps {
   linkForPreviewSkin: string
   linkForProfile: string
   isRentable: boolean
+  stickers: Array<{ url: string; name: string }>
 }
 
 export function ModalSkinShowcaseMain({
@@ -43,18 +44,26 @@ export function ModalSkinShowcaseMain({
   isSelected,
   asset_id,
   linkForPreviewSkin,
-  linkForProfile,
+  stickers,
   id,
 }: IProps) {
+  const itemsToCheckAveragePrice = [
+    marketName,
+    ...stickers.map((sticker) => 'Sticker | ' + sticker.name),
+  ]
+
   const { data: averagePrice } = useQuery({
     queryKey: ['GetItemAveragePrice', marketName],
-    queryFn: () => SkinService.getItemAveragePrice([marketName]),
-    enabled: !!marketName,
+    queryFn: () => SkinService.getItemAveragePrice(itemsToCheckAveragePrice),
+    enabled: !!itemsToCheckAveragePrice,
   })
   const [open, setOpen] = useState(false)
 
-  console.log(averagePrice?.data)
-  console.log(marketName)
+  console.log(itemsToCheckAveragePrice)
+
+  if (itemsToCheckAveragePrice[0].includes('USP-S')) {
+    console.log(averagePrice)
+  }
 
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>
@@ -84,11 +93,13 @@ export function ModalSkinShowcaseMain({
             <div className="flex h-[90%] w-11/12 items-center justify-between">
               <ModalSkinShowcaseSkin
                 isRentable={isRentable}
+                stickers={stickers}
                 icon_url={skinImage}
                 weapon={skinWeapon}
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                stickers={stickers}
                 onOpenChange={() => setOpen((state) => !state)}
                 isRentable={isRentable}
                 asset_id={asset_id}

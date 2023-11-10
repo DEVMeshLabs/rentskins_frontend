@@ -5,18 +5,18 @@ import classNames from 'classnames'
 import { OtherCard } from '../../OtherCard/OtherCard'
 
 export interface IAllSkinsProps {
-  skinsCategories: ISkins[] | undefined
+  items: ISkins[] | undefined
   itemsPerPage?: number
   center?: boolean
   itsRent?: boolean
-  itensFromUser?: boolean
+  userItems?: boolean
 }
 
 export default function AllSkins({
-  skinsCategories,
+  items,
   center = false,
   itsRent,
-  itensFromUser,
+  userItems,
 }: IAllSkinsProps) {
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-start ">
@@ -24,16 +24,16 @@ export default function AllSkins({
         className={classNames(
           'mt-6 flex w-fit flex-wrap justify-center gap-x-5 gap-y-3',
           {
-            'mb-6 mt-0 w-auto': skinsCategories !== undefined,
+            'mb-6 mt-0 w-auto': items !== undefined,
             'justify-center': center,
           },
         )}
       >
-        {skinsCategories?.map((item, index: number) => {
+        {items?.map((item, index: number) => {
           return (
             <div className="flex w-[17.5rem]" key={`skin-card-${index}`}>
               <OtherCard
-                itensFromUser={itensFromUser}
+                userItems={userItems}
                 itsRent={itsRent}
                 item={item}
                 key={item.id}

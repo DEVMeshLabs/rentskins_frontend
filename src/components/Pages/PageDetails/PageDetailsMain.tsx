@@ -9,7 +9,6 @@ import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
 
 import SkinService from '@/services/skin.service'
-import Time from '@/tools/time.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -65,63 +64,23 @@ export default function PageDetailsMain({ item, seller }: IProps) {
 
       <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4">
         <div className="col-span-3 grid grid-rows-1 gap-4">
-          <PageDetailsCard
-            skinImage={item.skin_image}
-            skinName={item.skin_name}
-            skinRarity={item.skin_rarity}
-            skinCategory={item.skin_category}
-            skinLinkGame={item.skin_link_game}
-            skinLinkSteam={item.skin_link_steam}
-            skinFloat={Number(item.skin_float)}
-            deletedAt={item.deletedAt}
-          />
+          <PageDetailsCard item={item} />
 
           <PageDetailsVendas latestSales={latestSales?.data} />
         </div>
 
         <div className="col-span-2 grid grid-rows-1 gap-4">
           <PageDetailsSkin
-            saleType={item.sale_type}
-            token={trueSession.user?.token!}
-            userName={trueSession.user?.name!}
-            skinImage={item.skin_image}
-            userId={trueSession.user?.steam?.steamid!}
-            ownerSkin={item.seller_id}
+            item={item}
+            session={trueSession}
             defaultID={defaultID}
-            userStatus={status}
-            assetId={item.asset_id}
             skinName={customName}
-            skinPrice={item.skin_price}
-            skinFloat={item.skin_float}
-            skinCategory={item.skin_category}
-            skinWeapon={item.skin_weapon}
-            skinRarity={item.skin_rarity}
             itemAveragePrice={averagePrice?.data[0]!}
-            sellerId={item.seller_id}
-            statusFloat={item.status_float}
-            skinId={item.id}
-            cartId={userRetrieved?.data?.cart?.id as string}
+            userStatus={status}
+            userCart={userRetrieved?.data?.cart!}
             userConfiguration={userRetrieved?.data?.configuration!}
           />
-          <PageDetailsPerfil
-            id={seller.owner_id}
-            account_date={seller.steam_created_date!}
-            delivery_rate={
-              seller.total_exchanges_completed && seller.total_exchanges
-                ? (seller.total_exchanges_completed / seller.total_exchanges) *
-                  100
-                : 'Sem informações'
-            }
-            reliability={seller.reliability}
-            delivery_time={
-              seller.delivery_time !== 'Sem informações'
-                ? Time.roundTime(seller.delivery_time!)
-                : 'Sem informações'
-            }
-            owner_name={seller.owner_name!}
-            picture={seller.picture!}
-            total_exchanges={seller.total_exchanges!}
-          />
+          <PageDetailsPerfil seller={seller} />
         </div>
       </div>
       <SkinsSemelhantes
