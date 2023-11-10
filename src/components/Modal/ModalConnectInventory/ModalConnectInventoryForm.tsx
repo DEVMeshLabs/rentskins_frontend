@@ -57,6 +57,7 @@ export function ModalConnectInventoryForm({
         owner_phone: phoneWatch,
         owner_cpf: cpfWatch,
         url_sell: sellLink,
+        key: apikeyWatch!,
         url_trade: tradelinkWatch,
         agreed_with_emails: notificationsWatch,
         agreed_with_terms: true,

@@ -120,7 +120,6 @@ export function PageSettingsInformation() {
     if (data['trade-link'] !== '') {
       const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         url_trade: data['trade-link'],
       })
 
@@ -136,7 +135,6 @@ export function PageSettingsInformation() {
     if (data.email !== '') {
       const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         owner_email: data.email,
       })
 
@@ -152,7 +150,6 @@ export function PageSettingsInformation() {
     if (data.phone !== '') {
       const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         owner_phone: data.phone,
       })
 
@@ -168,7 +165,6 @@ export function PageSettingsInformation() {
     if (data.cpf !== '') {
       const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         owner_cpf: data.cpf,
       })
 
@@ -178,6 +174,7 @@ export function PageSettingsInformation() {
       }
     }
   }
+  console.log(trueSession)
 
   const onSubmitKey = async (data: any) => {
     setEditKey(false)
@@ -185,9 +182,10 @@ export function PageSettingsInformation() {
     if (data['api-key'] !== '') {
       const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         key: data['api-key'],
       })
+
+      console.log(response)
 
       if (response?.response?.status === 409) {
         Toast.Error('Chave da API inválida.', 2000)
