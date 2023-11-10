@@ -5,14 +5,16 @@ import Image from 'next/image'
 type Props = {
   rarity: string
   icon_url: string
-  primeiroName: string
+  assetid: string
+  firstName: string
   stickers: Array<{ url: string; name: string }>
 }
 
 export function CardSkinImage({
   rarity,
   icon_url,
-  primeiroName,
+  assetid,
+  firstName,
   stickers,
 }: Props) {
   const stickersElement =
@@ -22,7 +24,7 @@ export function CardSkinImage({
         <Image
           src={sticker.url}
           alt={sticker.name}
-          key={'sticker' + index}
+          key={'sticker' + assetid + index}
           width={30}
           height={30}
           draggable={false}
@@ -40,7 +42,7 @@ export function CardSkinImage({
       />
       <Image
         src={`https://steamcommunity-a.akamaihd.net/economy/image/${icon_url}`}
-        alt={`${primeiroName}`}
+        alt={`${firstName}`}
         width={140}
         height={100}
         className="max-h-[100px] max-w-[140px]"

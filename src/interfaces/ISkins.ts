@@ -15,6 +15,7 @@ export interface ISkins {
   median_price: number
   sale_type: 'sale' | 'rent'
   seller_id: string
+  stickers: Array<{ url: string; name: string }>
   skin_link_game: string
   skin_link_steam: string
   status_float: string

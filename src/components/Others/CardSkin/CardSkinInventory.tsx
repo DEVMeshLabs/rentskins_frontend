@@ -157,7 +157,7 @@ export function CardSkinInventory() {
               index: number,
             ) => {
               if (index < page * 16 && index >= page * 16 - 16) {
-                const primeiroName = name.split('|')[0]
+                const firstName = name.split('|')[0]
                 const statusFloatText = market_name.match(/\((.*?)\)/g)
                 const statusFloat =
                   statusFloatText && statusFloatText[0].replace(/\(|\)/g, '')
@@ -236,10 +236,11 @@ export function CardSkinInventory() {
                         <CardSkin.Root classname="flex relative flex-col h-[245px] justify-between">
                           <div className="h-full">
                             <CardSkin.Image
+                              assetid={assetid}
                               stickers={stickers}
                               icon_url={icon_url}
                               rarity={rarity}
-                              primeiroName={primeiroName}
+                              firstName={firstName}
                             />
                             {isSelected && (
                               <Common.Button className="absolute left-11 top-[85px] w-1/2 border-none bg-mesh-color-neutral-500 opacity-100">
@@ -248,7 +249,7 @@ export function CardSkinInventory() {
                             )}
                             <CardSkin.Content
                               market_name={market_name}
-                              primeiroName={primeiroName}
+                              firstName={firstName}
                               float={
                                 itemIsAWeapon && isRentable ? '0.254665' : ''
                               }

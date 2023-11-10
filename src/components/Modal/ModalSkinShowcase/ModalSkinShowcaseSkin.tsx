@@ -25,9 +25,9 @@ export function ModalSkinShowcaseSkin({
           src={sticker.url}
           alt={sticker.name}
           key={'sticker' + index}
-          width={100}
+          width={120}
           draggable={false}
-          height={100}
+          height={120}
         />
       </>
     ))
