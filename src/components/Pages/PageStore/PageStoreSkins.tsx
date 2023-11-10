@@ -130,7 +130,7 @@ export default function PageStoreSkins() {
         allSkinsFilters &&
         allSkinsFilters.length > 0 ? (
         <AllSkins
-          skinsCategories={
+          items={
             !typeFilter
               ? allSkinsFilters
               : allSkinsFilters.sort(organized[typeFilter])
