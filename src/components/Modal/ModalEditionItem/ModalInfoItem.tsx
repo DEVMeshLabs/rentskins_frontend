@@ -20,6 +20,7 @@ interface IProps {
   sale_type: 'sale' | 'rent'
   skin_weapon: string
   id: string
+  isRentable?: boolean
   onClick: () => void
 }
 
@@ -29,6 +30,7 @@ export function ModalInfoItem({
   sale_type,
   skin_weapon,
   statusFloatText,
+  isRentable,
   id,
   onClick,
 }: IProps) {
@@ -225,11 +227,13 @@ export function ModalInfoItem({
             label="Venda"
             checked={true}
           />
-          <Form.Input.Checkbox
-            name="sell-rent"
-            register={register('rent')}
-            label="Aluguel"
-          />
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="sell-rent"
+              register={register('rent')}
+              label="Aluguel"
+            />
+          )}
         </div>
         {/* ---------INPUT FIM -------------  */}
 

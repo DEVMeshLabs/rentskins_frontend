@@ -16,6 +16,9 @@ interface IProps {
 export function ModalEditionItemMain({ activator, item }: IProps) {
   const [modalOpen, setModalOpen] = useState(false)
   const handleOpen = () => setModalOpen((state) => !state)
+  const isRentable = ['Sticker', 'Container', 'Collectible']
+
+  console.log(item.skin_category)
   return (
     <Dialog.Root open={modalOpen} onOpenChange={handleOpen}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
@@ -53,6 +56,7 @@ export function ModalEditionItemMain({ activator, item }: IProps) {
                 skin_name={item.skin_name}
                 skin_weapon={item.skin_weapon}
                 statusFloatText={item.status_float}
+                isRentable={!isRentable.includes(item.skin_category)}
               />
             </div>
             <div />

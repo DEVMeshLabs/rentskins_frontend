@@ -98,7 +98,9 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
           )}
         </div>
         <div className="flex items-center justify-between">
-          <h1 className="text-sm font-medium opacity-60">{item.skin_weapon}</h1>
+          <h1 className="h-12 text-sm font-medium opacity-60">
+            {item.skin_weapon}
+          </h1>
           <div className="flex gap-2">
             {itsRent && (
               <ModalEditionItemMain
