@@ -117,7 +117,7 @@ export function PageDetailsSkin({
     refetch: createCart,
     isRefetching: recreatingCart,
   } = useQuery({
-    queryKey: ['createSkinFromCart', item.id, userCart.id!],
+    queryKey: ['createSkinFromCart', item.id, userCart?.id!],
     queryFn: () => {
       return CartService.createSkinFromCart(item.id, userCart.id)
     },

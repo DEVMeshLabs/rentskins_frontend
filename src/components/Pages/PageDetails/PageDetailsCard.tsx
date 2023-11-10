@@ -19,6 +19,21 @@ export function PageDetailsCard({ item }: PropsType) {
     item.skin_category === 'Collectible'
   )
 
+  const stickersElement =
+    item?.stickers.length > 0 &&
+    item?.stickers.map((sticker, index: number) => (
+      <>
+        <Image
+          src={sticker.url}
+          alt={sticker.name}
+          key={'sticker' + index}
+          width={120}
+          draggable={false}
+          height={120}
+        />
+      </>
+    ))
+
   return (
     <div className="relative">
       {item.deletedAt !== null && (
@@ -62,15 +77,20 @@ export function PageDetailsCard({ item }: PropsType) {
             </div>
           )}
 
-          <Image
-            src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
-            alt={item.skin_name}
-            width={510}
-            height={380}
-            quality={100}
-            className="m-auto object-cover"
-            draggable={false}
-          />
+          <div>
+            <Image
+              src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
+              alt={item.skin_name}
+              width={510}
+              height={380}
+              quality={100}
+              className="m-auto object-cover"
+              draggable={false}
+            />
+            <div className="absolute bottom-2 flex w-full justify-center">
+              {stickersElement}
+            </div>
+          </div>
 
           {thereIsFloat && (
             <div className="w-full ">
