@@ -28,6 +28,7 @@ type Props = {
   isSelected: boolean
   asset_id: string
   isRentable: boolean
+  stickers: Array<{ url: string; name: string }>
   onOpenChange: () => void
 }
 
@@ -47,6 +48,7 @@ export function ModalSkinShowcaseInfo({
   status_float,
   statusFloatText,
   recomended_price,
+  stickers,
   isSelected,
   asset_id,
   id,
@@ -143,6 +145,7 @@ export function ModalSkinShowcaseInfo({
         skin_link_steam,
         skin_name,
         skin_weapon,
+        stickers,
         status,
         status_float,
         asset_id,

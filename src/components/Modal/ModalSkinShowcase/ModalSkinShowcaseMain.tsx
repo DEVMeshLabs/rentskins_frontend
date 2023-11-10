@@ -88,6 +88,7 @@ export function ModalSkinShowcaseMain({
                 float={float}
               />
               <ModalSkinShowcaseInfo
+                stickers={stickers}
                 onOpenChange={() => setOpen((state) => !state)}
                 isRentable={isRentable}
                 asset_id={asset_id}

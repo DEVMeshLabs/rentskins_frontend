@@ -125,6 +125,7 @@ export interface ISkinsToAdvertise {
   seller_name: string
   seller_id: string
   skin_rarity: string
+  stickers: Array<{ url: string; name: string }>
   status: string
   sale_type: string
   status_float: string

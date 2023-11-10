@@ -134,21 +134,6 @@ export function CardSkinInventory() {
     )
   }
 
-  console.log(itemsLeftOnInventory)
-  console.log(itemsOnInventory)
-  console.log(itemsOnProfile)
-
-  const stickers = [
-    { name: 'Sticker 1', url: 'link1.com' },
-    { name: 'Sticker 2', url: 'link2.com' },
-    { name: 'Sticker 3', url: 'link3.com' },
-    { name: 'Sticker 4', url: 'link4.com' },
-  ]
-
-  console.log(stickers)
-
-  console.log(JSON.stringify(stickers))
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="ml-2 flex flex-wrap justify-center gap-4">
