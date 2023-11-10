@@ -47,12 +47,23 @@ export function ModalSkinShowcaseMain({
   stickers,
   id,
 }: IProps) {
+  const itemsToCheckAveragePrice = [
+    marketName,
+    ...stickers.map((sticker) => 'Sticker | ' + sticker.name),
+  ]
+
   const { data: averagePrice } = useQuery({
     queryKey: ['GetItemAveragePrice', marketName],
-    queryFn: () => SkinService.getItemAveragePrice([marketName]),
-    enabled: !!marketName,
+    queryFn: () => SkinService.getItemAveragePrice(itemsToCheckAveragePrice),
+    enabled: !!itemsToCheckAveragePrice,
   })
   const [open, setOpen] = useState(false)
+
+  console.log(itemsToCheckAveragePrice)
+
+  if (itemsToCheckAveragePrice[0].includes('USP-S')) {
+    console.log(averagePrice)
+  }
 
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>

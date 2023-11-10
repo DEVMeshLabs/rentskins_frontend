@@ -21,8 +21,8 @@ export function PageDetailsCard({ item }: PropsType) {
   )
 
   const stickersElement =
-    item?.stickers.length > 0 &&
-    item?.stickers.map((sticker, index: number) => (
+    item?.stickers?.length > 0 &&
+    item?.stickers?.map((sticker, index: number) => (
       <>
         <StickerHoverCard name={sticker.name}>
           <Image
