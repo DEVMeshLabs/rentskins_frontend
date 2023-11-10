@@ -347,8 +347,9 @@ export function PageSettingsInformation() {
                   <span className="italice font-bold">Passo a Passo:</span>
                   <ul>
                     <li>
-                      <span className="font-bold">1.</span> Insira um domínio,
-                      concorde com os termos e se registre.
+                      <span className="font-bold">1.</span> Insira um domínio
+                      (sugerimos colocar &quot;rentskins&quot;), concorde com os
+                      termos e se registre.
                     </li>
                     <li>
                       <span className="font-bold">2.</span> Copie a chave
@@ -396,7 +397,7 @@ export function PageSettingsInformation() {
             <span className="pl-3 text-mesh-color-neutral-200">
               {status === 'authenticated'
                 ? `
-              https://rentskins/?sellerid=${
+              https://rentskins.com/?sellerid=${
                 trueSession.user?.steam?.steamid! || 'ERROR'
               }
               `
@@ -407,7 +408,7 @@ export function PageSettingsInformation() {
               className=" border-none bg-mesh-color-primary-1200 px-3 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `https://rentskins/?sellerid=${trueSession.user?.steam
+                  `https://rentskins.com/?sellerid=${trueSession.user?.steam
                     ?.steamid!}`,
                 )
                 Toast.Success('Link copiado para a área de transferência.')
