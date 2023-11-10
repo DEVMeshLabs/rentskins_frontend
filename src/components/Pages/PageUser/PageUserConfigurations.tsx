@@ -108,7 +108,7 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
               : 'text-mesh-color-neutral-200'
           }`}
         >
-          Informações Pessoais
+          Informações da Conta
         </div>
       ),
       value: 'personal',

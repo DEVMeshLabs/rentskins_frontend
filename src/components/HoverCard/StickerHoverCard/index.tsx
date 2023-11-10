@@ -6,7 +6,7 @@ interface IProps {
   name: string
 }
 
-export default function StickerHoverCard({ children, name }: IProps) {
+export default function HoverCardSticker({ children, name }: IProps) {
   const formattedName = 'Sticker%20|%20' + name.replaceAll(/\s/g, '%20')
   const url = 'https://steamcommunity.com/market/listings/730/' + formattedName
 
