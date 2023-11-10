@@ -84,8 +84,8 @@ export function PageDetailsCard({ item }: PropsType) {
             <Image
               src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
               alt={item.skin_name}
-              width={item.skin_category === 'Sticker' ? 408 : 510}
-              height={item.skin_category === 'Sticker' ? 408 : 510}
+              width={!thereIsFloat ? 408 : 510}
+              height={!thereIsFloat ? 408 : 510}
               quality={100}
               className="m-auto object-cover"
               draggable={false}
