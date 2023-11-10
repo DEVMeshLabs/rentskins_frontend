@@ -3,11 +3,14 @@ import { IconCarrinho } from '@/components/Icons'
 import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { IOptionalConfig } from '@/interfaces/IConfig'
+import { ISkins } from '@/interfaces/ISkins'
+import ISteamUser from '@/interfaces/steam.interface'
 import CartService from '@/services/cart.service'
+import { IGetUserCart } from '@/services/interfaces/user.interface'
 import NotificationServices from '@/services/notifications.service'
 import SkinService from '@/services/skin.service'
 import useSkinsStore from '@/stores/skins.store'
-import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
+import ColorRarity from '@/tools/colorRarity.tool'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
@@ -18,50 +21,25 @@ import { toast } from 'react-hot-toast'
 //
 
 type PropsTypes = {
+  item: ISkins
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
   userConfiguration: IOptionalConfig
   skinName: string
-  skinImage: string
-  skinPrice: number
-  skinFloat: string
-  skinCategory: string
-  skinWeapon: string
-  skinRarity: TItemRarity
-  sellerId: string
-  statusFloat: string
   itemAveragePrice: number | null | string
   defaultID: string
-  skinId: string
-  cartId: string
-  assetId: string
-  ownerSkin: string
-  userId: string
-  userName: string
-  token: string
-  saleType: 'sale' | 'rent'
+  userCart: IGetUserCart
+  session: ISteamUser
 }
 
 export function PageDetailsSkin({
+  item,
   userStatus,
   userConfiguration,
   skinName,
-  skinImage,
   itemAveragePrice,
-  skinPrice,
-  skinFloat,
-  skinCategory,
-  skinWeapon,
-  sellerId,
-  statusFloat,
-  skinRarity,
   defaultID,
-  skinId,
-  cartId,
-  assetId,
-  ownerSkin,
-  userId,
-  saleType,
-  token,
+  session,
+  userCart,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [rentPercentage, setRentPercentage] = useState(10)
@@ -84,28 +62,28 @@ export function PageDetailsSkin({
     setItemAvailable,
   } = useSkinsStore()
   const thereIsFloat = !(
-    skinCategory === 'Graffiti' ||
-    skinCategory === 'Container' ||
-    skinCategory === 'Sticker' ||
-    skinCategory === 'Collectible'
+    item.skin_category === 'Graffiti' ||
+    item.skin_category === 'Container' ||
+    item.skin_category === 'Sticker' ||
+    item.skin_category === 'Collectible'
   )
 
   const skinToBuy = {
-    skinId,
-    skinPrice,
-    skinRarity,
-    skinFloat,
-    skinImage,
+    skinId: item.id,
+    skinPrice: item.skin_price,
+    skinRarity: item.skin_rarity,
+    skinFloat: item.skin_float,
+    skinImage: item.skin_image,
     skinName,
-    skinWeapon,
-    statusFloat,
+    skinWeapon: item.skin_weapon,
+    statusFloat: item.status_float,
   }
 
   useEffect(() => {
-    if (ownerSkin === userId) {
+    if (item.seller_id === session?.user?.steam?.steamid) {
       setUserIsntOwnerSkin(false)
     }
-  }, [ownerSkin, userId])
+  }, [item.seller_id, session?.user?.steam?.steamid])
 
   const hasConfigurations =
     userConfiguration &&
@@ -139,9 +117,9 @@ export function PageDetailsSkin({
     refetch: createCart,
     isRefetching: recreatingCart,
   } = useQuery({
-    queryKey: ['createSkinFromCart', skinId, cartId],
+    queryKey: ['createSkinFromCart', item.id, userCart?.id!],
     queryFn: () => {
-      return CartService.createSkinFromCart(skinId, cartId)
+      return CartService.createSkinFromCart(item.id, userCart.id)
     },
     enabled: false,
     cacheTime: 0,
@@ -152,15 +130,16 @@ export function PageDetailsSkin({
     data: resultAvailability,
     isRefetching: refetchingAvailability,
   } = useQuery({
-    queryKey: ['checkItemAvailability', assetId, sellerId],
-    queryFn: () => SkinService.postCheckItemAvailability(assetId, sellerId),
+    queryKey: ['checkItemAvailability', item.asset_id, item.seller_id],
+    queryFn: () =>
+      SkinService.postCheckItemAvailability(item.asset_id, item.seller_id),
     enabled: false,
     cacheTime: 0,
   })
 
   const { data: deleteResult, refetch: deleteItem } = useQuery({
-    queryKey: ['deleteItem', assetId, sellerId],
-    queryFn: () => SkinService.deleteById(skinId),
+    queryKey: ['deleteItem', item.asset_id, item.seller_id],
+    queryFn: () => SkinService.deleteById(item.id),
     enabled: false,
     cacheTime: 0,
   })
@@ -301,10 +280,10 @@ export function PageDetailsSkin({
         proceedItem()
       } else if (resultAvailability?.request?.status === 404) {
         NotificationServices.createNewNotification(
-          sellerId,
-          token,
+          item.seller_id,
+          session?.user?.token!,
           `O anúncio do item ${skinName} foi removido da loja. Durante a compra de um usuário o item não foi encontrado em seu inventário.`,
-          skinId,
+          item.id,
         )
         deleteItem()
         setOpenModalBuySkin(false)
@@ -317,10 +296,10 @@ export function PageDetailsSkin({
           setOpenModalBuySkin(false)
         } else {
           NotificationServices.createNewNotification(
-            sellerId,
-            token,
+            item.seller_id,
+            session?.user?.token!,
             `O anúncio do item ${skinName} foi removido. Verifique se o seu inventário se encontra público e anuncie novamente.`,
-            skinId,
+            item.id,
           )
           deleteItem()
           setOpenModalBuySkin(false)
@@ -367,12 +346,12 @@ export function PageDetailsSkin({
           <Common.Title className="text-2xl font-extrabold text-white">
             {skinName}
           </Common.Title>
-          <p className="text-mesh-color-neutral-200">{statusFloat}</p>
+          <p className="text-mesh-color-neutral-200">{item.status_float}</p>
         </div>
 
         <div>
           <Common.Title className="text-2xl font-extrabold text-white">
-            {Number(skinPrice).toLocaleString('PT-BR', {
+            {Number(item.skin_price).toLocaleString('PT-BR', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
@@ -381,7 +360,7 @@ export function PageDetailsSkin({
           <p className="text-mesh-color-neutral-200">Preço Total</p>
         </div>
 
-        {saleType === 'rent' && stateRentTime > 0 && (
+        {item.sale_type === 'rent' && stateRentTime > 0 && (
           <div
             className={`transition-all duration-500 ${
               stateRentTime > 0 ? 'opacity-100' : 'opacity-0'
@@ -390,7 +369,7 @@ export function PageDetailsSkin({
             <div className="flex items-center">
               <Common.Title className="text-2xl font-extrabold text-white">
                 {(
-                  parseFloat(String(skinPrice)) *
+                  parseFloat(String(item.skin_price)) *
                   (rentPercentage / 100)
                 ).toLocaleString('PT-BR', {
                   style: 'currency',
@@ -436,7 +415,7 @@ export function PageDetailsSkin({
               Float
             </Common.Title>
             <div className="flex items-center">
-              <p className="text-white">{skinFloat}</p>
+              <p className="text-white">{item.skin_float}</p>
             </div>
           </div>
         )}
@@ -445,7 +424,7 @@ export function PageDetailsSkin({
           <Common.Title className="text-mesh-color-neutral-200">
             Tipo
           </Common.Title>
-          <p className="text-white">{skinCategory}</p>
+          <p className="text-white">{item.skin_category}</p>
         </div>
 
         <div className="flex justify-between">
@@ -455,7 +434,9 @@ export function PageDetailsSkin({
           <div className="flex items-center justify-center">
             <div
               className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
-              style={{ background: `#${ColorRarity.transform(skinRarity)}` }}
+              style={{
+                background: `#${ColorRarity.transform(item.skin_rarity)}`,
+              }}
             />
           </div>
         </div>
@@ -471,7 +452,7 @@ export function PageDetailsSkin({
       >
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
-            {saleType === 'rent' &&
+            {item.sale_type === 'rent' &&
               renderButton(
                 <Common.Button
                   disabled={
@@ -488,11 +469,11 @@ export function PageDetailsSkin({
               )}
             <ModalBuyMain
               createTransaction={{
-                skinPrice: Number(skinPrice),
-                skinId,
-                token,
-                userId,
-                sellerId,
+                skinPrice: Number(item.skin_price),
+                skinId: item.id,
+                token: session?.user?.token!,
+                userId: session?.user?.steam?.steamid!,
+                sellerId: item.seller_id,
               }}
             />
             {renderButton(
@@ -549,7 +530,7 @@ export function PageDetailsSkin({
         <div
           className={`h-0 transition-all ${rent ? 'visible h-20' : 'hidden'}`}
         >
-          {saleType === 'rent' && rent && (
+          {item.sale_type === 'rent' && rent && (
             <>
               <Common.Title className="font-semibold text-white">
                 Selecione o período de Aluguel

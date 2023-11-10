@@ -8,6 +8,7 @@ import SkinService from '@/services/skin.service'
 import useComponentStore from '@/stores/components.store'
 import useFilterStore from '@/stores/filters.store'
 import useSkinsStore from '@/stores/skins.store'
+import { Stickers } from '@/tools/stickers.tool'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
@@ -129,21 +130,6 @@ export function CardSkinInventory() {
     )
   }
 
-  console.log(itemsLeftOnInventory)
-  console.log(itemsOnInventory)
-  console.log(itemsOnProfile)
-
-  const stickers = [
-    { name: 'Sticker 1', url: 'link1.com' },
-    { name: 'Sticker 2', url: 'link2.com' },
-    { name: 'Sticker 3', url: 'link3.com' },
-    { name: 'Sticker 4', url: 'link4.com' },
-  ]
-
-  console.log(stickers)
-
-  console.log(JSON.stringify(stickers))
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="ml-2 flex flex-wrap justify-center gap-4">
@@ -162,11 +148,12 @@ export function CardSkinInventory() {
                 type,
                 assetid,
                 actions,
+                descriptions,
               },
               index: number,
             ) => {
               if (index < page * 16 && index >= page * 16 - 16) {
-                const primeiroName = name.split('|')[0]
+                const firstName = name.split('|')[0]
                 const statusFloatText = market_name.match(/\((.*?)\)/g)
                 const statusFloat =
                   statusFloatText && statusFloatText[0].replace(/\(|\)/g, '')
@@ -195,9 +182,17 @@ export function CardSkinInventory() {
                 )
                 const linkForPreviewSkin = actions ? actions[0].link : '#'
 
+                console.log(name)
+                console.log(assetid)
+
+                const stickers = Stickers.extractStickersFromString(
+                  descriptions[6]?.value,
+                )
+
                 return (
                   <ModalSkinShowcaseMain
                     isRentable={isRentable}
+                    stickers={stickers}
                     key={assetid}
                     asset_id={assetid}
                     skinImage={icon_url}
@@ -237,9 +232,11 @@ export function CardSkinInventory() {
                         <CardSkin.Root classname="flex relative flex-col h-[245px] justify-between">
                           <div className="h-full">
                             <CardSkin.Image
+                              assetid={assetid}
+                              stickers={stickers}
                               icon_url={icon_url}
                               rarity={rarity}
-                              primeiroName={primeiroName}
+                              firstName={firstName}
                             />
                             {isSelected && (
                               <Common.Button className="absolute left-11 top-[85px] w-1/2 border-none bg-mesh-color-neutral-500 opacity-100">
@@ -248,7 +245,7 @@ export function CardSkinInventory() {
                             )}
                             <CardSkin.Content
                               market_name={market_name}
-                              primeiroName={primeiroName}
+                              firstName={firstName}
                               float={
                                 itemIsAWeapon && isRentable ? '0.254665' : ''
                               }

@@ -86,7 +86,7 @@ export default function PageProfileUser() {
       {isLoadingItens || isRefetching || isLoadingUser ? (
         <AllSkeletonSkins />
       ) : itens?.data.skins.length! > 0 ? (
-        <AllSkins skinsCategories={itens?.data?.skins} />
+        <AllSkins items={itens?.data?.skins} />
       ) : (
         <Common.SearchFeedback
           content="ao perfil de"

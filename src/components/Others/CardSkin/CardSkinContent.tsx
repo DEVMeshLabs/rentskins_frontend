@@ -3,11 +3,11 @@ import Common from '@/components/Common'
 
 type Props = {
   market_name: string
-  primeiroName: string
+  firstName: string
   float: string
 }
 
-export function CardSkinContent({ market_name, primeiroName, float }: Props) {
+export function CardSkinContent({ market_name, firstName, float }: Props) {
   const customName = market_name.includes('StatTrak™')
     ? market_name.split('™')
     : market_name
@@ -34,7 +34,7 @@ export function CardSkinContent({ market_name, primeiroName, float }: Props) {
           </Common.Title>
         </div>
         <span className="mt-2 text-xs font-medium text-mesh-color-neutral-200">
-          {primeiroName}
+          {firstName}
         </span>
       </div>
       <p className={`my-2 text-sm font-medium`}>
