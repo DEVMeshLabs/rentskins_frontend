@@ -16,7 +16,6 @@ export default function PageHomeSkins() {
     refetchOnReconnect: true,
   })
 
-  console.log(data)
   return (
     <>
       {isLoadingAllItems ? (
