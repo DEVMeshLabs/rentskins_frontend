@@ -42,9 +42,14 @@ export function CardSkinInventory() {
     isRefetching: isInventoryRefetching,
     refetch: refetchInventory,
   } = useQuery({
-    queryKey: ['skinsInventory'],
+    queryKey: [
+      'skinsInventory',
+      trueSession.user?.steam?.steamid!,
+      trueSession.user?.token!,
+      inventoryTypeFilter,
+    ],
     queryFn: async () =>
-      await SkinService.findBySkinsInventoryWithFilters(
+      SkinService.findBySkinsInventoryWithFilters(
         trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
