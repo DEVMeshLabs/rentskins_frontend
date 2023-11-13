@@ -5,6 +5,7 @@ import Form from '@/components/Forms'
 import ISteamUser from '@/interfaces/steam.interface'
 
 import useSkinsStore from '@/stores/skins.store'
+import { Values } from '@/tools/values.tool'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -12,7 +13,6 @@ import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  recomended_price: string
   sale_type?: string
   skin_category: string
   skin_rarity: string
@@ -27,6 +27,8 @@ type Props = {
   id: string
   isSelected: boolean
   asset_id: string
+  recommended_price: number | string
+  isPriceLoading: boolean
   isRentable: boolean
   stickers: Array<{ url: string; name: string }>
   onOpenChange: () => void
@@ -47,8 +49,9 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  recomended_price,
   stickers,
+  isPriceLoading,
+  recommended_price,
   isSelected,
   asset_id,
   id,
@@ -77,15 +80,6 @@ export function ModalSkinShowcaseInfo({
     }
   }, [])
 
-  const removeSign = (value: string) => {
-    const response = value
-      .replace('R$ ', '')
-      .replaceAll('.', '')
-      .replace(',', '.')
-
-    return Number(response)
-  }
-
   const {
     register,
     watch,
@@ -106,15 +100,6 @@ export function ModalSkinShowcaseInfo({
   const watchTerms = watch('terms')
   const watchSell = watch('sell')
   const watchRent = watch('rent')
-
-  const formattedValue = (value: string): number => {
-    let newFormattedValue
-    newFormattedValue = value.replace(/\./g, '')
-    newFormattedValue = newFormattedValue.replace('R$ ', '')
-    newFormattedValue = newFormattedValue.replace(',', '.')
-
-    return Number(newFormattedValue)
-  }
 
   useEffect(() => {
     setDisabled(
@@ -149,8 +134,8 @@ export function ModalSkinShowcaseInfo({
         status,
         status_float,
         asset_id,
-        median_price: removeSign(recomended_price) || 0,
-        skin_price: formattedValue(String(watchValue)),
+        median_price: Number(recommended_price) || 0,
+        skin_price: Values.currencyToNumber(String(watchValue))!,
       })
       onOpenChange()
     }
@@ -158,7 +143,7 @@ export function ModalSkinShowcaseInfo({
 
   const handleChangeSkinToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
-      changeSkinToAdvertise(id, formattedValue(String(watchValue)))
+      changeSkinToAdvertise(id, Values.currencyToNumber(String(watchValue))!)
       onOpenChange()
     }
   }
@@ -192,7 +177,11 @@ export function ModalSkinShowcaseInfo({
               Preço Recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
-              {recomended_price}
+              {!isPriceLoading ? (
+                recommended_price
+              ) : (
+                <div className="h-6 w-16 animate-pulse rounded-lg bg-mesh-color-neutral-600" />
+              )}
             </span>
           </div>
           <p className="w-full pt-2 text-sm leading-tight text-mesh-color-neutral-200">
@@ -211,14 +200,13 @@ export function ModalSkinShowcaseInfo({
               label="Preço de Venda"
               placeHolder={
                 savePrice
-                  ? `${formattedValue(String(savePrice)).toLocaleString(
-                      'pt-br',
-                      {
-                        currency: 'BRL',
-                        style: 'currency',
-                        minimumFractionDigits: 2,
-                      },
-                    )}`
+                  ? `${Values.currencyToNumber(
+                      String(savePrice),
+                    )!.toLocaleString('pt-br', {
+                      currency: 'BRL',
+                      style: 'currency',
+                      minimumFractionDigits: 2,
+                    })}`
                   : 'R$ 0,00'
               }
               register={register('value')}
@@ -241,17 +229,27 @@ export function ModalSkinShowcaseInfo({
                 color="white"
                 size="lg"
               >
-                {(
-                  (formattedValue(watchValue ? String(watchValue) : '') ||
-                    formattedValue(savePrice ? String(savePrice) : '')) -
-                  (formattedValue(watchValue ? String(watchValue) : '') ||
-                    formattedValue(savePrice ? String(savePrice) : '')) *
-                    0.04
-                ).toLocaleString('pt-br', {
-                  style: 'currency',
-                  currency: 'BRL',
-                  minimumFractionDigits: 2,
-                })}
+                {watchValue || savePrice
+                  ? (
+                      (Values.currencyToNumber(
+                        watchValue ? String(watchValue) : '',
+                      )! ||
+                        Values.currencyToNumber(
+                          savePrice ? String(savePrice) : '',
+                        )!) -
+                      (Values.currencyToNumber(
+                        watchValue ? String(watchValue) : '',
+                      )! ||
+                        Values.currencyToNumber(
+                          savePrice ? String(savePrice) : '',
+                        )!) *
+                        0.04
+                    ).toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 2,
+                    })
+                  : 'R$ 0,00'}
               </Common.Title>
             </div>
           </div>

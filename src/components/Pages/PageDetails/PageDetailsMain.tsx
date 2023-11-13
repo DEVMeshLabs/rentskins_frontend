@@ -9,6 +9,7 @@ import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
 
 import SkinService from '@/services/skin.service'
+import { Values } from '@/tools/values.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -28,8 +29,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   const defaultID = item.skin_link_game.slice(20, 37)
   const customName = item.skin_name.split('(')[0]
 
-  console.log(seller.owner_id)
-
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
     queryFn: () => {
@@ -38,19 +37,50 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     enabled: status === 'authenticated',
   })
 
-  const { data: averagePrice } = useQuery({
-    queryKey: ['averagePrice', item.skin_name],
-    queryFn: () => SkinService.getItemAveragePrice([item.skin_name]),
-    enabled: !!item.skin_name,
-  })
-
-  console.log(averagePrice)
-
   const { data: latestSales } = useQuery({
     queryKey: ['lastSales', item.skin_name],
     queryFn: () => UserService.getLatestSales(item.skin_name),
     enabled: status === 'authenticated',
   })
+
+  const itemsToCheckAveragePrice = [
+    item.skin_name,
+    ...item.stickers.map((sticker) => 'Sticker | ' + sticker.name),
+  ]
+
+  const { data: averagePrice, isLoading: isLoadingAveragePrice } = useQuery({
+    queryKey: ['GetItemAveragePrice', item.skin_name],
+    queryFn: () => SkinService.getItemAveragePrice(itemsToCheckAveragePrice),
+    enabled: !!itemsToCheckAveragePrice,
+    keepPreviousData: false,
+    cacheTime: 0,
+  })
+
+  const averagePriceSum = () => {
+    const price = averagePrice?.data
+      .map((price) => {
+        return Values.currencyToNumber(price)
+      })
+      .reduce((acc, item, index) => {
+        if (item) {
+          return acc! + item
+        }
+
+        return acc!
+      }, 0)
+
+    if (price === 0) {
+      return 'Indisponível no momento.'
+    }
+
+    return (
+      Number(price).toLocaleString('pt-br', {
+        currency: 'BRL',
+        style: 'currency',
+        minimumFractionDigits: 2,
+      }) || 'Indisponível no momento.'
+    )
+  }
 
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
@@ -64,7 +94,11 @@ export default function PageDetailsMain({ item, seller }: IProps) {
 
       <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4">
         <div className="col-span-3 grid grid-rows-1 gap-4">
-          <PageDetailsCard item={item} />
+          <PageDetailsCard
+            item={item}
+            stickersPrice={averagePrice?.data?.slice(1)}
+            isLoadingStickersPrice={isLoadingAveragePrice}
+          />
 
           <PageDetailsVendas latestSales={latestSales?.data} />
         </div>
@@ -75,8 +109,9 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             session={trueSession}
             defaultID={defaultID}
             skinName={customName}
-            itemAveragePrice={averagePrice?.data[0]!}
             userStatus={status}
+            recommendedPrice={averagePriceSum()}
+            isLoadingRecommendedPrice={isLoadingAveragePrice}
             userCart={userRetrieved?.data?.cart!}
             userConfiguration={userRetrieved?.data?.configuration!}
           />

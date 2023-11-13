@@ -42,15 +42,11 @@ export function CardSkinInventory() {
     isRefetching: isInventoryRefetching,
     refetch: refetchInventory,
   } = useQuery({
-    queryKey: [
-      'skinsInventory',
-      trueSession.user?.steam?.steamid!,
-      trueSession.user?.token!,
-      inventoryTypeFilter,
-    ],
+    queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        trueSession.user?.steam?.steamid!,
+        // trueSession.user?.steam?.steamid!,
+        '76561198862407248',
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -186,9 +182,6 @@ export function CardSkinInventory() {
                   categoryType[0].name === 'Collectible'
                 )
                 const linkForPreviewSkin = actions ? actions[0].link : '#'
-
-                console.log(name)
-                console.log(assetid)
 
                 const stickers = Stickers.extractStickersFromString(
                   descriptions[6]?.value,

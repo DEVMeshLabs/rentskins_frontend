@@ -10,9 +10,15 @@ import Link from 'next/link'
 
 type PropsType = {
   item: ISkins
+  stickersPrice: Array<string>
+  isLoadingStickersPrice: boolean
 }
 
-export function PageDetailsCard({ item }: PropsType) {
+export function PageDetailsCard({
+  item,
+  isLoadingStickersPrice,
+  stickersPrice,
+}: PropsType) {
   const thereIsFloat = !(
     item.skin_category === 'Graffiti' ||
     item.skin_category === 'Container' ||
@@ -24,7 +30,15 @@ export function PageDetailsCard({ item }: PropsType) {
     item?.stickers?.length > 0 &&
     item?.stickers?.map((sticker, index: number) => (
       <>
-        <HoverCardSticker name={sticker.name}>
+        <HoverCardSticker
+          name={sticker.name}
+          value={
+            stickersPrice?.length > 0 && stickersPrice[index] !== null
+              ? stickersPrice[index]
+              : 'Indisponível no momento.'
+          }
+          isValueLoading={isLoadingStickersPrice}
+        >
           <Image
             src={sticker.url}
             alt={sticker.name}
