@@ -96,7 +96,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
         <div className="col-span-3 grid grid-rows-1 gap-4">
           <PageDetailsCard
             item={item}
-            stickersPrice={averagePrice?.data?.slice(1)}
+            stickersPrice={averagePrice?.data?.slice(1)!}
             isLoadingStickersPrice={isLoadingAveragePrice}
           />
 
