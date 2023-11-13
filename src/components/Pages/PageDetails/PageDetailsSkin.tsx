@@ -24,8 +24,9 @@ type PropsTypes = {
   item: ISkins
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
   userConfiguration: IOptionalConfig
+  recommendedPrice: string
+  isLoadingRecommendedPrice: boolean
   skinName: string
-  itemAveragePrice: number | null | string
   defaultID: string
   userCart: IGetUserCart
   session: ISteamUser
@@ -36,8 +37,9 @@ export function PageDetailsSkin({
   userStatus,
   userConfiguration,
   skinName,
-  itemAveragePrice,
   defaultID,
+  isLoadingRecommendedPrice,
+  recommendedPrice,
   session,
   userCart,
 }: PropsTypes) {
@@ -396,15 +398,13 @@ export function PageDetailsSkin({
           <Common.Title className="text-mesh-color-neutral-200">
             Tendências de Mercado
           </Common.Title>
-          <p className="text-white">
-            {itemAveragePrice
-              ? itemAveragePrice.toLocaleString('pt-br', {
-                  currency: 'BRL',
-                  style: 'currency',
-                  minimumFractionDigits: 2,
-                })
-              : 'Indisponível'}
-          </p>
+          <div className="text-white">
+            {!isLoadingRecommendedPrice ? (
+              recommendedPrice
+            ) : (
+              <div className="h-6 w-16 animate-pulse rounded-lg bg-mesh-color-neutral-600" />
+            )}
+          </div>
         </div>
 
         <div className="flex justify-between">

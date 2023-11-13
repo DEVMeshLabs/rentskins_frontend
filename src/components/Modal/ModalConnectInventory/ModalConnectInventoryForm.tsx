@@ -49,7 +49,7 @@ export function ModalConnectInventoryForm({
   const { data, refetch, isRefetching, fetchStatus } = useQuery({
     queryKey: ['ConfigService.createConfig', trueSession?.user?.steam?.steamid],
     queryFn: async () => {
-      const sellLink = `https://rentskins/?sellerid=${trueSession?.user?.steam?.steamid}`
+      const sellLink = `https://rentskins.com/?sellerid=${trueSession?.user?.steam?.steamid}`
       const params = {
         owner_id: trueSession?.user?.steam?.steamid as string,
         owner_name: trueSession?.user?.name as string,

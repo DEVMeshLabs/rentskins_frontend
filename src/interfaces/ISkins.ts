@@ -131,7 +131,7 @@ export interface ISkinsToAdvertise {
   sale_type: string
   status_float: string
   skin_link_game: string
-  median_price: number
+  median_price?: number
   skin_link_steam: string
 }
 

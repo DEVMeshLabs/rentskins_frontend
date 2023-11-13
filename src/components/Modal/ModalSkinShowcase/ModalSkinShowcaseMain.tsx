@@ -3,6 +3,7 @@
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
 import SkinService from '@/services/skin.service'
+import { Values } from '@/tools/values.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
@@ -47,23 +48,49 @@ export function ModalSkinShowcaseMain({
   stickers,
   id,
 }: IProps) {
+  const [open, setOpen] = useState(false)
+
   const itemsToCheckAveragePrice = [
-    marketName,
+    skinName,
     ...stickers.map((sticker) => 'Sticker | ' + sticker.name),
   ]
 
-  const { data: averagePrice } = useQuery({
-    queryKey: ['GetItemAveragePrice', marketName],
+  const { data: averagePrice, isLoading: isLoadingAveragePrice } = useQuery({
+    queryKey: ['GetItemAveragePrice', skinName],
     queryFn: () => SkinService.getItemAveragePrice(itemsToCheckAveragePrice),
-    enabled: !!itemsToCheckAveragePrice,
+    enabled: !!itemsToCheckAveragePrice && !!open,
+    keepPreviousData: false,
+    cacheTime: 0,
   })
-  const [open, setOpen] = useState(false)
 
-  console.log(itemsToCheckAveragePrice)
+  const averagePriceSum = () => {
+    const price = averagePrice?.data
+      .map((price) => {
+        return Values.currencyToNumber(price)
+      })
+      .reduce((acc, item, index) => {
+        if (item) {
+          return acc! + item
+        }
 
-  if (itemsToCheckAveragePrice[0].includes('USP-S')) {
-    console.log(averagePrice)
+        return acc!
+      }, 0)
+
+    if (price === 0) {
+      return 'Indisponível no momento.'
+    }
+
+    return (
+      Number(price).toLocaleString('pt-br', {
+        currency: 'BRL',
+        style: 'currency',
+        minimumFractionDigits: 2,
+      }) || 'Indisponível no momento.'
+    )
   }
+
+  console.log(averagePrice?.data)
+  console.log(averagePrice?.data?.slice(1))
 
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>
@@ -94,6 +121,8 @@ export function ModalSkinShowcaseMain({
               <ModalSkinShowcaseSkin
                 isRentable={isRentable}
                 stickers={stickers}
+                stickersValue={averagePrice?.data?.slice(1)!}
+                stickersLoading={isLoadingAveragePrice}
                 icon_url={skinImage}
                 weapon={skinWeapon}
                 float={float}
@@ -107,14 +136,10 @@ export function ModalSkinShowcaseMain({
                 id={id}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
-                recomended_price={
-                  (averagePrice?.data &&
-                    averagePrice?.data?.length > 0 &&
-                    averagePrice?.data[0]) ||
-                  'Indisponível'
-                }
                 sale_type={'sale'}
                 skin_category={skinCategory}
+                recommended_price={averagePriceSum()}
+                isPriceLoading={isLoadingAveragePrice}
                 skin_rarity={skinRarity}
                 skin_float={float}
                 skin_image={skinImage}

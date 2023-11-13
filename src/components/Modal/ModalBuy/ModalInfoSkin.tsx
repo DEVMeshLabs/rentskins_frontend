@@ -43,7 +43,7 @@ export function ModalInfoSkin({
               bold={700}
               className={classNames('text-3xl text-white', classNameTitle)}
             >
-              {value.toLocaleString('pt-br', {
+              {value?.toLocaleString('pt-br', {
                 currency: 'BRL',
                 style: 'currency',
                 minimumFractionDigits: 2,

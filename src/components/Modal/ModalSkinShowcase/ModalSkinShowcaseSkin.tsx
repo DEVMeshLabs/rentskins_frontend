@@ -9,6 +9,8 @@ type Props = {
   float: string
   isRentable: boolean
   stickers: Array<{ url: string; name: string }>
+  stickersValue: Array<string>
+  stickersLoading: boolean
 }
 
 export function ModalSkinShowcaseSkin({
@@ -17,12 +19,22 @@ export function ModalSkinShowcaseSkin({
   float,
   isRentable,
   stickers,
+  stickersValue,
+  stickersLoading,
 }: Props) {
   const stickersElement =
     stickers?.length > 0 &&
     stickers?.map((sticker, index: number) => (
       <>
-        <HoverCardSticker name={sticker.name}>
+        <HoverCardSticker
+          name={sticker.name}
+          value={
+            stickersValue?.length > 0 && stickersValue[index] !== null
+              ? stickersValue[index]
+              : 'Indisponível no momento.'
+          }
+          isValueLoading={stickersLoading}
+        >
           <Image
             src={sticker.url}
             alt={sticker.name}

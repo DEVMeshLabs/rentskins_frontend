@@ -31,7 +31,7 @@ export function LayoutHeaderBottom({ className }: IProps) {
               'Bowie Knife',
               'Shadow Daggers',
               'Falchion Knife',
-              'Buttefly Knife',
+              'Butterfly Knife',
               'Huntsman Knife',
               'M9 Bayonet',
               'Bayonet',
@@ -78,7 +78,6 @@ export function LayoutHeaderBottom({ className }: IProps) {
               'CZ75-Auto',
               'Desert Eagle',
               'Dual Berettas',
-              'Dual Berettas',
               'Five-SeveN',
               'Glock-18',
               'P2000',
@@ -117,7 +116,7 @@ export function LayoutHeaderBottom({ className }: IProps) {
         <ContainerItem title="Luvas" iconSeta={<IconSetaType />} isList={true}>
           <ItemLink
             items={[
-              'Bloodhoud Gloves',
+              'Bloodhound Gloves',
               'Broken Fang Gloves',
               'Driver Gloves',
               'Hand Wraps',

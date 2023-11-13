@@ -64,9 +64,9 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
         {
           owner_id: trueSession.user?.steam?.steamid!,
           email: userConfigurations?.data.owner_email!,
-          success_url: ('https://rentskins-testing.vercel.app' +
+          success_url: ('https://rentskins.com-testing.vercel.app' +
             '/pagamento/recarregar') as string,
-          cancel_url: ('https://rentskins-testing.vercel.app' +
+          cancel_url: ('https://rentskins.com-testing.vercel.app' +
             '/pagamento/recarregar') as string,
           amount: Number(payment.value),
           payment_method: payment.method as 'card' | 'boleto' | 'pix',
