@@ -9,7 +9,6 @@ import { IGetUser } from '@/services/interfaces/user.interface'
 import UserService from '@/services/user.service'
 
 import SkinService from '@/services/skin.service'
-import { Values } from '@/tools/values.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -56,32 +55,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     cacheTime: 0,
   })
 
-  const averagePriceSum = () => {
-    const price = averagePrice?.data
-      .map((price) => {
-        return Values.currencyToNumber(price)
-      })
-      .reduce((acc, item, index) => {
-        if (item) {
-          return acc! + item
-        }
-
-        return acc!
-      }, 0)
-
-    if (price === 0) {
-      return 'Indisponível no momento.'
-    }
-
-    return (
-      Number(price).toLocaleString('pt-br', {
-        currency: 'BRL',
-        style: 'currency',
-        minimumFractionDigits: 2,
-      }) || 'Indisponível no momento.'
-    )
-  }
-
   return (
     <main className="mx-auto w-10/12 bg-mesh-color-others-black">
       <Link href="/" className="mt-8 flex w-fit items-center gap-4">
@@ -110,7 +83,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             defaultID={defaultID}
             skinName={customName}
             userStatus={status}
-            recommendedPrice={averagePriceSum()}
+            recommendedPrice={averagePrice?.data[0] || 'Indisponível'}
             isLoadingRecommendedPrice={isLoadingAveragePrice}
             userCart={userRetrieved?.data?.cart!}
             userConfiguration={userRetrieved?.data?.configuration!}

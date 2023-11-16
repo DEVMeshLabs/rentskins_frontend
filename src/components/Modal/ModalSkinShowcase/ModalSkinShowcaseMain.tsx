@@ -3,7 +3,6 @@
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
 import SkinService from '@/services/skin.service'
-import { Values } from '@/tools/values.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
@@ -63,35 +62,6 @@ export function ModalSkinShowcaseMain({
     cacheTime: 0,
   })
 
-  const averagePriceSum = () => {
-    const price = averagePrice?.data
-      .map((price) => {
-        return Values.currencyToNumber(price)
-      })
-      .reduce((acc, item, index) => {
-        if (item) {
-          return acc! + item
-        }
-
-        return acc!
-      }, 0)
-
-    if (price === 0) {
-      return 'Indisponível no momento.'
-    }
-
-    return (
-      Number(price).toLocaleString('pt-br', {
-        currency: 'BRL',
-        style: 'currency',
-        minimumFractionDigits: 2,
-      }) || 'Indisponível no momento.'
-    )
-  }
-
-  console.log(averagePrice?.data)
-  console.log(averagePrice?.data?.slice(1))
-
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen((state) => !state)}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>
@@ -138,7 +108,7 @@ export function ModalSkinShowcaseMain({
                 skin_weapon={skinWeapon}
                 sale_type={'sale'}
                 skin_category={skinCategory}
-                recommended_price={averagePriceSum()}
+                recommended_price={averagePrice?.data[0] || 'Indisponível'}
                 isPriceLoading={isLoadingAveragePrice}
                 skin_rarity={skinRarity}
                 skin_float={float}
