@@ -45,8 +45,7 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        // trueSession.user?.steam?.steamid!,
-        '76561198862407248',
+        trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -160,7 +159,8 @@ export function CardSkinInventory() {
                   statusFloatText && statusFloatText[0].replace(/\(|\)/g, '')
                 const itemIsAWeapon =
                   !tags[0].name.includes('Sticker') &&
-                  !tags[0].name.includes('Agent')
+                  !tags[0].name.includes('Agent') &&
+                  !tags[0].name.includes('Patch')
                 const completeType = type.split(' ')
                 const category = completeType.pop()!
                 const rarity = tags.filter(
@@ -179,7 +179,8 @@ export function CardSkinInventory() {
                   categoryType[0].name === 'Graffiti' ||
                   categoryType[0].name === 'Container' ||
                   categoryType[0].name === 'Sticker' ||
-                  categoryType[0].name === 'Collectible'
+                  categoryType[0].name === 'Collectible' ||
+                  categoryType[0].name === 'Patch'
                 )
                 const linkForPreviewSkin = actions ? actions[0].link : '#'
 

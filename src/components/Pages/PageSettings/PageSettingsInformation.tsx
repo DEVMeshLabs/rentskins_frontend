@@ -8,6 +8,7 @@ import ConfigService from '@/services/config.service'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver as apikeyResolver } from './schemas/information-apikey.schema'
@@ -325,6 +326,18 @@ export function PageSettingsInformation() {
                         apenas para verificação e validação das trocas
                       </span>
                       , mas nunca para confirma-las ou altera-las.
+                    </p>
+                    <br />
+                    <p className="text-sm italic">
+                      Para saber mais como sobre sua chave está segura conosco,{' '}
+                      <Link
+                        href="/faq"
+                        target="_blank"
+                        className="text-mesh-color-primary-1600 hover:brightness-125"
+                      >
+                        clique aqui
+                      </Link>
+                      .
                     </p>
                   </div>
                 </HoverCardInfo>

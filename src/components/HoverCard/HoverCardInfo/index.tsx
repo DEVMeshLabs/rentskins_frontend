@@ -13,7 +13,7 @@ export default function HoverCardInfo({
   side = 'top',
 }: IProps) {
   return (
-    <HoverCard.Root openDelay={0} closeDelay={0}>
+    <HoverCard.Root openDelay={0} closeDelay={100}>
       <HoverCard.Trigger asChild>
         {customTrigger || (
           <div

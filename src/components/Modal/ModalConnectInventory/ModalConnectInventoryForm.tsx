@@ -203,6 +203,18 @@ export function ModalConnectInventoryForm({
                   </span>
                   , mas nunca para confirma-las ou altera-las.
                 </p>
+                <br />
+                <p className="text-sm italic">
+                  Para saber mais como sobre sua chave está segura conosco,{' '}
+                  <Link
+                    href="/faq"
+                    target="_blank"
+                    className="text-mesh-color-primary-1600 hover:brightness-125"
+                  >
+                    clique aqui
+                  </Link>
+                  .
+                </p>
               </div>
             </HoverCardInfo>
           </div>
