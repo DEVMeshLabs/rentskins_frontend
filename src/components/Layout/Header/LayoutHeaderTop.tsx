@@ -84,8 +84,6 @@ export function LayoutHeaderTop() {
     enabled: status === 'authenticated',
   })
 
-  console.log(userConfig)
-
   const configValidation =
     userConfig &&
     userConfig.data &&
@@ -112,8 +110,6 @@ export function LayoutHeaderTop() {
       ),
     enabled: status === 'authenticated',
   })
-
-  console.log(walletRetrieved)
 
   const disableAddButton =
     pathname.includes('/pagamento') ||

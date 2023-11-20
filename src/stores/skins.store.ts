@@ -28,11 +28,19 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
     })
   },
 
-  changeSkinToAdvertise: (paramAssetId: string, price: number) => {
+  changeSkinToAdvertise: (
+    paramAssetId: string,
+    price: number,
+    itsRented: boolean,
+  ) => {
     set(({ skinsToAdvertise: oldSkinsToAdvertise }) => {
       const newChangedSkinsToAdvertise = oldSkinsToAdvertise.map((skin) => {
         if (skin.asset_id === paramAssetId) {
-          return { ...skin, skin_price: price }
+          return {
+            ...skin,
+            skin_price: price,
+            sale_type: itsRented ? 'rent' : 'sale',
+          }
         }
         return skin
       })

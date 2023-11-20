@@ -143,7 +143,11 @@ export function ModalSkinShowcaseInfo({
 
   const handleChangeSkinToAdvertise = () => {
     if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
-      changeSkinToAdvertise(id, Values.currencyToNumber(String(watchValue))!)
+      changeSkinToAdvertise(
+        id,
+        Values.currencyToNumber(String(watchValue))!,
+        !!watchRent,
+      )
       onOpenChange()
     }
   }
