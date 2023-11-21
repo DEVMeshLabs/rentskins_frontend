@@ -251,7 +251,7 @@ export function LayoutHeaderTop() {
               >
                 <Image
                   src={trueSession?.user?.image! || BlankUser}
-                  alt={trueSession?.user?.name! || 'Profile'}
+                  alt={'Profile'}
                   className="cursor-pointer rounded-full"
                   width={trueSession?.user?.image! ? 44 : 32}
                   height={trueSession?.user?.image! ? 44 : 32}
