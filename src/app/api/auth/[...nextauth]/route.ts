@@ -70,6 +70,7 @@ async function handler(
             console.log('ok')
 
             console.log(userCreated)
+
             if (userCreated?.status !== 201) {
               await signOut()
             }
