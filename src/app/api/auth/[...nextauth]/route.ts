@@ -5,7 +5,6 @@ import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
 import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
-import { signOut } from 'next-auth/react'
 import { NextRequest } from 'next/server'
 
 async function handler(
@@ -41,10 +40,12 @@ async function handler(
         if ('steam' in token) {
           const newToken = JsonWebToken.create(session)
           const decodeToken = JsonWebToken.decode(newToken)
+
           session.user!.token = JsonWebToken.create({
             ...decodeToken,
             ownerId: token.steam?.steamid!,
           })
+
           session.user!.steam = token.steam
 
           const verifyVAC = await UserService.verifyAccountStatus(
@@ -56,7 +57,7 @@ async function handler(
           )
 
           if (userAlreadyExists?.response?.status === 404) {
-            const userCreated = await UserService.createUser(
+            await UserService.createUser(
               {
                 owner_id: session?.user?.steam?.steamid!,
                 owner_name: session?.user?.name!,
@@ -67,12 +68,13 @@ async function handler(
               session?.user?.token!,
             )
 
-            console.log('ok')
+            // console.log('ok')
 
-            console.log(userCreated)
-            if (userCreated?.status !== 201) {
-              await signOut()
-            }
+            // console.log(userCreated)
+
+            // if (userCreated?.status !== 201) {
+            //   await signOut()
+            // }
           } else if (userAlreadyExists?.status === 200) {
             const { owner_name, picture, steam_url, id } =
               userAlreadyExists?.data

@@ -14,29 +14,6 @@ export default class WalletService {
       .catch((e) => e)
   }
 
-  public static async createEmptyWallet(
-    username: string,
-    steamid: string,
-    token: string,
-  ) {
-    const user = await this.getWalletBySteamID(steamid, token)
-
-    if (!user.data) {
-      return Api.post(
-        '/wallet',
-        {
-          owner_name: username,
-          owner_id: steamid,
-        },
-        { headers: { Authorization: 'Bearer ' + token } },
-      )
-        .then(() => this.getWalletBySteamID(steamid, token))
-        .catch((e) => e)
-    } else {
-      return { message: 'User wallet already exists' }
-    }
-  }
-
   public static async updateWallet(
     username: string,
     steamid: string,
