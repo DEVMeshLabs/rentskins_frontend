@@ -20,18 +20,21 @@ interface ISearchParams {
 }
 
 interface IProps {
-  searchParams: ISearchParams
+  searchParams?: ISearchParams
 }
 
 export default function Home({ searchParams }: IProps) {
-  if (searchParams.sellerid) {
+  if (searchParams?.sellerid) {
     redirect(`/perfil/${searchParams.sellerid}`)
   }
 
   return (
     <main className="h-full">
       <div className="h-screen">
-        <div className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat">
+        <div
+          data-testid="home-hero"
+          className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat"
+        >
           <PageHomeHero />
         </div>
         <div className="h-1/5 w-full bg-mesh-color-neutral-800">
