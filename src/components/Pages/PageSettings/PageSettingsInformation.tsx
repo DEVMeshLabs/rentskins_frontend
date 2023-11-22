@@ -11,6 +11,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import PageSettingsRemoveKeyButton from './PageSettingsRemoveKeyButton'
 import { formResolver as apikeyResolver } from './schemas/information-apikey.schema'
 import { formResolver as cpfResolver } from './schemas/information-cpf.contact.schema'
 import { formResolver as emailResolver } from './schemas/information-email.contact.schema'
@@ -175,7 +176,6 @@ export function PageSettingsInformation() {
       }
     }
   }
-  console.log(trueSession)
 
   const onSubmitKey = async (data: any) => {
     setEditKey(false)
@@ -185,8 +185,6 @@ export function PageSettingsInformation() {
         token: trueSession.user?.token!,
         key: data['api-key'],
       })
-
-      console.log(response)
 
       if (response?.response?.status === 409) {
         Toast.Error('Chave da API inválida.', 2000)
@@ -305,9 +303,7 @@ export function PageSettingsInformation() {
                 errors={errorsKey['api-key']}
                 maxLength={32}
                 placeholder={
-                  isLoading
-                    ? 'Verificando...'
-                    : 'A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5'
+                  isLoading ? 'Verificando...' : 'Sem chave definida.'
                 }
                 className={`${
                   editKey ? 'text-white' : 'text-mesh-color-neutral-200'
@@ -343,7 +339,16 @@ export function PageSettingsInformation() {
                 </HoverCardInfo>
               </div>
             </div>
-            <div className="-mt-3 flex w-3/12 items-center justify-end gap-4">
+            <div className="-mt-3 flex w-2/3 items-center justify-end gap-4">
+              <PageSettingsRemoveKeyButton
+                session={trueSession}
+                showButton={
+                  userConfig?.data?.key !== '' &&
+                  userConfig?.data?.key !== undefined &&
+                  userConfig?.data?.key !== null &&
+                  !editKey
+                }
+              />
               <HoverCardInfo
                 customTrigger={
                   <a
