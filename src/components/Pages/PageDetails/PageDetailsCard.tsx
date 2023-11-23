@@ -23,7 +23,8 @@ export function PageDetailsCard({
     item.skin_category === 'Graffiti' ||
     item.skin_category === 'Container' ||
     item.skin_category === 'Sticker' ||
-    item.skin_category === 'Collectible'
+    item.skin_category === 'Collectible' ||
+    item.skin_category === 'Patch'
   )
 
   const stickersElement =

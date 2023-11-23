@@ -22,12 +22,13 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
     ? item.skin_name.split('™')
     : item.skin_name
-  const thereIsFloat = !(
-    item.skin_category === 'Graffiti' ||
-    item.skin_category === 'Container' ||
-    item.skin_category === 'Sticker' ||
-    item.skin_category === 'Collectible'
-  )
+  const thereIsFloat = [
+    'Sticker',
+    'Container',
+    'Collectible',
+    'Patch',
+    'Graffiti',
+  ]
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
 
@@ -102,16 +103,14 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
             {item.skin_weapon}
           </h1>
           <div className="flex gap-2">
-            {itsRent && (
-              <ModalEditionItemMain
-                activator={
-                  <Common.Button color="invisible">
-                    <IconMagic />
-                  </Common.Button>
-                }
-                item={item}
-              />
-            )}
+            <ModalEditionItemMain
+              activator={
+                <Common.Button color="invisible">
+                  <IconMagic />
+                </Common.Button>
+              }
+              item={item}
+            />
             <Link
               target="_blank"
               rel="noreferrer"
@@ -141,7 +140,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
             })}
           </h1>
           <h1>
-            {thereIsFloat && (
+            {!thereIsFloat.includes(item.skin_category) && (
               <>
                 <strong>FT / </strong>
                 <span className="opacity-60">{item.skin_float}</span>
@@ -149,7 +148,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
             )}
           </h1>
         </div>
-        {item.skin_float && thereIsFloat ? (
+        {item.skin_float && !thereIsFloat.includes(item.skin_category) ? (
           <ColoredLine position={item.skin_float} />
         ) : (
           <div className="h-[6px] w-full" />
