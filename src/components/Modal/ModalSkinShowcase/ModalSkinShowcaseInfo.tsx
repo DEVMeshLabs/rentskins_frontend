@@ -278,7 +278,7 @@ export function ModalSkinShowcaseInfo({
               onChange={() => {
                 if (!apiKey) {
                   Toast.Error(
-                    'Para alugar um item é necessário ter a chave adicionada nas configurações.',
+                    'Para alugar um item, é necessário ter a chave adicionada nas configurações.',
                     7000,
                   )
                   setValue('rent', false)

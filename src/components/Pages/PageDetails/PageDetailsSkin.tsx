@@ -67,7 +67,8 @@ export function PageDetailsSkin({
     item.skin_category === 'Graffiti' ||
     item.skin_category === 'Container' ||
     item.skin_category === 'Sticker' ||
-    item.skin_category === 'Collectible'
+    item.skin_category === 'Collectible' ||
+    item.skin_category === 'Patch'
   )
 
   const skinToBuy = {
@@ -464,8 +465,17 @@ export function PageDetailsSkin({
                     (loading && hasConfigurations) || userStatus === 'loading'
                   }
                   onClick={() => {
-                    Toast.Error('A opção de aluguel ainda não está disponível.')
-                    setRent(false)
+                    if (userConfiguration.key) {
+                      Toast.Error(
+                        'A opção de aluguel ainda não está disponível.',
+                      )
+                      setRent(false)
+                    } else {
+                      Toast.Error(
+                        'Para alugar um item, é necessário ter a chave adicionada nas configurações.',
+                        7000,
+                      )
+                    }
                   }}
                   className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
                 >
