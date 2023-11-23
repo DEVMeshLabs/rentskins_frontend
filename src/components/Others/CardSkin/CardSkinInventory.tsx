@@ -17,7 +17,11 @@ import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
 import ColoredLine from '../ColoredLine'
 
-export function CardSkinInventory() {
+interface Props {
+  apiKey: boolean
+}
+
+export function CardSkinInventory({ apiKey }: Props) {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
   const [page, setPage] = useState(1)
@@ -45,7 +49,7 @@ export function CardSkinInventory() {
     queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        '76561198862407248',
+        trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
