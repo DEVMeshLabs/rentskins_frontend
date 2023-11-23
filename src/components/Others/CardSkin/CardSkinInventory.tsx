@@ -201,6 +201,7 @@ export function CardSkinInventory({ apiKey }: Props) {
                     skinImage={icon_url}
                     marketName={market_hash_name}
                     skinName={market_name}
+                    apiKey={apiKey}
                     skinCategory={category}
                     skinWeapon={weapon}
                     statusFloat={statusFloat || ''}
