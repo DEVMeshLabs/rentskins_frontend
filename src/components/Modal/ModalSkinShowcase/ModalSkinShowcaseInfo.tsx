@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
+import Toast from '@/tools/toast.tool'
 
 type Props = {
   statusFloatText: string
@@ -31,12 +32,14 @@ type Props = {
   isPriceLoading: boolean
   isRentable: boolean
   stickers: Array<{ url: string; name: string }>
+  apiKey: boolean
   onOpenChange: () => void
 }
 
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
   onOpenChange,
+  apiKey,
   skin_category,
   isRentable,
   skin_rarity,
@@ -85,6 +88,7 @@ export function ModalSkinShowcaseInfo({
     watch,
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: formResolver,
@@ -270,6 +274,16 @@ export function ModalSkinShowcaseInfo({
               name="sell-rent"
               register={register('rent')}
               label="Aluguel"
+              checked={watchRent}
+              onChange={() => {
+                if (!apiKey) {
+                  Toast.Error(
+                    'Para alugar um item é necessário ter a chave adicionada nas configurações.',
+                    7000,
+                  )
+                  setValue('rent', false)
+                }
+              }}
             />
           )}
         </div>

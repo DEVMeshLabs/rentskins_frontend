@@ -38,7 +38,7 @@ export default function PageInventoryMiddle() {
         enabled={isLoading}
       >
         {!isLoading && configValidation ? (
-          <CardSkinInventory />
+          <CardSkinInventory apiKey={!!userHasConfig.data.key} />
         ) : (
           <div className="mx-auto w-[60%] rounded-xl bg-mesh-color-others-eerie-black px-5 py-5">
             <Common.Title

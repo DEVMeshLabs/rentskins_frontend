@@ -27,12 +27,14 @@ interface IProps {
   linkForProfile: string
   isRentable: boolean
   stickers: Array<{ url: string; name: string }>
+  apiKey: boolean
 }
 
 export function ModalSkinShowcaseMain({
   activator,
   isEdition,
   skinImage,
+  apiKey,
   skinWeapon,
   isRentable,
   statusFloat,
@@ -104,6 +106,7 @@ export function ModalSkinShowcaseMain({
                 asset_id={asset_id}
                 isSelected={isSelected}
                 id={id}
+                apiKey={apiKey}
                 skin_name={skinName}
                 skin_weapon={skinWeapon}
                 sale_type={'sale'}
