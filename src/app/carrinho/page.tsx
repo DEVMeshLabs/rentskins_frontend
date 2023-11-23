@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 
 const AllSkinsCart = dynamic(() =>
@@ -10,6 +11,11 @@ const PageSummaryCart = dynamic(() =>
     (module) => module.default,
   ),
 )
+
+export const metadata: Metadata = {
+  title: 'Carrinho - RentSkins',
+  description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
+}
 
 export default function Carrinho() {
   return (
