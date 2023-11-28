@@ -103,14 +103,16 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
             {item.skin_weapon}
           </h1>
           <div className="flex gap-2">
-            <ModalEditionItemMain
-              activator={
-                <Common.Button color="invisible">
-                  <IconMagic />
-                </Common.Button>
-              }
-              item={item}
-            />
+            {userItems && (
+              <ModalEditionItemMain
+                activator={
+                  <Common.Button color="invisible">
+                    <IconMagic />
+                  </Common.Button>
+                }
+                item={item}
+              />
+            )}
             <Link
               target="_blank"
               rel="noreferrer"

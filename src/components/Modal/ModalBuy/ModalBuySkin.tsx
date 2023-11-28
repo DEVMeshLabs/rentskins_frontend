@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react'
 import { ModalConfirm } from './ModalComfirm'
 import { ModalInfoSkin } from './ModalInfoSkin'
 import { ModalTitleSkin } from './ModalTitleSkin'
+import { useQuery } from '@tanstack/react-query'
 
 interface IProps {
   onClick: () => void
@@ -26,11 +27,18 @@ export function ModalBuySkin({ onClick }: IProps) {
     setWhatModalOpenToBuySkin,
   } = useSkinsStore()
 
+  const { data: inventory, refetch } = useQuery({
+    queryKey: ['inventory', trueSession.user?.steam?.steamid!],
+    queryFn: () =>
+      SkinService.findBySkinsInventory(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+    enabled: false,
+  })
+
   const checkInventoryAvailability = async (): Promise<boolean> => {
-    const inventory = await SkinService.findBySkinsInventory(
-      trueSession.user?.steam?.steamid!,
-      trueSession.user?.token!,
-    )
+    await refetch()
 
     if (inventory && inventory?.data && inventory?.data?.length > 0) return true
 
