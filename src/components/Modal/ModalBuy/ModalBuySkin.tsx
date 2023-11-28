@@ -27,19 +27,17 @@ export function ModalBuySkin({ onClick }: IProps) {
     setWhatModalOpenToBuySkin,
   } = useSkinsStore()
 
-  const { data: inventory, refetch } = useQuery({
+  const { data: inventory, isLoading } = useQuery({
     queryKey: ['inventory', trueSession.user?.steam?.steamid!],
     queryFn: () =>
       SkinService.findBySkinsInventory(
         trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
       ),
-    enabled: false,
+    enabled: !!trueSession.user?.steam?.steamid!,
   })
 
   const checkInventoryAvailability = async (): Promise<boolean> => {
-    await refetch()
-
     if (inventory && inventory?.data && inventory?.data?.length > 0) return true
 
     Toast.Error(
@@ -89,7 +87,7 @@ export function ModalBuySkin({ onClick }: IProps) {
         </div>
         <hr className="w-full border-mesh-color-neutral-200" />
         <ModalConfirm
-          itemAvailable={itemAvailable}
+          itemAvailable={itemAvailable && !isLoading}
           onClick={async () => {
             if (!(await checkInventoryAvailability())) {
               return null
