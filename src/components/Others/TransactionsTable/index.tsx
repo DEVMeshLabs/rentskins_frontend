@@ -11,8 +11,10 @@ export function TransactionsTable({ data, steamid }: IProps) {
   const treatStatus = (status: string) => {
     const generateElement = (className: string) => {
       return (
-        <div>
-          <span className={'rounded-full px-4 py-2 ' + className}>
+        <div className="text-sm 2xl:text-base">
+          <span
+            className={'rounded-full px-2 py-1 2xl:px-4 2xl:py-2 ' + className}
+          >
             {status}
           </span>
         </div>
@@ -60,43 +62,42 @@ export function TransactionsTable({ data, steamid }: IProps) {
                 height={64}
                 alt="Image"
                 draggable={false}
-                className="w-28"
+                className="w-20 2xl:w-28"
               />
             </div>
           </div>
-          <div className="flex flex-col justify-between gap-1 text-start">
-            <p
-              className={`text-md w-48 overflow-hidden text-ellipsis
-          font-medium ${
-            item.skin.skin_name.includes('StatTrak')
-              ? 'text-mesh-color-secondary-800'
-              : 'text-white'
-          } `}
+          <div className="mr-4 flex flex-col justify-between gap-1 text-ellipsis text-start">
+            <span
+              className={`overflow-hidden text-ellipsis text-sm font-medium
+              2xl:text-base ${
+                item.skin.skin_name.includes('StatTrak')
+                  ? 'text-mesh-color-secondary-800'
+                  : 'text-white'
+              } `}
             >
               {item.skin.skin_name}
-            </p>
-            <p className="text-sm text-mesh-color-neutral-300">
-              {' '}
-              {item.skin.skin_weapon}{' '}
-            </p>
+            </span>
+            <span className="text-xs text-mesh-color-neutral-300 2xl:text-sm">
+              {item.skin.skin_weapon}
+            </span>
           </div>
-          <div className="w-48 text-start">
-            <p className="text-md font-medium text-white">
+          <div className="flex w-fit flex-col gap-1 text-start">
+            <span className="text-sm font-medium text-white 2xl:text-base">
               {item.skin.status_float}
-            </p>
-            <p className="text-mesh-color-neutral-300">
+            </span>
+            <span className="text-xs text-mesh-color-neutral-300 2xl:text-sm">
               {item.skin.skin_float}
-            </p>
+            </span>
           </div>
           {treatStatus(item.status)}
-          <div className="text-white">
+          <div className="text-sm text-white 2xl:text-base">
             {item.skin.skin_price.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
             })}
           </div>
-          <div className="text-white">
+          <div className="text-sm text-white 2xl:text-base">
             {item.buyer_id === steamid ? 'Compra' : 'Venda'}
           </div>
         </div>
