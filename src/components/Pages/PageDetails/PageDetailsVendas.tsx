@@ -23,8 +23,6 @@ export function PageDetailsVendas({ latestSales }: IProps) {
     }
   }
 
-  console.log(latestSales)
-
   const renderLatestSales =
     latestSales && latestSales.length > 0 ? (
       latestSales.map(({ date, price }, index) => {

@@ -15,7 +15,7 @@ export async function generateMetadata({
   const response = await UserService.getUser(String(userSteamId))
 
   return {
-    title: `${response?.data?.owner_name || 'Perfil'} - RentSkins`,
+    title: `Perfil de ${response?.data?.owner_name || 'Perfil'} - RentSkins`,
     description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
   }
 }

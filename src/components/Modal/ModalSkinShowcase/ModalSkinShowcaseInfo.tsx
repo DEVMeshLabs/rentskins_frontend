@@ -165,7 +165,7 @@ export function ModalSkinShowcaseInfo({
   }
 
   return (
-    <div className="flex h-full w-[40%] flex-col justify-center ">
+    <div className="flex h-full w-[70%] flex-col justify-center transition-all 2xl:w-[50%] ">
       <div>
         <Common.Title color="white" className="text-[24px]">
           {skin_name}

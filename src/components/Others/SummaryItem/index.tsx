@@ -16,7 +16,6 @@ export default function LineInfosSummaryh({
   cash = false,
   size = 'base',
 }: Props) {
-  console.log(+value - 0.05)
   const formattedNumber = cash
     ? parseFloat(value).toLocaleString('pt-BR', {
         style: 'currency',

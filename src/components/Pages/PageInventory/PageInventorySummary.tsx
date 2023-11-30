@@ -58,7 +58,6 @@ export default function PageInventorySummary() {
 
   useEffect(() => {
     if (itemAnnounced) {
-      console.log(itemAnnounced)
       if (itemAnnounced?.request.status === 201) {
         window.location.replace(pathname + '?success=true')
       } else if (itemAnnounced?.request.status === 409) {

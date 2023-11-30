@@ -67,14 +67,6 @@ async function handler(
               },
               session?.user?.token!,
             )
-
-            // console.log('ok')
-
-            // console.log(userCreated)
-
-            // if (userCreated?.status !== 201) {
-            //   await signOut()
-            // }
           } else if (userAlreadyExists?.status === 200) {
             const { owner_name, picture, steam_url, id } =
               userAlreadyExists?.data

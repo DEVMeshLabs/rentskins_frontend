@@ -35,7 +35,7 @@ export function PageDetailsPerfil({ seller }: IProps) {
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="flex flex-col justify-between gap-8 p-4">
         <div className="flex items-center">
-          <Link href={`/perfil/${seller.id}`} className="cursor-pointer">
+          <Link href={`/perfil/${seller.owner_id}`} className="cursor-pointer">
             <Image
               src={
                 seller.picture &&

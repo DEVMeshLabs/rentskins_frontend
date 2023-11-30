@@ -91,7 +91,6 @@ export function ModalInfoItem({
   })
 
   useEffect(() => {
-    console.log(data)
     if (isRefetching) {
       if (data?.request.status === 204) {
         onClick()

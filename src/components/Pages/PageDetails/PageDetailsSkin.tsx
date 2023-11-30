@@ -227,11 +227,9 @@ export function PageDetailsSkin({
 
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
-      console.log(wasRaised)
       if (userStatus === 'authenticated') {
         if (hasConfigurations) {
           const handleCart = async () => {
-            console.log('asdf')
             setMethodSelected(undefined)
             await createCart()
             setWasRaised(true)
@@ -321,10 +319,12 @@ export function PageDetailsSkin({
     proceedItem,
     router,
     deleteItem,
+    item,
+    session,
+    skinName,
   ])
 
   useEffect(() => {
-    console.log(data)
     if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
         Toast.Success('Item adicionado ao carrinho!')
@@ -408,12 +408,14 @@ export function PageDetailsSkin({
           </div>
         </div>
 
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            Paint Seed
-          </Common.Title>
-          <p className="text-white">{defaultID}</p>
-        </div>
+        {defaultID && (
+          <div className="flex justify-between">
+            <Common.Title className="text-mesh-color-neutral-200">
+              Paint Seed
+            </Common.Title>
+            <p className="text-white">{defaultID}</p>
+          </div>
+        )}
 
         {thereIsFloat && (
           <div className="flex justify-between">

@@ -21,7 +21,6 @@ const useSkinsStore = create<ISkinsStore>((set) => ({
   removeSkinToAdvertise: (paramAssetId: string) => {
     set(({ skinsToAdvertise }) => {
       const newSkinsToAdvertise = skinsToAdvertise.filter(({ asset_id }) => {
-        console.log(asset_id)
         return asset_id !== paramAssetId
       })
       return { skinsToAdvertise: newSkinsToAdvertise }

@@ -29,7 +29,7 @@ export default function SkinsSemelhantes({
         Semelhantes
       </Common.Title>
       <div className="w-full">
-        <div className="flex gap-4 overflow-x-auto pb-3">
+        <div className="flex gap-4 overflow-x-auto scroll-smooth pb-3">
           {sameItems && sameItems?.length > 0 ? (
             sameItems.map((item: ISkins, index: number) => {
               return <OtherCard item={item} key={item.id} />

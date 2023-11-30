@@ -56,7 +56,6 @@ export default class SkinService {
     steamId: string,
     page?: number | string,
   ) {
-    console.log(steamId)
     if (page) {
       return Api.get<ISkinsResponse>(
         `/skins/seller/user/${steamId}?page=${page}`,

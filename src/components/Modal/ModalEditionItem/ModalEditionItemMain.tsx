@@ -2,11 +2,11 @@
 'use client'
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
+import { ISkins } from '@/interfaces/ISkins'
 import * as Dialog from '@radix-ui/react-dialog'
 import React, { useState } from 'react'
-import { ModalItemShow } from './ModalItemShow'
-import { ISkins } from '@/interfaces/ISkins'
 import { ModalInfoItem } from './ModalInfoItem'
+import { ModalItemShow } from './ModalItemShow'
 
 interface IProps {
   activator: React.ReactNode
