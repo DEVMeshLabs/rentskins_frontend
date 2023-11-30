@@ -232,7 +232,7 @@ export function PageSettingsInformation() {
                 labelClassName="w-full"
                 className={`${
                   editTradeLink ? 'text-white' : 'text-mesh-color-neutral-200'
-                } w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent
+                } w-[90%] rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent 2xl:w-full
                  ${watchTradelink !== '' ? 'pr-14' : 'pr-3'}
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
@@ -256,7 +256,7 @@ export function PageSettingsInformation() {
                     target="_blank"
                     rel="noopener noreferrer"
                     href="http://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
-                    className="max-h-[40px] w-28 overflow-hidden text-ellipsis rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center opacity-70 hover:opacity-100 disabled:opacity-70"
+                    className="flex h-full max-h-[40px] w-28 items-center justify-center overflow-hidden text-ellipsis rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center text-sm opacity-70 hover:opacity-100 disabled:opacity-70 2xl:text-base"
                   >
                     Obter URL
                   </a>
@@ -307,8 +307,8 @@ export function PageSettingsInformation() {
                 }
                 className={`${
                   editKey ? 'text-white' : 'text-mesh-color-neutral-200'
-                } w-[390px] rounded-md bg-mesh-color-neutral-600 py-2 pl-3 ring-mesh-color-primary-1900 transition-all
-                placeholder:text-mesh-color-neutral-300 focus:ring-2 disabled:bg-transparent`}
+                } w-[300px] rounded-md bg-mesh-color-neutral-600 py-2 pl-3 ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300
+                focus:ring-2 disabled:bg-transparent 2xl:w-[390px]`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
               <div className="relative -top-2">
@@ -355,7 +355,7 @@ export function PageSettingsInformation() {
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://steamcommunity.com/dev/apikey"
-                    className="max-h-[40px] w-28 overflow-hidden text-ellipsis rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center opacity-70 hover:opacity-100 disabled:opacity-70"
+                    className="flex h-full max-h-[40px] w-28 items-center justify-center overflow-hidden text-ellipsis rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center text-sm opacity-70 hover:opacity-100 disabled:opacity-70 2xl:text-base"
                   >
                     Obter Chave
                   </a>

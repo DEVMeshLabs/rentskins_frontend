@@ -42,7 +42,7 @@ export default function PageSettingsRemoveKeyButton({
     <ModalBlank
       contentClassname="w-1/3 h-1/3 flex items-center"
       activator={
-        <Common.Button className="w-29 max-h-[40px] overflow-hidden text-ellipsis rounded-md border-none px-2 py-2 text-center font-bold text-mesh-color-rarity-lowest opacity-70 hover:opacity-100 disabled:opacity-70">
+        <Common.Button className="w-29 h-full max-h-[40px] overflow-hidden text-ellipsis rounded-md border-none px-2 py-2 text-center text-xs font-bold text-mesh-color-rarity-lowest opacity-70 hover:opacity-100 disabled:opacity-70 2xl:text-base">
           Remover Chave
         </Common.Button>
       }
