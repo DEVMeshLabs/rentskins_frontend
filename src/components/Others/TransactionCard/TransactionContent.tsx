@@ -10,8 +10,8 @@ export function TransactionContent({
   textIsCurrency = false,
 }: IProps) {
   return (
-    <div className="flex h-full min-w-[150px] max-w-[150px] items-center gap-4">
-      <div className="mx-auto flex flex-col">
+    <div className="flex h-full w-[150px] items-center justify-start gap-4">
+      <div className="flex w-full flex-col">
         <span>
           {!textIsCurrency
             ? text
@@ -21,7 +21,7 @@ export function TransactionContent({
                 minimumFractionDigits: 2,
               })}
         </span>
-        <span className="text-white/40"> {subtext} </span>
+        <span className="text-sm text-white/40 2xl:text-base"> {subtext} </span>
       </div>
     </div>
   )
