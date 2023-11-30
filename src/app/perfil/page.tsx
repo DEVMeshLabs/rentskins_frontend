@@ -2,7 +2,7 @@ import PageProfileSelf from '@/components/Pages/PageProfile/PageProfileSelf'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: `Perfil - RentSkins`,
+  title: `Meu Perfil - RentSkins`,
   description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 

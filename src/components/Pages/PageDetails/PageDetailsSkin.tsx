@@ -320,10 +320,12 @@ export function PageDetailsSkin({
     proceedItem,
     router,
     deleteItem,
+    item,
+    session,
+    skinName,
   ])
 
   useEffect(() => {
-    console.log(data)
     if (wasRaised && !recreatingCart) {
       if (data && data.request.status === 201) {
         Toast.Success('Item adicionado ao carrinho!')
