@@ -48,7 +48,7 @@ export function ModalSkinShowcaseSkin({
     ))
 
   return (
-    <div className="relative mr-6 mt-2 flex h-full w-[60%] select-none items-center justify-center rounded-t-lg bg-mesh-image-details bg-cover bg-no-repeat">
+    <div className="relative mr-6 mt-2 flex h-[80%] w-[60%] select-none items-center justify-center rounded-t-lg bg-mesh-image-details bg-cover bg-no-repeat 2xl:h-full">
       <Image
         src={`https://steamcommunity-a.akamaihd.net/economy/image/${icon_url}`}
         alt={weapon}
