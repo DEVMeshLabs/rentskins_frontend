@@ -47,7 +47,7 @@ export default function PageNotificationTransaction({
 
       return (
         <TransactionCard.Root key={'transactions-' + index}>
-          <div className="flex items-center gap-4">
+          <div className="flex min-w-[500px] max-w-[500px] items-center gap-4">
             <TransactionCard.Image
               image={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
               alt={item.skin.skin_name}
