@@ -23,8 +23,6 @@ export default function PageStoreSkins() {
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
   const { selectedFilters, typeFilter } = useFilterStore()
 
-  console.log(category)
-
   useEffect(() => {
     if (!category) {
       router.push(`/loja?search=${search}&page=${page}`)
@@ -43,7 +41,6 @@ export default function PageStoreSkins() {
   } = useQuery({
     queryKey: ['skinsCategory', category],
     queryFn: async () => {
-      console.log(category)
       if (search !== null && search !== undefined && search !== '') {
         const data = await SkinService.findBySearchParameter(search, 'name')
         return data
@@ -56,8 +53,6 @@ export default function PageStoreSkins() {
     },
     keepPreviousData: true,
   })
-
-  console.log(data)
 
   const organized = {
     biggestPrice: (a: ISkins, b: ISkins) =>

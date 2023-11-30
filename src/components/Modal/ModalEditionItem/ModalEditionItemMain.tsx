@@ -2,11 +2,11 @@
 'use client'
 import Common from '@/components/Common'
 import { IconClose } from '@/components/Icons/IconClose'
+import { ISkins } from '@/interfaces/ISkins'
 import * as Dialog from '@radix-ui/react-dialog'
 import React, { useState } from 'react'
-import { ModalItemShow } from './ModalItemShow'
-import { ISkins } from '@/interfaces/ISkins'
 import { ModalInfoItem } from './ModalInfoItem'
+import { ModalItemShow } from './ModalItemShow'
 
 interface IProps {
   activator: React.ReactNode
@@ -18,7 +18,6 @@ export function ModalEditionItemMain({ activator, item }: IProps) {
   const handleOpen = () => setModalOpen((state) => !state)
   const isRentable = ['Sticker', 'Container', 'Collectible']
 
-  console.log(item.skin_category)
   return (
     <Dialog.Root open={modalOpen} onOpenChange={handleOpen}>
       <Dialog.Trigger asChild>{activator}</Dialog.Trigger>

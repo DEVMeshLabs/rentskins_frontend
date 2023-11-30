@@ -42,7 +42,6 @@ export function ModalInfoItem({
     queryFn: () => SkinService.getItemAveragePrice([skin_name]),
     enabled: !!skin_name,
   })
-  console.log(averagePrice)
 
   const {
     register,
@@ -92,7 +91,6 @@ export function ModalInfoItem({
   })
 
   useEffect(() => {
-    console.log(data)
     if (isRefetching) {
       if (data?.request.status === 204) {
         onClick()

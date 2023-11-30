@@ -25,8 +25,6 @@ export default function PageSettingsRemoveKeyButton({
       key: '',
     })
 
-    console.log(response)
-
     if (response?.status !== 204) {
       Toast.Error(
         'Não foi possível remover a chave, tente novamente mais tarde.',

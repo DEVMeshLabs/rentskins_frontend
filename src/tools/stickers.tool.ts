@@ -36,26 +36,5 @@ export class Stickers {
     )
 
     return stickersObject
-    // if (
-    //   !stickerMatches ||
-    //   !nameMatches ||
-    //   stickerMatches.length !== nameMatches.length
-    // ) {
-    //   console.error('Erro na extração de dados')
-    //   return []
-    // }
-
-    // const stickersArray = []
-
-    // for (let i = 0; i < stickerMatches.length; i++) {
-    //   const url = stickerMatches[i].match(/src="([^"]+)"/)![1]
-    //   const name = nameMatches[i].replace('Sticker: ', '').trim()
-
-    //   stickersArray.push({ name, url })
-    // }
-
-    // console.log(stickersArray)
-
-    // return stickersArray
   }
 }
