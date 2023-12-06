@@ -134,8 +134,12 @@ export function PageDetailsSkin({
     isRefetching: refetchingAvailability,
   } = useQuery({
     queryKey: ['checkItemAvailability', item.asset_id, item.seller_id],
-    queryFn: () =>
-      SkinService.postCheckItemAvailability(item.asset_id, item.seller_id),
+    queryFn: () => {
+      return SkinService.postCheckItemAvailability(
+        item.asset_id,
+        item.seller_id,
+      )
+    },
     enabled: false,
     cacheTime: 0,
   })
@@ -192,6 +196,7 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations, itemAvailable])
 
   useEffect(() => {
+    console.log(resultAvailability)
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)
@@ -276,6 +281,7 @@ export function PageDetailsSkin({
   ])
 
   useEffect(() => {
+    console.log(resultAvailability)
     if (resultAvailability?.request && !refetchingAvailability) {
       if (resultAvailability?.request?.status === 200) {
         proceedItem()
@@ -296,6 +302,7 @@ export function PageDetailsSkin({
           router.push('/')
           setOpenModalBuySkin(false)
         } else {
+          console.log('Aqui foi 2')
           NotificationServices.createNewNotification(
             item.seller_id,
             session?.user?.token!,

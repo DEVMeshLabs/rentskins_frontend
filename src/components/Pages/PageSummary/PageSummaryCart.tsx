@@ -20,9 +20,11 @@ export default function PageSummaryCart() {
 
   useEffect(() => {
     const totalPrice = String(
-      skinsFromCart.reduce((acc, { skin: { skin_price, id } }) => {
-        if (skinsToBuy.some(({ skin_id }) => id === skin_id)) {
-          return acc + skin_price
+      skinsFromCart.reduce((acc, { skin: { skin_price, id, status } }) => {
+        if (status === null) {
+          if (skinsToBuy.some(({ skin_id }) => id === skin_id)) {
+            return acc + skin_price
+          }
         }
         return acc
       }, 0),
@@ -47,13 +49,24 @@ export default function PageSummaryCart() {
   }
 
   useEffect(() => {
-    if (data?.request.status === 400) {
+    if (data?.request.status === 201) {
+      const totalItems: Array<{}> = JSON.parse(data.config.data)
+      Toast.Success(
+        `${totalItems.length} ite${
+          totalItems.length > 1 ? 'ns comprados' : 'm comprado'
+        } com sucesso.`,
+      )
+      window.location.reload()
+    } else if (data?.request.status === 400) {
       Toast.Error('Saldo insuficiente.')
     } else if (data?.request.status === 409) {
       Toast.Error(
         `O item ${data?.request.response
           .split('#!%')[1]
-          .replace('"}', '')} já foi vendido.`,
+          .replace('"}', '')
+          .split(' ')
+          .slice(0, -1)
+          .join(' ')} já foi vendido.`,
       )
     }
   }, [data, refetch, isRefetching])

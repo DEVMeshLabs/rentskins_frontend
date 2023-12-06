@@ -105,6 +105,7 @@ export default class SkinService {
     assetId: string,
     ownerId: string,
   ) {
+    console.log(assetId)
     const result: AxiosResponse<ISkinsAvailability, any> = await Api.post(
       `/skins/availability/${ownerId}`,
       {
