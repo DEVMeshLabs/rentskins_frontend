@@ -32,7 +32,7 @@ export default function PageSummaryCart() {
     setTotalPrice(String(Number(totalPrice) - 0.05 * Number(totalPrice)))
   }, [skinsToBuy, skinsFromCart])
 
-  const { data, refetch, isRefetching } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryKey: ['createTransactions'],
     queryFn: () =>
       TransactionsService.createTransaction({
@@ -43,7 +43,7 @@ export default function PageSummaryCart() {
   })
 
   const handleCreateTransation = () => {
-    if (skinsToBuy.length > 0 && !isRefetching) {
+    if (skinsToBuy.length > 0) {
       refetch()
     }
   }
@@ -56,7 +56,7 @@ export default function PageSummaryCart() {
           totalItems.length > 1 ? 'ns comprados' : 'm comprado'
         } com sucesso.`,
       )
-      window.location.reload()
+      setTimeout(() => window.location.reload(), 3000)
     } else if (data?.request.status === 400) {
       Toast.Error('Saldo insuficiente.')
     } else if (data?.request.status === 409) {
@@ -69,7 +69,7 @@ export default function PageSummaryCart() {
           .join(' ')} já foi vendido.`,
       )
     }
-  }, [data, refetch, isRefetching])
+  }, [data, refetch])
 
   return (
     <aside className="sticky top-6 flex w-[378px] flex-col gap-28 rounded-xl bg-[#222723] px-4 py-6">
@@ -99,14 +99,10 @@ export default function PageSummaryCart() {
         <Common.Button
           onClick={handleCreateTransation}
           className="h-32 w-full flex-1 p-28 text-base font-semibold"
-          disabled={skinsToBuy.length === 0 || isRefetching}
+          disabled={skinsToBuy.length === 0 || isFetching}
           color="green"
         >
-          <LayoutLoading
-            className="h-7 w-7"
-            enabled={isRefetching}
-            label={null}
-          >
+          <LayoutLoading className="h-7 w-7" enabled={isFetching} label={null}>
             Comprar agora
           </LayoutLoading>
         </Common.Button>
