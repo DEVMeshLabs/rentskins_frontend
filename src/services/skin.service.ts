@@ -54,14 +54,17 @@ export default class SkinService {
 
   public static findAllSkinsByIdSeller(
     steamId: string,
-    page?: number | string,
+    page?: number | string | undefined,
+    showDeleted = false,
   ) {
     if (page) {
       return Api.get<ISkinsResponse>(
-        `/skins/seller/user/${steamId}?page=${page}`,
+        `/skins/seller/user/${steamId}?page=${page}&deletedAt=${showDeleted}`,
       )
     } else {
-      return Api.get<ISkinsResponse>(`/skins/seller/user/${steamId}`)
+      return Api.get<ISkinsResponse>(
+        `/skins/seller/user/${steamId}?deletedAt=${showDeleted}`,
+      )
     }
   }
 
