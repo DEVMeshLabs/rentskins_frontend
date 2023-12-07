@@ -46,6 +46,7 @@ export function CardSkinInventory() {
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
         trueSession.user?.steam?.steamid!,
+        // trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),

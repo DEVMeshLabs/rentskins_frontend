@@ -11,8 +11,7 @@ export function TransactionLabel({ name, weapon }: IProps) {
           name.includes('StatTrak') && 'text-mesh-color-secondary-800'
         }`}
       >
-        M4A4 | In Living Color (Field-Tested)
-        {/* {name} */}
+        {name}
       </span>
       <span className="text-xs text-white/40 2xl:text-base"> {weapon} </span>
     </div>
