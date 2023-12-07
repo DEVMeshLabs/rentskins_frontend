@@ -216,10 +216,10 @@ export function PageDetailsSkin({
     ) {
       setLoading(false)
       setItemAvailable(false)
-      Toast.Error(
-        'Desculpe, infelizmente esse item não está mais disponível.',
-        7000,
-      )
+      // Toast.Error(
+      //   'Desculpe, infelizmente esse item não está mais disponível.',
+      //   7000,
+      // )
     }
   }, [
     resultAvailability,
@@ -271,14 +271,7 @@ export function PageDetailsSkin({
         return Toast.Error('Tente novamente após alguns segundos.')
       }
     }
-  }, [
-    methodSelected,
-    createCart,
-    userStatus,
-    pathname,
-    hasConfigurations,
-    wasRaised,
-  ])
+  }, [methodSelected, createCart, userStatus, pathname, hasConfigurations])
 
   useEffect(() => {
     console.log(resultAvailability)
