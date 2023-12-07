@@ -148,7 +148,9 @@ export default function CartSkinCard({
         </div>
         <Common.Button
           onClick={async (event) => {
+            setSelected(false)
             await refetch()
+            deleteSkinsToBuy(skinId)
             handleOnClick(event)
           }}
           className="group flex h-full w-0 items-center justify-center

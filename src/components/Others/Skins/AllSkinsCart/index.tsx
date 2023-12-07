@@ -31,7 +31,8 @@ export default function AllSkinsCart() {
   useEffect(() => {
     if (dataSkinsCart?.data) {
       const skinsFiltred = dataSkinsCart.data.SkinToCart.filter(
-        ({ skin: { deletedAt } }) => deletedAt === null,
+        ({ skin: { deletedAt, status } }) =>
+          deletedAt === null && status === null,
       )
       setSkinsFromCart(skinsFiltred)
     }
@@ -68,30 +69,30 @@ export default function AllSkinsCart() {
                 },
                 idx: number,
               ) => {
-                // if (status === null || status === 'Falhou') {
-                return (
-                  <CartSkinCard
-                    sellerId={seller_id}
-                    skinId={id}
-                    userId={
-                      trueSession.user && trueSession.user?.steam?.steamid
-                    }
-                    statusFloat={status_float}
-                    skinPrice={skin_price}
-                    skinWeapon={skin_weapon}
-                    iconUrl={skin_image}
-                    name={skin_name}
-                    nameColor={name_color}
-                    key={`${name}-${idx}`}
-                    handleOnClick={() => {
-                      deleteSkinFromCart(id)
-                      deleteSkinFromCart(id)
-                    }}
-                    modelId={modelId}
-                  />
-                )
-                // }
-                // return false
+                if (status === null) {
+                  return (
+                    <CartSkinCard
+                      sellerId={seller_id}
+                      skinId={id}
+                      userId={
+                        trueSession.user && trueSession.user?.steam?.steamid
+                      }
+                      statusFloat={status_float}
+                      skinPrice={skin_price}
+                      skinWeapon={skin_weapon}
+                      iconUrl={skin_image}
+                      name={skin_name}
+                      nameColor={name_color}
+                      key={`${name}-${idx}`}
+                      handleOnClick={() => {
+                        deleteSkinFromCart(id)
+                        deleteSkinFromCart(id)
+                      }}
+                      modelId={modelId}
+                    />
+                  )
+                }
+                return false
               },
             )
           ) : (
