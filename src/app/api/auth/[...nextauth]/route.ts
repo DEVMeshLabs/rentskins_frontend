@@ -3,6 +3,7 @@
 import ISteamUser from '@/interfaces/steam.interface'
 import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
+import moment from 'moment'
 import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
 import { NextRequest } from 'next/server'
@@ -29,6 +30,27 @@ async function handler(
       error: '/oops',
     },
     callbacks: {
+      async signIn({ user, account, credentials, email, profile }) {
+        console.log(user)
+        console.log(account)
+        console.log(credentials)
+        console.log(email)
+        console.log(profile)
+        const userAlreadyExists = await UserService.getUser(user?.id!)
+
+        console.log(new Date(profile?.timecreated))
+        console.log(userAlreadyExists)
+
+        const now = moment()
+        const date = moment(profile?.timecreated)
+        const difference = now.diff(date)
+
+        console.log(difference)
+        console.log(difference.months)
+        // console.log(moment(now.diff(date), 'months', true).)
+
+        return user
+      },
       jwt({ token, account, profile }) {
         if (account?.provider === PROVIDER_ID) {
           token.steam = profile
@@ -86,6 +108,16 @@ async function handler(
 
           session.user!.steam.banned = verifyVAC.data
         }
+
+        const now = moment()
+        const date = moment(session?.user?.steam?.timecreated)
+        const difference = now.diff(date)
+
+        console.log(date.get('months'))
+        console.log(date.get('month'))
+
+        console.log(moment(difference))
+        console.log(difference.months)
 
         return session as ISteamUser
       },
