@@ -22,8 +22,10 @@ export function PageDetailsPerfil({ seller }: IProps) {
       : moment(seller.steam_created_date).locale('pt-br').format('D MMM, YYYY')
 
   const deliveryRate =
-    seller.total_exchanges_completed && seller.total_exchanges
-      ? (seller.total_exchanges_completed / seller.total_exchanges) * 100
+    seller.total_exchanges_completed > 0 || seller.total_exchanges_failed > 0
+      ? (seller.total_exchanges_completed /
+          (seller.total_exchanges_completed + seller.total_exchanges_failed)) *
+        100
       : 'Sem informações'
 
   const deliveryTime =
@@ -119,7 +121,7 @@ export function PageDetailsPerfil({ seller }: IProps) {
               Total de Transações
             </Common.Title>
             <span className="font-medium text-white">
-              {seller.total_exchanges}
+              {seller.total_exchanges_completed + seller.total_exchanges_failed}
             </span>
           </div>
 

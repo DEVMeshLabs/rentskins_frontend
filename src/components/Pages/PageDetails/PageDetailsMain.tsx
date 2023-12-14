@@ -46,8 +46,14 @@ export default function PageDetailsMain({ item, seller }: IProps) {
 
   const itemsToCheckAveragePrice = [
     item.skin_name,
-    ...item.stickers.map((sticker) => 'Sticker | ' + sticker.name),
+    ...item.stickers.map((sticker) =>
+      item.skin_category === 'Agent'
+        ? 'Patch'
+        : 'Sticker' + ' | ' + sticker.name,
+    ),
   ]
+
+  console.log(item)
 
   const { data: averagePrice, isLoading: isLoadingAveragePrice } = useQuery({
     queryKey: ['GetItemAveragePrice', item.skin_name],

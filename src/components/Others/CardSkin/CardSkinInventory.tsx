@@ -37,6 +37,7 @@ export function CardSkinInventory({ apiKey }: Props) {
     queryFn: () =>
       SkinService.findAllSkinsByIdSeller(
         trueSession?.user?.steam?.steamid!,
+        // '76561198862407248',
         undefined,
         true,
       ),
@@ -53,7 +54,7 @@ export function CardSkinInventory({ apiKey }: Props) {
     queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        trueSession.user?.steam?.steamid!,
+        '76561198862407248',
         // trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
@@ -194,7 +195,10 @@ export function CardSkinInventory({ apiKey }: Props) {
                 const linkForPreviewSkin = actions ? actions[0].link : '#'
 
                 const stickers = Stickers.extractStickersFromString(
-                  descriptions[6]?.value,
+                  categoryType[0].name === 'Agent'
+                    ? descriptions[4]?.value
+                    : descriptions[6]?.value,
+                  categoryType[0].name === 'Agent' ? 'Patch' : 'Sticker',
                 )
 
                 return (
@@ -202,6 +206,7 @@ export function CardSkinInventory({ apiKey }: Props) {
                     isRentable={isRentable}
                     stickers={stickers}
                     key={assetid}
+                    type={categoryType[0].name}
                     asset_id={assetid}
                     skinImage={icon_url}
                     marketName={market_hash_name}

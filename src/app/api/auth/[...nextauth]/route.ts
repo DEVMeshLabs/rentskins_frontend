@@ -3,6 +3,7 @@
 import ISteamUser from '@/interfaces/steam.interface'
 import UserService from '@/services/user.service'
 import JsonWebToken from '@/tools/jsonwebtoken.tool'
+import moment from 'moment'
 import NextAuth from 'next-auth'
 import SteamProvider, { PROVIDER_ID } from 'next-auth-steam'
 import { NextRequest } from 'next/server'
@@ -29,6 +30,23 @@ async function handler(
       error: '/oops',
     },
     callbacks: {
+      async signIn({ user, account, credentials, email, profile }) {
+        const date = moment.unix(profile?.timecreated)
+        const now = moment()
+        const monthsDifference = now.diff(date, 'months')
+
+        const verifyVAC = await UserService.verifyAccountStatus(user?.id!)
+
+        if (monthsDifference <= 3) {
+          return '/?error=InvalidAccountDate'
+        }
+
+        if (verifyVAC?.data) {
+          return '/?error=SignInAccountVACBanned'
+        }
+
+        return user
+      },
       jwt({ token, account, profile }) {
         if (account?.provider === PROVIDER_ID) {
           token.steam = profile

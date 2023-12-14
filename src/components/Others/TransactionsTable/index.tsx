@@ -30,6 +30,8 @@ export function TransactionsTable({ data, steamid }: IProps) {
         return generateElement(
           'bg-mesh-color-rarity-medium/10 text-mesh-color-rarity-medium',
         )
+      case 'Em análise':
+        return generateElement('bg-purple-400/10 text-purple-400')
       case 'Falhou':
         return generateElement(
           'bg-mesh-color-rarity-low/10 text-mesh-color-rarity-low',

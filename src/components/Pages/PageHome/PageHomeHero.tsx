@@ -1,10 +1,26 @@
 'use client'
 
 import { CommonSteamButton } from '@/components/Common/CommonSteamButton'
+import { TypeErrors } from '@/interfaces/tools/general.interface'
+import GeneralTool from '@/tools/general.tool'
 import { useSession } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
-export default function PageHomeHero() {
+interface IProps {
+  error: TypeErrors | undefined
+}
+
+export default function PageHomeHero({ error }: IProps) {
   const { status } = useSession()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (error) {
+      GeneralTool.generateToastError(error!, router, pathname)
+    }
+  }, [error, pathname, router])
 
   return (
     <div className="flex h-4/6 flex-col items-center justify-center bg-mesh-image-hero bg-cover bg-center bg-no-repeat">

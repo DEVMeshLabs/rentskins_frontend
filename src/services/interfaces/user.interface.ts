@@ -23,6 +23,7 @@ export interface IGetUser {
   delivery_time: string
   total_exchanges: number
   total_exchanges_completed: number
+  total_exchanges_failed: number
   reliability: string
   createdAt: Date
   updatedAt: Date
