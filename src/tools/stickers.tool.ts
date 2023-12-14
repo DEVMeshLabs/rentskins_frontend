@@ -1,9 +1,12 @@
 export class Stickers {
-  public static extractStickersFromString(string: string) {
+  public static extractStickersFromString(
+    string: string,
+    type: 'Sticker' | 'Patch',
+  ) {
     if (!string || string === ' ') {
       return []
     }
-    const startNameRegex = /Sticker:/
+    const startNameRegex = type === 'Sticker' ? /Sticker:/ : /Patch:/
     const endNameRegex = /<\/center><\/div>/
 
     const urlRegex = /https:\/\/steamcdn-a\.akamaihd\.net\/[^\s]+\b\.png/g
@@ -16,7 +19,7 @@ export class Stickers {
     }
 
     const stickerNameContent = string
-      ?.substring(startNameIndex + 8, endNameIndex)
+      ?.substring(startNameIndex + (type === 'Sticker' ? 8 : 7), endNameIndex)
       ?.trim()
 
     const stickerUrlContent = string?.match(urlRegex)

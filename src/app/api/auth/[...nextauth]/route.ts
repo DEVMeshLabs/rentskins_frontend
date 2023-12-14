@@ -31,23 +31,19 @@ async function handler(
     },
     callbacks: {
       async signIn({ user, account, credentials, email, profile }) {
-        console.log(user)
-        console.log(account)
-        console.log(credentials)
-        console.log(email)
-        console.log(profile)
-        const userAlreadyExists = await UserService.getUser(user?.id!)
-
-        console.log(new Date(profile?.timecreated))
-        console.log(userAlreadyExists)
-
+        const date = moment.unix(profile?.timecreated)
         const now = moment()
-        const date = moment(profile?.timecreated)
-        const difference = now.diff(date)
+        const monthsDifference = now.diff(date, 'months')
 
-        console.log(difference)
-        console.log(difference.months)
-        // console.log(moment(now.diff(date), 'months', true).)
+        const verifyVAC = await UserService.verifyAccountStatus(user?.id!)
+
+        if (monthsDifference <= 3) {
+          return '/?error=InvalidAccountDate'
+        }
+
+        if (verifyVAC?.data) {
+          return '/?error=SignInAccountVACBanned'
+        }
 
         return user
       },
@@ -108,16 +104,6 @@ async function handler(
 
           session.user!.steam.banned = verifyVAC.data
         }
-
-        const now = moment()
-        const date = moment(session?.user?.steam?.timecreated)
-        const difference = now.diff(date)
-
-        console.log(date.get('months'))
-        console.log(date.get('month'))
-
-        console.log(moment(difference))
-        console.log(difference.months)
 
         return session as ISteamUser
       },

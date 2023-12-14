@@ -7,6 +7,7 @@ import {
 import { HeroInformation } from '@/components/Others/HeroInformation'
 import PageHomeHero from '@/components/Pages/PageHome/PageHomeHero'
 import PageHomeSkins from '@/components/Pages/PageHome/PageHomeSkins'
+import { TypeErrors } from '@/interfaces/tools/general.interface'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 
 interface ISearchParams {
   sellerid: string
+  error: TypeErrors
 }
 
 interface IProps {
@@ -31,7 +33,7 @@ export default function Home({ searchParams }: IProps) {
   return (
     <main className="h-full">
       <div className="h-screen">
-        <PageHomeHero />
+        <PageHomeHero error={searchParams.error} />
         <div className="h-1/5 w-full bg-mesh-color-neutral-800">
           <hr className="-mt-0.5 h-2 w-full bg-mesh-gradient-green-pattern" />
 
