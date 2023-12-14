@@ -62,8 +62,11 @@ export default function PageProfileSelf() {
   )!.getFullYear()}`
 
   const deliveryFee =
-    user?.data?.total_exchanges_completed && user?.data?.total_exchanges
-      ? (user?.data?.total_exchanges_completed / user?.data?.total_exchanges) *
+    user?.data?.total_exchanges_completed! > 0 ||
+    user?.data?.total_exchanges_failed! > 0
+      ? (user?.data?.total_exchanges_completed! /
+          (user?.data?.total_exchanges_completed! +
+            user?.data?.total_exchanges_failed!)) *
         100
       : 'Sem informações'
 
@@ -72,7 +75,10 @@ export default function PageProfileSelf() {
       <ModalReturnMain />
       {status === 'authenticated' && user?.data ? (
         <PerfilPerson
-          totalExchanges={user?.data?.total_exchanges}
+          totalExchanges={
+            user?.data?.total_exchanges_completed +
+            user?.data?.total_exchanges_failed
+          }
           deliveryTime={user?.data?.delivery_time}
           deliveryFee={deliveryFee}
           isLoading={isLoadingUser}
