@@ -8,6 +8,7 @@ type Props = {
   weapon: string
   float: string
   isRentable: boolean
+  type: string
   stickers: Array<{ url: string; name: string }>
   stickersValue: Array<string>
   stickersLoading: boolean
@@ -19,6 +20,7 @@ export function ModalSkinShowcaseSkin({
   float,
   isRentable,
   stickers,
+  type,
   stickersValue,
   stickersLoading,
 }: Props) {
@@ -28,6 +30,7 @@ export function ModalSkinShowcaseSkin({
       <>
         <HoverCardSticker
           name={sticker.name}
+          type={type}
           value={
             stickersValue?.length > 0 && stickersValue[index] !== null
               ? stickersValue[index]

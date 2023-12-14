@@ -206,6 +206,7 @@ export function CardSkinInventory({ apiKey }: Props) {
                     isRentable={isRentable}
                     stickers={stickers}
                     key={assetid}
+                    type={categoryType[0].name}
                     asset_id={assetid}
                     skinImage={icon_url}
                     marketName={market_hash_name}

@@ -33,6 +33,7 @@ export function PageDetailsCard({
       <>
         <HoverCardSticker
           name={sticker.name}
+          type={item.skin_category}
           value={
             stickersPrice?.length > 0 && stickersPrice[index] !== null
               ? stickersPrice[index]

@@ -21,6 +21,7 @@ interface IProps {
   skinRarity: string
   skinCategory: string
   id: string
+  type: string
   isSelected: boolean
   asset_id: string
   linkForPreviewSkin: string
@@ -36,6 +37,7 @@ export function ModalSkinShowcaseMain({
   skinImage,
   apiKey,
   skinWeapon,
+  type,
   isRentable,
   statusFloat,
   float,
@@ -53,7 +55,10 @@ export function ModalSkinShowcaseMain({
 
   const itemsToCheckAveragePrice = [
     skinName,
-    ...stickers.map((sticker) => 'Sticker | ' + sticker.name),
+    ...stickers.map(
+      (sticker) =>
+        (type === 'Agent' ? 'Patch' : 'Sticker') + ' | ' + sticker.name,
+    ),
   ]
 
   const { data: averagePrice, isLoading: isLoadingAveragePrice } = useQuery({
@@ -93,6 +98,7 @@ export function ModalSkinShowcaseMain({
               <ModalSkinShowcaseSkin
                 isRentable={isRentable}
                 stickers={stickers}
+                type={type}
                 stickersValue={averagePrice?.data?.slice(1)!}
                 stickersLoading={isLoadingAveragePrice}
                 icon_url={skinImage}

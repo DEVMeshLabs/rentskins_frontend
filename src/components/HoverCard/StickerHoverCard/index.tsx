@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 interface IProps {
   children: ReactNode
   name: string
+  type: string
   value: string
   isValueLoading: boolean
 }
@@ -11,10 +12,13 @@ interface IProps {
 export default function HoverCardSticker({
   children,
   name,
+  type,
   value,
   isValueLoading,
 }: IProps) {
-  const formattedName = 'Sticker%20|%20' + name.replaceAll(/\s/g, '%20')
+  const formattedName =
+    (type === 'Agent' ? 'Patch%20|%20' : 'Sticker%20|%20') +
+    name.replaceAll(/\s/g, '%20')
   const url = 'https://steamcommunity.com/market/listings/730/' + formattedName
 
   return (
