@@ -119,10 +119,10 @@ export function ModalConnectInventoryForm({
   return (
     <Form.Root
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-6 flex h-full w-11/12 flex-col items-start justify-between gap-4"
+      className="mb-6 flex h-full w-11/12 flex-col items-start justify-between gap-4"
     >
       <div className="w-full">
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between md:gap-2">
           <Form.Input.Text
             label="Insira URL Trade Link do seu Perfil"
             name="trade-link"
@@ -226,7 +226,7 @@ export function ModalConnectInventoryForm({
               rel="noopener noreferrer"
               href="https://steamcommunity.com/dev/apikey"
               tabIndex={-1}
-              className="mt-3 h-full place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100"
+              className="mt-3 h-full place-self-center whitespace-nowrap rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 font-semibold text-black opacity-70 transition-all hover:opacity-100 md:h-10"
             >
               Obter Chave
             </a>
@@ -312,7 +312,7 @@ export function ModalConnectInventoryForm({
       <Form.Button
         buttonStyle={undefined}
         disabled={fetchStatus === 'fetching'}
-        className="mt-8 flex w-48 items-center justify-center border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
+        className="mb-4 mt-8 flex w-48 items-center justify-center border-none bg-mesh-color-primary-1200 px-20 py-2 text-lg font-bold text-mesh-color-others-black transition-all disabled:bg-mesh-color-neutral-400 disabled:text-mesh-color-neutral-100"
       >
         {fetchStatus === 'fetching' ? buttonLoading : 'Concluir'}
       </Form.Button>
