@@ -37,7 +37,6 @@ export function CardSkinInventory({ apiKey }: Props) {
     queryFn: () =>
       SkinService.findAllSkinsByIdSeller(
         trueSession?.user?.steam?.steamid!,
-        // '76561198862407248',
         undefined,
         true,
       ),
@@ -54,8 +53,7 @@ export function CardSkinInventory({ apiKey }: Props) {
     queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        '76561198862407248',
-        // trueSession.user?.steam?.steamid!,
+        trueSession.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
