@@ -32,6 +32,8 @@ export function CardSkinInventory({ apiKey }: Props) {
     ISteamItens[]
   >([])
 
+  console.log(trueSession.user?.steam?.steamid)
+
   const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
@@ -74,9 +76,12 @@ export function CardSkinInventory({ apiKey }: Props) {
           !itemsOnInventory?.data?.message &&
           itemsOnInventory?.data?.filter(
             ({ assetid }: any) =>
-              !itemsOnProfile?.data?.skins.some(
-                ({ asset_id }) => asset_id === assetid,
-              ),
+              !itemsOnProfile?.data?.skins.some(({ asset_id, status }) => {
+                if (status !== 'Falhou') {
+                  return asset_id === assetid
+                }
+                return false
+              }),
           ),
       )
     }
