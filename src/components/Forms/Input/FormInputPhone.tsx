@@ -32,7 +32,7 @@ export function FormInputPhone({
   ...rest
 }: IProps) {
   return (
-    <label className={`${labelClassName} flex flex-col text-lg`}>
+    <label className={`${labelClassName} relative flex flex-col text-lg`}>
       <span className="-mb-4"> {label} </span>
       <ReactInputMask
         mask={mask || '(99) 99999-9999'}

@@ -29,14 +29,14 @@ export function ModalConnectInventoryMain({
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70" />
         <Dialog.Content
           className="fixed left-1/2 top-1/2 z-30 w-6/12 -translate-x-1/2 -translate-y-1/2
-        rounded-2xl bg-mesh-color-neutral-700"
+        overflow-auto rounded-2xl bg-mesh-color-neutral-700 md:h-[90vh]"
           onPointerDownOutside={(event) => {
             if (formSubmitted) {
               event.preventDefault()
             }
           }}
         >
-          <div className="flex h-full w-full flex-col items-center justify-between py-8">
+          <div className="flex h-full w-full flex-col items-center py-8 ">
             {/* TOP */}
             <div className="flex w-11/12 items-center justify-between">
               <Dialog.Title>

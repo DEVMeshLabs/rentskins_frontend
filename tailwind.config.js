@@ -25,6 +25,9 @@ module.exports = {
       '4xl': '2048px',
     },
     extend: {
+      screens: {
+        xg: '1350px',
+      },
       colors: {
         'mesh-color': {
           neutral: {
