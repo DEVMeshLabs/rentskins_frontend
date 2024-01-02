@@ -153,8 +153,10 @@ export default function PageUserNotifications() {
         <PageNotificationTransaction
           steamid={trueSession.user?.steam?.steamid!}
           token={trueSession.user?.token!}
+          profileurl={trueSession.user?.steam?.profileurl!}
         />
       )}
+      {console.log(trueSession)}
     </>
   )
 }

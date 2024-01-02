@@ -6,17 +6,21 @@ import TransactionsService from '@/services/transactions.service'
 import useComponentStore from '@/stores/components.store'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
+import Link from 'next/link'
 // import TransactionsTable from '../Settings/Transactions/table'
 
 interface IProps {
   steamid: string
   token: string
+  profileurl: string
 }
 export default function PageNotificationTransaction({
   steamid,
   token,
+  profileurl,
 }: IProps) {
   const { setRedirectToSteam } = useComponentStore()
+  const tradeOffersLink = profileurl + '/tradeoffers/'
 
   const { data: transactions, isLoading } = useQuery({
     queryKey: ['Transactions', steamid],
@@ -68,48 +72,50 @@ export default function PageNotificationTransaction({
             subtext={item.buyer_id === steamid ? 'Compra' : 'Venda'}
           />
           <TransactionCard.Actions>
-            <TransactionCard.Button
-              modal={false}
-              token={token}
-              onClick={async () => {
-                Toast.Loading(
-                  'Redirecionando para a página de troca da Steam...',
-                )
-
-                let link
-
-                if (isABuyer) {
-                  const tradeLink = await ConfigService.findByConfigUserId(
-                    item.seller_id,
-                    token,
+            {isABuyer && (
+              <TransactionCard.Button
+                modal={false}
+                token={token}
+                onClick={async () => {
+                  Toast.Loading(
+                    'Redirecionando para a página de troca da Steam...',
                   )
 
-                  link = tradeLink
-                } else {
-                  const tradeLink = await ConfigService.findByConfigUserId(
-                    item.buyer_id,
-                    token,
-                  )
+                  let link
 
-                  link = tradeLink
-                }
+                  if (isABuyer) {
+                    const tradeLink = await ConfigService.findByConfigUserId(
+                      item.seller_id,
+                      token,
+                    )
 
-                if (link.status === 200) {
-                  Object.assign(document.createElement('a'), {
-                    target: '_blank',
-                    rel: 'noopener noreferrer',
-                    href: link.data.url_trade,
-                  }).click()
-                  setRedirectToSteam(false)
-                } else {
-                  Toast.Error(
-                    'Não foi possível acessar a página de troca da Steam no momento.',
-                  )
-                }
-              }}
-              buttonStyle="full"
-              text={isABuyer ? 'Solicitar Item' : 'Enviar Item'}
-            />
+                    link = tradeLink
+                  } else {
+                    const tradeLink = await ConfigService.findByConfigUserId(
+                      item.buyer_id,
+                      token,
+                    )
+
+                    link = tradeLink
+                  }
+
+                  if (link.status === 200) {
+                    Object.assign(document.createElement('a'), {
+                      target: '_blank',
+                      rel: 'noopener noreferrer',
+                      href: link.data.url_trade,
+                    }).click()
+                    setRedirectToSteam(false)
+                  } else {
+                    Toast.Error(
+                      'Não foi possível acessar a página de troca da Steam no momento.',
+                    )
+                  }
+                }}
+                buttonStyle="full"
+                text={'Solicitar Item'}
+              />
+            )}
             <TransactionCard.Button
               token={token}
               modal
@@ -142,9 +148,16 @@ export default function PageNotificationTransaction({
   return (
     <div>
       <div className="mb-12 mt-4">
-        <span className="text-lg font-medium text-mesh-color-neutral-200">
-          Pendentes
-        </span>
+        <div className="flex w-full select-none justify-between text-lg font-medium text-mesh-color-neutral-200">
+          <span className="">Pendentes</span>
+          <Link
+            href={tradeOffersLink}
+            target="_blank"
+            className="cursor-pointer opacity-50 transition-all hover:opacity-100"
+          >
+            Minhas Ofertas de Troca
+          </Link>
+        </div>
         <div
           className={`mt-4 flex max-h-[24rem] w-full flex-col gap-4 overflow-y-scroll ${
             renderTransactions && renderTransactions.length > 3 && 'pr-4'

@@ -14,6 +14,10 @@ export default class SkinService {
     return Api.get<ISkinsResponse>(`/skins?page=${page || 1}`)
   }
 
+  public static findBySlug(slug: string) {
+    return Api.get<ISkins>(`/skins/slug/${slug}`)
+  }
+
   public static findById(id: string) {
     return Api.get<ISkins>(`/skins/${id}`)
   }

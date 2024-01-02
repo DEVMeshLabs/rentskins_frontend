@@ -7,6 +7,7 @@ export interface ISkins {
   skin_image: string
   skin_name: string
   skin_rarity: TItemRarity
+  slug: string
   skin_category: string
   skin_weapon: string
   skin_price: number

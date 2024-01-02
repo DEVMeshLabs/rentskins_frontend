@@ -60,7 +60,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
         )}
       >
         <Link
-          href={`/detalhes/${item.id}`}
+          href={`/detalhes/${item.slug}`}
           className="flex h-full max-h-[170px] min-h-[170px] w-full select-none flex-col items-center justify-between
           rounded-lg border-2 border-mesh-color-neutral-400
           bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
