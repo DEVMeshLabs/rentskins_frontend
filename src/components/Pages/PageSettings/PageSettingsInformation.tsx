@@ -71,9 +71,11 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: phoneResolver,
     defaultValues: {
-      phone: userConfig?.data?.owner_phone || undefined,
+      phone: userConfig?.data?.owner_phone || '',
     },
   })
+
+  console.log(userConfig?.data?.owner_phone)
 
   const {
     handleSubmit: handleSubmitCPF,
@@ -101,11 +103,11 @@ export function PageSettingsInformation() {
 
   useEffect(() => {
     if (!isLoading && userConfig?.request.status === 200) {
-      setValueEmail('email', userConfig?.data.owner_email)
-      setValuePhone('phone', userConfig?.data.owner_phone)
-      setValueCPF('cpf', userConfig?.data.owner_cpf)
-      setValueTrade('trade-link', userConfig?.data.url_trade)
-      setValueKey('api-key', userConfig?.data.key)
+      setValueEmail('email', userConfig?.data.owner_email || '')
+      setValuePhone('phone', userConfig?.data.owner_phone || '')
+      setValueCPF('cpf', userConfig?.data.owner_cpf || '')
+      setValueTrade('trade-link', userConfig?.data.url_trade || '')
+      setValueKey('api-key', userConfig?.data.key || '')
     }
   }, [
     userConfig,
