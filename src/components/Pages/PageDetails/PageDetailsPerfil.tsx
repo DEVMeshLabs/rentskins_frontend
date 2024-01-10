@@ -134,7 +134,7 @@ export function PageDetailsPerfil({ seller }: IProps) {
         </div>
         <div className="self-center">
           <Link
-            href={`/perfil/${seller.id}`}
+            href={`/perfil/${seller.owner_id}`}
             className="cursor-pointer select-none text-lg font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
           >
             Ver mais itens à venda
