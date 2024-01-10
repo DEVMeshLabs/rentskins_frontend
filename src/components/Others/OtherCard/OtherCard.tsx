@@ -31,6 +31,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
   ]
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
+  const detailsLink = '/detalhes/' + item.slug
 
   const stickersElement =
     item?.stickers?.length > 0 &&
@@ -60,7 +61,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
         )}
       >
         <Link
-          href={`/detalhes/${item.slug}`}
+          href={detailsLink}
           className="flex h-full max-h-[170px] min-h-[170px] w-full select-none flex-col items-center justify-between
           rounded-lg border-2 border-mesh-color-neutral-400
           bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
@@ -188,7 +189,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
             />
           ) : (
             <Link
-              href={`/detalhes/${item.id}`}
+              href={detailsLink}
               className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
             >
               Comprar

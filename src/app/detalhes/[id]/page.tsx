@@ -59,7 +59,6 @@ export async function generateMetadata({
 
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
-  console.log(params.id)
   const seller = await fetchSeller(item?.seller_id)
 
   if (item) {
