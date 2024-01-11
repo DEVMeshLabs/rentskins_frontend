@@ -46,8 +46,21 @@ export function FormInputCurrency({
         control={control}
         render={({ field: { ref, ...rest } }: any) => (
           <NumericFormat
-            thousandSeparator="."
-            decimalSeparator=","
+            allowLeadingZeros={true}
+            thousandSeparator={
+              /\.([1-9]\d*|0[1-9])$/.test(
+                String(placeHolder).replace('R$', '').replace(',', '.'),
+              )
+                ? ','
+                : '.'
+            }
+            decimalSeparator={
+              /\.([1-9]\d*|0[1-9])$/.test(
+                String(placeHolder).replace('R$', '').replace(',', '.'),
+              )
+                ? '.'
+                : ','
+            }
             autoComplete="off"
             prefix="R$ "
             decimalScale={2}

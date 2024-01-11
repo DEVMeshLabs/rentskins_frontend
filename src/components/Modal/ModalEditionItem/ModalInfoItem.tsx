@@ -64,6 +64,8 @@ export function ModalInfoItem({
   const watchRent = watch('rent')
   const saleType = watchRent ? 'rent' : 'sale'
 
+  console.log(watchValue)
+
   const { data, isRefetching, refetch } = useQuery({
     queryKey: [
       'updateSkin',
@@ -76,9 +78,7 @@ export function ModalInfoItem({
     queryFn: () => {
       const skinPrice =
         watchValue && watchValue?.length > 0
-          ? Number(
-              watchValue!.replace('R$ ', '').replace(',', '').replace('.', ''),
-            )
+          ? Number(watchValue!.replace('R$ ', '').replace(',', '.'))
           : skin_price
       return SkinService.updateEditSkin(
         id,
@@ -106,8 +106,7 @@ export function ModalInfoItem({
 
   const formattedValue = (value: string): number => {
     let newFormattedValue
-    newFormattedValue = value.replace(/\./g, '')
-    newFormattedValue = newFormattedValue.replace('R$ ', '')
+    newFormattedValue = value.replace('R$ ', '')
     newFormattedValue = newFormattedValue.replace(',', '.')
 
     return Number(newFormattedValue)
@@ -118,9 +117,7 @@ export function ModalInfoItem({
       setDisabled(
         sale_type === saleType &&
           skin_price ===
-            Number(
-              watchValue!.replace('R$ ', '').replace(',', '').replace('.', ''),
-            ),
+            Number(watchValue!.replace('R$ ', '').replace(',', '.')),
       )
     }
   }, [saleType, watchTerms, sale_type, watchValue])
@@ -130,6 +127,15 @@ export function ModalInfoItem({
       refetch()
     }
   }
+
+  console.log(watchValue)
+  console.log(
+    typeof formattedValue(String(skin_price)).toLocaleString('en', {
+      currency: 'BRL',
+      style: 'currency',
+      minimumFractionDigits: 2,
+    }),
+  )
 
   return (
     <div className="flex h-full w-[40%] flex-col">
@@ -172,18 +178,14 @@ export function ModalInfoItem({
               control={control}
               maxLength={10}
               label="Preço de Venda"
-              placeHolder={
-                skin_price
-                  ? `${formattedValue(String(skin_price)).toLocaleString(
-                      'pt-br',
-                      {
-                        currency: 'BRL',
-                        style: 'currency',
-                        minimumFractionDigits: 2,
-                      },
-                    )}`
-                  : 'R$ 2.000,00'
-              }
+              placeHolder={formattedValue(String(skin_price)).toLocaleString(
+                'pt-br',
+                {
+                  currency: 'BRL',
+                  style: 'currency',
+                  minimumFractionDigits: 2,
+                },
+              )}
               register={register('value')}
               errors={errors.value}
             />
