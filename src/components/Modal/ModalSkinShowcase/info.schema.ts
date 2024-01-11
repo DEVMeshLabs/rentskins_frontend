@@ -13,8 +13,7 @@ const formSchema = yup.object({
         }
 
         let currencyToNumber
-        currencyToNumber = item.replace(/\./g, '')
-        currencyToNumber = currencyToNumber.replace('R$ ', '')
+        currencyToNumber = item.replace('R$ ', '')
         currencyToNumber = currencyToNumber.replace(',', '.')
 
         if (Number(currencyToNumber) <= 0) {
@@ -33,8 +32,7 @@ const formSchema = yup.object({
         }
 
         let currencyToNumber
-        currencyToNumber = item.replace(/\./g, '')
-        currencyToNumber = currencyToNumber.replace('R$ ', '')
+        currencyToNumber = item.replace('R$ ', '')
         currencyToNumber = currencyToNumber.replace(',', '.')
 
         if (Number(currencyToNumber) < 10) {
