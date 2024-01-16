@@ -32,8 +32,6 @@ export function CardSkinInventory({ apiKey }: Props) {
     ISteamItens[]
   >([])
 
-  console.log(trueSession.user?.steam?.steamid)
-
   const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
