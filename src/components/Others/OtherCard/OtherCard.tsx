@@ -192,7 +192,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
           ) : (
             <Link
               href={detailsLink}
-              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-primary-1200 px-4 text-zinc-800 opacity-60 hover:opacity-100"
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-primary-1200 px-4 text-zinc-900 opacity-60 hover:opacity-100"
             >
               Comprar
             </Link>
