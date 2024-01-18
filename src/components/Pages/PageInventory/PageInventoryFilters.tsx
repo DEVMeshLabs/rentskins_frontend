@@ -56,8 +56,13 @@ const renderTypeCheckboxes = (register: any, isInventoryFetching: boolean) => {
     { value: 'Pistol', label: 'Pistolas' },
     { value: 'SMG', label: 'SMG' },
     { value: ['Shotgun', 'Machinegun'], label: 'Pesadas' },
-    { value: 'Sticker', label: 'Figurinhas' },
+    { value: 'Sticker', label: 'Adesivos' },
+    { value: 'Gloves', label: 'Luvas' },
     { value: 'Agent', label: 'Agentes' },
+    {
+      value: ['Graffiti', 'Container', 'Collctible', 'Patch'],
+      label: 'Diversos',
+    },
   ]
 
   return types.map((type, index) => (

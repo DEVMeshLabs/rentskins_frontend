@@ -80,6 +80,22 @@ export interface ISteamItens {
       type: string
       value: string
     },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
   ]
   tradable: boolean
   actions: Array<{
