@@ -42,7 +42,7 @@ export function CardSkinInventory({ apiKey }: Props) {
       SkinService.findAllSkinsByIdSeller(
         trueSession?.user?.steam?.steamid!,
         undefined,
-        true,
+        false,
       ),
     keepPreviousData: false,
     cacheTime: 0,
