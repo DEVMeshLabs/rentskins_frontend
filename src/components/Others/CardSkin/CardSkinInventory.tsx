@@ -32,7 +32,9 @@ export function CardSkinInventory({ apiKey }: Props) {
     ISteamItens[]
   >([])
 
-  console.log(trueSession.user?.steam?.steamid)
+  useEffect(() => {
+    setPage(1)
+  }, [inventoryTypeFilter])
 
   const { data: itemsOnProfile, refetch: refetchItemsOnProfile } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
@@ -55,7 +57,7 @@ export function CardSkinInventory({ apiKey }: Props) {
     queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        trueSession.user?.steam?.steamid!,
+        trueSession?.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -109,7 +111,7 @@ export function CardSkinInventory({ apiKey }: Props) {
     const types = {
       Knife: 'Não existem facas em seu inventário.',
       Agent: 'Não existem agentes em seu inventário.',
-      Sticker: 'Não existem figurinhas em seu inventário.',
+      Sticker: 'Não existem adesivos em seu inventário.',
     }
 
     const index = inventoryTypeFilter[0] as 'Knife' | 'Agent' | 'Sticker'
@@ -125,7 +127,7 @@ export function CardSkinInventory({ apiKey }: Props) {
           <span>
             {selectedType !== undefined
               ? selectedType
-              : 'Não existem armas desse tipo no seu inventário.'}
+              : 'Não existem items desse tipo no seu inventário.'}
           </span>
         ) : itemsOnInventory?.data?.err?.code === 429 ||
           itemsOnInventory?.data?.message?.includes('Error') ? (
@@ -200,6 +202,8 @@ export function CardSkinInventory({ apiKey }: Props) {
                 const stickers = Stickers.extractStickersFromString(
                   categoryType[0].name === 'Agent'
                     ? descriptions[4]?.value
+                    : name.includes('Souvenir')
+                    ? descriptions[10]?.value
                     : descriptions[6]?.value,
                   categoryType[0].name === 'Agent' ? 'Patch' : 'Sticker',
                 )
