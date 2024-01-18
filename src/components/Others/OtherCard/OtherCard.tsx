@@ -31,7 +31,9 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
   ]
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
-  const detailsLink = '/detalhes/' + item.slug
+  const detailsLink = '/detalhes/' + item.slug.replaceAll('--', '-')
+
+  console.log(item.skin_name.includes('Sticker | MOUZ') ? detailsLink : null)
 
   const stickersElement =
     item?.stickers?.length > 0 &&
@@ -190,7 +192,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
           ) : (
             <Link
               href={detailsLink}
-              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-primary-1200 px-4 text-zinc-900 opacity-60 hover:opacity-100"
             >
               Comprar
             </Link>
