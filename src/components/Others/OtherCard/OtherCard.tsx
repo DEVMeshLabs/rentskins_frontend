@@ -16,9 +16,10 @@ interface Props {
   itsRent?: boolean
   item: ISkins
   userItems?: boolean
+  apiKey?: boolean
 }
 
-export function OtherCard({ itsRent, item, userItems }: Props) {
+export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
   const customName = item.skin_name.includes('StatTrak™')
     ? item.skin_name.split('™')
     : item.skin_name
@@ -114,6 +115,7 @@ export function OtherCard({ itsRent, item, userItems }: Props) {
                   </Common.Button>
                 }
                 item={item}
+                apiKey={apiKey}
               />
             )}
             <Link

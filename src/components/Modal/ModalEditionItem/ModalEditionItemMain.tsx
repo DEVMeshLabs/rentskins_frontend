@@ -11,9 +11,10 @@ import { ModalItemShow } from './ModalItemShow'
 interface IProps {
   activator: React.ReactNode
   item: ISkins
+  apiKey?: boolean
 }
 
-export function ModalEditionItemMain({ activator, item }: IProps) {
+export function ModalEditionItemMain({ activator, item, apiKey }: IProps) {
   const [modalOpen, setModalOpen] = useState(false)
   const handleOpen = () => setModalOpen((state) => !state)
   const isRentable = [
@@ -59,6 +60,7 @@ export function ModalEditionItemMain({ activator, item }: IProps) {
                 skin_price={item.skin_price}
                 sale_type={item.sale_type}
                 id={item.id}
+                apiKey={apiKey}
                 skin_name={item.skin_name}
                 skin_weapon={item.skin_weapon}
                 statusFloatText={item.status_float}

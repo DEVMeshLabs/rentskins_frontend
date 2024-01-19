@@ -77,7 +77,7 @@ export function TransactionsTable({ data, steamid }: IProps) {
                   : 'text-white'
               } `}
             >
-              {item.skin.skin_name}
+              {item.skin.skin_name.split('(')[0]}
             </span>
             <span className="text-xs text-mesh-color-neutral-300 2xl:text-sm">
               {item.skin.skin_weapon}
