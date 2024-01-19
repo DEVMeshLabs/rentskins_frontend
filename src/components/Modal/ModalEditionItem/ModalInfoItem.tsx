@@ -22,6 +22,7 @@ interface IProps {
   id: string
   isRentable?: boolean
   onClick: () => void
+  apiKey?: boolean
 }
 
 export function ModalInfoItem({
@@ -31,6 +32,7 @@ export function ModalInfoItem({
   skin_weapon,
   statusFloatText,
   isRentable,
+  apiKey,
   id,
   onClick,
 }: IProps) {
@@ -48,6 +50,7 @@ export function ModalInfoItem({
     watch,
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: formResolver,
@@ -63,8 +66,6 @@ export function ModalInfoItem({
   const watchTerms = watch('terms')
   const watchRent = watch('rent')
   const saleType = watchRent ? 'rent' : 'sale'
-
-  console.log(watchValue)
 
   const { data, isRefetching, refetch } = useQuery({
     queryKey: [
@@ -127,15 +128,6 @@ export function ModalInfoItem({
       refetch()
     }
   }
-
-  console.log(watchValue)
-  console.log(
-    typeof formattedValue(String(skin_price)).toLocaleString('en', {
-      currency: 'BRL',
-      style: 'currency',
-      minimumFractionDigits: 2,
-    }),
-  )
 
   return (
     <div className="flex h-full w-[40%] flex-col">
@@ -232,6 +224,15 @@ export function ModalInfoItem({
               name="sell-rent"
               register={register('rent')}
               label="Aluguel"
+              onChange={() => {
+                if (!apiKey) {
+                  Toast.Error(
+                    'Para alugar um item, é necessário ter a chave adicionada nas configurações.',
+                    7000,
+                  )
+                  setValue('rent', false)
+                }
+              }}
             />
           )}
         </div>

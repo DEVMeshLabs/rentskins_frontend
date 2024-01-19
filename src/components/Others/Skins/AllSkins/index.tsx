@@ -10,6 +10,7 @@ export interface IAllSkinsProps {
   center?: boolean
   itsRent?: boolean
   userItems?: boolean
+  apiKey?: boolean
 }
 
 export default function AllSkins({
@@ -17,6 +18,7 @@ export default function AllSkins({
   center = false,
   itsRent,
   userItems,
+  apiKey,
 }: IAllSkinsProps) {
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-start ">
@@ -37,6 +39,7 @@ export default function AllSkins({
                 itsRent={itsRent}
                 item={item}
                 key={item.id}
+                apiKey={apiKey}
               />
             </div>
           )

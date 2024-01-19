@@ -9,6 +9,7 @@ import PersonProfileSkeleton from '@/components/Others/PersonProfile/PersonProfi
 import AllSkins from '@/components/Others/Skins/AllSkins'
 import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
 import { useQuery } from '@tanstack/react-query'
@@ -25,6 +26,16 @@ export default function PageProfileSelf() {
   }
 
   const [page, setPage] = useState(1)
+
+  const { data: userHasConfig } = useQuery({
+    queryKey: ['config'],
+    queryFn: async () =>
+      ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+    enabled: status === 'authenticated',
+  })
 
   const {
     data: itens,
@@ -94,7 +105,11 @@ export default function PageProfileSelf() {
       {isLoadingItens || isRefetching || isLoadingUser ? (
         <AllSkeletonSkins />
       ) : itens?.data?.skins?.length! > 0 ? (
-        <AllSkins userItems={true} items={itens?.data?.skins} />
+        <AllSkins
+          userItems={true}
+          items={itens?.data?.skins}
+          apiKey={!!userHasConfig?.data.key}
+        />
       ) : (
         <Common.SearchFeedback
           content="ao perfil de"
