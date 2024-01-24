@@ -4,6 +4,7 @@ import {
   ISkinsAvailability,
   ISkinsResponse,
   ISkinsToAdvertise,
+  skinFloat,
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
 import { AxiosPromise, AxiosResponse } from 'axios'
@@ -20,6 +21,10 @@ export default class SkinService {
 
   public static findById(id: string) {
     return Api.get<ISkins>(`/skins/${id}`)
+  }
+
+  public static getSkinFloat(url: string) {
+    return Api.post<skinFloat>('/skins/float', { url })
   }
 
   public static findByWeapon(weapon: string) {

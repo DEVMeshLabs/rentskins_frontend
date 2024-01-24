@@ -26,6 +26,15 @@ export interface ISkins {
   saleAt: string | null
 }
 
+export interface skinFloat {
+  origin: number
+  float: number
+  paintseed: number
+  paintindex: number
+  hassticker: boolean
+  stickeramount: number
+}
+
 export interface ISkinsCardModal {
   skinId: string
   skinPrice: number

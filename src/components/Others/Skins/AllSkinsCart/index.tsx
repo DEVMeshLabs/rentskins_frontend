@@ -64,6 +64,7 @@ export default function AllSkinsCart() {
                     id,
                     skin_weapon,
                     status,
+                    skin_float,
                   },
                   id: modelId,
                 },
@@ -72,6 +73,7 @@ export default function AllSkinsCart() {
                 if (status === null) {
                   return (
                     <CartSkinCard
+                      skinFloat={skin_float}
                       sellerId={seller_id}
                       skinId={id}
                       userId={
