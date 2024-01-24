@@ -15,7 +15,6 @@ import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { CardSkin } from '.'
-import ColoredLine from '../ColoredLine'
 
 interface Props {
   apiKey: boolean
@@ -172,10 +171,6 @@ export function CardSkinInventory({ apiKey }: Props) {
                 const statusFloatText = market_name.match(/\((.*?)\)/g)
                 const statusFloat =
                   statusFloatText && statusFloatText[0].replace(/\(|\)/g, '')
-                const itemIsAWeapon =
-                  !tags[0].name.includes('Sticker') &&
-                  !tags[0].name.includes('Agent') &&
-                  !tags[0].name.includes('Patch')
                 const completeType = type.split(' ')
                 const category = completeType.pop()!
                 const rarity = tags.filter(
@@ -213,6 +208,7 @@ export function CardSkinInventory({ apiKey }: Props) {
                     isRentable={isRentable}
                     stickers={stickers}
                     key={assetid}
+                    steamId={trueSession.user?.steam?.steamid!}
                     type={categoryType[0].name}
                     asset_id={assetid}
                     skinImage={icon_url}
@@ -267,14 +263,8 @@ export function CardSkinInventory({ apiKey }: Props) {
                             <CardSkin.Content
                               market_name={market_name}
                               firstName={firstName}
-                              float={
-                                itemIsAWeapon && isRentable ? '0.254665' : ''
-                              }
                             />
                           </div>
-                          {itemIsAWeapon && isRentable && (
-                            <ColoredLine position={0.254665} />
-                          )}
                         </CardSkin.Root>
                       </div>
                     }

@@ -52,7 +52,6 @@ export function ModalBuyMain({
     })
 
   useEffect(() => {
-    console.log(createTransaction)
     if (createTransaction?.status === 201) {
       setWhatModalOpenToBuySkin(3)
     } else if (createTransaction?.request.status === 400) {

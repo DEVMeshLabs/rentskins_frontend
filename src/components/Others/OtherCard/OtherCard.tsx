@@ -150,7 +150,9 @@ export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
             {!thereIsFloat.includes(item.skin_category) && (
               <>
                 <strong>FT / </strong>
-                <span className="opacity-60">{item.skin_float}</span>
+                <span className="opacity-60">
+                  {Number(item.skin_float).toFixed(6)}
+                </span>
               </>
             )}
           </h1>

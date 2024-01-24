@@ -16,6 +16,7 @@ interface Props {
   userId: string | undefined
   sellerId: string
   skinId: string
+  skinFloat: string | number
   modelId: string
   handleOnClick: MouseEventHandler<HTMLButtonElement>
 }
@@ -32,6 +33,7 @@ export default function CartSkinCard({
   sellerId,
   skinId,
   userId,
+  skinFloat,
 }: Props) {
   const { addSkinsToBuy, deleteSkinsToBuy } = useCartStore()
   const [selected, setSelected] = useState(false)
@@ -142,7 +144,7 @@ export default function CartSkinCard({
               bold={400}
             >
               <strong>FT / </strong>
-              <span className="opacity-60">0.0003</span>
+              <span className="opacity-60">{Number(skinFloat).toFixed(6)}</span>
             </Common.Title>
           </div>
         </div>

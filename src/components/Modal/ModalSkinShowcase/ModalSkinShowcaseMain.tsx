@@ -29,6 +29,7 @@ interface IProps {
   isRentable: boolean
   stickers: Array<{ url: string; name: string }>
   apiKey: boolean
+  steamId: string
 }
 
 export function ModalSkinShowcaseMain({
@@ -50,6 +51,7 @@ export function ModalSkinShowcaseMain({
   linkForPreviewSkin,
   stickers,
   id,
+  steamId,
 }: IProps) {
   const [open, setOpen] = useState(false)
 
@@ -65,6 +67,18 @@ export function ModalSkinShowcaseMain({
     queryKey: ['GetItemAveragePrice', skinName],
     queryFn: () => SkinService.getItemAveragePrice(itemsToCheckAveragePrice),
     enabled: !!itemsToCheckAveragePrice && !!open,
+    keepPreviousData: false,
+    cacheTime: 0,
+  })
+
+  const inspectLink = linkForPreviewSkin
+    .replace('%owner_steamid%', steamId)
+    .replace('%assetid%', asset_id)
+
+  const { data: skinFloat } = useQuery({
+    queryKey: ['skinFloat', inspectLink!],
+    queryFn: () => SkinService.getSkinFloat(inspectLink),
+    enabled: !!open,
     keepPreviousData: false,
     cacheTime: 0,
   })
@@ -103,7 +117,7 @@ export function ModalSkinShowcaseMain({
                 stickersLoading={isLoadingAveragePrice}
                 icon_url={skinImage}
                 weapon={skinWeapon}
-                float={float}
+                float={skinFloat?.data.float || ''}
               />
               <ModalSkinShowcaseInfo
                 stickers={stickers}
@@ -120,9 +134,9 @@ export function ModalSkinShowcaseMain({
                 recommended_price={averagePrice?.data[0] || 'Indisponível'}
                 isPriceLoading={isLoadingAveragePrice}
                 skin_rarity={skinRarity}
-                skin_float={float}
+                skin_float={String(skinFloat?.data.float) || ''}
                 skin_image={skinImage}
-                skin_link_game={linkForPreviewSkin}
+                skin_link_game={inspectLink}
                 skin_link_steam={`https://steamcommunity.com/market/listings/730/${marketName}`}
                 status_float={statusFloat}
                 statusFloatText={statusFloat}

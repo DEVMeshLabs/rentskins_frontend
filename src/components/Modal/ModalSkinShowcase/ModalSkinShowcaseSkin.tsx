@@ -6,7 +6,7 @@ import Image from 'next/image'
 type Props = {
   icon_url: string
   weapon: string
-  float: string
+  float: string | number
   isRentable: boolean
   type: string
   stickers: Array<{ url: string; name: string }>
