@@ -8,7 +8,7 @@ import URLQuery from '@/tools/urlquery.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PageNotificationHistoric from './PageUserNotificationsHistoric'
 import PageNotificationTransaction from './PageUserNotificationsTransaction'
 
@@ -64,8 +64,7 @@ export default function PageUserNotifications() {
     cacheTime: 0,
   })
 
-  const handleOnRadio = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
+  const handleButton = (value: string) => {
     router.push(URLQuery.addQuery([{ key: 'type', value }]))
   }
 
@@ -86,21 +85,19 @@ export default function PageUserNotifications() {
       <div className="mt-5 flex items-center justify-between">
         <div className="flex select-none items-center gap-6">
           <label className="flex cursor-pointer flex-col">
-            <input
-              type="radio"
+            <button
               name="notification-radio"
               className="peer appearance-none"
-              defaultChecked={urlquery === 'transactions'}
-              value={'transactions'}
-              onChange={(event) => handleOnRadio(event)}
-            />
-            <span
-              className={`text-xl font-semibold transition-all ${
-                urlquery === 'transactions' ? 'text-white' : 'text-white/50'
-              }`}
+              onClick={() => handleButton('transactions')}
             >
-              Transações
-            </span>
+              <span
+                className={`text-xl font-semibold transition-all ${
+                  urlquery === 'transactions' ? 'text-white' : 'text-white/50'
+                }`}
+              >
+                Transações
+              </span>
+            </button>
             <div
               className={`mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all ${
                 urlquery === 'transactions' && 'pl-20'
@@ -108,21 +105,19 @@ export default function PageUserNotifications() {
             />
           </label>
           <label className="flex cursor-pointer flex-col">
-            <input
-              type="radio"
+            <button
               name="notification-radio"
-              className="peer"
-              defaultChecked={urlquery === 'historic'}
-              value={'historic'}
-              onChange={(event) => handleOnRadio(event)}
-            />
-            <span
-              className={`text-xl font-semibold  transition-all ${
-                urlquery === 'historic' ? 'text-white' : 'text-white/50'
-              }`}
+              className="peer appearance-none"
+              onClick={() => handleButton('historic')}
             >
-              Histórico
-            </span>
+              <span
+                className={`text-xl font-semibold  transition-all ${
+                  urlquery === 'historic' ? 'text-white' : 'text-white/50'
+                }`}
+              >
+                Histórico
+              </span>
+            </button>
             <div
               className={`mt-2 h-0.5 w-0 place-self-center bg-mesh-color-primary-900 pl-0 transition-all ${
                 urlquery === 'historic' && 'pl-16'
