@@ -6,6 +6,7 @@ export interface INotification {
   owner_id: string
   description: string
   new: boolean
+  type: 'Input' | null
   skin_id: string | null
   createdAt: string
   updatedAt: string | null

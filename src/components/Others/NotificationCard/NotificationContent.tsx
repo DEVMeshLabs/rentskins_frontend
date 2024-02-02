@@ -5,5 +5,9 @@ interface IProps {
 }
 
 export function NotificationContent({ children }: IProps) {
-  return <span className="text-mesh-color-neutral-200">{children}</span>
+  return (
+    <div className="flex w-full items-center justify-between text-mesh-color-neutral-200">
+      {children}
+    </div>
+  )
 }
