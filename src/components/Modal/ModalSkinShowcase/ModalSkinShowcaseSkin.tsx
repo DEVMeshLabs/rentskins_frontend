@@ -65,7 +65,7 @@ export function ModalSkinShowcaseSkin({
       </div>
       {isRentable && (
         <div className="absolute -bottom-1 w-full">
-          <ColoredLine position={float} />
+          <ColoredLine position={float} showFloat />
         </div>
       )}
     </div>
