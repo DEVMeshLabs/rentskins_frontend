@@ -56,7 +56,8 @@ export function CardSkinInventory({ apiKey }: Props) {
     queryKey: ['skinsInventory', trueSession.user?.token!, inventoryTypeFilter],
     queryFn: async () =>
       SkinService.findBySkinsInventoryWithFilters(
-        trueSession?.user?.steam?.steamid!,
+        '76561198862407248',
+        // trueSession?.user?.steam?.steamid!,
         trueSession.user?.token!,
         inventoryTypeFilter,
       ),
@@ -187,6 +188,7 @@ export function CardSkinInventory({ apiKey }: Props) {
                 const categoryType = tags.filter(
                   ({ category }) => category === 'Type',
                 )
+                console.log(categoryType[0].name === 'Tag' && name)
                 const isRentable = !(
                   categoryType[0].name === 'Graffiti' ||
                   categoryType[0].name === 'Container' ||

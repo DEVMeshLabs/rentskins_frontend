@@ -36,6 +36,8 @@ export function LayoutHeaderTop() {
   const trueSession = session as ISteamUser
   const router = useRouter()
 
+  console.log(trueSession)
+
   const {
     register,
     handleSubmit,

@@ -60,10 +60,10 @@ export function ModalSkinShowcaseSkin({
         draggable={false}
         className="object-cover"
       />
-      <div className="absolute bottom-4 flex w-full justify-center gap-2">
+      <div className="absolute bottom-8 flex w-full justify-center gap-2">
         {stickersElement}
       </div>
-      {isRentable && (
+      {isRentable && type !== 'Agent' && type !== 'Tag' && (
         <div className="absolute -bottom-1 w-full">
           <ColoredLine position={float} showFloat />
         </div>
