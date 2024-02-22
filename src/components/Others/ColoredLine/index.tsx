@@ -8,8 +8,6 @@ interface IProps {
 
 export default function ColoredLine({ position, showFloat }: IProps) {
   const percentage = Math.abs(Number(String(position).replace(',', '.')) * 100)
-  console.log(percentage)
-  console.log(position)
   return (
     <div className="relative flex w-full flex-col">
       {percentage !== 0.0 && (

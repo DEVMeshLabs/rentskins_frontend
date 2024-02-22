@@ -161,9 +161,9 @@ export function ModalSkinShowcaseInfo({
   }
 
   return (
-    <div className="flex h-full w-[70%] flex-col justify-center transition-all 2xl:w-[50%] ">
+    <div className="flex h-full w-[70%] flex-col transition-all 2xl:w-[50%]">
       <div>
-        <Common.Title color="white" className="text-[24px]">
+        <Common.Title color="white" className="text-[28px]" bold={600}>
           {skin_name}
         </Common.Title>
         <p className="-mt-1 font-medium text-mesh-color-neutral-200">
@@ -173,7 +173,7 @@ export function ModalSkinShowcaseInfo({
 
       <Form.Root
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex h-fit w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
+        className="mt-4 flex w-full flex-1 flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
       >
         <div>
           <div className="mt-2 flex justify-between">
