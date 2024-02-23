@@ -157,8 +157,8 @@ export default function CartSkinCard({
           }}
           className="group flex h-full w-0 items-center justify-center
         rounded-l-none rounded-r-xl border-none
-        stroke-white transition-[width/color] hover:cursor-pointer
-        hover:stroke-mesh-color-rarity-lowest group-hover:w-20 group-hover:bg-mesh-color-others-eerie-black"
+        stroke-white transition-[width/color] group-hover:w-20
+        group-hover:bg-mesh-color-others-eerie-black hover:cursor-pointer hover:stroke-mesh-color-rarity-lowest"
         >
           <IconTrash />
         </Common.Button>
