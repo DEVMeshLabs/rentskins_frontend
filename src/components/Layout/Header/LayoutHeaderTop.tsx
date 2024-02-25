@@ -95,7 +95,7 @@ export function LayoutHeaderTop() {
 
   useEffect(() => {
     if (trueSession?.user?.steam?.steamid) {
-      refetch() // Refaz a requisição a cada 1 segundo
+      refetch() // Refaz a requisição a cada 1 seg
     }
     setHasNotifications(Notifications.hasNotification(data?.data))
   }, [pathname])
