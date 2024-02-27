@@ -77,9 +77,9 @@ export function FormInputRadioBlock({
             labelClassname ||
             `flex h-full w-full rounded-md border-2
           border-transparent bg-mesh-color-neutral-500 px-4 py-3 text-lg font-semibold text-mesh-color-neutral-200
-          duration-500 hover:bg-mesh-color-neutral-500/50 peer-checked:border-mesh-color-primary-600
-          peer-checked:bg-mesh-color-neutral-400 peer-checked:text-white peer-disabled:cursor-default
-          peer-disabled:border-mesh-color-neutral-600 peer-disabled:bg-mesh-color-neutral-600`
+          duration-500 peer-checked:border-mesh-color-primary-600 peer-checked:bg-mesh-color-neutral-400
+          peer-checked:text-white peer-disabled:cursor-default peer-disabled:border-mesh-color-neutral-600
+          peer-disabled:bg-mesh-color-neutral-600 hover:bg-mesh-color-neutral-500/50`
           } cursor-pointer select-none items-center justify-center transition-all`}
         >
           {(item.labelType === 'node' || item.labelType === 'string') &&

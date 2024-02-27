@@ -555,7 +555,7 @@ export function PageDetailsSkin({
                   <Common.Button
                     key={label}
                     className={classNames(
-                      'w-20 cursor-pointer rounded-lg border-2 border-mesh-color-neutral-400 p-2 font-medium text-white transition-all hover:bg-mesh-color-neutral-600 peer-checked:bg-mesh-color-primary-1200 peer-checked:text-black peer-disabled:opacity-10',
+                      'w-20 cursor-pointer rounded-lg border-2 border-mesh-color-neutral-400 p-2 font-medium text-white transition-all peer-checked:bg-mesh-color-primary-1200 peer-checked:text-black peer-disabled:opacity-10 hover:bg-mesh-color-neutral-600',
                       {
                         'bg-mesh-color-rarity-lowest text-white':
                           selectedRentTime,

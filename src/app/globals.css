@@ -7,17 +7,17 @@
 
 /* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 6px !important;
+  height: 6px !important;
 }
 
 *::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent !important;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #a6cf2b;
-  border-radius: 20px;
+  background-color: #a6cf2b !important;
+  border-radius: 20px !important;
 }
 
 @tailwind base;
@@ -33,7 +33,7 @@ body {
 }
 
 input:focus {
-  outline: none
+  outline: none;
 }
 
 input[type='radio'] {
@@ -42,7 +42,7 @@ input[type='radio'] {
   -moz-appearance: none;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
