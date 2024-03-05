@@ -52,11 +52,16 @@ export function ModalBuyMain({
     })
 
   useEffect(() => {
+    console.log(createTransaction)
     if (createTransaction?.status === 201) {
       setWhatModalOpenToBuySkin(3)
+      setOpenModalBuySkin(false)
     } else if (createTransaction?.request.status === 400) {
       setWhatModalOpenToBuySkin(4)
-    } else if (createTransaction?.request.status === 409) {
+      setOpenModalBuySkin(false)
+    } else if (
+      createTransaction?.request.response.includes('Skin Has Already Been Sold')
+    ) {
       setWhatModalOpenToBuySkin(0)
       Toast.Error('Desculpe, esse item já foi vendido.', 2000)
 
