@@ -158,7 +158,8 @@ export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
           </h1>
         </div>
         {item.skin_float && !thereIsFloat.includes(item.skin_category) ? (
-          <ColoredLine position={item.skin_float} />
+          // <ColoredLine position={item.skin_float} />
+          <ColoredLine position={0.38} />
         ) : (
           <div className="h-[6px] w-full" />
         )}
