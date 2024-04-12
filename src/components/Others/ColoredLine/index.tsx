@@ -23,7 +23,7 @@ export default function ColoredLine({ position, showFloat }: IProps) {
           )}
         >
           <IconLittleArrow />
-          <div className="absolute bottom-0 left-3 z-20 flex h-7 justify-center">
+          <div className="relative left-6 z-20 flex h-7 items-center justify-center">
             {showFloat && (
               <div className="text-mesh-color-primary-0">
                 {Number(position).toFixed(6)}
