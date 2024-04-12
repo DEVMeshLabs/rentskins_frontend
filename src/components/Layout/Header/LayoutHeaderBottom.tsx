@@ -21,7 +21,7 @@ interface IProps {
 export function LayoutHeaderBottom({ className }: IProps) {
   return (
     <div
-      className={`${className} z-0 flex w-full select-none items-center justify-center gap-10 border-y border-mesh-color-neutral-700`}
+      className={`${className} z-0 flex w-full select-none items-center justify-center gap-10 border-y border-mesh-color-neutral-700 text-xs laptop:text-base`}
     >
       {/*  */}
       <div className="flex w-10/12 select-none justify-between gap-10 p-4">

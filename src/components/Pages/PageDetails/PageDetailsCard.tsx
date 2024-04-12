@@ -62,7 +62,7 @@ export function PageDetailsCard({
       )}
       <div
         className={classNames(
-          'h-full min-h-[560px] w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat',
+          'h-fit w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat',
           {
             'opacity-30': item.deletedAt !== null,
           },
@@ -72,7 +72,7 @@ export function PageDetailsCard({
           style={{
             borderColor: `#${ColorRarity.transform(item.skin_rarity)}`,
           }}
-          className="flex h-full w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
+          className="flex aspect-video w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
         >
           {item.deletedAt === null && (
             <div className="absolute flex select-none space-x-2 p-2">
@@ -81,14 +81,14 @@ export function PageDetailsCard({
                 target="_blank"
                 rel="noreferrer"
               >
-                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
+                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-sm text-white opacity-50 transition-all first-line:border-neutral-600 hover:opacity-100 laptop:text-base">
                   <IconSteam />
                   Visualizar no Mercado da Steam
                 </div>
               </Link>
 
               <Link target="_blank" href={item.skin_link_game} rel="noreferrer">
-                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all hover:opacity-100">
+                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-sm text-white opacity-50 transition-all hover:opacity-100 laptop:text-base">
                   <IconOlho />
                   Inspecionar no Jogo
                 </div>

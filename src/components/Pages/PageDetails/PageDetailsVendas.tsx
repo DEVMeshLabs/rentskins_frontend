@@ -31,7 +31,7 @@ export function PageDetailsVendas({ latestSales }: IProps) {
           return (
             <div
               key={`${date}-${index}`}
-              className="flex justify-between border-b border-mesh-color-others-black-olive pb-1"
+              className="flex justify-between border-b border-mesh-color-others-black-olive pb-1 text-sm laptop:text-base"
             >
               <Common.Title className="text-mesh-color-neutral-0">
                 {refactorDate}
@@ -49,7 +49,7 @@ export function PageDetailsVendas({ latestSales }: IProps) {
         return null
       })
     ) : (
-      <Common.Title className="flex h-[235px] justify-center text-base font-normal text-mesh-color-neutral-400">
+      <Common.Title className="flex h-[235px] justify-center text-sm font-normal text-mesh-color-neutral-400 laptop:text-base">
         Nenhuma venda do item realizada.
       </Common.Title>
     )
@@ -57,7 +57,10 @@ export function PageDetailsVendas({ latestSales }: IProps) {
   return (
     <div className="h-full min-h-[340px] rounded-lg border-2 border-mesh-color-others-black-olive">
       <div className="h-full p-4">
-        <Common.Title color="white" className="text-[28px] font-bold">
+        <Common.Title
+          color="white"
+          className="text-base font-bold laptop:text-lg"
+        >
           Últimas Vendas
         </Common.Title>
         <div className="flex h-[90%] flex-col justify-between">

@@ -53,8 +53,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
     ),
   ]
 
-  console.log(item)
-
   const { data: averagePrice, isLoading: isLoadingAveragePrice } = useQuery({
     queryKey: ['GetItemAveragePrice', item.skin_name],
     queryFn: () => SkinService.getItemAveragePrice(itemsToCheckAveragePrice),
@@ -73,30 +71,38 @@ export default function PageDetailsMain({ item, seller }: IProps) {
         </Common.Title>
       </Link>
 
-      <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4">
+      <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4 ">
         <div className="col-span-3 grid grid-rows-1 gap-4">
-          <PageDetailsCard
-            item={item}
-            stickersPrice={averagePrice?.data?.slice(1)!}
-            isLoadingStickersPrice={isLoadingAveragePrice}
-          />
+          <div className="h-full w-full">
+            <PageDetailsCard
+              item={item}
+              stickersPrice={averagePrice?.data?.slice(1)!}
+              isLoadingStickersPrice={isLoadingAveragePrice}
+            />
+          </div>
 
-          <PageDetailsVendas latestSales={latestSales?.data} />
+          <div className="h-full w-full">
+            <PageDetailsVendas latestSales={latestSales?.data} />
+          </div>
         </div>
 
         <div className="col-span-2 grid grid-rows-1 gap-4">
-          <PageDetailsSkin
-            item={item}
-            session={trueSession}
-            defaultID={defaultID}
-            skinName={customName}
-            userStatus={status}
-            recommendedPrice={averagePrice?.data[0] || 'Indisponível'}
-            isLoadingRecommendedPrice={isLoadingAveragePrice}
-            userCart={userRetrieved?.data?.cart!}
-            userConfiguration={userRetrieved?.data?.configuration!}
-          />
-          <PageDetailsPerfil seller={seller} />
+          <div className="h-full w-full">
+            <PageDetailsSkin
+              item={item}
+              session={trueSession}
+              defaultID={defaultID}
+              skinName={customName}
+              userStatus={status}
+              recommendedPrice={averagePrice?.data[0] || 'Indisponível'}
+              isLoadingRecommendedPrice={isLoadingAveragePrice}
+              userCart={userRetrieved?.data?.cart!}
+              userConfiguration={userRetrieved?.data?.configuration!}
+            />
+          </div>
+          <div className="h-full w-full">
+            <PageDetailsPerfil seller={seller} />
+          </div>
         </div>
       </div>
       <SkinsSemelhantes
