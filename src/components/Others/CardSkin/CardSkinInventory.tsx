@@ -146,6 +146,17 @@ export function CardSkinInventory({ apiKey }: Props) {
 
   console.log(itemsLeftOnInventory)
 
+  const test = itemsLeftOnInventory.find((item) => {
+    return item.name.includes('Moonrise')
+  })
+
+  console.log(test?.descriptions)
+  console.log(test?.descriptions[6])
+  console.log(test?.descriptions[7])
+  console.log(test?.descriptions[8])
+  console.log(test?.descriptions[9])
+  console.log(test?.descriptions[11])
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="ml-2 flex flex-wrap justify-center gap-4">
@@ -202,9 +213,13 @@ export function CardSkinInventory({ apiKey }: Props) {
                     ? descriptions[4]?.value
                     : name.includes('Souvenir')
                     ? descriptions[10]?.value
-                    : descriptions[6]?.value,
+                    : descriptions[6]?.value !== ' '
+                    ? descriptions[6]?.value
+                    : descriptions[11]?.value,
                   categoryType[0].name === 'Agent' ? 'Patch' : 'Sticker',
                 )
+
+                console.log(categoryType[0].name)
 
                 return (
                   <ModalSkinShowcaseMain
