@@ -138,7 +138,7 @@ export default function PageStoreSkins() {
           {nameCorrection ? (
             <Common.Title
               bold={600}
-              className="text-2xl text-mesh-color-neutral-200"
+              className="text-lg text-mesh-color-neutral-200 laptop:text-2xl"
             >
               Nenhum item relacionado a{' '}
               <span className="text-mesh-color-primary-1200">

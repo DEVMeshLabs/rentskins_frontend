@@ -79,42 +79,43 @@ export default function CartSkinCard({
         className="absolute -left-2 -top-2 z-20 h-7 w-7 cursor-pointer rounded-full border-[1px] border-mesh-color-neutral-200 checked:bg-mesh-color-primary-1200"
       />
       <section
-        className="group flex h-44 w-full
-    select-none justify-center rounded-xl
-    bg-mesh-color-others-eerie-black transition-all ease-in-out hover:bg-mesh-color-neutral-500"
+        className="group flex h-32 w-full select-none
+    justify-center rounded-xl bg-mesh-color-others-eerie-black
+    transition-all ease-in-out hover:bg-mesh-color-neutral-500 laptop:h-44"
       >
         <div
           onClick={() => {
             setSelected((state) => !state)
             handleSetSkinToBuy()
           }}
-          className="pl flex w-full cursor-pointer items-center justify-start px-6"
+          className="flex w-full cursor-pointer items-center justify-start px-6"
         >
-          <div className="flex w-full items-center justify-start gap-6">
-            <div className="flex h-32 w-48 flex-col items-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern">
+          <div className="flex w-full items-center justify-start gap-2 laptop:gap-6">
+            <div className="flex aspect-video w-32 flex-col items-center justify-between rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern laptop:w-48">
               <div
-                className="h-1 w-32 rounded-b-full"
+                className="h-1 w-20 rounded-b-full laptop:w-32"
                 style={{ backgroundColor: `#${nameColor}` }}
               />
               <Image
                 src={`https://steamcommunity-a.akamaihd.net/economy/image/${iconUrl}`}
                 alt="placeholder"
-                width={138}
-                height={103}
+                width={200}
+                height={200}
+                className="p-4 laptop:w-36"
               />
             </div>
-            <div className="flex h-24 flex-col justify-between gap-3">
+            <div className="flex h-16 flex-col justify-center gap-3">
               <div>
                 <Common.Title
                   bold={600}
-                  className="text-2xl md:text-lg"
+                  className="text-sm laptop:text-xl"
                   color="white"
                 >
                   {customName}
                 </Common.Title>
                 <Common.Title
                   bold={500}
-                  className="text-2xl opacity-60 md:text-lg"
+                  className="text-sm opacity-60 laptop:text-xl"
                   color="cinza"
                 >
                   {statusFloat}
@@ -124,7 +125,7 @@ export default function CartSkinCard({
                 bold={500}
                 size="xl"
                 color="cinza"
-                className="text-xl opacity-60 md:text-base"
+                className="text-xs opacity-60 laptop:text-lg"
               >
                 {skinWeapon}
               </Common.Title>
@@ -133,14 +134,14 @@ export default function CartSkinCard({
           <div>
             <Common.Title
               bold={600}
-              className="text-3xl opacity-60 md:text-xl"
+              className="text-base opacity-60 laptop:text-2xl"
               color="white"
             >
               {formattedNumber}
             </Common.Title>
             <Common.Title
               color="white"
-              className="whitespace-nowrap text-lg opacity-60 md:text-sm"
+              className="whitespace-nowrap text-xs opacity-60 laptop:text-lg"
               bold={400}
             >
               <strong>FT / </strong>

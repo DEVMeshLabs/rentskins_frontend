@@ -75,7 +75,7 @@ export function PageDetailsCard({
           className="flex aspect-video w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
         >
           {item.deletedAt === null && (
-            <div className="absolute flex select-none space-x-2 p-2">
+            <div className="flex h-2 select-none space-x-2 p-2">
               <Link
                 href={item.skin_link_steam}
                 target="_blank"
@@ -103,12 +103,14 @@ export function PageDetailsCard({
               width={!thereIsFloat ? 408 : 510}
               height={!thereIsFloat ? 408 : 510}
               quality={100}
-              className="m-auto object-cover"
+              className="m-auto w-[50%] object-cover"
               draggable={false}
             />
-            <div className="absolute bottom-2 flex w-full justify-center">
-              {stickersElement}
-            </div>
+            {stickersElement && (
+              <div className="absolute bottom-2 flex w-full justify-center">
+                {stickersElement}
+              </div>
+            )}
           </div>
 
           {thereIsFloat && (

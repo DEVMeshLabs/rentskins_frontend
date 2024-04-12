@@ -398,7 +398,7 @@ export function PageDetailsSkin({
         )}
       </div>
 
-      <div className="mt-4 space-y-1 text-sm laptop:mt-6 laptop:space-y-4 laptop:text-base">
+      <div className="mt-4 space-y-4 text-sm laptop:mt-6 laptop:space-y-4 laptop:text-base">
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
             Tendências de Mercado

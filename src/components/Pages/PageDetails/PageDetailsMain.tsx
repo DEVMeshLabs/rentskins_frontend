@@ -62,7 +62,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   })
 
   return (
-    <main className="mx-auto w-10/12 bg-mesh-color-others-black">
+    <main className="mx-auto w-11/12 bg-mesh-color-others-black laptop:w-10/12">
       <Link href="/" className="mt-8 flex w-fit items-center gap-4">
         <IconArrow />
         <Common.Title color="cinza">
@@ -73,7 +73,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
 
       <div className="mx-auto grid w-full grid-cols-5 gap-4 py-4 ">
         <div className="col-span-3 grid grid-rows-1 gap-4">
-          <div className="h-full w-full">
+          <div className="">
             <PageDetailsCard
               item={item}
               stickersPrice={averagePrice?.data?.slice(1)!}
@@ -81,13 +81,13 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             />
           </div>
 
-          <div className="h-full w-full">
+          <div className="">
             <PageDetailsVendas latestSales={latestSales?.data} />
           </div>
         </div>
 
         <div className="col-span-2 grid grid-rows-1 gap-4">
-          <div className="h-full w-full">
+          <div className="">
             <PageDetailsSkin
               item={item}
               session={trueSession}
@@ -100,7 +100,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
               userConfiguration={userRetrieved?.data?.configuration!}
             />
           </div>
-          <div className="h-full w-full">
+          <div className="">
             <PageDetailsPerfil seller={seller} />
           </div>
         </div>

@@ -10,7 +10,7 @@ import Link from 'next/link'
 export function LayoutFooter() {
   return (
     <footer>
-      <div className="flex h-64 items-center justify-between bg-mesh-color-neutral-800 px-32">
+      <div className="flex h-48 items-center justify-between bg-mesh-color-neutral-800 px-32 laptop:h-64">
         <div className="flex flex-col gap-4">
           <IconLogo />
           <p>
@@ -21,7 +21,7 @@ export function LayoutFooter() {
         </div>
 
         <div className="flex flex-col items-end gap-16">
-          <nav className="flex gap-12">
+          <nav className="flex gap-6 text-xs laptop:gap-12 laptop:text-base">
             <Link
               href="/termos-de-uso"
               tabIndex={-1}
