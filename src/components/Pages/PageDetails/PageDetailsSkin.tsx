@@ -348,7 +348,7 @@ export function PageDetailsSkin({
   ]
 
   return (
-    <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 p-4">
+    <div className="flex h-full flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 p-4">
       <div className="space-y-2 laptop:space-y-4">
         <div>
           <Common.Title className="text-lg font-extrabold text-white laptop:text-2xl">
