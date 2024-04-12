@@ -89,7 +89,7 @@ export function ModalSkinShowcaseMain({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex bg-black/70 transition-all" />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 flex h-[75%] w-[80%]
+          className="fixed left-1/2 top-1/2 z-50 flex h-fit w-[80%]
         -translate-x-1/2 -translate-y-1/2 flex-col justify-center rounded-2xl bg-mesh-color-neutral-700"
         >
           <div className="flex h-full w-full flex-col items-center justify-between p-4 ">
@@ -108,7 +108,7 @@ export function ModalSkinShowcaseMain({
                 </Common.Button>
               </Dialog.Close>
             </div>
-            <div className="flex h-[90%] w-11/12 items-center justify-between">
+            <div className="flex h-fit w-full items-center justify-between px-8">
               <ModalSkinShowcaseSkin
                 isRentable={isRentable}
                 stickers={stickers}
