@@ -147,7 +147,7 @@ export function ModalInfoItem({
         <div>
           <div className="mt-2 flex justify-between">
             <Common.Title size="md" bold={500} color="white">
-              Preço recomendado:
+              Preço Recomendado:
             </Common.Title>
             <span className="text-mesh-color-accent-1000">
               {(averagePrice?.data &&

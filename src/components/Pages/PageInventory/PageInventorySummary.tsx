@@ -57,6 +57,8 @@ export default function PageInventorySummary() {
   }, [pathname, searchParams, router])
 
   useEffect(() => {
+    console.log(itemAnnounced)
+
     if (itemAnnounced) {
       if (itemAnnounced?.request.status === 201) {
         window.location.replace(pathname + '?success=true')
