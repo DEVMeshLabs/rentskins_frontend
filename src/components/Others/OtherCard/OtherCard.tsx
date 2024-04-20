@@ -29,12 +29,12 @@ export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
     'Collectible',
     'Patch',
     'Graffiti',
+    'Tag',
+    'Agent',
   ]
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
   const detailsLink = '/detalhes/' + item.slug.replaceAll('--', '-')
-
-  console.log(item.skin_name.includes('Sticker | MOUZ') ? detailsLink : null)
 
   const stickersElement =
     item?.stickers?.length > 0 &&

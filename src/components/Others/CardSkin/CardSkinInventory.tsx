@@ -146,17 +146,6 @@ export function CardSkinInventory({ apiKey }: Props) {
 
   console.log(itemsLeftOnInventory)
 
-  const test = itemsLeftOnInventory.find((item) => {
-    return item.name.includes('Moonrise')
-  })
-
-  console.log(test?.descriptions)
-  console.log(test?.descriptions[6])
-  console.log(test?.descriptions[7])
-  console.log(test?.descriptions[8])
-  console.log(test?.descriptions[9])
-  console.log(test?.descriptions[11])
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="ml-2 flex flex-wrap justify-center gap-4">
@@ -198,7 +187,6 @@ export function CardSkinInventory({ apiKey }: Props) {
                 const categoryType = tags.filter(
                   ({ category }) => category === 'Type',
                 )
-                console.log(categoryType[0].name === 'Tag' && name)
                 const isRentable = !(
                   categoryType[0].name === 'Graffiti' ||
                   categoryType[0].name === 'Container' ||

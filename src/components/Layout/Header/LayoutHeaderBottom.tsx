@@ -173,10 +173,10 @@ export const ContainerItem = ({
       )}
 
       {isList && (
-        <div
-          className={`invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white drop-shadow-lg delay-75 group-hover:visible`}
-        >
-          <ul className="flex flex-col">{children}</ul>
+        <div className="invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white drop-shadow-lg delay-75 group-hover:visible">
+          <ul className="scrollbar-thumb-[ #a6cf2b] flex flex-col scrollbar-thin scrollbar-track-gray-200">
+            {children}
+          </ul>
         </div>
       )}
     </div>

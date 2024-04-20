@@ -51,16 +51,28 @@ export function ModalBuyMain({
       cacheTime: 0,
     })
 
+  console.log(createTransaction)
+
   useEffect(() => {
     if (createTransaction?.status === 201) {
       setWhatModalOpenToBuySkin(3)
+      setTimeout(() => {
+        onOpenChange()
+        router.replace('/')
+      }, 2000)
+      onOpenChange()
     } else if (createTransaction?.request.status === 400) {
       setWhatModalOpenToBuySkin(4)
-    } else if (createTransaction?.request.status === 409) {
+    } else if (
+      createTransaction?.request.response.includes('Skin Has Already Been Sold')
+    ) {
       setWhatModalOpenToBuySkin(0)
       Toast.Error('Desculpe, esse item já foi vendido.', 2000)
 
-      setTimeout(() => router.replace('/'), 2000)
+      setTimeout(() => {
+        onOpenChange()
+        router.replace('/')
+      }, 2000)
     }
   }, [createTransaction, refetchCreateTransaction])
 

@@ -92,11 +92,9 @@ export function LayoutHeaderTop() {
     userConfig!.data?.url_trade !== ''
 
   useEffect(() => {
-    // const interval = setInterval(() => {
     if (trueSession?.user?.steam?.steamid) {
-      refetch() // Refaz a requisição a cada 1 segundo
+      refetch() // Refaz a requisição a cada 1 seg
     }
-    // }, 10 * 60 * 1000)
     setHasNotifications(Notifications.hasNotification(data?.data))
   }, [pathname])
 
