@@ -10,7 +10,7 @@ interface IProps {
 export function ModalConfirm({ label, onClick, itemAvailable }: IProps) {
   return (
     <div className="flex items-end pt-2">
-      <p className="w-4/5 leading-tight text-mesh-color-neutral-0">
+      <p className="w-4/5 pr-2 leading-tight text-mesh-color-neutral-0">
         Ao prosseguir para finalizar o pagamento, você concorda com os nossos{' '}
         <Link
           href={'/termos-de-uso'}

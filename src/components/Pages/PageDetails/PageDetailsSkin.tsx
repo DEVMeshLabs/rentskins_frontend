@@ -348,24 +348,28 @@ export function PageDetailsSkin({
   ]
 
   return (
-    <div className="flex flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
-      <div className="space-y-4">
+    <div className="flex h-full flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 p-4">
+      <div className="space-y-2 laptop:space-y-4">
         <div>
-          <Common.Title className="text-2xl font-extrabold text-white">
+          <Common.Title className="text-lg font-extrabold text-white laptop:text-2xl">
             {skinName}
           </Common.Title>
-          <p className="text-mesh-color-neutral-200">{item.status_float}</p>
+          <p className="text-xs text-mesh-color-neutral-200 laptop:text-base">
+            {item.status_float}
+          </p>
         </div>
 
         <div>
-          <Common.Title className="text-2xl font-extrabold text-white">
+          <Common.Title className="text-lg font-extrabold text-white laptop:text-2xl">
             {Number(item.skin_price).toLocaleString('PT-BR', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
             })}
           </Common.Title>
-          <p className="text-mesh-color-neutral-200">Preço Total</p>
+          <p className="text-xs text-mesh-color-neutral-200 laptop:text-base">
+            Preço Total
+          </p>
         </div>
 
         {item.sale_type === 'rent' && stateRentTime > 0 && (
@@ -394,7 +398,7 @@ export function PageDetailsSkin({
         )}
       </div>
 
-      <div className="mt-6 space-y-4">
+      <div className="mt-4 space-y-4 text-sm laptop:mt-6 laptop:space-y-4 laptop:text-base">
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
             Tendências de Mercado
@@ -452,7 +456,7 @@ export function PageDetailsSkin({
 
       <div
         className={classNames(
-          'mt-6 flex h-32 flex-col justify-end gap-4 transition-all',
+          'mt-6 flex h-fit flex-col justify-end gap-4 transition-all',
           {
             'justify-between': rent,
           },

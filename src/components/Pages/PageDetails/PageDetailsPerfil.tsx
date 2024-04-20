@@ -53,17 +53,22 @@ export function PageDetailsPerfil({ seller }: IProps) {
             />
           </Link>
           <div className="ml-4">
-            <Common.Title color="white" className="text-2xl font-semibold">
+            <Common.Title
+              color="white"
+              className="text-lg font-semibold laptop:text-2xl"
+            >
               {seller.owner_name}
             </Common.Title>
-            <Image
-              src={Rank.retrieveRank(seller.reliability!) as StaticImageData}
-              alt="Rank"
-              width={80}
-            />
+            <div className="w-[48px] laptop:w-[80px]">
+              <Image
+                src={Rank.retrieveRank(seller.reliability!) as StaticImageData}
+                alt="Rank"
+                width={80}
+              />
+            </div>
           </div>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2 text-sm laptop:space-y-3 laptop:text-base">
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
               Taxa de Entrega
@@ -135,7 +140,7 @@ export function PageDetailsPerfil({ seller }: IProps) {
         <div className="self-center">
           <Link
             href={`/perfil/${seller.owner_id}`}
-            className="cursor-pointer select-none text-lg font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
+            className="cursor-pointer select-none text-base font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100 laptop:text-lg"
           >
             Ver mais itens à venda
           </Link>

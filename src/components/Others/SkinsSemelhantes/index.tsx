@@ -24,8 +24,12 @@ export default function SkinsSemelhantes({
   )
 
   return (
-    <div className="min-h-[300px] pb-16 pt-8">
-      <Common.Title color="white" bold={700} className="mb-6 text-[28px]">
+    <div className="min-h-[300px] pb-16 laptop:pt-8">
+      <Common.Title
+        color="white"
+        bold={700}
+        className="mb-6 text-[20px] laptop:text-[28px]"
+      >
         Semelhantes
       </Common.Title>
       <div className="w-full">

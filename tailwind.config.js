@@ -27,6 +27,11 @@ module.exports = {
     extend: {
       screens: {
         xg: '1350px',
+        ipad: '1024px',
+        laptop: '1440px',
+        desktop_sm: '1680px',
+        desktop_md: '1920px',
+        desktop_lg: '2560px',
       },
       colors: {
         'mesh-color': {

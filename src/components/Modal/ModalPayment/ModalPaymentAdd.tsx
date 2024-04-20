@@ -195,7 +195,7 @@ overflow-y-auto rounded-2xl bg-mesh-color-neutral-700"
                 </div>
               </div>
               <div className="mb-8 flex w-11/12 items-center justify-between gap-2 self-center md:gap-0">
-                <span className="leading text-white">
+                <span className="leading pr-2 text-white">
                   Ao prosseguir para finalizar o pagamento, você concorda com os
                   nossos{' '}
                   <Link

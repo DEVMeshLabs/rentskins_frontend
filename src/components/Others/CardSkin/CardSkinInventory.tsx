@@ -199,9 +199,13 @@ export function CardSkinInventory({ apiKey }: Props) {
                     ? descriptions[4]?.value
                     : name.includes('Souvenir')
                     ? descriptions[10]?.value
-                    : descriptions[6]?.value,
+                    : descriptions[6]?.value !== ' '
+                    ? descriptions[6]?.value
+                    : descriptions[11]?.value,
                   categoryType[0].name === 'Agent' ? 'Patch' : 'Sticker',
                 )
+
+                console.log(categoryType[0].name)
 
                 return (
                   <ModalSkinShowcaseMain

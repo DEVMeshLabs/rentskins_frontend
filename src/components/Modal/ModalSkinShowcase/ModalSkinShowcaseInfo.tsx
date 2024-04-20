@@ -5,12 +5,12 @@ import Form from '@/components/Forms'
 import ISteamUser from '@/interfaces/steam.interface'
 
 import useSkinsStore from '@/stores/skins.store'
+import Toast from '@/tools/toast.tool'
 import { Values } from '@/tools/values.tool'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formResolver } from './info.schema'
-import Toast from '@/tools/toast.tool'
 
 type Props = {
   statusFloatText: string
@@ -161,25 +161,25 @@ export function ModalSkinShowcaseInfo({
   }
 
   return (
-    <div className="flex h-full w-[70%] flex-col transition-all 2xl:w-[50%]">
+    <div className="flex h-full w-[70%] flex-col justify-center transition-all">
       <div>
-        <Common.Title color="white" className="text-[28px]" bold={600}>
+        <Common.Title color="white" className="text-[18px] laptop:text-[24px]">
           {skin_name}
         </Common.Title>
-        <p className="-mt-1 font-medium text-mesh-color-neutral-200">
+        <p className="-mt-1 text-sm text-mesh-color-neutral-200 laptop:text-base">
           {skin_weapon} {statusFloatText && `• ${statusFloatText}`}
         </p>
       </div>
 
       <Form.Root
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex w-full flex-1 flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
+        className="mt-1 flex h-fit w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4 laptop:mt-4"
       >
-        <div>
-          <div className="mt-2 flex justify-between">
-            <Common.Title size="md" bold={500} color="white">
+        <div className="h-fit">
+          <div className="flex items-center justify-between laptop:mt-2">
+            <text className="text-sm font-semibold text-white laptop:text-base">
               Preço Recomendado:
-            </Common.Title>
+            </text>
             <span className="text-mesh-color-accent-1000">
               {!isPriceLoading ? (
                 recommended_price
@@ -188,14 +188,14 @@ export function ModalSkinShowcaseInfo({
               )}
             </span>
           </div>
-          <p className="w-full pt-2 text-sm leading-tight text-mesh-color-neutral-200">
+          <p className="w-full text-xs leading-tight text-mesh-color-neutral-200 laptop:pt-2 laptop:text-sm">
             Preço que recomendamos com base no mercado do momento.
           </p>
-          <div className="mt-6 rounded border-b border-mesh-color-neutral-200" />
+          <div className="my-1 rounded border-b border-mesh-color-neutral-200 laptop:my-6" />
         </div>
 
         {/* ---------INPUT -------------  */}
-        <div className="mt-5 flex w-full max-w-[100%] gap-4">
+        <div className="flex w-full max-w-[100%] gap-4">
           <div className="w-1/2 max-w-[50%]">
             <Form.Input.Currency
               name="value"
@@ -218,8 +218,8 @@ export function ModalSkinShowcaseInfo({
             />
           </div>
 
-          <div className="flex w-1/2 max-w-[50%] flex-col">
-            <Common.Title bold={500} color="white" size="lg">
+          <div className="flex w-1/2 max-w-[50%] flex-col ">
+            <Common.Title bold={100} color="white" size="lg">
               Você irá receber
             </Common.Title>
             <div
@@ -258,7 +258,7 @@ export function ModalSkinShowcaseInfo({
             </div>
           </div>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 ">
           <Form.Input.Checkbox
             name="sell-rent"
             register={register('sell')}
@@ -285,7 +285,7 @@ export function ModalSkinShowcaseInfo({
         </div>
         {/* ---------INPUT FIM -------------  */}
 
-        <div className="space-y-6">
+        <div className="space-y-2 laptop:space-y-6">
           {isSelected ? (
             <div className="flex gap-4">
               <Form.Button
@@ -319,7 +319,7 @@ export function ModalSkinShowcaseInfo({
             <Form.Input.Checkbox
               name="terms"
               wrapperClassname="gap-4"
-              labelClassName="text-sm text-justify text-white"
+              labelClassName="text-xs laptop:text-sm text-justify text-white"
               label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
