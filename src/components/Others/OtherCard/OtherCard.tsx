@@ -35,6 +35,11 @@ export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
 
   const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
   const detailsLink = '/detalhes/' + item.slug.replaceAll('--', '-')
+  const floatValue = item.status_float.includes('-')
+    ? item.status_float.split('-')[0][0] + item.status_float.split('-')[1][0]
+    : !thereIsFloat.includes(item.skin_category)
+    ? item.status_float.split(' ')[0][0] + item.status_float.split(' ')[1][0]
+    : ''
 
   const stickersElement =
     item?.stickers?.length > 0 &&
@@ -149,7 +154,7 @@ export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
           <h1>
             {!thereIsFloat.includes(item.skin_category) && (
               <>
-                <strong>FT / </strong>
+                <strong>{floatValue} / </strong>
                 <span className="opacity-60">
                   {Number(item.skin_float).toFixed(6)}
                 </span>
@@ -158,9 +163,9 @@ export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
           </h1>
         </div>
         {item.skin_float && !thereIsFloat.includes(item.skin_category) ? (
-          // <ColoredLine position={item.skin_float} />
-          <ColoredLine position={0.38} />
+          <ColoredLine position={item.skin_float} />
         ) : (
+          // <ColoredLine position={0.38} />
           <div className="h-[6px] w-full" />
         )}
         <div className="flex select-none items-center justify-end">

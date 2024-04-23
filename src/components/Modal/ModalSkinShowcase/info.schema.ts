@@ -16,7 +16,7 @@ const formSchema = yup.object({
         currencyToNumber = item.replace('R$ ', '')
         currencyToNumber = currencyToNumber.replace(',', '.')
 
-        if (Number(currencyToNumber) <= 0) {
+        if (Number(currencyToNumber) < 0) {
           return false
         }
 
@@ -25,7 +25,7 @@ const formSchema = yup.object({
     )
     .test(
       'form-value-min-test',
-      'O campo deve conter um valor maior ou igual a R$ 10,00.',
+      'O campo deve conter um valor maior ou igual a R$ 0,10.',
       (item) => {
         if (item === '' || item === undefined) {
           return true
@@ -35,7 +35,10 @@ const formSchema = yup.object({
         currencyToNumber = item.replace('R$ ', '')
         currencyToNumber = currencyToNumber.replace(',', '.')
 
-        if (Number(currencyToNumber) < 10) {
+        console.log(currencyToNumber)
+        console.log(parseFloat(currencyToNumber))
+
+        if (parseFloat(currencyToNumber) < 0.1) {
           return false
         }
 
