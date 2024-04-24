@@ -35,9 +35,6 @@ const formSchema = yup.object({
         currencyToNumber = item.replace('R$ ', '')
         currencyToNumber = currencyToNumber.replace(',', '.')
 
-        console.log(currencyToNumber)
-        console.log(parseFloat(currencyToNumber))
-
         if (parseFloat(currencyToNumber) < 0.1) {
           return false
         }
