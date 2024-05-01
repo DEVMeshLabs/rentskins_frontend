@@ -218,8 +218,8 @@ export function ModalSkinShowcaseInfo({
             />
           </div>
 
-          <div className="flex w-1/2 max-w-[50%] flex-col ">
-            <Common.Title bold={100} color="white" size="lg">
+          <div className="flex w-1/2 max-w-[50%] flex-col text-base laptop:text-lg">
+            <Common.Title bold={100} color="white">
               Você irá receber
             </Common.Title>
             <div
