@@ -99,7 +99,7 @@ export default class SkinService {
     const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
       return skin
     })
-
+    console.log(skinsWithoutId)
     const result: AxiosResponse<{ status: number }> = await Api.post<{
       status: number
     }>('/skins', skinsWithoutId, {
@@ -107,9 +107,8 @@ export default class SkinService {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response)
+      .then((response) => console.log(response))
       .catch((err) => err)
-
     return result
   }
 
@@ -117,7 +116,6 @@ export default class SkinService {
     assetId: string,
     ownerId: string,
   ) {
-    console.log(assetId)
     const result: AxiosResponse<ISkinsAvailability, any> = await Api.post(
       `/skins/availability/${ownerId}`,
       {

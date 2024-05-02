@@ -75,8 +75,6 @@ export function PageSettingsInformation() {
     },
   })
 
-  console.log(userConfig?.data?.owner_phone)
-
   const {
     handleSubmit: handleSubmitCPF,
     register: registerCPF,

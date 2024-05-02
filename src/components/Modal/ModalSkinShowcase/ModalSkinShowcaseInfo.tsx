@@ -18,6 +18,7 @@ type Props = {
   skin_category: string
   skin_rarity: string
   skin_float: string
+  skin_paintseed: number
   skin_image: string
   skin_link_game: string
   skin_link_steam: string
@@ -44,6 +45,7 @@ export function ModalSkinShowcaseInfo({
   isRentable,
   skin_rarity,
   skin_float,
+  skin_paintseed,
   skin_image,
   skin_link_game,
   skin_link_steam,
@@ -125,6 +127,7 @@ export function ModalSkinShowcaseInfo({
         skin_category,
         skin_rarity,
         skin_float,
+        skin_paintseed,
         skin_image,
         skin_link_game,
         skin_link_steam,

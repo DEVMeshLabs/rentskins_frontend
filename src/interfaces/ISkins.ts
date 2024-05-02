@@ -12,7 +12,7 @@ export interface ISkins {
   skin_weapon: string
   skin_price: number
   skin_float: string
-  skin_paintseed: string
+  skin_paintseed: number
   status: string
   median_price: number
   sale_type: 'sale' | 'rent'
@@ -154,6 +154,7 @@ export interface ISkinsToAdvertise {
   skin_weapon: string
   skin_price: number
   skin_float: string
+  skin_paintseed: number
   seller_name: string
   seller_id: string
   skin_rarity: string
