@@ -12,6 +12,7 @@ export interface ISkins {
   skin_weapon: string
   skin_price: number
   skin_float: string
+  skin_paintseed: string
   status: string
   median_price: number
   sale_type: 'sale' | 'rent'

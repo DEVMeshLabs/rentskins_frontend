@@ -70,7 +70,7 @@ export function PageDetailsSkin({
     item.skin_category === 'Collectible' ||
     item.skin_category === 'Patch'
   )
-
+  console.log(item)
   const skinToBuy = {
     skinId: item.id,
     skinPrice: item.skin_price,
