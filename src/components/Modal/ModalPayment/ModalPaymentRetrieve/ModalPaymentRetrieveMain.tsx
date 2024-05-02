@@ -18,7 +18,7 @@ export function ModalPaymentRetrieveMain({ afterFormSubmit }: IProps) {
   return (
     <Dialog.Content
       className="h-8/10 fixed left-1/2 top-1/2 z-30 w-10/12 -translate-x-1/2 -translate-y-1/2 rounded-2xl
-  bg-mesh-color-neutral-700 transition-all laptop:h-2/3 laptop:w-2/3 laptop:bg-red-500"
+  bg-mesh-color-neutral-700 transition-all laptop:h-2/3 laptop:w-2/3"
     >
       <div className="flex h-full w-full flex-col items-center justify-between pt-8">
         <div className="flex w-11/12 items-center justify-between">
