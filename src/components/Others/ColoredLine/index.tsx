@@ -21,7 +21,7 @@ export default function ColoredLine({ position, showFloat }: IProps) {
             },
           )}
         >
-          <div className="absolute bottom-0 z-20 flex h-9 justify-center">
+          <div className="absolute bottom-0 z-20 flex h-9 w-0 justify-center bg-red-500">
             {showFloat && (
               <div className="text-mesh-color-primary-0">
                 {Number(position).toFixed(6)}
