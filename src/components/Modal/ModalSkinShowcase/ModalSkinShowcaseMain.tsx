@@ -103,8 +103,10 @@ export function ModalSkinShowcaseMain({
                 )}
               </Dialog.Title>
               <Dialog.Close asChild>
-                <Common.Button className="-mb-6 border-transparent outline-none">
-                  <IconClose />
+                <Common.Button className=" border-transparent outline-none">
+                  <div>
+                    <IconClose />
+                  </div>
                 </Common.Button>
               </Dialog.Close>
             </div>
