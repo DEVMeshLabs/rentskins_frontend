@@ -14,7 +14,7 @@ export function ModalPaymentMain({ children }: IProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
   const handleAfterFormSubmit = () => {
-    // setModalOpen(false)
+    setModalOpen(false)
   }
 
   const {

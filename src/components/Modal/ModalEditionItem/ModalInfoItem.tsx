@@ -182,7 +182,7 @@ export function ModalInfoItem({
               errors={errors.value}
             />
           </div>
-          <div className="flex w-1/2 max-w-[50%] flex-col">
+          <div className="flex w-1/2 max-w-[50%] flex-col text-base laptop:text-lg">
             <Common.Title bold={500} color="white" size="lg">
               Você irá receber
             </Common.Title>
