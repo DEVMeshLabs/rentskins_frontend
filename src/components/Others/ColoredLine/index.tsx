@@ -1,6 +1,5 @@
 import IconLittleArrow from '@/components/Icons/IconLittleArrow'
 import classNames from 'classnames'
-import { log } from 'console'
 
 interface IProps {
   position: string | number
@@ -9,7 +8,7 @@ interface IProps {
 
 export default function ColoredLine({ position, showFloat }: IProps) {
   const percentage = Math.abs(Number(String(position).replace(',', '.')) * 100)
-  console.log(percentage)
+
   return (
     <div className="relative flex w-full flex-col">
       {percentage !== 0.0 && (
