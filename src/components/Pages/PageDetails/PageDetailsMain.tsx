@@ -27,7 +27,6 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   const trueSession = (session as ISteamUser) || {}
   const paintSeed = item.skin_paintseed
   const customName = item.skin_name.split('(')[0]
-
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
     queryFn: () => {
