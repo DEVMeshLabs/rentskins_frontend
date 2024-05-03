@@ -36,7 +36,7 @@ export default function PageInventorySummary() {
         skinsToAdvertise,
         trueSession.user?.token!,
       )
-
+      console.log(announcedSkins)
       if (announcedSkins.request.status !== 409) {
         cleanSkinsToAdvertise()
       }
@@ -57,9 +57,8 @@ export default function PageInventorySummary() {
   }, [pathname, searchParams, router])
 
   useEffect(() => {
-    console.log(itemAnnounced)
-
     if (itemAnnounced) {
+      console.log(itemAnnounced)
       if (itemAnnounced?.request.status === 201) {
         window.location.replace(pathname + '?success=true')
       } else if (itemAnnounced?.request.status === 409) {

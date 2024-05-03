@@ -103,8 +103,10 @@ export function ModalSkinShowcaseMain({
                 )}
               </Dialog.Title>
               <Dialog.Close asChild>
-                <Common.Button className="-mb-6 border-transparent outline-none">
-                  <IconClose />
+                <Common.Button className=" border-transparent outline-none">
+                  <div>
+                    <IconClose />
+                  </div>
                 </Common.Button>
               </Dialog.Close>
             </div>
@@ -139,6 +141,7 @@ export function ModalSkinShowcaseMain({
                 skin_link_game={inspectLink}
                 skin_link_steam={`https://steamcommunity.com/market/listings/730/${marketName}`}
                 status_float={statusFloat}
+                skin_paintseed={skinFloat?.data.paintseed || 0}
                 statusFloatText={statusFloat}
               />
             </div>
