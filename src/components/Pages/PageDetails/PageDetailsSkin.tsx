@@ -18,7 +18,6 @@ import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-//
 
 type PropsTypes = {
   item: ISkins
@@ -80,7 +79,6 @@ export function PageDetailsSkin({
     skinWeapon: item.skin_weapon,
     statusFloat: item.status_float,
   }
-
 
   useEffect(() => {
     if (item.seller_id === session?.user?.steam?.steamid) {
@@ -196,7 +194,6 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations, itemAvailable])
 
   useEffect(() => {
-
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)
@@ -274,7 +271,6 @@ export function PageDetailsSkin({
   }, [methodSelected, createCart, userStatus, pathname, hasConfigurations])
 
   useEffect(() => {
-
     if (resultAvailability?.request && !refetchingAvailability) {
       if (resultAvailability?.request?.status === 200) {
         proceedItem()
@@ -295,7 +291,6 @@ export function PageDetailsSkin({
           router.push('/')
           setOpenModalBuySkin(false)
         } else {
-
           NotificationServices.createNewNotification(
             item.seller_id,
             session?.user?.token!,
@@ -417,9 +412,8 @@ export function PageDetailsSkin({
           <Common.Title className="text-mesh-color-neutral-200">
             Paint Seed
           </Common.Title>
-          <p className="text-white">{paintSeed ? paintSeed : "Indisponível"}</p>
+          <p className="text-white">{paintSeed || 'Indisponível'}</p>
         </div>
-       
 
         {thereIsFloat && (
           <div className="flex justify-between">
@@ -427,7 +421,9 @@ export function PageDetailsSkin({
               Float
             </Common.Title>
             <div className="flex items-center">
-              <p className="text-white">{item.skin_float ? item.skin_float : "Indisponível"}</p>
+              <p className="text-white">
+                {item.skin_float ? item.skin_float : 'Indisponível'}
+              </p>
             </div>
           </div>
         )}

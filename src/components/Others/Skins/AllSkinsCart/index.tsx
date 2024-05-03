@@ -65,7 +65,6 @@ export default function AllSkinsCart() {
                     skin_weapon,
                     status,
                     skin_float,
-                    
                   },
                   id: modelId,
                 },

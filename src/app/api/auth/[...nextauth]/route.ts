@@ -35,7 +35,6 @@ async function handler(
         const now = moment()
         const monthsDifference = now.diff(date, 'months')
 
-
         const verifyVAC = await UserService.verifyAccountStatus(user?.id!)
 
         if (monthsDifference <= 3) {

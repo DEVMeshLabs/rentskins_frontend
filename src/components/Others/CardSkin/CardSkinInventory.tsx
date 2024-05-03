@@ -205,7 +205,6 @@ export function CardSkinInventory({ apiKey }: Props) {
                   categoryType[0].name === 'Agent' ? 'Patch' : 'Sticker',
                 )
 
-
                 return (
                   <ModalSkinShowcaseMain
                     isRentable={isRentable}

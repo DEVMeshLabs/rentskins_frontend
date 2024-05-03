@@ -57,7 +57,6 @@ export default function PageInventorySummary() {
   }, [pathname, searchParams, router])
 
   useEffect(() => {
-
     if (itemAnnounced) {
       console.log(itemAnnounced)
       if (itemAnnounced?.request.status === 201) {

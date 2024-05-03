@@ -118,7 +118,7 @@ export function ModalSkinShowcaseMain({
                 stickersValue={averagePrice?.data?.slice(1)!}
                 stickersLoading={isLoadingAveragePrice}
                 icon_url={skinImage}
-                weapon={skinWeapon}                
+                weapon={skinWeapon}
                 float={skinFloat?.data.float || ''}
               />
               <ModalSkinShowcaseInfo
@@ -143,7 +143,6 @@ export function ModalSkinShowcaseMain({
                 status_float={statusFloat}
                 skin_paintseed={skinFloat?.data.paintseed || 0}
                 statusFloatText={statusFloat}
-
               />
             </div>
             <div />
