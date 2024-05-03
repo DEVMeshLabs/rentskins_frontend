@@ -37,6 +37,8 @@ export default function PageProfileSelf() {
     enabled: status === 'authenticated',
   })
 
+  console.log(session)
+
   const {
     data: itens,
     isLoading: isLoadingItens,

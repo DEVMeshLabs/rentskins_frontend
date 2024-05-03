@@ -29,6 +29,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
   const customName = item.skin_name.split('(')[0]
 
   console.log(seller.owner_id)
+  console.log(seller)
 
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],

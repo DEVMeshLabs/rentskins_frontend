@@ -27,7 +27,7 @@ export default function PageHomeHero({ error }: IProps) {
       <div className="flex flex-col items-center space-y-8 text-center text-white">
         <p className="max-w-2xl text-[3.5rem] font-bold leading-none">
           <span>
-            Descubra o mundo das skins de{' '}
+            Descubra o mundo das skins deeeeeeee{' '}
             <strong className="bg-mesh-gradient-green-pattern bg-clip-text text-transparent">
               Counter-Strike
             </strong>

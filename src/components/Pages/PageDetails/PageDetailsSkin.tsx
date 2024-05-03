@@ -18,7 +18,6 @@ import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-//
 
 type PropsTypes = {
   item: ISkins

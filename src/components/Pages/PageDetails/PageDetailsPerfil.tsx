@@ -16,6 +16,7 @@ interface IProps {
 }
 
 export function PageDetailsPerfil({ seller }: IProps) {
+  console.log(seller)
   const dateFormated =
     seller.steam_created_date === undefined
       ? 'Indefinido'
