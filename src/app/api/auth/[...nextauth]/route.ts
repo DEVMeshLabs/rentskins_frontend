@@ -46,6 +46,9 @@ async function handler(
           return '/?error=SignInAccountVACBanned'
         }
 
+        console.log(user)
+        console.log(profile)
+
         return user
       },
       jwt({ token, account, profile }) {

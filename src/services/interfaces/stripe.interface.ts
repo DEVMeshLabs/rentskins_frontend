@@ -1,6 +1,6 @@
 export interface IStripeCreatePayment {
   owner_id: string
-  email: string
+  email?: string
   success_url: string
   cancel_url: string
   cpf: string
