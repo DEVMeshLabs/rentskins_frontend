@@ -86,10 +86,10 @@ export function LayoutHeaderTop() {
   const configValidation =
     userConfig &&
     userConfig.data &&
-    userConfig!.data?.owner_email !== '' &&
-    userConfig!.data?.owner_phone !== '' &&
-    userConfig!.data?.owner_cpf !== '' &&
-    userConfig!.data?.url_trade !== ''
+    userConfig!.data?.owner_email !== ('' || null) &&
+    userConfig!.data?.owner_phone !== ('' || null) &&
+    userConfig!.data?.owner_cpf !== ('' || null) &&
+    userConfig!.data?.url_trade !== ('' || null)
 
   useEffect(() => {
     if (trueSession?.user?.steam?.steamid) {

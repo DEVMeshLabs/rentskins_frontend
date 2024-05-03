@@ -59,11 +59,12 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
 
   const { data: createdPayment, refetch: createPayment } = useQuery({
     queryKey: ['Payment'],
-    queryFn: () =>
-      StripeService.createPayment(
+    queryFn: () => {
+      return StripeService.createPayment(
         {
           owner_id: trueSession.user?.steam?.steamid!,
-          email: userConfigurations?.data.owner_email!,
+          email: userConfigurations?.data.owner_email,
+          // email: userConfigurations?.data.owner_email!,
           success_url: ('https://rentskins-testing.vercel.app' +
             '/pagamento/recarregar') as string,
           cancel_url: ('https://rentskins-testing.vercel.app' +
@@ -73,12 +74,17 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
           cpf: userConfigurations?.data.owner_cpf!,
         },
         trueSession.user?.token!,
-      ),
+      )
+    },
     cacheTime: 0,
     enabled: false,
   })
 
+  console.log(createdPayment)
+
   useEffect(() => {
+    console.log(payment)
+    console.log(startPayment)
     if (payment && startPayment) {
       createPayment()
       afterFormSubmit()

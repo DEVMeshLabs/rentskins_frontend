@@ -52,6 +52,9 @@ async function handler(
         }
         console.log('ok')
 
+        console.log(user)
+        console.log(profile)
+
         return user
       },
       jwt({ token, account, profile }) {
