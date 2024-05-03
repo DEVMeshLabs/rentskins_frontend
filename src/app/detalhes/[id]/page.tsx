@@ -50,7 +50,7 @@ export async function generateMetadata({
   params: { id },
 }: IMetadata): Promise<Metadata> {
   const response = await fetchItem(id)
-
+  console.log()
   return {
     title: `${response?.skin_name || 'Detalhes'} - RentSkins`,
     description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
@@ -60,7 +60,6 @@ export async function generateMetadata({
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
   const seller = await fetchSeller(item?.seller_id)
-
   if (item) {
     if (!seller || seller.deletedAt) {
       await deleteItem(item.id)

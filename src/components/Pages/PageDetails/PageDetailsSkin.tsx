@@ -26,7 +26,7 @@ type PropsTypes = {
   recommendedPrice: string
   isLoadingRecommendedPrice: boolean
   skinName: string
-  defaultID: string
+  paintSeed: number
   userCart: IGetUserCart
   session: ISteamUser
 }
@@ -36,7 +36,7 @@ export function PageDetailsSkin({
   userStatus,
   userConfiguration,
   skinName,
-  defaultID,
+  paintSeed,
   isLoadingRecommendedPrice,
   recommendedPrice,
   session,
@@ -69,7 +69,6 @@ export function PageDetailsSkin({
     item.skin_category === 'Collectible' ||
     item.skin_category === 'Patch'
   )
-
   const skinToBuy = {
     skinId: item.id,
     skinPrice: item.skin_price,
@@ -80,6 +79,7 @@ export function PageDetailsSkin({
     skinWeapon: item.skin_weapon,
     statusFloat: item.status_float,
   }
+
 
   useEffect(() => {
     if (item.seller_id === session?.user?.steam?.steamid) {
@@ -195,7 +195,7 @@ export function PageDetailsSkin({
   }, [methodSelected, refetchAvailability, hasConfigurations, itemAvailable])
 
   useEffect(() => {
-    console.log(resultAvailability)
+
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
       setRentTime(stateRentTime!)
@@ -273,7 +273,7 @@ export function PageDetailsSkin({
   }, [methodSelected, createCart, userStatus, pathname, hasConfigurations])
 
   useEffect(() => {
-    console.log(resultAvailability)
+
     if (resultAvailability?.request && !refetchingAvailability) {
       if (resultAvailability?.request?.status === 200) {
         proceedItem()
@@ -294,7 +294,7 @@ export function PageDetailsSkin({
           router.push('/')
           setOpenModalBuySkin(false)
         } else {
-          console.log('Aqui foi 2')
+
           NotificationServices.createNewNotification(
             item.seller_id,
             session?.user?.token!,
@@ -387,6 +387,7 @@ export function PageDetailsSkin({
                   currency: 'BRL',
                   minimumFractionDigits: 2,
                 })}
+                aqui
               </Common.Title>
               <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
                 {rentPercentage}%
@@ -411,14 +412,13 @@ export function PageDetailsSkin({
           </div>
         </div>
 
-        {defaultID && (
-          <div className="flex justify-between">
-            <Common.Title className="text-mesh-color-neutral-200">
-              Paint Seed
-            </Common.Title>
-            <p className="text-white">{defaultID}</p>
-          </div>
-        )}
+        <div className="flex justify-between">
+          <Common.Title className="text-mesh-color-neutral-200">
+            Paint Seed
+          </Common.Title>
+          <p className="text-white">{paintSeed ? paintSeed : "Indisponível"}</p>
+        </div>
+       
 
         {thereIsFloat && (
           <div className="flex justify-between">
@@ -426,7 +426,7 @@ export function PageDetailsSkin({
               Float
             </Common.Title>
             <div className="flex items-center">
-              <p className="text-white">{item.skin_float}</p>
+              <p className="text-white">{item.skin_float ? item.skin_float : "Indisponível"}</p>
             </div>
           </div>
         )}

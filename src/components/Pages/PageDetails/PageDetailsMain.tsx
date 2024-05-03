@@ -25,12 +25,8 @@ interface IProps {
 export default function PageDetailsMain({ item, seller }: IProps) {
   const { data: session, status } = useSession()
   const trueSession = (session as ISteamUser) || {}
-  const defaultID = item.skin_link_game.slice(20, 37)
+  const paintSeed = item.skin_paintseed
   const customName = item.skin_name.split('(')[0]
-
-  console.log(seller.owner_id)
-  console.log(seller)
-
   const { data: userRetrieved } = useQuery({
     queryKey: ['ifProfile', trueSession.user?.steam?.steamid!],
     queryFn: () => {
@@ -92,7 +88,7 @@ export default function PageDetailsMain({ item, seller }: IProps) {
             <PageDetailsSkin
               item={item}
               session={trueSession}
-              defaultID={defaultID}
+              paintSeed={paintSeed}
               skinName={customName}
               userStatus={status}
               recommendedPrice={averagePrice?.data[0] || 'Indisponível'}

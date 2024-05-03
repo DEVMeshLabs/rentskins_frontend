@@ -35,22 +35,16 @@ async function handler(
         const now = moment()
         const monthsDifference = now.diff(date, 'months')
 
-        console.log('ok')
 
-        console.log(user?.id)
         const verifyVAC = await UserService.verifyAccountStatus(user?.id!)
-        console.log('ok')
-        console.log(verifyVAC)
 
         if (monthsDifference <= 3) {
           return '/?error=InvalidAccountDate'
         }
-        console.log('ok')
 
         if (verifyVAC?.data) {
           return '/?error=SignInAccountVACBanned'
         }
-        console.log('ok')
 
         console.log(user)
         console.log(profile)

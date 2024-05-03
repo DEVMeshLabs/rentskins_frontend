@@ -119,7 +119,7 @@ export function CardSkinInventory({ apiKey }: Props) {
     if (inventoryTypeFilter[1]) {
       selectedType = 'Não existem estes items em seu inventário.'
     }
-
+    console.log(itemsOnInventory)
     return (
       <div className="flex h-[50vh] items-center justify-center font-semibold text-white">
         {inventoryTypeFilter.length ? (
@@ -205,7 +205,6 @@ export function CardSkinInventory({ apiKey }: Props) {
                   categoryType[0].name === 'Agent' ? 'Patch' : 'Sticker',
                 )
 
-                console.log(categoryType[0].name)
 
                 return (
                   <ModalSkinShowcaseMain
