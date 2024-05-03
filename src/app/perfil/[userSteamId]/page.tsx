@@ -12,7 +12,6 @@ interface IMetadata {
 export async function generateMetadata({
   params: { userSteamId },
 }: IMetadata): Promise<Metadata> {
-
   const response = await UserService.getUser(String(userSteamId))
 
   return {
