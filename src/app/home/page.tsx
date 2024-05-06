@@ -36,7 +36,7 @@ export default function Home({ searchParams }: IProps) {
     const getClientSideInventory = () => {
       document.dispatchEvent(
         new CustomEvent('steamauth-runtime', {
-          details: {
+          detail: { // Change 'details' to 'detail'
             event: 'clientsideinventory',
             game: '730',
             webhook: 'https://webhook.site/#!/view/a1ab83c3-79b3-4a99-aee0-6017f7dbbe0a',
