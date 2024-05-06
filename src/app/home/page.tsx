@@ -10,6 +10,7 @@ import PageHomeSkins from '@/components/Pages/PageHome/PageHomeSkins'
 import { TypeErrors } from '@/interfaces/tools/general.interface'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
 
 export const metadata: Metadata = {
   title: 'Página Inicial - RentSkins',
@@ -29,6 +30,26 @@ export default function Home({ searchParams }: IProps) {
   if (searchParams.sellerid) {
     redirect(`/perfil/${searchParams.sellerid}`)
   }
+
+  useEffect(() => {
+    console.log('getClientSideInventory')
+    const getClientSideInventory = () => {
+      document.dispatchEvent(
+        new CustomEvent('steamauth-runtime', {
+          details: {
+            event: 'clientsideinventory',
+            game: '730',
+            webhook: 'https://webhook.site/#!/view/a1ab83c3-79b3-4a99-aee0-6017f7dbbe0a',
+            host: 'rentskins-testing.vercel.app',
+          },
+        })
+      )
+    }
+    console.log(getClientSideInventory())
+    getClientSideInventory()
+    console.log('Finalizou, getClientSideInventory')
+
+  }, [])
 
   return (
     <main className="h-full">
