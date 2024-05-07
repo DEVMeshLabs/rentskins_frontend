@@ -2,42 +2,64 @@ import IconSteam from '@/assets/IconSteam'
 import Common from '@/components/Common'
 import IconMagic from '@/components/Icons/IconMagicpen'
 import { IconOlho } from '@/components/Icons/IconOlho'
+import { ModalEditionItemMain } from '@/components/Modal/ModalEditionItem/ModalEditionItemMain'
+import { ModalRemoveItemMain } from '@/components/Modal/ModalRemoveItem/ModalRemoveItemMain'
+import { ISkins } from '@/interfaces/ISkins'
+import useModalStore from '@/stores/modal.store'
+import ColorRarity from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import ColoredLine from '../ColoredLine'
 
 interface Props {
-  id: string
-  sellerName: string
-  skinPrice: string
-  skinFloat: string
-  skinWeapon: string
-  skinColor: string
-  skinImage: string
-  deletedAt: string | null
   itsRent?: boolean
+  item: ISkins
+  userItems?: boolean
+  apiKey?: boolean
 }
 
-export function OtherCard({
-  id,
-  sellerName,
-  skinColor,
-  skinImage,
-  skinFloat,
-  skinPrice,
-  skinWeapon,
-  deletedAt,
-  itsRent,
-}: Props) {
-  const customName = sellerName.includes('StatTrak™')
-    ? sellerName.split('™')
-    : sellerName
+export function OtherCard({ itsRent, item, userItems, apiKey }: Props) {
+  const customName = item.skin_name.includes('StatTrak™')
+    ? item.skin_name.split('™')
+    : item.skin_name
+  const thereIsFloat = [
+    'Sticker',
+    'Container',
+    'Collectible',
+    'Patch',
+    'Graffiti',
+    'Tag',
+    'Agent',
+  ]
+
+  const { setOpenModalReturnSkin, setSkinToReturn } = useModalStore()
+  const detailsLink = '/detalhes/' + item.slug.replaceAll('--', '-')
+  const floatValue = item.status_float.includes('-')
+    ? item.status_float.split('-')[0][0] + item.status_float.split('-')[1][0]
+    : !thereIsFloat.includes(item.skin_category)
+    ? item.status_float.split(' ')[0][0] + item.status_float.split(' ')[1][0]
+    : ''
+
+  const stickersElement =
+    item?.stickers?.length > 0 &&
+    item?.stickers?.map((sticker, index: number) => (
+      <>
+        <Image
+          src={sticker.url}
+          alt={sticker.name}
+          key={'sticker' + item.asset_id + index}
+          width={50}
+          height={50}
+          draggable={false}
+        />
+      </>
+    ))
 
   return (
     <article className="relative">
-      {deletedAt !== null && (
-        <div className="absolute left-1/2 top-1/3 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
+      {item.deletedAt !== null && (
+        <div className="absolute left-1/2 top-1/4 z-10 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl font-semibold text-mesh-color-rarity-lowest">
           ITEM REMOVIDO
         </div>
       )}
@@ -47,27 +69,30 @@ export function OtherCard({
         )}
       >
         <Link
-          href={`/detalhes/${id}`}
-          className={classNames(
-            'flex select-none flex-col items-center justify-center rounded-lg border-2 border-mesh-color-neutral-400 bg-mesh-gradient-black-pattern transition-all hover:brightness-150',
-            {
-              'border-mesh-color-secondary-1400 shadow-stattrak-glow':
-                typeof customName === 'object',
-            },
-          )}
+          href={detailsLink}
+          className="flex h-full max-h-[170px] min-h-[170px] w-full select-none flex-col items-center justify-between
+          rounded-lg border-2 border-mesh-color-neutral-400
+          bg-mesh-gradient-black-pattern transition-all hover:brightness-150"
         >
-          <div
-            className={`h-2 w-52 rounded-b-full`}
-            style={{ backgroundColor: `#${skinColor}` }}
-          />
-          <Image
-            src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
-            className="h-[154px] w-[206px]"
-            alt={sellerName}
-            width={206}
-            height={154}
-            draggable={false}
-          />
+          <div>
+            <div
+              className={`top-0 h-2 w-52 rounded-b-full`}
+              style={{
+                backgroundColor: `#${ColorRarity.transform(item.skin_rarity)}`,
+              }}
+            />
+            <Image
+              className="m-auto p-2"
+              src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
+              alt={item.skin_name}
+              width={190}
+              height={154}
+              draggable={false}
+            />
+            <div className="relative top-5 -mt-[50px] flex justify-center">
+              {stickersElement}
+            </div>
+          </div>
         </Link>
 
         <div className="flex h-11 flex-col gap-3">
@@ -76,49 +101,112 @@ export function OtherCard({
               <span className="text-mesh-color-secondary-1200 ">
                 {customName[0]}
               </span>
-              {customName[1]}
+              {customName[1].split('(')[0]}
             </h1>
           ) : (
-            customName
+            customName.split('(')[0]
           )}
         </div>
         <div className="flex items-center justify-between">
-          <h1 className="text-sm font-medium opacity-60">{skinWeapon}</h1>
+          <h1 className="h-12 text-sm font-medium opacity-60">
+            {item.skin_weapon}
+          </h1>
           <div className="flex gap-2">
-            {itsRent && (
-              <Common.Button color="invisible">
-                <IconMagic />
-              </Common.Button>
+            {userItems && (
+              <ModalEditionItemMain
+                activator={
+                  <Common.Button color="invisible">
+                    <IconMagic />
+                  </Common.Button>
+                }
+                item={item}
+                apiKey={apiKey}
+              />
             )}
-            <Common.Button color="invisible" className="h-9 w-9">
+            <Link
+              target="_blank"
+              rel="noreferrer"
+              href={item.skin_link_steam}
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-mesh-color-neutral-400 bg-transparent 
+              fill-white p-1 text-lg opacity-60 transition hover:opacity-100"
+            >
               <IconSteam />
-            </Common.Button>
-            <Common.Button color="invisible" className="h-9 w-9">
+            </Link>
+            <Link
+              target="_blank"
+              rel="noreferrer"
+              href={item.skin_link_game}
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-mesh-color-neutral-400 bg-transparent 
+              fill-white p-1 text-lg opacity-60 transition hover:opacity-100"
+            >
               <IconOlho />
-            </Common.Button>
+            </Link>
           </div>
         </div>
         <div className="flex select-none items-center justify-between">
           <h1 className="text-lg font-semibold">
-            {Number(skinPrice).toLocaleString('pt-br', {
+            {Number(item.skin_price).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
             })}
           </h1>
           <h1>
-            <strong>FT / </strong>
-            <span className="opacity-60">{skinFloat}</span>
+            {!thereIsFloat.includes(item.skin_category) && (
+              <>
+                <strong>{floatValue} / </strong>
+                <span className="opacity-60">
+                  {Number(item.skin_float).toFixed(6)}
+                </span>
+              </>
+            )}
           </h1>
         </div>
-        <ColoredLine position={skinFloat} />
+        {item.skin_float && !thereIsFloat.includes(item.skin_category) ? (
+          <ColoredLine position={item.skin_float} />
+        ) : (
+          // <ColoredLine position={0.38} />
+          <div className="h-[6px] w-full" />
+        )}
         <div className="flex select-none items-center justify-end">
-          <Link
-            href={`/detalhes/${id}`}
-            className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
-          >
-            Comprar
-          </Link>
+          {itsRent ? (
+            <Common.Button
+              type="button"
+              onClick={() => {
+                setSkinToReturn({
+                  skinRarity: item.skin_rarity,
+                  skinFloat: item.skin_float,
+                  skinId: item.id,
+                  skinImage: item.skin_image,
+                  skinName: item.skin_name,
+                  skinPrice: item.skin_price,
+                  skinWeapon: item.skin_weapon,
+                  statusFloat: item.status_float,
+                })
+                setOpenModalReturnSkin(true)
+              }}
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100"
+            >
+              Devolução
+            </Common.Button>
+          ) : userItems ? (
+            <ModalRemoveItemMain
+              skinId={item.id}
+              skinName={item.skin_name}
+              activator={
+                <Common.Button className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-neutral-500 px-4 opacity-60 hover:opacity-100">
+                  Remover
+                </Common.Button>
+              }
+            />
+          ) : (
+            <Link
+              href={detailsLink}
+              className="flex h-10 items-center rounded-lg border-transparent bg-mesh-color-primary-1200 px-4 text-zinc-900 opacity-60 hover:opacity-100"
+            >
+              Comprar
+            </Link>
+          )}
         </div>
       </div>
     </article>

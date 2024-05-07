@@ -1,13 +1,18 @@
 'use client'
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
+import HoverCardInfo from '@/components/HoverCard/HoverCardInfo'
 import { IconClose } from '@/components/Icons'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
+import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import PageSettingsRemoveKeyButton from './PageSettingsRemoveKeyButton'
+import { formResolver as apikeyResolver } from './schemas/information-apikey.schema'
 import { formResolver as cpfResolver } from './schemas/information-cpf.contact.schema'
 import { formResolver as emailResolver } from './schemas/information-email.contact.schema'
 import { formResolver as phoneResolver } from './schemas/information-phone.contact.schema'
@@ -20,6 +25,7 @@ export function PageSettingsInformation() {
   const [editPhone, setEditPhone] = useState(false)
   const [editCPF, setEditCPF] = useState(false)
   const [editTradeLink, setEditTradeLink] = useState(false)
+  const [editKey, setEditKey] = useState(false)
 
   const { data: userConfig, isLoading } = useQuery({
     queryKey: ['ConfigService.getUserConfig'],
@@ -65,7 +71,7 @@ export function PageSettingsInformation() {
   } = useForm({
     resolver: phoneResolver,
     defaultValues: {
-      phone: userConfig?.data?.owner_phone || undefined,
+      phone: userConfig?.data?.owner_phone || '',
     },
   })
 
@@ -81,12 +87,25 @@ export function PageSettingsInformation() {
     },
   })
 
+  const {
+    handleSubmit: handleSubmitKey,
+    register: registerKey,
+    setValue: setValueKey,
+    formState: { errors: errorsKey },
+  } = useForm({
+    resolver: apikeyResolver,
+    defaultValues: {
+      'api-key': userConfig?.data?.key || undefined,
+    },
+  })
+
   useEffect(() => {
     if (!isLoading && userConfig?.request.status === 200) {
-      setValueEmail('email', userConfig?.data.owner_email)
-      setValuePhone('phone', userConfig?.data.owner_phone)
-      setValueCPF('cpf', userConfig?.data.owner_cpf)
-      setValueTrade('trade-link', userConfig?.data.url_trade)
+      setValueEmail('email', userConfig?.data.owner_email || '')
+      setValuePhone('phone', userConfig?.data.owner_phone || '')
+      setValueCPF('cpf', userConfig?.data.owner_cpf || '')
+      setValueTrade('trade-link', userConfig?.data.url_trade || '')
+      setValueKey('api-key', userConfig?.data.key || '')
     }
   }, [
     userConfig,
@@ -95,47 +114,82 @@ export function PageSettingsInformation() {
     setValueCPF,
     setValuePhone,
     setValueTrade,
+    setValueKey,
   ])
 
-  const onSubmitPersonal = (data: any) => {
+  const onSubmitPersonal = async (data: any) => {
     setEditTradeLink(false)
-    ConfigService.updateConfig({
-      token: trueSession.user?.token!,
-      owner_id: trueSession.user?.steam?.steamid!,
-      url_trade: data['trade-link'],
-    })
+    if (data['trade-link'] !== '') {
+      const response = await ConfigService.updateConfig({
+        token: trueSession.user?.token!,
+        url_trade: data['trade-link'],
+      })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('URL de Troca inválida.', 2000)
+        setEditEmail(true)
+      }
+    }
   }
 
-  const onSubmitEmail = (data: any) => {
+  const onSubmitEmail = async (data: any) => {
     setEditEmail(false)
     if (data.email !== '') {
-      ConfigService.updateConfig({
+      const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         owner_email: data.email,
       })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('Email já cadastrado no sistema.', 2000)
+        setEditEmail(true)
+      }
     }
   }
 
-  const onSubmitPhone = (data: any) => {
+  const onSubmitPhone = async (data: any) => {
     setEditPhone(false)
     if (data.phone !== '') {
-      ConfigService.updateConfig({
+      const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         owner_phone: data.phone,
       })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('Telefone já cadastrado no sistema.', 2000)
+        setEditPhone(true)
+      }
     }
   }
 
-  const onSubmitCPF = (data: any) => {
+  const onSubmitCPF = async (data: any) => {
     setEditCPF(false)
     if (data.cpf !== '') {
-      ConfigService.updateConfig({
+      const response = await ConfigService.updateConfig({
         token: trueSession.user?.token!,
-        owner_id: trueSession.user?.steam?.steamid!,
         owner_cpf: data.cpf,
       })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('CPF já cadastrado no sistema.', 2000)
+        setEditCPF(true)
+      }
+    }
+  }
+
+  const onSubmitKey = async (data: any) => {
+    setEditKey(false)
+
+    if (data['api-key'] !== '') {
+      const response = await ConfigService.updateConfig({
+        token: trueSession.user?.token!,
+        key: data['api-key'],
+      })
+
+      if (response?.response?.status === 409) {
+        Toast.Error('Chave da API inválida.', 2000)
+        setEditKey(true)
+      }
     }
   }
 
@@ -146,10 +200,10 @@ export function PageSettingsInformation() {
       <div className="rounded-2xl bg-mesh-color-neutral-800 px-4 py-6">
         <div>
           <Common.Title bold={700} size={'2xl'} color="white">
-            Informações Pessoais
+            Informações Gerais
           </Common.Title>
           <span className="text-mesh-color-neutral-200">
-            Aqui você encontra informações sobre a sua conta RentsSkins.
+            Aqui você encontra informações sobre a sua conta RentSkins.
             Recomendamos que você mantenha a sua URL de Troca e outras
             informações importantes atualizadas para não ter problema na hora da
             negociação.
@@ -163,7 +217,7 @@ export function PageSettingsInformation() {
           <Common.Title size={'lg'} color="white" className="-mt-4 mb-2">
             URL de Troca
           </Common.Title>
-          <div className="flex gap-4">
+          <div className="flex justify-between gap-4">
             <div className="flex w-full items-center">
               <Form.Input.Text
                 name="trade-link"
@@ -178,7 +232,7 @@ export function PageSettingsInformation() {
                 labelClassName="w-full"
                 className={`${
                   editTradeLink ? 'text-white' : 'text-mesh-color-neutral-200'
-                } w-full rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent
+                } w-[90%] rounded-md bg-mesh-color-neutral-600 py-2 pl-3 transition-all disabled:bg-transparent 2xl:w-full
                  ${watchTradelink !== '' ? 'pr-14' : 'pr-3'}
                 ring-mesh-color-primary-1900 placeholder:text-mesh-color-neutral-300 focus:ring-2`}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
@@ -195,39 +249,165 @@ export function PageSettingsInformation() {
                   </Common.Button>
                 )}
             </div>
-            <div className="-mt-3 flex w-3/12 items-center justify-evenly">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="http://steamcommunity.com/my/tradeoffers/privacy"
-                className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:opacity-70"
+            <div className="-mt-3 flex w-3/12 items-center justify-end gap-4">
+              <HoverCardInfo
+                customTrigger={
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="http://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
+                    className="flex h-full max-h-[40px] w-28 items-center justify-center overflow-hidden text-ellipsis rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center text-sm opacity-70 hover:opacity-100 disabled:opacity-70 2xl:text-base"
+                  >
+                    Obter URL
+                  </a>
+                }
               >
-                Obter URL
-              </a>
+                Para iniciar o fluxo de transação, precisamos do seu link de
+                trocas. Isso possibilitará que outros usuários iniciem
+                negociações com você de maneira mais eficiente.
+              </HoverCardInfo>
               {editTradeLink ? (
                 <Form.Button
                   buttonStyle={undefined}
                   disabled={isLoading}
-                  className="border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  className="border-none bg-mesh-color-primary-1200 px-4 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                 >
                   Aplicar
                 </Form.Button>
               ) : (
-                <button
+                <Common.Button
                   disabled={isLoading}
                   onClick={() => setEditTradeLink(true)}
-                  className="border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                  className="border-none bg-mesh-color-primary-1200 px-5 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                 >
                   Editar
-                </button>
+                </Common.Button>
               )}
             </div>
           </div>
         </Form.Root>
 
-        <div className="mb-6 mt-8 h-[1px] w-full bg-mesh-color-neutral-200" />
+        <Form.Root
+          onSubmit={handleSubmitKey(onSubmitKey)}
+          className="mt-12 flex flex-col gap-2"
+        >
+          <Common.Title size={'lg'} color="white" className="-mt-4 mb-2">
+            Chave da API
+          </Common.Title>
+          <div className="flex justify-between gap-4">
+            <div className="flex w-full items-center gap-4">
+              <Form.Input.Text
+                name="api-key"
+                register={registerKey('api-key')}
+                disabled={isLoading || !editKey}
+                errors={errorsKey['api-key']}
+                maxLength={32}
+                placeholder={
+                  isLoading ? 'Verificando...' : 'Sem chave definida.'
+                }
+                className={`${
+                  editKey ? 'text-white' : 'text-mesh-color-neutral-200'
+                } w-[300px] rounded-md bg-mesh-color-neutral-600 py-2 pl-3 ring-mesh-color-primary-1900 transition-all placeholder:text-mesh-color-neutral-300
+                focus:ring-2 disabled:bg-transparent 2xl:w-[390px]`}
+                errorsClassname="text-red-500 text-sm mt-8 absolute"
+              />
+              <div className="relative -top-2">
+                <HoverCardInfo>
+                  <div>
+                    <p>
+                      Negociações de <span className="font-bold">alugueis</span>{' '}
+                      requerem que os usuários forneçam uma Chave de API para
+                      detecção da proposta de negociação. A chave será utilizada{' '}
+                      <span className="font-bold">
+                        apenas para verificação e validação das trocas
+                      </span>
+                      , mas nunca para confirma-las ou altera-las.
+                    </p>
+                    <br />
+                    <p className="text-sm italic">
+                      Para saber mais como sobre sua chave está segura conosco,{' '}
+                      <Link
+                        href="/faq"
+                        target="_blank"
+                        className="text-mesh-color-primary-1600 hover:brightness-125"
+                      >
+                        clique aqui
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </HoverCardInfo>
+              </div>
+            </div>
+            <div className="-mt-3 flex w-2/3 items-center justify-end gap-4">
+              <PageSettingsRemoveKeyButton
+                session={trueSession}
+                showButton={
+                  userConfig?.data?.key !== '' &&
+                  userConfig?.data?.key !== undefined &&
+                  userConfig?.data?.key !== null &&
+                  !editKey
+                }
+              />
+              <HoverCardInfo
+                customTrigger={
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://steamcommunity.com/dev/apikey"
+                    className="flex h-full max-h-[40px] w-28 items-center justify-center overflow-hidden text-ellipsis rounded-md border-none bg-mesh-color-primary-1200 px-2 py-2 text-center text-sm opacity-70 hover:opacity-100 disabled:opacity-70 2xl:text-base"
+                  >
+                    Obter Chave
+                  </a>
+                }
+              >
+                <div>
+                  <span className="italice font-bold">Passo a Passo:</span>
+                  <ul>
+                    <li>
+                      <span className="font-bold">1.</span> Insira um domínio
+                      (sugerimos colocar &quot;rentskins&quot;), concorde com os
+                      termos e se registre.
+                    </li>
+                    <li>
+                      <span className="font-bold">2.</span> Copie a chave
+                      fornecida.
+                    </li>
+                    <li>
+                      <span className="font-bold">3.</span> Cole a chave
+                      fornecida no campo &quot;Chave da API&quot; no formulário.
+                    </li>
+                  </ul>
+                  <br />
+                  <span className="text-justify text-sm italic">
+                    Obs: Se você já possuir uma chave que não foi registrada por
+                    você, recomendamos revoga-la por motivos de segurança.
+                  </span>
+                </div>
+              </HoverCardInfo>
 
-        <div className="flex flex-col">
+              {editKey ? (
+                <Form.Button
+                  buttonStyle={undefined}
+                  disabled={isLoading}
+                  className="border-none bg-mesh-color-primary-1200 px-4 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                >
+                  Aplicar
+                </Form.Button>
+              ) : (
+                <Common.Button
+                  disabled={isLoading}
+                  onClick={() => setEditKey(true)}
+                  className="border-none bg-mesh-color-primary-1200 px-5 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                >
+                  Editar
+                </Common.Button>
+              )}
+            </div>
+          </div>
+        </Form.Root>
+
+        <div className="mt-6 flex flex-col">
           <Common.Title size={'lg'} color="white">
             Link de Venda
           </Common.Title>
@@ -235,7 +415,7 @@ export function PageSettingsInformation() {
             <span className="pl-3 text-mesh-color-neutral-200">
               {status === 'authenticated'
                 ? `
-              https://rentskins/?sellerid=${
+              https://rentskins.com/?sellerid=${
                 trueSession.user?.steam?.steamid! || 'ERROR'
               }
               `
@@ -243,13 +423,14 @@ export function PageSettingsInformation() {
             </span>
             <Common.Button
               disabled={status !== 'authenticated'}
-              className="mr-[1.5%] border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
-              onClick={() =>
+              className=" border-none bg-mesh-color-primary-1200 px-3 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+              onClick={() => {
                 navigator.clipboard.writeText(
-                  `https://rentskins/?sellerid=${trueSession.user?.steam
-                    ?.steamid!}` || 'Problema ao copiar o link...',
+                  `https://rentskins.com/?sellerid=${trueSession.user?.steam
+                    ?.steamid!}`,
                 )
-              }
+                Toast.Success('Link copiado para a área de transferência.')
+              }}
             >
               Copiar Link
             </Common.Button>
@@ -282,12 +463,12 @@ export function PageSettingsInformation() {
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
 
-              <div className="flex w-1/12">
+              <div className="flex w-1/12 justify-end">
                 {editEmail ? (
                   <Form.Button
                     buttonStyle={undefined}
                     disabled={isLoading}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Salvar
                   </Form.Button>
@@ -295,7 +476,7 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditEmail(true)}
-                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
                   </button>
@@ -323,12 +504,12 @@ export function PageSettingsInformation() {
                 errors={errorsPhone.phone}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              <div className="flex w-1/12">
+              <div className="flex w-1/12 justify-end">
                 {editPhone ? (
                   <Form.Button
                     buttonStyle={undefined}
                     disabled={isLoading}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Salvar
                   </Form.Button>
@@ -336,7 +517,7 @@ export function PageSettingsInformation() {
                   <button
                     disabled={isLoading}
                     onClick={() => setEditPhone(true)}
-                    className="-mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Editar
                   </button>
@@ -364,12 +545,12 @@ export function PageSettingsInformation() {
                 errors={errorsCPF.cpf}
                 errorsClassname="text-red-500 text-sm mt-8 absolute"
               />
-              <div className="flex w-1/12">
+              <div className="flex w-1/12 justify-end">
                 {editCPF ? (
                   <Form.Button
                     buttonStyle={undefined}
                     disabled={isLoading}
-                    className="-mt-8 border-none text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
+                    className="-mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70"
                   >
                     Salvar
                   </Form.Button>
@@ -383,7 +564,7 @@ export function PageSettingsInformation() {
                       userConfig?.data?.owner_cpf !== undefined
                         ? 'hidden opacity-0'
                         : 'visible opacity-100'
-                    } -mt-8 border-none px-2 text-mesh-color-primary-1200 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70`}
+                    } -mt-8 rounded-md border-none bg-mesh-color-primary-1200 px-4 py-2 opacity-70 hover:opacity-100 disabled:text-mesh-color-primary-1900 disabled:opacity-70`}
                   >
                     Editar
                   </button>

@@ -25,6 +25,14 @@ module.exports = {
       '4xl': '2048px',
     },
     extend: {
+      screens: {
+        xg: '1350px',
+        ipad: '1024px',
+        laptop: '1440px',
+        desktop_sm: '1680px',
+        desktop_md: '1920px',
+        desktop_lg: '2560px',
+      },
       colors: {
         'mesh-color': {
           neutral: {
@@ -134,11 +142,22 @@ module.exports = {
         // IMAGES
         'mesh-image-hero': "url('/hero.png')",
         'mesh-image-details': "url('/details-item.png')",
+        'mesh-image-details-pattern': "url('/detail-wallpaper.png')",
+        'mesh-image-details-pattern-2': "url('/detail-wallpaper-2.png')",
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      animation: {
+        bounceImage: 'myAimation 3s infinite ease-in-out',
+      },
+      keyframes: {
+        myAimation: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(5px)' },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 }

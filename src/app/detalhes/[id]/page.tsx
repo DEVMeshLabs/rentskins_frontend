@@ -20,7 +20,7 @@ interface IMetadata {
 
 const fetchItem = cache(async (id: string) => {
   try {
-    return (await SkinService.findById(id)).data
+    return (await SkinService.findBySlug(id)).data
   } catch (err) {
     console.log(err)
   }
@@ -38,32 +38,30 @@ const fetchSeller = cache(async (sellerid?: string) => {
   }
 })
 
-const deleteItem = cache(async (id: string) => {
+const deleteItem = async (id: string) => {
   try {
     return await SkinService.deleteById(id)
   } catch (err) {
     return undefined
   }
-})
+}
 
 export async function generateMetadata({
   params: { id },
 }: IMetadata): Promise<Metadata> {
   const response = await fetchItem(id)
-
+  console.log()
   return {
     title: `${response?.skin_name || 'Detalhes'} - RentSkins`,
-    description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
-    Encontre skins raras e exclusivas para personalizar seu jogo.`,
+    description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
   }
 }
 
 export default async function Details({ params }: IProps) {
   const item = await fetchItem(params.id)
-  const seller = await fetchSeller(item && item.seller_id)
-
+  const seller = await fetchSeller(item?.seller_id)
   if (item) {
-    if (!seller) {
+    if (!seller || seller.deletedAt) {
       await deleteItem(item.id)
     }
   } else {

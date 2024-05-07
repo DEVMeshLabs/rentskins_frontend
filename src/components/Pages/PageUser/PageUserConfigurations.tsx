@@ -3,7 +3,7 @@
 import Common from '@/components/Common'
 import Form from '@/components/Forms'
 import { TypeFormRadioInlineOption } from '@/components/Forms/Input/Radio/FormInputRadioBlock'
-import { IconGear, IconPaper } from '@/components/Icons'
+import { IconGear } from '@/components/Icons'
 import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import URLQuery from '@/tools/urlquery.tool'
 import {
@@ -14,7 +14,6 @@ import {
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageSettingsInformation } from '../PageSettings/PageSettingsInformation'
-import { PageSettingsTransactions } from '../PageSettings/PageSettingsTransactions'
 import { formResolver } from './configuration.schema'
 
 export default function PageUserConfigurations() {
@@ -34,13 +33,11 @@ export default function PageUserConfigurations() {
   }, [watchTab, router])
 
   useEffect(() => {
-    const titleQuery = searchParams.get('type') as 'personal' | 'transactions'
+    const titleQuery = searchParams.get('type') as 'personal'
 
     if (titleQuery !== 'personal') {
-      if (titleQuery !== 'transactions') {
-        router.push(URLQuery.addQuery([{ key: 'type', value: 'personal' }]))
-        return setValidRoute(false as any)
-      }
+      router.push(URLQuery.addQuery([{ key: 'type', value: 'personal' }]))
+      return setValidRoute(false as any)
     }
 
     return setValidRoute(true as any)
@@ -49,12 +46,11 @@ export default function PageUserConfigurations() {
   const renderPageContent = () => {
     const content = {
       personal: <PageSettingsInformation />,
-      transactions: <PageSettingsTransactions />,
     }
 
-    const possibleTypes = ['personal', 'transactions', 'security']
+    const possibleTypes = ['personal']
 
-    const index = searchParams.get('type') as 'personal' | 'transactions'
+    const index = searchParams.get('type') as 'personal'
 
     if (possibleTypes.includes(index)) {
       return content[index]
@@ -112,36 +108,11 @@ const renderRadioButtonOptions = (searchParams: ReadonlyURLSearchParams) => {
               : 'text-mesh-color-neutral-200'
           }`}
         >
-          Informações Pessoais
+          Informações da Conta
         </div>
       ),
       value: 'personal',
       checked: searchParams.get('type') === 'personal',
-    },
-    {
-      icon: (
-        <IconPaper
-          width={18}
-          height={18}
-          fill={
-            searchParams.get('type') === 'transactions' ? '#A6CF2A' : '#A7B0A0'
-          }
-          stroke="#222723"
-        />
-      ),
-      label: (
-        <div
-          className={`${
-            searchParams.get('type') === 'transactions'
-              ? 'text-mesh-color-primary-1200'
-              : 'text-mesh-color-neutral-200'
-          }`}
-        >
-          Transações
-        </div>
-      ),
-      value: 'transactions',
-      checked: searchParams.get('type') === 'transactions',
     },
   ]
 

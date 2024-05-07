@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import Common from '@/components/Common'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
 import Image from 'next/image'
 
@@ -9,7 +10,7 @@ interface Props {
   statusFloat: string
   skinFloat: string
   skinWeapon: string
-  skinColor: string
+  skinRarity: TItemRarity
 }
 
 export function CardSkinModalContent({
@@ -18,7 +19,7 @@ export function CardSkinModalContent({
   skinFloat,
   skinWeapon,
   skinImage,
-  skinColor,
+  skinRarity,
 }: Props) {
   const customName =
     skinName && skinName.includes('StatTrak™') ? skinName.split('™') : skinName
@@ -36,7 +37,9 @@ export function CardSkinModalContent({
         >
           <div
             className={`h-1 w-4/5 rounded-b-full`}
-            style={{ backgroundColor: `#${skinColor}` }}
+            style={{
+              backgroundColor: `#${ColorRarity.transform(skinRarity)}`,
+            }}
           />
           <Image
             src={

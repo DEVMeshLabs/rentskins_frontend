@@ -12,18 +12,22 @@ import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+//
 
 export default function PageStoreSkins() {
   const router = useRouter()
   const search = useSearchParams().get('search') || ''
+  const category = useSearchParams().get('category') || ''
   const pageQuery = useSearchParams().get('page') || '1'
   const [page, setPage] = useState(pageQuery)
   const nameCorrection = decodeURIComponent(search.replace(/\+/g, ' '))
   const { selectedFilters, typeFilter } = useFilterStore()
 
   useEffect(() => {
-    router.push(`/loja?search=${search}&page=${page}`)
-  }, [page, router, search])
+    if (!category) {
+      router.push(`/loja?search=${search}&page=${page}`)
+    }
+  }, [page, router, search, category])
 
   useEffect(() => {
     setPage(pageQuery)
@@ -35,11 +39,13 @@ export default function PageStoreSkins() {
     isRefetching,
     isLoading,
   } = useQuery({
-    queryKey: ['skinsCategory'],
+    queryKey: ['skinsCategory', category],
     queryFn: async () => {
       if (search !== null && search !== undefined && search !== '') {
-        const data = await SkinService.findBySearchParameter(search, page)
+        const data = await SkinService.findBySearchParameter(search, 'name')
         return data
+      } else if (category) {
+        return SkinService.findBySearchParameter(category, 'category')
       } else {
         const data = await SkinService.findByAll(page)
         return data
@@ -50,9 +56,9 @@ export default function PageStoreSkins() {
 
   const organized = {
     biggestPrice: (a: ISkins, b: ISkins) =>
-      parseFloat(b.skin_price) - parseFloat(a.skin_price),
+      parseFloat(String(b.skin_price)) - parseFloat(String(a.skin_price)),
     lowestPrice: (a: ISkins, b: ISkins) =>
-      parseFloat(a.skin_price) - parseFloat(b.skin_price),
+      parseFloat(String(a.skin_price)) - parseFloat(String(b.skin_price)),
     biggestFloat: (a: ISkins, b: ISkins) =>
       parseFloat(b.skin_float) - parseFloat(a.skin_float),
     lowestFloat: (a: ISkins, b: ISkins) =>
@@ -113,9 +119,7 @@ export default function PageStoreSkins() {
           <IconArrowLeft /> Home {nameCorrection && `• ${nameCorrection}`}
         </Common.Title>
       </Link>
-
       <SkinFilters />
-
       {isLoading || isRefetching ? (
         <AllSkeletonSkins />
       ) : data &&
@@ -123,7 +127,7 @@ export default function PageStoreSkins() {
         allSkinsFilters &&
         allSkinsFilters.length > 0 ? (
         <AllSkins
-          skinsCategories={
+          items={
             !typeFilter
               ? allSkinsFilters
               : allSkinsFilters.sort(organized[typeFilter])
@@ -134,11 +138,11 @@ export default function PageStoreSkins() {
           {nameCorrection ? (
             <Common.Title
               bold={600}
-              className="text-2xl text-mesh-color-neutral-200"
+              className="text-lg text-mesh-color-neutral-200 laptop:text-2xl"
             >
               Nenhum item relacionado a{' '}
               <span className="text-mesh-color-primary-1200">
-                {nameCorrection}
+                {nameCorrection === 'Agent' ? 'Agente' : nameCorrection}
                 <span className="text-mesh-color-neutral-200">
                   {' '}
                   foi encontrado.
@@ -156,7 +160,7 @@ export default function PageStoreSkins() {
         </div>
       )}
 
-      {data?.data?.totalPages &&
+      {data?.data &&
         data?.data?.totalPages > 1 &&
         Number(page) <= data?.data?.totalPages && (
           <LayoutPagination

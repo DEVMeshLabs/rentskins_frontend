@@ -10,12 +10,12 @@ import { LayoutLoading } from '@/components/Layout/LayoutLoading'
 import ISteamUser from '@/interfaces/steam.interface'
 import ConfigService from '@/services/config.service'
 import StripeService from '@/services/stripe.service'
-import Toast from '@/tools/toast.tool'
 import URLQuery from '@/tools/urlquery.tool'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Image, { StaticImageData } from 'next/image'
+import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -59,33 +59,32 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
 
   const { data: createdPayment, refetch: createPayment } = useQuery({
     queryKey: ['Payment'],
-    queryFn: () =>
-      StripeService.createPayment(
+    queryFn: () => {
+      return StripeService.createPayment(
         {
           owner_id: trueSession.user?.steam?.steamid!,
-          email: userConfigurations?.data.owner_email!,
+          email: userConfigurations?.data.owner_email,
+          // email: userConfigurations?.data.owner_email!,
           success_url: ('https://rentskins-testing.vercel.app' +
             '/pagamento/recarregar') as string,
           cancel_url: ('https://rentskins-testing.vercel.app' +
             '/pagamento/recarregar') as string,
           amount: Number(payment.value),
           payment_method: payment.method as 'card' | 'boleto' | 'pix',
+          cpf: userConfigurations?.data.owner_cpf!,
         },
         trueSession.user?.token!,
-      ),
+      )
+    },
     cacheTime: 0,
     enabled: false,
   })
 
-  useEffect(() => {
-    Toast.Icon(
-      'O pagamento por PIX se encontra desativado no momento.',
-      '⚠️',
-      3000,
-    )
-  }, [])
+  console.log(createdPayment)
 
   useEffect(() => {
+    console.log(payment)
+    console.log(startPayment)
     if (payment && startPayment) {
       createPayment()
       afterFormSubmit()
@@ -101,8 +100,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
 
   const watchValue = watch('value')
 
-  useEffect(() => console.log(watchValue), [watchValue])
-
   const onSubmit = (data: any) => {
     setIsLoading(true)
 
@@ -115,7 +112,6 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
       setPayment({ method: data.method, value: currencyToNumber })
     } else {
       let currencyToNumber
-      console.log(currencyToNumber)
       currencyToNumber = data?.value.replace(/\./g, '')
       currencyToNumber = currencyToNumber.replace('R$ ', '')
       currencyToNumber = currencyToNumber.replace(',', '.')
@@ -129,10 +125,10 @@ export function ModalPaymentAdd({ afterFormSubmit }: IProps) {
   return (
     <Dialog.Content
       className="fixed left-1/2 top-1/2 z-30 h-3/5 w-2/3 -translate-x-1/2 -translate-y-1/2
-rounded-2xl bg-mesh-color-neutral-700"
+overflow-y-auto rounded-2xl bg-mesh-color-neutral-700"
     >
       <div className="flex h-full w-full">
-        <div className="h-full w-1/4 rounded-l-2xl bg-mesh-color-others-eerie-black px-6 pt-6">
+        <div className="h-[586px] w-1/3 rounded-l-2xl px-6 pt-6 xg:w-1/4">
           <Common.Title
             bold={400}
             size="xl"
@@ -152,7 +148,7 @@ rounded-2xl bg-mesh-color-neutral-700"
           />
         </div>
         <LayoutLoading label="Processando..." enabled={isLoading}>
-          <div className="flex h-full w-3/4 flex-col items-center justify-start">
+          <div className="flex h-[586px] w-3/4 flex-col items-center justify-start">
             <div className=" mt-6 flex w-11/12 items-center justify-between">
               <Dialog.Title>
                 <Common.Title bold={800} size="2xl" color="white">
@@ -200,37 +196,40 @@ rounded-2xl bg-mesh-color-neutral-700"
                     register={register('valueButtons')}
                   />
                 </div>
-                <div className="w-1/3 self-center">
+                <div className="hidden w-1/3 self-center xg:block">
                   <IconMoneyBag />
                 </div>
               </div>
-              <div className="mb-8 flex w-11/12 items-center justify-between self-center">
-                <span className="leading text-white">
+              <div className="mb-8 flex w-11/12 items-center justify-between gap-2 self-center md:gap-0">
+                <span className="leading pr-2 text-white">
                   Ao prosseguir para finalizar o pagamento, você concorda com os
                   nossos{' '}
-                  <a
+                  <Link
                     href="/termos-de-uso"
+                    tabIndex={-1}
                     target="_blank"
                     className="hover:text-inherit/50 text-mesh-color-primary-1000"
                   >
                     Termos de Serviço
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a
+                  <Link
                     href="/privacidade"
+                    tabIndex={-1}
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
                     Política de Privacidade
-                  </a>
-                  ,{' '}
-                  <a
-                    href=""
+                  </Link>{' '}
+                  e{' '}
+                  <Link
+                    href="/termos-de-uso"
+                    tabIndex={-1}
                     target="_blank"
                     className="text-mesh-color-primary-1000"
                   >
                     Política de Reembolso
-                  </a>
+                  </Link>
                   .
                 </span>
                 <Form.Button
@@ -263,7 +262,6 @@ const renderRadioMethodOptions = () => {
     {
       label: renderImage(ImagePIX, 'pix'),
       value: 'pix',
-      disabled: true,
     },
     {
       label: renderImage(ImageTicket, 'boleto'),

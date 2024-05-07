@@ -1,73 +1,123 @@
+import HoverCardSticker from '@/components/HoverCard/StickerHoverCard'
 import { IconSteam } from '@/components/Icons'
 import { IconOlho } from '@/components/Icons/IconOlho'
 import ColoredLine from '@/components/Others/ColoredLine'
+import { ISkins } from '@/interfaces/ISkins'
+import ColorRarity from '@/tools/colorRarity.tool'
 import classNames from 'classnames'
 import Image from 'next/image'
+import Link from 'next/link'
 
 type PropsType = {
-  skinImage: string
-  skinName: string
-  skinLinkGame: string
-  skinLinkSteam: string
-  skinFloat: number
-  deletedAt: string | null
+  item: ISkins
+  stickersPrice: Array<string>
+  isLoadingStickersPrice: boolean
 }
 
 export function PageDetailsCard({
-  skinImage,
-  skinName,
-  skinLinkGame,
-  skinLinkSteam,
-  skinFloat,
-  deletedAt,
+  item,
+  isLoadingStickersPrice,
+  stickersPrice,
 }: PropsType) {
+  const thereIsFloat = !(
+    item.skin_category === 'Graffiti' ||
+    item.skin_category === 'Container' ||
+    item.skin_category === 'Sticker' ||
+    item.skin_category === 'Collectible' ||
+    item.skin_category === 'Patch'
+  )
+
+  const stickersElement =
+    item?.stickers?.length > 0 &&
+    item?.stickers?.map((sticker, index: number) => (
+      <>
+        <HoverCardSticker
+          name={sticker.name}
+          type={item.skin_category}
+          value={
+            stickersPrice?.length > 0 && stickersPrice[index] !== null
+              ? stickersPrice[index]
+              : 'Indisponível no momento.'
+          }
+          isValueLoading={isLoadingStickersPrice}
+        >
+          <Image
+            src={sticker.url}
+            alt={sticker.name}
+            key={'sticker' + index}
+            width={120}
+            draggable={false}
+            height={120}
+          />
+        </HoverCardSticker>
+      </>
+    ))
+
   return (
     <div className="relative">
-      {deletedAt !== null && (
+      {item.deletedAt !== null && (
         <div className="absolute left-1/2 top-1/2 z-10 w-fit -translate-x-1/2 -translate-y-1/2 transform text-center text-6xl font-semibold text-mesh-color-rarity-lowest">
           ITEM REMOVIDO
         </div>
       )}
       <div
         className={classNames(
-          'h-full min-h-[560px] w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat',
+          'h-fit w-auto rounded-lg bg-mesh-image-details bg-cover bg-no-repeat',
           {
-            'opacity-30': deletedAt !== null,
+            'opacity-30': item.deletedAt !== null,
           },
         )}
       >
-        <div className="flex h-full w-full flex-col justify-between gap-8">
-          {deletedAt === null && (
-            <div className="flex select-none space-x-2 p-2">
-              <a href={skinLinkSteam}>
-                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all first-line:border-neutral-600  hover:opacity-100">
+        <div
+          style={{
+            borderColor: `#${ColorRarity.transform(item.skin_rarity)}`,
+          }}
+          className="flex aspect-video w-full flex-col justify-between gap-8 rounded-t-lg border-t-4 bg-opacity-20 bg-mesh-image-details-pattern-2 bg-[length:50%] bg-center bg-no-repeat"
+        >
+          {item.deletedAt === null && (
+            <div className="flex h-2 select-none space-x-2 p-2">
+              <Link
+                href={item.skin_link_steam}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-sm text-white opacity-50 transition-all first-line:border-neutral-600 hover:opacity-100 laptop:text-base">
                   <IconSteam />
                   Visualizar no Mercado da Steam
                 </div>
-              </a>
+              </Link>
 
-              <a target="_blank" href={skinLinkGame} rel="noreferrer">
-                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-white opacity-50 transition-all hover:opacity-100">
+              <Link target="_blank" href={item.skin_link_game} rel="noreferrer">
+                <div className="flex h-8 w-fit items-center gap-2 rounded-lg border border-neutral-600 fill-white p-2 text-sm text-white opacity-50 transition-all hover:opacity-100 laptop:text-base">
                   <IconOlho />
                   Inspecionar no Jogo
                 </div>
-              </a>
+              </Link>
             </div>
           )}
 
-          <Image
-            src={`https://steamcommunity-a.akamaihd.net/economy/image/${skinImage}`}
-            alt={skinName}
-            width={510}
-            height={380}
-            quality={100}
-            className="mx-auto my-auto h-full w-fit object-cover"
-            draggable={false}
-          />
-
-          <div className="w-full ">
-            <ColoredLine position={skinFloat} />
+          <div className="flex h-full items-center justify-center">
+            <Image
+              src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin_image}`}
+              alt={item.skin_name}
+              width={!thereIsFloat ? 408 : 510}
+              height={!thereIsFloat ? 408 : 510}
+              quality={100}
+              className="m-auto w-[50%] object-cover"
+              draggable={false}
+            />
+            {stickersElement && (
+              <div className="absolute bottom-2 flex w-full justify-center">
+                {stickersElement}
+              </div>
+            )}
           </div>
+
+          {thereIsFloat && (
+            <div className="w-full ">
+              {item.skin_float && <ColoredLine position={item.skin_float} />}
+            </div>
+          )}
         </div>
       </div>
     </div>

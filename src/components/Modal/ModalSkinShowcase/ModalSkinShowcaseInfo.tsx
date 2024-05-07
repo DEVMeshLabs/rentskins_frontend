@@ -5,7 +5,8 @@ import Form from '@/components/Forms'
 import ISteamUser from '@/interfaces/steam.interface'
 
 import useSkinsStore from '@/stores/skins.store'
-import * as Dialog from '@radix-ui/react-dialog'
+import Toast from '@/tools/toast.tool'
+import { Values } from '@/tools/values.tool'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -13,11 +14,11 @@ import { formResolver } from './info.schema'
 
 type Props = {
   statusFloatText: string
-  recomended_price: string
   sale_type?: string
   skin_category: string
-  skin_color: string
+  skin_rarity: string
   skin_float: string
+  skin_paintseed: number
   skin_image: string
   skin_link_game: string
   skin_link_steam: string
@@ -28,13 +29,23 @@ type Props = {
   id: string
   isSelected: boolean
   asset_id: string
+  recommended_price: number | string
+  isPriceLoading: boolean
+  isRentable: boolean
+  stickers: Array<{ url: string; name: string }>
+  apiKey: boolean
+  onOpenChange: () => void
 }
 
 export function ModalSkinShowcaseInfo({
   sale_type = 'sale',
+  onOpenChange,
+  apiKey,
   skin_category,
-  skin_color,
+  isRentable,
+  skin_rarity,
   skin_float,
+  skin_paintseed,
   skin_image,
   skin_link_game,
   skin_link_steam,
@@ -43,7 +54,9 @@ export function ModalSkinShowcaseInfo({
   status = 'Pending',
   status_float,
   statusFloatText,
-  recomended_price,
+  stickers,
+  isPriceLoading,
+  recommended_price,
   isSelected,
   asset_id,
   id,
@@ -52,6 +65,9 @@ export function ModalSkinShowcaseInfo({
   const trueSession = (session as ISteamUser) || {}
   const [disabled, setDisabled] = useState(true)
   const [savePrice, setSavePrice] = useState<null | number>(null)
+  const [whatFunctionExecute, setWhatFunctionExecute] = useState<
+    'add' | 'change'
+  >('add')
   const {
     setSkinsToAdvertise,
     removeSkinToAdvertise,
@@ -61,31 +77,20 @@ export function ModalSkinShowcaseInfo({
 
   useEffect(() => {
     const savedSkin = skinsToAdvertise.filter(
-      ({ id: skinId }) => skinId && id === skinId,
+      ({ asset_id }) => asset_id && id === asset_id,
     )
 
     if (savedSkin.length) {
       setSavePrice(savedSkin[0].skin_price)
-      console.log(savePrice)
     }
   }, [])
-
-  console.log(recomended_price)
-
-  const removeSign = (value: string) => {
-    const response = value
-      .replace('R$ ', '')
-      .replaceAll('.', '')
-      .replace(',', '.')
-
-    return Number(response)
-  }
 
   const {
     register,
     watch,
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: formResolver,
@@ -99,95 +104,101 @@ export function ModalSkinShowcaseInfo({
   })
   const watchValue = watch('value')
   const watchTerms = watch('terms')
-  const watchSell = watch('rent')
-  const watchRent = watch('sell')
-
-  const formattedValue = (value: string): number => {
-    let newFormattedValue
-    newFormattedValue = value.replace(/\./g, '')
-    newFormattedValue = newFormattedValue.replace('R$ ', '')
-    newFormattedValue = newFormattedValue.replace(',', '.')
-
-    return Number(newFormattedValue)
-  }
+  const watchSell = watch('sell')
+  const watchRent = watch('rent')
 
   useEffect(() => {
     setDisabled(
       !(
         watchValue &&
         watchValue?.length > 0 &&
-        watchTerms &&
+        (watchTerms || !isRentable) &&
         (watchRent || watchSell)
       ),
     )
-  }, [watchValue, watchTerms, watchSell, watchRent])
+  }, [watchValue, watchTerms, watchSell, watchRent, isRentable])
 
   const handleAddSkinsToAdvertise = () => {
-    if (watchValue && watchValue?.length > 0 && watchTerms) {
+    if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
       setSkinsToAdvertise({
-        id,
-        sale_type,
+        sale_type: watchRent && isRentable ? 'rent' : 'sale',
         seller_id: trueSession.user?.steam?.steamid as string,
         seller_name: trueSession.user?.name as string,
         skin_category,
-        skin_color,
+        skin_rarity,
         skin_float,
+        skin_paintseed,
         skin_image,
         skin_link_game,
         skin_link_steam,
         skin_name,
         skin_weapon,
+        stickers,
         status,
         status_float,
         asset_id,
-        median_price: removeSign(recomended_price),
-        skin_price: Number(formattedValue(watchValue)),
+        median_price: Number(recommended_price) || 0,
+        skin_price: Values.currencyToNumber(String(watchValue))!,
       })
+      onOpenChange()
     }
   }
 
   const handleChangeSkinToAdvertise = () => {
-    if (watchValue && watchValue?.length > 0 && watchTerms) {
-      changeSkinToAdvertise(id, Number(watchValue))
+    if (watchValue && watchValue?.length > 0 && (watchTerms || !isRentable)) {
+      changeSkinToAdvertise(
+        id,
+        Values.currencyToNumber(String(watchValue))!,
+        !!watchRent,
+      )
+      onOpenChange()
     }
   }
 
   const onSubmit = (data: any) => {
-    handleAddSkinsToAdvertise()
+    if (whatFunctionExecute === 'add') {
+      handleAddSkinsToAdvertise()
+    } else {
+      handleChangeSkinToAdvertise()
+    }
   }
 
   return (
-    <div className="flex h-full w-[40%] flex-col">
+    <div className="flex h-full w-[70%] flex-col justify-center transition-all">
       <div>
-        <Common.Title color="white" className="text-[24px]">
+        <Common.Title color="white" className="text-[18px] laptop:text-[24px]">
           {skin_name}
         </Common.Title>
-        <p className="-mt-1 font-medium text-mesh-color-neutral-200">
-          {skin_weapon} • {statusFloatText}
+        <p className="-mt-1 text-sm text-mesh-color-neutral-200 laptop:text-base">
+          {skin_weapon} {statusFloatText && `• ${statusFloatText}`}
         </p>
       </div>
 
       <Form.Root
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex h-full w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4"
+        className="mt-1 flex h-fit w-full flex-col gap-0 rounded-lg bg-mesh-color-others-black p-4 laptop:mt-4"
       >
-        <div>
-          <div className="mt-2 flex justify-between">
-            <Common.Title size="md" bold={500} color="white">
-              Preço recomendado:
-            </Common.Title>
+        <div className="h-fit">
+          <div className="flex items-center justify-between laptop:mt-2">
+            <text className="text-sm font-semibold text-white laptop:text-base">
+              Preço Recomendado:
+            </text>
             <span className="text-mesh-color-accent-1000">
-              {recomended_price}
+              {!isPriceLoading ? (
+                recommended_price
+              ) : (
+                <div className="h-6 w-16 animate-pulse rounded-lg bg-mesh-color-neutral-600" />
+              )}
             </span>
           </div>
-          <p className="w-[70%] text-mesh-color-neutral-200">
-            Preço que recomendamos com base no mercado do momento
+          <p className="w-full text-xs leading-tight text-mesh-color-neutral-200 laptop:pt-2 laptop:text-sm">
+            Preço que recomendamos com base no mercado do momento.
           </p>
-          <div className="mt-6 rounded border-b border-mesh-color-neutral-200" />
+          <div className="my-1 rounded border-b border-mesh-color-neutral-200 laptop:my-6" />
         </div>
 
         {/* ---------INPUT -------------  */}
-        <div className="mt-5 flex w-full max-w-[100%] gap-4">
+        <div className="flex w-full max-w-[100%] gap-4">
           <div className="w-1/2 max-w-[50%]">
             <Form.Input.Currency
               name="value"
@@ -196,27 +207,26 @@ export function ModalSkinShowcaseInfo({
               label="Preço de Venda"
               placeHolder={
                 savePrice
-                  ? `${formattedValue(String(savePrice)).toLocaleString(
-                      'pt-br',
-                      {
-                        currency: 'BRL',
-                        style: 'currency',
-                        minimumFractionDigits: 2,
-                      },
-                    )}`
-                  : 'R$ 2.000,00'
+                  ? `${Values.currencyToNumber(
+                      String(savePrice),
+                    )!.toLocaleString('pt-br', {
+                      currency: 'BRL',
+                      style: 'currency',
+                      minimumFractionDigits: 2,
+                    })}`
+                  : 'R$ 0,00'
               }
               register={register('value')}
               errors={errors.value}
             />
           </div>
 
-          <div className="flex w-1/2 max-w-[50%] flex-col">
-            <Common.Title bold={500} color="white" size="lg">
+          <div className="flex w-1/2 max-w-[50%] flex-col text-base laptop:text-lg">
+            <Common.Title bold={100} color="white">
               Você irá receber
             </Common.Title>
             <div
-              className="transitions-all max-w-[100%] overflow-hidden text-ellipsis rounded-md
+              className="transitions-all max-w-[100%] select-none overflow-hidden text-ellipsis rounded-md
               border-[2px] border-mesh-color-primary-1100/30 bg-mesh-color-others-eerie-black px-1 py-3
                 ring-mesh-color-primary-1900 duration-300 placeholder:text-white/70 focus:border-mesh-color-primary-1100"
             >
@@ -226,50 +236,70 @@ export function ModalSkinShowcaseInfo({
                 color="white"
                 size="lg"
               >
-                {(
-                  (formattedValue(watchValue || '') ||
-                    formattedValue(String(savePrice))) -
-                  (formattedValue(watchValue || '') ||
-                    formattedValue(String(savePrice))) *
-                    0.05
-                ).toLocaleString('pt-br', {
-                  style: 'currency',
-                  currency: 'BRL',
-                  minimumFractionDigits: 2,
-                })}
+                {watchValue || savePrice
+                  ? (
+                      (Values.currencyToNumber(
+                        watchValue ? String(watchValue) : '',
+                      )! ||
+                        Values.currencyToNumber(
+                          savePrice ? String(savePrice) : '',
+                        )!) -
+                      (Values.currencyToNumber(
+                        watchValue ? String(watchValue) : '',
+                      )! ||
+                        Values.currencyToNumber(
+                          savePrice ? String(savePrice) : '',
+                        )!) *
+                        0.04
+                    ).toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 2,
+                    })
+                  : 'R$ 0,00'}
               </Common.Title>
             </div>
           </div>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 ">
           <Form.Input.Checkbox
             name="sell-rent"
             register={register('sell')}
             label="Venda"
             checked={true}
           />
-          <Form.Input.Checkbox
-            name="sell-rent"
-            register={register('rent')}
-            label="Aluguel"
-          />
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="sell-rent"
+              register={register('rent')}
+              label="Aluguel"
+              checked={watchRent}
+              onChange={() => {
+                if (!apiKey) {
+                  Toast.Error(
+                    'Para alugar um item, é necessário ter a chave adicionada nas configurações.',
+                    7000,
+                  )
+                  setValue('rent', false)
+                }
+              }}
+            />
+          )}
         </div>
         {/* ---------INPUT FIM -------------  */}
 
-        <div className="space-y-6">
+        <div className="space-y-2 laptop:space-y-6">
           {isSelected ? (
             <div className="flex gap-4">
-              <Dialog.Close className="w-full">
-                <Common.Button
-                  disabled={disabled}
-                  onClick={handleChangeSkinToAdvertise}
-                  className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-                >
-                  <Common.Title bold={600} className="rounded-xl">
-                    Alterar
-                  </Common.Title>
-                </Common.Button>
-              </Dialog.Close>
+              <Form.Button
+                disabled={disabled}
+                onClick={() => setWhatFunctionExecute('change')}
+                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 text-center font-bold disabled:bg-mesh-color-neutral-400"
+              >
+                <Common.Title bold={600} className="rounded-xl">
+                  Alterar
+                </Common.Title>
+              </Form.Button>
               <Common.Button
                 onClick={() => removeSkinToAdvertise(id)}
                 className="mt-4 h-11 w-3/5 border-mesh-color-neutral-200"
@@ -280,28 +310,27 @@ export function ModalSkinShowcaseInfo({
               </Common.Button>
             </div>
           ) : (
-            <Dialog.Close className="w-full">
-              <Form.Button
-                disabled={disabled}
-                buttonStyle={undefined}
-                className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
-                onClick={handleAddSkinsToAdvertise}
-              >
-                Anunciar
-              </Form.Button>
-            </Dialog.Close>
+            <Form.Button
+              disabled={disabled}
+              buttonStyle={undefined}
+              className="mt-4 h-11 w-full border-transparent bg-mesh-color-primary-1400 font-bold disabled:bg-mesh-color-neutral-400"
+            >
+              Anunciar
+            </Form.Button>
           )}
-          <Form.Input.Checkbox
-            name="terms"
-            wrapperClassname="gap-4"
-            labelClassName="text-sm text-justify text-white"
-            label="Estou ciente que esta plataforma possui a modalidade de locação, e
+          {isRentable && (
+            <Form.Input.Checkbox
+              name="terms"
+              wrapperClassname="gap-4"
+              labelClassName="text-xs laptop:text-sm text-justify text-white"
+              label="Estou ciente que esta plataforma possui a modalidade de locação, e
             meu item poderá ser disponibilizado em caráter temporário, fazendo
             com que o recebimento pela venda ou locação deste item só seja
             realizado no prazo final da transação."
-            register={register('terms')}
-            errors={errors.warning}
-          />
+              register={register('terms')}
+              errors={errors.warning}
+            />
+          )}
         </div>
       </Form.Root>
     </div>

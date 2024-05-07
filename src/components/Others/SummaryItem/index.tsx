@@ -14,25 +14,26 @@ export default function LineInfosSummaryh({
   value,
   className,
   cash = false,
-  size = 'base',
 }: Props) {
   const formattedNumber = cash
-    ? parseFloat(String(+value > 0 ? +value - 0.05 * 100 : '0')).toLocaleString(
-        'pt-BR',
-        {
-          style: 'currency',
-          currency: 'BRL',
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        },
-      )
+    ? parseFloat(value).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     : value
   return (
-    <div className={classNames('flex w-full justify-between', className)}>
-      <Common.Title color="white" size={size} bold={400}>
+    <div
+      className={classNames(
+        'flex w-full justify-between text-sm laptop:text-base',
+        className,
+      )}
+    >
+      <Common.Title color="white" bold={400}>
         {title}
       </Common.Title>
-      <Common.Title color="white" size={size} bold={600}>
+      <Common.Title color="white" bold={600}>
         {formattedNumber}
       </Common.Title>
     </div>

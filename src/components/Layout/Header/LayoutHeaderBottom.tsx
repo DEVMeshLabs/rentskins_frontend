@@ -21,7 +21,7 @@ interface IProps {
 export function LayoutHeaderBottom({ className }: IProps) {
   return (
     <div
-      className={`${className} z-0 flex w-full select-none items-center justify-center gap-10 border-y border-mesh-color-neutral-700`}
+      className={`${className} z-0 flex w-full select-none items-center justify-center gap-10 border-y border-mesh-color-neutral-700 text-xs laptop:text-base`}
     >
       {/*  */}
       <div className="flex w-10/12 select-none justify-between gap-10 p-4">
@@ -31,7 +31,7 @@ export function LayoutHeaderBottom({ className }: IProps) {
               'Bowie Knife',
               'Shadow Daggers',
               'Falchion Knife',
-              'Buttefly Knife',
+              'Butterfly Knife',
               'Huntsman Knife',
               'M9 Bayonet',
               'Bayonet',
@@ -78,7 +78,6 @@ export function LayoutHeaderBottom({ className }: IProps) {
               'CZ75-Auto',
               'Desert Eagle',
               'Dual Berettas',
-              'Dual Berettas',
               'Five-SeveN',
               'Glock-18',
               'P2000',
@@ -117,7 +116,7 @@ export function LayoutHeaderBottom({ className }: IProps) {
         <ContainerItem title="Luvas" iconSeta={<IconSetaType />} isList={true}>
           <ItemLink
             items={[
-              'Bloodhoud Gloves',
+              'Bloodhound Gloves',
               'Broken Fang Gloves',
               'Driver Gloves',
               'Hand Wraps',
@@ -129,8 +128,9 @@ export function LayoutHeaderBottom({ className }: IProps) {
           />
         </ContainerItem>
 
-        <ContainerItem title="Figurinhas" isList={false} />
+        <ContainerItem title="Adesivos" isList={false} />
         <ContainerItem title="Agentes" isList={false} />
+        <ContainerItem title="Diversos" isList={false} />
       </div>
     </div>
   )
@@ -148,7 +148,7 @@ export const ContainerItem = ({
     Rifles: 'Rifle',
     Pistolas: 'Pistol',
     Luvas: 'Glove',
-    Figurinhas: 'Sticker',
+    Adesivos: 'Sticker',
     Agentes: 'Agent',
     Pesadas: 'Heavy',
   }
@@ -159,7 +159,7 @@ export const ContainerItem = ({
     <div className={classNames('group relative z-20 ', className)}>
       {isList ? (
         <div className="flex items-center">
-          <Link href={`/loja?search=${hrefQuery}&page=1`}>
+          <Link href={`/loja?category=${hrefQuery}&page=1`}>
             <Common.Title color="white">{title}</Common.Title>
           </Link>
           <span className="ml-2 transition duration-300 ease-in-out group-hover:rotate-180">
@@ -168,15 +168,15 @@ export const ContainerItem = ({
         </div>
       ) : (
         <Common.Title color="white">
-          <Link href={`/loja?search=${hrefQuery}`}>{title}</Link>
+          <Link href={`/loja?category=${hrefQuery}`}>{title}</Link>
         </Common.Title>
       )}
 
       {isList && (
-        <div
-          className={`shadow-md invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white delay-75 group-hover:visible`}
-        >
-          <ul className="flex flex-col">{children}</ul>
+        <div className="invisible absolute top-10 max-h-[300px] w-fit min-w-[150px] overflow-y-auto overflow-x-hidden rounded-md bg-[#222723] py-1 text-white drop-shadow-lg delay-75 group-hover:visible">
+          <ul className="scrollbar-thumb-[ #a6cf2b] flex flex-col scrollbar-thin scrollbar-track-gray-200">
+            {children}
+          </ul>
         </div>
       )}
     </div>

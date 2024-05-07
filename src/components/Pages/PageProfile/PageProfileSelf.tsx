@@ -2,12 +2,14 @@
 
 import Common from '@/components/Common'
 import LayoutPagination from '@/components/Layout/LayoutPagination'
+import { ModalReturnMain } from '@/components/Modal/ModalReturnSkin/ModalReturnMain'
 import ChoiceItems from '@/components/Others/ChoiceItems'
 import PerfilPerson from '@/components/Others/PersonProfile'
 import PersonProfileSkeleton from '@/components/Others/PersonProfile/PersonProfileSkeleton'
 import AllSkins from '@/components/Others/Skins/AllSkins'
 import AllSkeletonSkins from '@/components/Skins/AllSkeletonSkins'
 import ISteamUser from '@/interfaces/steam.interface'
+import ConfigService from '@/services/config.service'
 import SkinService from '@/services/skin.service'
 import UserService from '@/services/user.service'
 import { useQuery } from '@tanstack/react-query'
@@ -24,14 +26,25 @@ export default function PageProfileSelf() {
   }
 
   const [page, setPage] = useState(1)
-  const [accountDate, setAccountDate] = useState('Data Não Obtida')
-  const [steamLevel, setSteamLevel] = useState('Não Obtido')
-  const [userState, setUserState] = useState('Não Obtido')
-  const [totalExchanges, setTotalExchanges] = useState('')
-  const [deliveryTime, setDeliveryTime] = useState('')
-  const [deliveryFee, setDeliveryFee] = useState(0)
 
-  const { data, isLoading, isRefetching, refetch } = useQuery({
+  const { data: userHasConfig } = useQuery({
+    queryKey: ['config'],
+    queryFn: async () =>
+      ConfigService.findByConfigUserId(
+        trueSession.user?.steam?.steamid!,
+        trueSession.user?.token!,
+      ),
+    enabled: status === 'authenticated',
+  })
+
+  console.log(session)
+
+  const {
+    data: itens,
+    isLoading: isLoadingItens,
+    isRefetching,
+    refetch,
+  } = useQuery({
     queryKey: ['profileSkins', trueSession?.user?.steam?.steamid!],
     queryFn: () =>
       SkinService.findAllSkinsByIdSeller(
@@ -45,64 +58,71 @@ export default function PageProfileSelf() {
     refetch()
   }, [page, refetch])
 
-  const { data: dataGettedUser, isLoading: isLoadingGetUser } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ['myProfile', trueSession?.user?.steam?.steamid!],
     queryFn: () => UserService.getUser(trueSession?.user?.steam?.steamid!),
   })
 
-  console.log(dataGettedUser)
+  const steamCreatedDate = `${new Date(user?.data?.steam_created_date!)
+    .getDate()
+    .toString()
+    .padStart(2, '0')}/${(
+    new Date(user?.data?.steam_created_date!).getMonth() + 1
+  )
+    .toString()
+    .padStart(2, '0')}/${new Date(
+    user?.data?.steam_created_date!,
+  )!.getFullYear()}`
 
-  useEffect(() => {
-    if (dataGettedUser?.data) {
-      const accountDate = new Date(dataGettedUser?.data.steam_created_date)
-      setAccountDate(
-        `${accountDate.getDate().toString().padStart(2, '0')}/${(
-          accountDate.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, '0')}/${accountDate.getFullYear()}`,
-      )
-      setSteamLevel(dataGettedUser.data.steam_level)
-      setUserState(dataGettedUser.data.status_member)
-      setTotalExchanges(dataGettedUser.data.total_exchanges)
-      setDeliveryTime(dataGettedUser.data.delivery_time)
-      setDeliveryFee(dataGettedUser.data.delivery_fee)
-    }
-  }, [dataGettedUser])
+  const deliveryFee =
+    user?.data?.total_exchanges_completed! > 0 ||
+    user?.data?.total_exchanges_failed! > 0
+      ? (user?.data?.total_exchanges_completed! /
+          (user?.data?.total_exchanges_completed! +
+            user?.data?.total_exchanges_failed!)) *
+        100
+      : 'Sem informações'
 
   return (
     <>
-      {status === 'authenticated' ? (
+      <ModalReturnMain />
+      {status === 'authenticated' && user?.data ? (
         <PerfilPerson
-          totalExchanges={totalExchanges}
-          deliveryTime={deliveryTime}
+          totalExchanges={
+            user?.data?.total_exchanges_completed +
+            user?.data?.total_exchanges_failed
+          }
+          deliveryTime={user?.data?.delivery_time}
           deliveryFee={deliveryFee}
-          isLoading={isLoadingGetUser}
-          userState={userState}
-          steamLevel={steamLevel}
-          accountDate={accountDate}
-          picture={trueSession?.user?.image!}
-          name={trueSession?.user?.name!}
+          isLoading={isLoadingUser}
+          accountDate={steamCreatedDate}
+          name={user?.data?.owner_name}
+          picture={user?.data?.picture}
+          reliability={user?.data?.reliability}
         />
       ) : (
         <PersonProfileSkeleton />
       )}
       <ChoiceItems thereIsRented={true} />
-      {isLoading || isRefetching ? (
+      {isLoadingItens || isRefetching || isLoadingUser ? (
         <AllSkeletonSkins />
-      ) : data?.data.skins.length! > 0 ? (
-        <AllSkins skinsCategories={data?.data?.skins} />
+      ) : itens?.data?.skins?.length! > 0 ? (
+        <AllSkins
+          userItems={true}
+          items={itens?.data?.skins}
+          apiKey={!!userHasConfig?.data.key}
+        />
       ) : (
         <Common.SearchFeedback
-          content="ao perfil"
-          title={trueSession?.user?.name!}
+          content="ao perfil de"
+          title={trueSession?.user?.name! || 'Usuário'}
         />
       )}
-      {data?.data?.totalPages &&
-        data?.data?.totalPages > 1 &&
-        Number(page) <= data?.data?.totalPages && (
+      {itens?.data?.totalPages &&
+        itens?.data?.totalPages > 1 &&
+        Number(page) <= itens?.data?.totalPages && (
           <LayoutPagination
-            maxPages={data?.data?.totalPages}
+            maxPages={itens?.data?.totalPages}
             pageState={page}
             setPageState={setPage}
           />

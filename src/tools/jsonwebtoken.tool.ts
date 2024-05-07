@@ -5,6 +5,10 @@ export default class JsonWebToken {
     return jwt.sign(item, process.env.NEXT_PUBLIC_SECRET_KEY as string)
   }
 
+  public static decode(jasonWebToken: string) {
+    return jwt.decode(jasonWebToken)
+  }
+
   public static verify(token: string): object {
     try {
       return jwt.verify(

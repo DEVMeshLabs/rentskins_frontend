@@ -1,29 +1,45 @@
+import { TItemRarity } from '@/tools/colorRarity.tool'
+
 export interface ISkins {
   id: string
   asset_id: string
   name_color: string
   skin_image: string
   skin_name: string
-  skin_color: string
+  skin_rarity: TItemRarity
+  slug: string
   skin_category: string
   skin_weapon: string
-  skin_price: string
+  skin_price: number
   skin_float: string
+  skin_paintseed: number
   status: string
-  sale_type: string
+  median_price: number
+  sale_type: 'sale' | 'rent'
   seller_id: string
+  stickers: Array<{ url: string; name: string }>
   skin_link_game: string
   skin_link_steam: string
   status_float: string
   buyer_name: string
   buyer_id: string
   deletedAt: string | null
+  saleAt: string | null
+}
+
+export interface skinFloat {
+  origin: number
+  float: number
+  paintseed: number
+  paintindex: number
+  hassticker: boolean
+  stickeramount: number
 }
 
 export interface ISkinsCardModal {
   skinId: string
-  skinPrice: string
-  skinColor: string
+  skinPrice: number
+  skinRarity: TItemRarity
   skinName: string
   skinImage: string
   statusFloat: string
@@ -44,11 +60,57 @@ export interface ISteamItens {
   background_color: string
   icon_url: string
   icon_url_large: string
-  descriptions: Array<{
-    type: string
-    value: string
-    color?: string
-  }>
+  descriptions: [
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+      color: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+    {
+      type: string
+      value: string
+    },
+  ]
   tradable: boolean
   actions: Array<{
     link: string
@@ -85,7 +147,6 @@ export interface ISkinsResponse {
 }
 
 export interface ISkinsToAdvertise {
-  id?: string
   asset_id: string
   skin_image: string
   skin_name: string
@@ -93,14 +154,16 @@ export interface ISkinsToAdvertise {
   skin_weapon: string
   skin_price: number
   skin_float: string
+  skin_paintseed: number
   seller_name: string
   seller_id: string
-  skin_color: string
+  skin_rarity: string
+  stickers: Array<{ url: string; name: string }>
   status: string
   sale_type: string
   status_float: string
   skin_link_game: string
-  median_price: number
+  median_price?: number
   skin_link_steam: string
 }
 

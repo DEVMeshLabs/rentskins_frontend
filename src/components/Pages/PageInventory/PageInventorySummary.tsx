@@ -7,35 +7,42 @@ import useSkinsStore from '@/stores/skins.store'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { ColorRing } from 'react-loader-spinner'
 
 export default function PageInventorySummary() {
+  const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
   const { data: session } = useSession()
   const trueSession = session as ISteamUser
 
-  const { skinsToAdvertise, changeSkinToAdvertise, cleanSkinsToAdvertise } =
-    useSkinsStore()
-  const [subtotal, setSubtotal] = useState(0)
+  const {
+    skinsToAdvertise,
+    removeSkinToAdvertise,
+    changeSkinToAdvertise,
+    cleanSkinsToAdvertise,
+  } = useSkinsStore()
+  const [subtotal, setSubtotal] = useState<number>(0)
   const [disabled, setDisabled] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['createdSkins'],
+  const { data: itemAnnounced, refetch: announceItem } = useQuery({
+    queryKey: ['announcedItems'],
     queryFn: async () => {
       setIsLoading(true)
-      console.log('Skins:', skinsToAdvertise)
       const announcedSkins = await SkinService.postAllSkinsToAdvertise(
         skinsToAdvertise,
         trueSession.user?.token!,
       )
       console.log(announcedSkins)
-
       if (announcedSkins.request.status !== 409) {
         cleanSkinsToAdvertise()
       }
 
       setIsLoading(false)
+
       return announcedSkins
     },
     enabled: false,
@@ -43,30 +50,39 @@ export default function PageInventorySummary() {
   })
 
   useEffect(() => {
-    console.log('ok')
-    if (data) {
-      if (data?.request.status === 201) {
-        Toast.Success('Anúncio adicionado com sucesso!')
-      } else if (data?.request.status === 409) {
-        const itemName = data.request.response
-          .split('"')[3]
-          .replace('Skin', '')
-          .replace(' Already Exist', '')
-        Toast.Error(`O item ${itemName} já existe no seu perfil.`)
+    if (searchParams.get('success')) {
+      Toast.Success('Anúncio(s) criado(s) com sucesso!')
+      router.push(pathname)
+    }
+  }, [pathname, searchParams, router])
+
+  useEffect(() => {
+    if (itemAnnounced) {
+      console.log(itemAnnounced)
+      if (itemAnnounced?.request.status === 201) {
+        window.location.replace(pathname + '?success=true')
+      } else if (itemAnnounced?.request.status === 409) {
+        const responseObject: { error: string; asset_id: string } = JSON.parse(
+          itemAnnounced?.request?.response,
+        )
+
+        if (responseObject.asset_id) {
+          removeSkinToAdvertise(responseObject.asset_id)
+        }
+
+        Toast.Error(responseObject.error)
       } else {
-        console.log(data)
         Toast.Error(
-          'Ocorreu um problema ao anunciar o item. Tente novamente mais tarde.',
+          'Ocorreu um problema ao anunciar o inventário. Tente novamente mais tarde.',
         )
       }
     }
-  }, [data])
+  }, [itemAnnounced, pathname, removeSkinToAdvertise])
 
   useEffect(() => {
-    const subtotal = skinsToAdvertise.reduce(
-      (acc, { skin_price }) => acc + skin_price,
-      0,
-    )
+    const subtotal = skinsToAdvertise.reduce((acc, { skin_price }) => {
+      return acc + skin_price
+    }, 0)
     setSubtotal(subtotal)
   }, [skinsToAdvertise, changeSkinToAdvertise])
 
@@ -79,7 +95,7 @@ export default function PageInventorySummary() {
   }, [subtotal])
 
   return (
-    <div className="flex min-h-[400px] flex-col justify-between rounded-xl bg-mesh-color-others-eerie-black px-6 py-6">
+    <div className="sticky top-10 flex min-h-[400px] flex-col justify-between rounded-xl bg-mesh-color-others-eerie-black px-6 py-6">
       <div className="text-white">
         <Common.Title color="white" className="text-[28px] font-bold">
           Resumo
@@ -103,7 +119,7 @@ export default function PageInventorySummary() {
         <div className="mt-5 flex justify-between ">
           <Common.Title>Taxa</Common.Title>
           <span>
-            {(0.05 * subtotal).toLocaleString('pt-br', {
+            {(0.04 * subtotal).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
@@ -115,7 +131,7 @@ export default function PageInventorySummary() {
         <div className="flex justify-between">
           <Common.Title>Total</Common.Title>
           <span>
-            {(subtotal - 0.05 * subtotal).toLocaleString('pt-br', {
+            {(subtotal - 0.04 * subtotal).toLocaleString('pt-br', {
               currency: 'BRL',
               style: 'currency',
               minimumFractionDigits: 2,
@@ -123,15 +139,15 @@ export default function PageInventorySummary() {
           </span>
         </div>
         <Common.Button
-          onClick={() => refetch()}
+          onClick={() => announceItem()}
           disabled={disabled}
-          className="h-[53px]"
+          className="h-[53px] border-mesh-color-primary-1200 bg-mesh-color-primary-1200 font-bold text-black disabled:border-mesh-color-neutral-400 disabled:bg-transparent disabled:text-mesh-color-neutral-200"
         >
           {isLoading ? (
             <ColorRing
               width={50}
               height={50}
-              colors={['#A6CF2B', '#A6CF2B', '#A6CF2B', '#A6CF2B', '#A6CF2B']}
+              colors={['#000000', '#000000', '#000000', '#000000', '#000000']}
             />
           ) : (
             <Common.Title>Vender</Common.Title>

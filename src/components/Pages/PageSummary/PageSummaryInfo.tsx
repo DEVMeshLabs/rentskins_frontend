@@ -6,13 +6,16 @@ interface IProps {
 }
 
 export function PageSummaryInfo({ totalPrice }: IProps) {
-  const { skinsFromCart } = useCartStore()
+  const { skinsToBuy } = useCartStore()
 
   return (
-    <div className="flex flex-col gap-5">
-      <LineInfosSummaryh title="Itens" value={String(skinsFromCart.length)} />
+    <div className="flex flex-col gap-2 laptop:gap-5">
+      <LineInfosSummaryh
+        title="Itens"
+        value={skinsToBuy.length > 0 ? String(skinsToBuy.length) : '0'}
+      />
       <LineInfosSummaryh title="Subtotal" value={totalPrice} cash={true} />
-      <LineInfosSummaryh title="Desconto promocional" value="5%" />
+      <LineInfosSummaryh title="Desconto Promocional" value="5%" />
     </div>
   )
 }

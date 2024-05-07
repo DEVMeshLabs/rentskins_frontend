@@ -7,7 +7,7 @@ export function ModalLoadingMain() {
   return (
     <div>
       <Dialog.Root modal open={true} defaultOpen={false}>
-        <Dialog.Portal>
+        <Dialog.Portal className="z-50">
           <Dialog.Overlay className="fixed inset-0 z-30 flex bg-black/70 transition-all" />
           <Dialog.Content
             onOpenAutoFocus={(event) => event.preventDefault()}

@@ -17,23 +17,23 @@ export default class ConfigService {
     agreed_with_emails,
     agreed_with_terms,
     owner_email,
-    owner_id,
     owner_name,
     owner_phone,
     owner_cpf,
+    key,
     steam_guard,
     url_sell,
     url_trade,
   }: IOptionalConfig) {
     return Api.put<IConfig>(
-      `/configuration/${owner_id}`,
+      `/configuration`,
       {
         agreed_with_emails,
         agreed_with_terms,
         owner_email,
-        owner_id,
         owner_cpf,
         owner_name,
+        key,
         owner_phone,
         steam_guard,
         url_sell,
@@ -43,5 +43,7 @@ export default class ConfigService {
         headers: { Authorization: 'Bearer ' + token },
       },
     )
+      .then((response) => response)
+      .catch((e) => e)
   }
 }

@@ -3,8 +3,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Termos de Uso - RentSkins',
-  description: `Rentskins é a melhor plataforma para comprar, vender e alugar skins do CS:GO.
-  Encontre skins raras e exclusivas para personalizar seu jogo.`,
+  description: `RentSkins é a melhor plataforma para comprar, vender e alugar skins do Counter-Strike. Encontre skins raras e exclusivas para personalizar seu jogo.`,
 }
 
 export default function TermoDeUso() {
@@ -174,7 +173,7 @@ export default function TermoDeUso() {
               <li>
                 3.5. Mediante solicitação é direito de todo e qualquer usuário
                 de encerrar sua conta a qualquer momento, basta enviar um e-mail
-                para o endereço de suporte: suporte@rentskins.com com as
+                para o endereço de suporte: suporte@RentSkins.com com as
                 informações de cadastro no site para remoção permanente.
               </li>
               <br />
@@ -579,7 +578,7 @@ export default function TermoDeUso() {
           </div>
           <div>
             <Common.Title bold={700} color="white" className="mb-8 text-2xl">
-              DOS DIREITOS DA RENTSKINS
+              DOS DIREITOS DA RentSkins
             </Common.Title>
             <ol>
               <li>

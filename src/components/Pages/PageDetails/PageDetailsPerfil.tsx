@@ -2,48 +2,48 @@
 // import fallen from '@/assets/fallen.svg'
 import blankProfile from '@/../public/blank-profile.png'
 import Common from '@/components/Common'
-import classnames from 'classnames'
+import { IGetUser } from '@/services/interfaces/user.interface'
+import { Rank } from '@/tools/rank.tool'
+import Time from '@/tools/time.tool'
+import classNames from 'classnames'
 import moment from 'moment'
 import 'moment/locale/pt-br'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
 
 interface IProps {
-  id: string
-  picture: string
-  owner_name: string
-  delivery_fee: number
-  delivery_time: string
-  account_date: string
-  status_member: string
-  steam_level: string
-  total_exchanges: string
+  seller: IGetUser
 }
 
-export function PageDetailsPerfil({
-  id,
-  picture,
-  owner_name,
-  delivery_fee,
-  delivery_time,
-  account_date,
-  status_member,
-  steam_level,
-  total_exchanges,
-}: IProps) {
+export function PageDetailsPerfil({ seller }: IProps) {
+  console.log(seller)
   const dateFormated =
-    account_date === undefined
+    seller.steam_created_date === undefined
       ? 'Indefinido'
-      : moment(account_date).locale('pt-br').format('MMM D, YYYY')
+      : moment(seller.steam_created_date).locale('pt-br').format('D MMM, YYYY')
+
+  const deliveryRate =
+    seller.total_exchanges_completed > 0 || seller.total_exchanges_failed > 0
+      ? (seller.total_exchanges_completed /
+          (seller.total_exchanges_completed + seller.total_exchanges_failed)) *
+        100
+      : 'Sem informações'
+
+  const deliveryTime =
+    seller.delivery_time !== 'Sem informações'
+      ? Time.roundTime(seller.delivery_time!)
+      : 'Sem informações'
+
   return (
     <div className="h-fit min-h-[300px] rounded-lg border-2 border-mesh-color-neutral-600">
       <div className="flex flex-col justify-between gap-8 p-4">
         <div className="flex items-center">
-          <Link href={`/perfil/${id}`} className="cursor-pointer">
+          <Link href={`/perfil/${seller.owner_id}`} className="cursor-pointer">
             <Image
               src={
-                picture && picture.includes('https://avatars.steamstatic.com/')
-                  ? picture
+                seller.picture &&
+                seller.picture.includes('https://avatars.steamstatic.com/')
+                  ? seller.picture
                   : blankProfile
               }
               alt=""
@@ -54,48 +54,64 @@ export function PageDetailsPerfil({
             />
           </Link>
           <div className="ml-4">
-            <Common.Title color="white" className="text-2xl font-semibold">
-              {owner_name}
-            </Common.Title>
-            <span
-              className={classnames(
-                'mt-1 flex h-[26px] w-fit items-center justify-center whitespace-nowrap rounded-[15px] border border-none bg-mesh-color-others-green px-3 text-sm capitalize text-mesh-color-accent-600',
-                {
-                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
-                    status_member === 'Risco',
-                },
-                {
-                  'bg-mesh-color-rarity-low/20 text-mesh-color-rarity-low':
-                    status_member === 'Questionável',
-                },
-                {
-                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
-                    status_member === 'Atenção',
-                },
-                {
-                  'bg-white/20 text-white': status_member === 'Membro novo',
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
-                    status_member === 'Frequente',
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
-                    status_member === 'Confiável',
-                },
-              )}
+            {/* <Common.Title
+              color="white"
+              className="text-lg font-semibold laptop:text-2xl"
             >
-              {status_member}
-            </span>
+              {seller.owner_name}
+            </Common.Title> */}
+            <div className="w-[48px] laptop:w-[80px]">
+              <Image
+                src={Rank.retrieveRank(seller.reliability!) as StaticImageData}
+                alt="Rank"
+                width={80}
+              />
+            </div>
           </div>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2 text-sm laptop:space-y-3 laptop:text-base">
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
               Taxa de Entrega
             </Common.Title>
-            <span className="font-medium text-mesh-color-primary-1400">
-              {delivery_fee}%
+            <span
+              className={classNames(
+                {
+                  'font-medium text-white': deliveryRate === 'Sem informações',
+                },
+                {
+                  'text-mesh-color-rarity-low':
+                    typeof deliveryRate === 'number' && deliveryRate < 20,
+                },
+                {
+                  'text-mesh-color-rarity-medium':
+                    typeof deliveryRate === 'number' &&
+                    deliveryRate >= 20 &&
+                    deliveryRate < 40,
+                },
+                {
+                  'text-white':
+                    typeof deliveryRate === 'number' &&
+                    deliveryRate >= 40 &&
+                    deliveryRate < 60,
+                },
+                {
+                  'text-mesh-color-rarity-high':
+                    typeof deliveryRate === 'number' &&
+                    deliveryRate >= 60 &&
+                    deliveryRate < 80,
+                },
+                {
+                  'text-mesh-color-rarity-highest':
+                    typeof deliveryRate === 'number' &&
+                    deliveryRate >= 80 &&
+                    deliveryRate < 101,
+                },
+              )}
+            >
+              {typeof deliveryRate === 'number'
+                ? Number(deliveryRate).toFixed(0) + '%'
+                : deliveryRate}
             </span>
           </div>
 
@@ -103,21 +119,16 @@ export function PageDetailsPerfil({
             <Common.Title className="text-mesh-color-neutral-200">
               Tempo de Entrega
             </Common.Title>
-            <span className="font-medium text-white">{delivery_time}</span>
+            <span className="font-medium text-white">{deliveryTime}</span>
           </div>
 
           <div className="flex justify-between">
             <Common.Title className="text-mesh-color-neutral-200">
               Total de Transações
             </Common.Title>
-            <span className="font-medium text-white">{total_exchanges}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <Common.Title className="text-mesh-color-neutral-200">
-              Nível da Steam
-            </Common.Title>
-            <span className="font-medium text-white">{steam_level}</span>
+            <span className="font-medium text-white">
+              {seller.total_exchanges_completed + seller.total_exchanges_failed}
+            </span>
           </div>
 
           <div className="flex justify-between">
@@ -129,8 +140,8 @@ export function PageDetailsPerfil({
         </div>
         <div className="self-center">
           <Link
-            href={`/perfil/${id}`}
-            className="cursor-pointer select-none text-lg font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100"
+            href={`/perfil/${seller.owner_id}`}
+            className="cursor-pointer select-none text-base font-medium text-mesh-color-neutral-200 opacity-50 transition-all hover:opacity-100 laptop:text-lg"
           >
             Ver mais itens à venda
           </Link>

@@ -1,8 +1,8 @@
 'use client'
 import Common from '@/components/Common'
 import { IconSend } from '@/components/Icons/IconSend'
-import classNames from 'classnames'
-import Image from 'next/image'
+import { Rank } from '@/tools/rank.tool'
+import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
 import ProfileInfo from '../ProfileInfo'
 
@@ -11,12 +11,12 @@ interface Props {
   picture?: string
   name?: string
   accountDate?: string
-  steamLevel?: string
+  reliability?: string
   isLoading?: boolean
   userState?: string
-  totalExchanges?: string
+  totalExchanges?: number
   deliveryTime?: string
-  deliveryFee?: number
+  deliveryFee?: number | string
 }
 
 export default function PersonProfile({
@@ -24,7 +24,7 @@ export default function PersonProfile({
   picture,
   name,
   accountDate,
-  steamLevel,
+  reliability,
   isLoading,
   userState,
   totalExchanges,
@@ -41,58 +41,25 @@ export default function PersonProfile({
           height={200}
           className="rounded-full"
         />
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col justify-center gap-7">
           <div className="flex flex-col gap-2">
-            <Common.Title
-              bold={600}
-              color="white"
-              size="3xl"
-              className="self-start"
-            >
-              {name || 'Usuário'}
-            </Common.Title>
-            <div
-              className={classNames(
-                'w-32 rounded-3xl p-1 text-center text-base font-normal capitalize',
-                {
-                  'h-8': isLoading === true,
-                },
-                {
-                  'bg-white/20 text-white': userState === 'Não Obtido',
-                },
-                {
-                  'bg-mesh-color-rarity-lowest/20 text-mesh-color-rarity-lowest':
-                    userState === 'Risco',
-                },
-                {
-                  'bg-mesh-color-rarity-low/20 text-mesh-color-rarity-low':
-                    userState === 'Questionável',
-                },
-                {
-                  'bg-mesh-color-rarity-medium/20 text-mesh-color-rarity-medium':
-                    userState === 'Atenção',
-                },
-                {
-                  'bg-white/20 text-white': userState === 'Membro novo',
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 text-mesh-color-rarity-high':
-                    userState === 'Frequente',
-                },
-                {
-                  'bg-mesh-color-rarity-high/20 font-semibold text-mesh-color-rarity-highest':
-                    userState === 'Confiável',
-                },
-              )}
-            >
-              {!isLoading && userState}
-            </div>
+            {isSeller ?? (
+              <Common.Title
+                bold={600}
+                color="white"
+                size="3xl"
+                className="self-start"
+              >
+                {name || 'Usuário'}
+              </Common.Title>
+            )}
+            <Image
+              src={Rank.retrieveRank(reliability!) as StaticImageData}
+              alt="Rank"
+              width={100}
+            />
           </div>
           <div className="flex flex-col gap-6">
-            <h1 className="flex gap-1 text-lg text-white">
-              <span className="opacity-60">Steam Level:</span>
-              <strong>{!isLoading && steamLevel}</strong>
-            </h1>
             {isSeller ?? (
               <Link href={'/inventario'}>
                 <Common.Button
@@ -112,17 +79,23 @@ export default function PersonProfile({
           title="Tempo de Entrega"
           value={
             (deliveryTime && deliveryTime.replace(' no momento', '')) ||
-            'Não Obtido'
+            'Sem informações'
           }
         />
         <ProfileInfo
           title="Total de Transações"
+          value={totalExchanges || 'Não Obtido'}
+        />
+        <ProfileInfo
+          title="Taxa de Entrega"
           value={
-            (totalExchanges && totalExchanges.replace(' no momento', '')) ||
-            'Não Obtido'
+            deliveryFee
+              ? typeof deliveryFee === 'number'
+                ? deliveryFee.toFixed(0) + '%'
+                : deliveryFee
+              : 'Sem informações'
           }
         />
-        <ProfileInfo title="Taxa de Entrega" isPercent value={deliveryFee} />
         <ProfileInfo title="Membro da Steam Desde" value={accountDate} />
       </div>
     </section>

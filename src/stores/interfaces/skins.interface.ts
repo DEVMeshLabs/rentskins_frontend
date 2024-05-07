@@ -9,7 +9,11 @@ export interface ISkinsStore {
   itemAvailable: boolean
   setSkinsToAdvertise: (skins: ISkinsToAdvertise) => void
   removeSkinToAdvertise: (skinId: string) => void
-  changeSkinToAdvertise: (skinId: string, price: number) => void
+  changeSkinToAdvertise: (
+    skinId: string,
+    price: number,
+    itsRented: boolean,
+  ) => void
   cleanSkinsToAdvertise: () => void
   setOpenModalBuySkin: (openModalBuySkin: boolean) => void
   setWhatModalOpenToBuySkin: (whatModalOpen: 0 | 1 | 2 | 3 | 4) => void

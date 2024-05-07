@@ -15,6 +15,7 @@ import { FormInputPostalCode } from './Input/FormInputPostalCode'
 import { FormInputString } from './Input/FormInputString'
 import { FormInputText } from './Input/FormInputText'
 import { FormInputRadioBlock } from './Input/Radio/FormInputRadioBlock'
+import { FormInputRadioChoice } from './Input/Radio/FormInputRadioChoice'
 import { FormInputRadioDefault } from './Input/Radio/FormInputRadioDefault'
 import { FormInputRadioInline } from './Input/Radio/FormInputRadioInline'
 
@@ -36,8 +37,9 @@ const Form = {
     PostalCode: FormInputPostalCode,
     Radio: {
       Block: FormInputRadioBlock,
-      Inline: FormInputRadioInline,
+      Choice: FormInputRadioChoice,
       Default: FormInputRadioDefault,
+      Inline: FormInputRadioInline,
     },
     String: FormInputString,
     Text: FormInputText,

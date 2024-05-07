@@ -7,6 +7,12 @@ export interface ISkinToCart {
   skin: ISkins
 }
 
+export interface ISkinsToBuy {
+  skin_id: string
+  buyer_id: string
+  seller_id: string
+}
+
 export interface ICart {
   id: string
   buyer_name: string

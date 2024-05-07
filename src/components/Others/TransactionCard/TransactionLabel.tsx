@@ -5,21 +5,15 @@ interface IProps {
 
 export function TransactionLabel({ name, weapon }: IProps) {
   return (
-    <div className="group flex h-16 w-64 flex-col justify-center">
+    <div className="group relative flex h-full max-h-[100px] w-full flex-col justify-center overflow-hidden">
       <span
-        className="relative top-10 -mb-10 w-fit select-none flex-wrap whitespace-nowrap rounded-lg
-          bg-mesh-color-neutral-300 px-2 text-black opacity-0 transition-all group-hover:opacity-100"
-      >
-        {name}
-      </span>
-      <span
-        className={`group w-64 overflow-hidden text-ellipsis text-lg font-medium ${
+        className={`overflow-hidden text-ellipsis text-base font-medium transition-all 2xl:text-lg ${
           name.includes('StatTrak') && 'text-mesh-color-secondary-800'
         }`}
       >
         {name}
       </span>
-      <span className="text-white/40"> {weapon} </span>
+      <span className="text-xs text-white/40 2xl:text-base"> {weapon} </span>
     </div>
   )
 }

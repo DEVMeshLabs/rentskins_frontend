@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export default function PageSuspendedActivities({ session }: IProps) {
-  const email = 'contato@rentskins.com.br'
+  const email = 'contato@RentSkins.com.br'
   const subject = 'Suspensão da Conta'
   const body = `Prezado(a)%20Time%20de%20Suporte,%0A%0AEu%20gostaria%20de%20entrar%20em%20contato%20para%20discutir%20o%20seguinte:%0A%0A[Insira%20sua%20mensagem%20aqui]%0A%0AAtenciosamente,%0A${session.user?.name}`
 
@@ -54,7 +54,7 @@ export default function PageSuspendedActivities({ session }: IProps) {
         <br />
         <p>Agradecemos pela sua compreensão e colaboração.</p>
         <br />
-        <p>Atenciosamente, a Equipe de Suporte Rentskins.</p>
+        <p>Atenciosamente, a Equipe de Suporte RentSkins.</p>
       </div>
       <button
         onClick={() => signOut({ callbackUrl: '/' })}

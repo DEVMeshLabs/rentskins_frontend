@@ -39,6 +39,7 @@ const formSchema = yup.object({
 
   phone: yup
     .string()
+    .required('Campo necessário.')
     .test('phone-test', 'O campo deve conter um telefone válido.', (item) => {
       if (item) {
         return item.length === 15
@@ -51,7 +52,7 @@ const formSchema = yup.object({
 
   'accept-terms': yup
     .bool()
-    .required('O campo é necessário.')
+    .required('Você deve concordar com os termos antes de prosseguir.')
     .isTrue('Você deve concordar com os termos antes de prosseguir.'),
 
   cpf: yup
@@ -86,6 +87,22 @@ const formSchema = yup.object({
         return false
       }
     }),
+  'api-key': yup
+    .string()
+    .notRequired()
+    .test(
+      'apikey-test',
+      'O campo deve conter uma chave API válida.',
+      (item) => {
+        if (!item) {
+          return true
+        }
+
+        const regex = /^[a-zA-Z0-9]+$/
+
+        return regex.test(item) && item.length === 32
+      },
+    ),
 })
 
 export const formResolver = yupResolver(formSchema)

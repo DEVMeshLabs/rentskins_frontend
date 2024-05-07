@@ -13,11 +13,29 @@ const formSchema = yup.object({
         }
 
         let currencyToNumber
-        currencyToNumber = item.replace(/\./g, '')
-        currencyToNumber = currencyToNumber.replace('R$ ', '')
+        currencyToNumber = item.replace('R$ ', '')
         currencyToNumber = currencyToNumber.replace(',', '.')
 
-        if (Number(currencyToNumber) <= 0) {
+        if (Number(currencyToNumber) < 0) {
+          return false
+        }
+
+        return true
+      },
+    )
+    .test(
+      'form-value-min-test',
+      'O campo deve conter um valor maior ou igual a R$ 0,10.',
+      (item) => {
+        if (item === '' || item === undefined) {
+          return true
+        }
+
+        let currencyToNumber
+        currencyToNumber = item.replace('R$ ', '')
+        currencyToNumber = currencyToNumber.replace(',', '.')
+
+        if (parseFloat(currencyToNumber) < 0.1) {
           return false
         }
 

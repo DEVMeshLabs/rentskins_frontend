@@ -6,6 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { ModalInfoSkin } from './ModalInfoSkin'
 import { ModalTitleSkin } from './ModalTitleSkin'
 import { ModalConfirm } from './ModalComfirm'
+import { useEffect, useState } from 'react'
 
 //
 
@@ -17,6 +18,19 @@ export function ModalExchangeSkin() {
     setWhatModalOpenToBuySkin,
     itemAvailable,
   } = useSkinsStore()
+  const [rentPercentage, setRentPercentage] = useState(10)
+
+  const handleSetRentPercentage = () => {
+    return {
+      '7': () => setRentPercentage(10),
+      '14': () => setRentPercentage(18),
+      '21': () => setRentPercentage(23),
+    }[rentTime as 7 | 14 | 21]()
+  }
+
+  useEffect(() => {
+    handleSetRentPercentage()
+  }, [])
 
   return (
     <Dialog.Content
@@ -25,7 +39,7 @@ export function ModalExchangeSkin() {
     >
       <CardSkinModal.Root>
         <CardSkinModal.Content
-          skinColor={skinToBuy?.skinColor!}
+          skinRarity={skinToBuy?.skinRarity!}
           skinFloat={skinToBuy?.skinFloat!}
           skinImage={skinToBuy?.skinImage!}
           skinName={skinToBuy?.skinName!}
@@ -47,7 +61,10 @@ export function ModalExchangeSkin() {
               },
               {
                 subtitle: `Preço do Aluguel por ${rentTime} dias:`,
-                value: Number(skinToBuy?.skinPrice!) * 0.1,
+                value: Number(
+                  parseFloat(String(skinToBuy?.skinPrice!)) *
+                    (rentPercentage / 100),
+                ),
               },
             ]}
           >

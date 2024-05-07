@@ -31,14 +31,15 @@ export default function AllSkinsCart() {
   useEffect(() => {
     if (dataSkinsCart?.data) {
       const skinsFiltred = dataSkinsCart.data.SkinToCart.filter(
-        ({ skin: { deletedAt } }) => deletedAt === null,
+        ({ skin: { deletedAt, status } }) =>
+          deletedAt === null && status === null,
       )
       setSkinsFromCart(skinsFiltred)
     }
   }, [dataSkinsCart?.data, setSkinsFromCart])
 
   return (
-    <div className="flex h-full w-[798px] flex-col items-center gap-6">
+    <div className="flex h-full min-h-screen w-[798px] flex-col items-center gap-6">
       <LayoutLoading
         enabled={isLoading}
         label="Carregando..."
@@ -54,32 +55,46 @@ export default function AllSkinsCart() {
               (
                 {
                   skin: {
+                    seller_id,
+                    status_float,
                     skin_price,
                     skin_name,
                     name_color,
                     skin_image,
                     id,
                     skin_weapon,
-                    deletedAt,
+                    status,
+                    skin_float,
                   },
                   id: modelId,
                 },
                 idx: number,
               ) => {
-                return (
-                  <CartSkinCard
-                    skinPrice={skin_price}
-                    skinWeapon={skin_weapon}
-                    iconUrl={skin_image}
-                    name={skin_name}
-                    nameColor={name_color}
-                    key={`${name}-${idx}`}
-                    handleOnClick={() => {
-                      deleteSkinFromCart(id)
-                    }}
-                    modelId={modelId}
-                  />
-                )
+                if (status === null) {
+                  return (
+                    <CartSkinCard
+                      skinFloat={skin_float}
+                      sellerId={seller_id}
+                      skinId={id}
+                      userId={
+                        trueSession.user && trueSession.user?.steam?.steamid
+                      }
+                      statusFloat={status_float}
+                      skinPrice={skin_price}
+                      skinWeapon={skin_weapon}
+                      iconUrl={skin_image}
+                      name={skin_name}
+                      nameColor={name_color}
+                      key={`${name}-${idx}`}
+                      handleOnClick={() => {
+                        deleteSkinFromCart(id)
+                        deleteSkinFromCart(id)
+                      }}
+                      modelId={modelId}
+                    />
+                  )
+                }
+                return false
               },
             )
           ) : (

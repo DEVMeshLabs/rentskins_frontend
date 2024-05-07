@@ -1,71 +1,57 @@
 import Common from '@/components/Common'
-import Form from '@/components/Forms'
 import { IconCarrinho } from '@/components/Icons'
+import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 import { ModalConnectInventoryMain } from '@/components/Modal/ModalConnectInventory/ModalConnectInventoryMain'
 import { IOptionalConfig } from '@/interfaces/IConfig'
+import { ISkins } from '@/interfaces/ISkins'
+import ISteamUser from '@/interfaces/steam.interface'
 import CartService from '@/services/cart.service'
+import { IGetUserCart } from '@/services/interfaces/user.interface'
+import NotificationServices from '@/services/notifications.service'
 import SkinService from '@/services/skin.service'
+import useSkinsStore from '@/stores/skins.store'
+import ColorRarity from '@/tools/colorRarity.tool'
 import Toast from '@/tools/toast.tool'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { formResolver } from './schemas/form.schema'
-import useSkinsStore from '@/stores/skins.store'
-import { ModalBuyMain } from '@/components/Modal/ModalBuy/ModalBuyMain'
 
 type PropsTypes = {
+  item: ISkins
   userStatus: 'authenticated' | 'loading' | 'unauthenticated'
   userConfiguration: IOptionalConfig
+  recommendedPrice: string
+  isLoadingRecommendedPrice: boolean
   skinName: string
-  skinImage: string
-  skinPrice: string
-  skinFloat: string
-  skinCategory: string
-  skinWeapon: string
-  skinColor: string
-  sellerId: string
-  statusFloat: string
-  defaultID: string
-  skinId: string
-  cartId: string
-  assetId: string
-  ownerSkin: string
-  userId: string
-  userName: string
-  token: string
+  paintSeed: number
+  userCart: IGetUserCart
+  session: ISteamUser
 }
 
 export function PageDetailsSkin({
+  item,
   userStatus,
   userConfiguration,
   skinName,
-  skinImage,
-  skinPrice,
-  skinFloat,
-  skinCategory,
-  skinWeapon,
-  sellerId,
-  statusFloat,
-  skinColor,
-  defaultID,
-  skinId,
-  cartId,
-  assetId,
-  ownerSkin,
-  userId,
-  userName,
-  token,
+  paintSeed,
+  isLoadingRecommendedPrice,
+  recommendedPrice,
+  session,
+  userCart,
 }: PropsTypes) {
   const [wasRaised, setWasRaised] = useState(false)
   const [rentPercentage, setRentPercentage] = useState(10)
-  const [methodSelected, setMethodSelected] = useState<any>()
+  const [methodSelected, setMethodSelected] = useState<
+    'rent' | 'buy' | 'cart' | undefined
+  >()
   const [loading, setLoading] = useState(false)
   const [selectedRentTime, setSelectedRentTime] = useState(false)
   const [userIsntOwnerSkin, setUserIsntOwnerSkin] = useState(true)
+  const [stateRentTime, setStateRentTime] = useState(0)
+  const [rent, setRent] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -73,25 +59,32 @@ export function PageDetailsSkin({
     setWhatModalOpenToBuySkin,
     setSkinToBuy,
     setRentTime,
+    itemAvailable,
     setItemAvailable,
   } = useSkinsStore()
-
+  const thereIsFloat = !(
+    item.skin_category === 'Graffiti' ||
+    item.skin_category === 'Container' ||
+    item.skin_category === 'Sticker' ||
+    item.skin_category === 'Collectible' ||
+    item.skin_category === 'Patch'
+  )
   const skinToBuy = {
-    skinId,
-    skinPrice,
-    skinColor,
-    skinFloat,
-    skinImage,
+    skinId: item.id,
+    skinPrice: item.skin_price,
+    skinRarity: item.skin_rarity,
+    skinFloat: item.skin_float,
+    skinImage: item.skin_image,
     skinName,
-    skinWeapon,
-    statusFloat,
+    skinWeapon: item.skin_weapon,
+    statusFloat: item.status_float,
   }
 
   useEffect(() => {
-    if (ownerSkin === userId) {
+    if (item.seller_id === session?.user?.steam?.steamid) {
       setUserIsntOwnerSkin(false)
     }
-  }, [ownerSkin, userId])
+  }, [item.seller_id, session?.user?.steam?.steamid])
 
   const hasConfigurations =
     userConfiguration &&
@@ -125,9 +118,9 @@ export function PageDetailsSkin({
     refetch: createCart,
     isRefetching: recreatingCart,
   } = useQuery({
-    queryKey: ['createSkinFromCart', skinId, cartId],
+    queryKey: ['createSkinFromCart', item.id, userCart?.id!],
     queryFn: () => {
-      return CartService.createSkinFromCart(skinId, cartId)
+      return CartService.createSkinFromCart(item.id, userCart.id)
     },
     enabled: false,
     cacheTime: 0,
@@ -138,23 +131,22 @@ export function PageDetailsSkin({
     data: resultAvailability,
     isRefetching: refetchingAvailability,
   } = useQuery({
-    queryKey: ['checkItemAvailability', assetId, sellerId],
-    queryFn: () => SkinService.postCheckItemAvailability(assetId, sellerId),
+    queryKey: ['checkItemAvailability', item.asset_id, item.seller_id],
+    queryFn: () => {
+      return SkinService.postCheckItemAvailability(
+        item.asset_id,
+        item.seller_id,
+      )
+    },
     enabled: false,
     cacheTime: 0,
   })
 
   const { data: deleteResult, refetch: deleteItem } = useQuery({
-    queryKey: ['deleteItem', assetId, sellerId],
-    queryFn: () => SkinService.deleteById(skinId),
+    queryKey: ['deleteItem', item.asset_id, item.seller_id],
+    queryFn: () => SkinService.deleteById(item.id),
     enabled: false,
     cacheTime: 0,
-  })
-  const { register, watch } = useForm({
-    resolver: formResolver,
-    defaultValues: {
-      'rent-time': undefined,
-    },
   })
 
   const renderButton = (child: ReactNode) => {
@@ -173,18 +165,17 @@ export function PageDetailsSkin({
     }
   }
 
-  const watchRentTime = watch('rent-time')
-
   useEffect(() => {
-    switch (String(watchRentTime)) {
+    setRentTime(stateRentTime)
+    switch (String(stateRentTime)) {
       case '7':
         return setRentPercentage(10)
       case '14':
         return setRentPercentage(18)
       case '21':
-        return setRentPercentage(25)
+        return setRentPercentage(23)
     }
-  }, [watchRentTime])
+  }, [stateRentTime, setRentTime])
 
   useEffect(() => {
     if (deleteResult) {
@@ -194,19 +185,18 @@ export function PageDetailsSkin({
   }, [deleteResult, router])
 
   useEffect(() => {
-    console.log(methodSelected !== undefined)
-    if (methodSelected !== undefined) {
+    if (methodSelected !== undefined && !itemAvailable) {
       setLoading(true)
       refetchAvailability()
     } else {
       setLoading(false)
     }
-  }, [methodSelected, refetchAvailability, hasConfigurations])
+  }, [methodSelected, refetchAvailability, hasConfigurations, itemAvailable])
 
   useEffect(() => {
     if (methodSelected === 'buy' && resultAvailability?.status === 200) {
       setLoading(false)
-      setRentTime(watchRentTime!)
+      setRentTime(stateRentTime!)
       setWhatModalOpenToBuySkin(0)
       setItemAvailable(true)
     } else if (
@@ -214,15 +204,28 @@ export function PageDetailsSkin({
       resultAvailability?.status === 200
     ) {
       setLoading(false)
-      setRentTime(watchRentTime!)
+      setRentTime(stateRentTime!)
       setWhatModalOpenToBuySkin(1)
       setItemAvailable(true)
-    } else if (resultAvailability?.request.status === 404) {
+    } else if (
+      resultAvailability?.request.status === 404 ||
+      resultAvailability?.request.status === 409
+    ) {
       setLoading(false)
       setItemAvailable(false)
-      Toast.Error('Desculpe, infelizmente esse item não está mais disponível.')
+      // Toast.Error(
+      //   'Desculpe, infelizmente esse item não está mais disponível.',
+      //   7000,
+      // )
     }
-  }, [resultAvailability])
+  }, [
+    resultAvailability,
+    methodSelected,
+    stateRentTime,
+    setItemAvailable,
+    setRentTime,
+    setWhatModalOpenToBuySkin,
+  ])
 
   const proceedItem = useCallback(async () => {
     if (methodSelected !== undefined) {
@@ -269,22 +272,51 @@ export function PageDetailsSkin({
 
   useEffect(() => {
     if (resultAvailability?.request && !refetchingAvailability) {
-      if (resultAvailability?.request.status === 200) {
+      if (resultAvailability?.request?.status === 200) {
         proceedItem()
-      } else if (resultAvailability?.request.status === 404) {
+      } else if (resultAvailability?.request?.status === 404) {
+        NotificationServices.createNewNotification(
+          item.seller_id,
+          session?.user?.token!,
+          `O anúncio do item ${skinName} foi removido da loja. Durante a compra de um usuário o item não foi encontrado em seu inventário.`,
+          item.id,
+        )
         deleteItem()
         setOpenModalBuySkin(false)
+      } else if (resultAvailability?.request?.status === 500) {
+        if (resultAvailability?.request?.response?.includes('HTTP error 429')) {
+          Toast.Error(
+            'Problemas de conexão com a Steam. Tente novamente mais tarde!',
+          )
+          router.push('/')
+          setOpenModalBuySkin(false)
+        } else {
+          NotificationServices.createNewNotification(
+            item.seller_id,
+            session?.user?.token!,
+            `O anúncio do item ${skinName} foi removido. Verifique se o seu inventário se encontra público e anuncie novamente.`,
+            item.id,
+          )
+          deleteItem()
+          setOpenModalBuySkin(false)
+        }
       } else {
         Toast.Error('Erro ao verificar o item. Tente novamente mais tarde!')
         router.push('/')
+        setOpenModalBuySkin(false)
       }
     }
   }, [
+    methodSelected,
     resultAvailability,
+    setOpenModalBuySkin,
     refetchingAvailability,
     proceedItem,
     router,
     deleteItem,
+    item,
+    session,
+    skinName,
   ])
 
   useEffect(() => {
@@ -295,175 +327,186 @@ export function PageDetailsSkin({
       } else if (data && data.request.status === 409) {
         Toast.Error('Item já adicionado em seu carrinho.')
         setWasRaised(false)
+      } else {
+        Toast.Error(
+          'Infelizmente algo de errado aconteceu. Tente novamente mais tarde.',
+        )
+        setWasRaised(false)
       }
     }
   }, [wasRaised, data, recreatingCart])
 
+  const items = [
+    { label: '7 Dias', value: 7 },
+    { label: '14 Dias', value: 14 },
+    { label: '21 Dias', value: 21 },
+  ]
+
   return (
-    <div className="rounded-lg border-2 border-mesh-color-neutral-600 px-4 py-3">
-      <div className="space-y-4">
+    <div className="flex h-full flex-col justify-between rounded-lg border-2 border-mesh-color-neutral-600 p-4">
+      <div className="space-y-2 laptop:space-y-4">
         <div>
-          <Common.Title className="text-2xl font-extrabold text-white">
+          <Common.Title className="text-lg font-extrabold text-white laptop:text-2xl">
             {skinName}
           </Common.Title>
-          <p className="text-mesh-color-neutral-200">{statusFloat}</p>
+          <p className="text-xs text-mesh-color-neutral-200 laptop:text-base">
+            {item.status_float}
+          </p>
         </div>
 
         <div>
-          <Common.Title className="text-2xl font-extrabold text-white">
-            {Number(skinPrice).toLocaleString('PT-BR', {
+          <Common.Title className="text-lg font-extrabold text-white laptop:text-2xl">
+            {Number(item.skin_price).toLocaleString('PT-BR', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
             })}
           </Common.Title>
-          <p className="text-mesh-color-neutral-200">Preço Total</p>
+          <p className="text-xs text-mesh-color-neutral-200 laptop:text-base">
+            Preço Total
+          </p>
         </div>
 
-        <div
-          className={`transition-all duration-500 ${
-            watchRentTime !== undefined && watchRentTime !== null
-              ? 'opacity-100'
-              : 'opacity-0'
-          }`}
-        >
-          <div className="flex items-center">
-            <Common.Title className="text-2xl font-extrabold text-white">
-              {(parseFloat(skinPrice) * (rentPercentage / 100)).toLocaleString(
-                'PT-BR',
-                {
+        {item.sale_type === 'rent' && stateRentTime > 0 && (
+          <div
+            className={`transition-all duration-500 ${
+              stateRentTime > 0 ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="flex items-center">
+              <Common.Title className="text-2xl font-extrabold text-white">
+                {(
+                  parseFloat(String(item.skin_price)) *
+                  (rentPercentage / 100)
+                ).toLocaleString('PT-BR', {
                   style: 'currency',
                   currency: 'BRL',
                   minimumFractionDigits: 2,
-                },
-              )}
-            </Common.Title>
-            <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
-              {rentPercentage}%
-            </span>
+                })}
+                aqui
+              </Common.Title>
+              <span className="ml-4 flex h-[24px] w-[42px] items-center justify-center rounded-full border border-none bg-mesh-color-others-green text-mesh-color-accent-600">
+                {rentPercentage}%
+              </span>
+            </div>
+            <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
           </div>
-          <p className="text-mesh-color-neutral-200">Preço do Aluguel</p>
-        </div>
+        )}
       </div>
 
-      <div className="mt-6 space-y-4">
+      <div className="mt-4 space-y-4 text-sm laptop:mt-6 laptop:space-y-4 laptop:text-base">
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
-            Tendências de mercado
+            Tendências de Mercado
           </Common.Title>
-          <p className="text-white">Undefined</p>
-        </div>
-
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            ID Padrão
-          </Common.Title>
-          <p className="text-white">{defaultID}</p>
-        </div>
-
-        <div className="flex justify-between">
-          <Common.Title className="text-mesh-color-neutral-200">
-            Float
-          </Common.Title>
-          <div className="flex items-center">
-            <p className="text-white">{skinFloat}</p>
-            <div
-              className={`ml-2 h-[17px] w-[17px] rounded-[3px]`}
-              style={{ background: `#${skinColor}` }}
-            />
+          <div className="text-white">
+            {!isLoadingRecommendedPrice ? (
+              recommendedPrice
+            ) : (
+              <div className="h-6 w-16 animate-pulse rounded-lg bg-mesh-color-neutral-600" />
+            )}
           </div>
         </div>
+
+        <div className="flex justify-between">
+          <Common.Title className="text-mesh-color-neutral-200">
+            Paint Seed
+          </Common.Title>
+          <p className="text-white">{paintSeed || 'Indisponível'}</p>
+        </div>
+
+        {thereIsFloat && (
+          <div className="flex justify-between">
+            <Common.Title className="text-mesh-color-neutral-200">
+              Float
+            </Common.Title>
+            <div className="flex items-center">
+              <p className="text-white">
+                {item.skin_float ? item.skin_float : 'Indisponível'}
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
             Tipo
           </Common.Title>
-          <p className="text-white">{skinCategory}</p>
+          <p className="text-white">{item.skin_category}</p>
         </div>
 
         <div className="flex justify-between">
           <Common.Title className="text-mesh-color-neutral-200">
-            Arma
+            Raridade
           </Common.Title>
-          <p className="text-white">{skinWeapon}</p>
+          <div className="flex items-center justify-center">
+            <div
+              className={`ml-2 h-[17px] w-[17px] rounded-[3px] border-[1px]`}
+              style={{
+                background: `#${ColorRarity.transform(item.skin_rarity)}`,
+              }}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-4">
-        <div className="">
-          <Common.Title className="font-semibold text-white">
-            Selecione o período de Aluguel
-          </Common.Title>
-          <Form.Input.Radio.Default
-            containerClassname="flex gap-2 mt-2"
-            disabled={
-              (loading && hasConfigurations) || userStatus === 'loading'
-            }
-            labelClassName={classNames(
-              'peer-disabled:opacity-10 peer-checked:bg-mesh-color-primary-1200 transition-all w-full h-full border-2 text-white p-2 rounded-lg border-mesh-color-neutral-400 peer-checked:text-black cursor-pointer hover:bg-mesh-color-neutral-600 font-medium',
-              {
-                'bg-mesh-color-rarity-lowest text-white': selectedRentTime,
-              },
-            )}
-            onClick={() => {
-              setSelectedRentTime(false)
-            }}
-            name="rent-time"
-            items={[
-              { label: '7 Dias', value: 7 },
-              { label: '14 Dias', value: 14 },
-              { label: '21 Dias', value: 21 },
-            ]}
-            register={register('rent-time')}
-          />
-        </div>
-
+      <div
+        className={classNames(
+          'mt-6 flex h-fit flex-col justify-end gap-4 transition-all',
+          {
+            'justify-between': rent,
+          },
+        )}
+      >
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
-            {renderButton(
-              <Common.Button
-                onClick={async () => {
-                  if (userIsntOwnerSkin) {
-                    if (!watchRentTime) {
-                      setSelectedRentTime(true)
-                      Toast.Error(
-                        'Você deve selecionar um período para prosseguir com o aluguel.',
-                      )
-                    } else {
-                      setSkinToBuy(skinToBuy)
-                      setRentTime(+watchRentTime)
-                      setWhatModalOpenToBuySkin(1)
-                      setOpenModalBuySkin(true)
-                    }
-                  } else {
-                    Toast.Error('Você não pode alugar o seu próprio item.')
+            {item.sale_type === 'rent' &&
+              renderButton(
+                <Common.Button
+                  disabled={
+                    (loading && hasConfigurations) || userStatus === 'loading'
                   }
-                }}
-                disabled={
-                  (loading && hasConfigurations) || userStatus === 'loading'
-                }
-                className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
-              >
-                Alugar
-              </Common.Button>,
-            )}
+                  onClick={() => {
+                    if (userConfiguration.key) {
+                      Toast.Error(
+                        'A opção de aluguel ainda não está disponível.',
+                      )
+                      setRent(false)
+                    } else {
+                      Toast.Error(
+                        'Para alugar um item, é necessário ter a chave adicionada nas configurações.',
+                        7000,
+                      )
+                    }
+                  }}
+                  className="h-11 w-[167px] cursor-pointer border-none bg-mesh-color-primary-1400 font-semibold text-black opacity-100 disabled:opacity-10"
+                >
+                  Alugar
+                </Common.Button>,
+              )}
             <ModalBuyMain
-              updateSkin={{
-                skinPrice: Number(skinPrice),
-                skinId,
-                token,
-                userId,
-                userName,
+              createTransaction={{
+                skinPrice: Number(item.skin_price),
+                skinId: item.id,
+                token: session?.user?.token!,
+                userId: session?.user?.steam?.steamid!,
+                sellerId: item.seller_id,
               }}
             />
             {renderButton(
               <Common.Button
                 onClick={async () => {
                   if (userIsntOwnerSkin) {
-                    setMethodSelected('buy')
-                    setSkinToBuy(skinToBuy)
-                    setWhatModalOpenToBuySkin(0)
-                    setOpenModalBuySkin(true)
+                    if (hasConfigurations) {
+                      setMethodSelected('buy')
+                      setSkinToBuy(skinToBuy)
+                      setWhatModalOpenToBuySkin(0)
+                      setOpenModalBuySkin(true)
+                    } else {
+                      Toast.Blank(
+                        'Você deve adicionar seus dados antes de proceder.',
+                      )
+                    }
                   } else {
                     Toast.Error('Você não pode comprar o seu próprio item.')
                   }
@@ -498,6 +541,46 @@ export function PageDetailsSkin({
               </Common.Button>,
             )}
           </div>
+        </div>
+        <div
+          className={`h-0 transition-all ${rent ? 'visible h-20' : 'hidden'}`}
+        >
+          {item.sale_type === 'rent' && rent && (
+            <>
+              <Common.Title className="font-semibold text-white">
+                Selecione o período de Aluguel
+              </Common.Title>
+              <div className="flex gap-2">
+                {items.map(({ label, value }) => (
+                  <Common.Button
+                    key={label}
+                    className={classNames(
+                      'w-20 cursor-pointer rounded-lg border-2 border-mesh-color-neutral-400 p-2 font-medium text-white transition-all peer-checked:bg-mesh-color-primary-1200 peer-checked:text-black peer-disabled:opacity-10 hover:bg-mesh-color-neutral-600',
+                      {
+                        'bg-mesh-color-rarity-lowest text-white':
+                          selectedRentTime,
+                      },
+                    )}
+                    onMouseOver={() => setStateRentTime(value)}
+                    onClick={() => {
+                      setStateRentTime(value)
+                      setSelectedRentTime(false)
+                      if (userIsntOwnerSkin) {
+                        setMethodSelected('rent')
+                        setSkinToBuy(skinToBuy)
+                        setWhatModalOpenToBuySkin(1)
+                        setOpenModalBuySkin(true)
+                      } else {
+                        Toast.Error('Você não pode alugar o seu próprio item.')
+                      }
+                    }}
+                  >
+                    {label}
+                  </Common.Button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

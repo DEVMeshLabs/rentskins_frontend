@@ -1,26 +1,20 @@
-import Image, { StaticImageData } from 'next/image'
-
-interface IData {
-  image: StaticImageData
-  name: string
-  weapon: string
-  condition: string
-  float: number
-  value: number
-  status: string
-  type: string
-}
+import { ITransaction } from '@/services/interfaces/transactions.interface'
+import ColorRarity, { TItemRarity } from '@/tools/colorRarity.tool'
+import Image from 'next/image'
 
 interface IProps {
-  data: IData[]
+  data: ITransaction[]
+  steamid: string
 }
 
-export function TransactionsTable({ data }: IProps) {
+export function TransactionsTable({ data, steamid }: IProps) {
   const treatStatus = (status: string) => {
     const generateElement = (className: string) => {
       return (
-        <div>
-          <span className={'rounded-full px-4 py-2 ' + className}>
+        <div className="text-sm 2xl:text-base">
+          <span
+            className={'rounded-full px-2 py-1 2xl:px-4 2xl:py-2 ' + className}
+          >
             {status}
           </span>
         </div>
@@ -36,6 +30,8 @@ export function TransactionsTable({ data }: IProps) {
         return generateElement(
           'bg-mesh-color-rarity-medium/10 text-mesh-color-rarity-medium',
         )
+      case 'Em análise':
+        return generateElement('bg-purple-400/10 text-purple-400')
       case 'Falhou':
         return generateElement(
           'bg-mesh-color-rarity-low/10 text-mesh-color-rarity-low',
@@ -44,66 +40,74 @@ export function TransactionsTable({ data }: IProps) {
   }
 
   return data.length > 0 ? (
-    <div>
+    <div className="max-h-[40rem] min-h-[10rem] scroll-p-24 overflow-y-auto overflow-x-hidden">
       {data.map((item, index) => (
         <div
           key={index}
           className={
-            'grid grid-cols-6 items-center py-4 last:rounded-b-lg odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
+            'grid max-h-[8rem] grid-cols-6 items-center py-4 first:rounded-t-md last:rounded-b-md odd:bg-mesh-color-neutral-800 even:bg-mesh-color-neutral-900'
           }
         >
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-center justify-between overflow-hidden rounded-md border border-mesh-color-neutral-500 bg-mesh-gradient-black-pattern px-2">
-              <div className="mb-1 h-1.5 w-5/6 rounded-b-2xl bg-green-500" />
+              <div
+                className="mb-1 h-1.5 w-5/6 rounded-b-2xl bg-green-500"
+                style={{
+                  backgroundColor: `#${ColorRarity.transform(
+                    item.skin.skin_rarity as TItemRarity,
+                  )}`,
+                }}
+              />
               <Image
-                src={item.image}
+                src={`https://steamcommunity-a.akamaihd.net/economy/image/${item.skin.skin_image}`}
+                width={112}
+                height={64}
                 alt="Image"
                 draggable={false}
-                className="w-28"
+                className="w-20 2xl:w-28"
               />
             </div>
           </div>
-          <div className="group text-start">
-            <div
-              className="invisible relative -left-8 -top-8 z-20 -mb-[5.5rem] w-fit flex-wrap whitespace-nowrap
-           px-8 py-8 opacity-0
-          transition-all group-hover:visible group-hover:opacity-100"
+          <div className="mr-4 flex flex-col justify-between gap-1 text-ellipsis text-start">
+            <span
+              className={`overflow-hidden text-ellipsis text-sm font-medium
+              2xl:text-base ${
+                item.skin.skin_name.includes('StatTrak')
+                  ? 'text-mesh-color-secondary-800'
+                  : 'text-white'
+              } `}
             >
-              <p className="shadow-md rounded-lg bg-mesh-color-neutral-300 px-2">
-                {item.name}
-              </p>
-            </div>
-            <p
-              className={`group w-40 overflow-hidden text-ellipsis text-lg
-          font-medium ${
-            item.name.includes('StatTrak')
-              ? 'text-mesh-color-secondary-800'
-              : 'text-white'
-          } `}
-            >
-              {item.name}
-            </p>
-            <p className="text-mesh-color-neutral-300 "> {item.weapon} </p>
+              {item.skin.skin_name.split('(')[0]}
+            </span>
+            <span className="text-xs text-mesh-color-neutral-300 2xl:text-sm">
+              {item.skin.skin_weapon}
+            </span>
           </div>
-          <div className="w-48 text-start">
-            <p className="text-lg font-medium text-white">{item.condition}</p>
-            <p className="text-mesh-color-neutral-300">{item.float}</p>
+          <div className="flex w-fit flex-col gap-1 text-start">
+            <span className="text-sm font-medium text-white 2xl:text-base">
+              {item.skin.status_float}
+            </span>
+            <span className="text-xs text-mesh-color-neutral-300 2xl:text-sm">
+              {item.skin.skin_float}
+            </span>
           </div>
           {treatStatus(item.status)}
-          <div className="text-white">
-            {item.value.toLocaleString('pt-br', {
+          <div className="text-sm text-white 2xl:text-base">
+            {item.skin.skin_price.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
               minimumFractionDigits: 2,
             })}
           </div>
-          <div className="text-white"> {item.type} </div>
+          <div className="text-sm text-white 2xl:text-base">
+            {item.buyer_id === steamid ? 'Compra' : 'Venda'}
+          </div>
         </div>
       ))}
     </div>
   ) : (
-    <div className="flex h-5/6 items-center justify-center text-mesh-color-neutral-400">
+    <span className="h-full w-full rounded-md py-3 text-center text-lg text-mesh-color-neutral-400">
       Histórico de transações vazio.
-    </div>
+    </span>
   )
 }

@@ -1,8 +1,10 @@
+/* eslint-disable camelcase */
 import {
   ISkins,
   ISkinsAvailability,
   ISkinsResponse,
   ISkinsToAdvertise,
+  skinFloat,
 } from '@/interfaces/ISkins'
 import { Api } from '@/providers'
 import { AxiosPromise, AxiosResponse } from 'axios'
@@ -13,36 +15,46 @@ export default class SkinService {
     return Api.get<ISkinsResponse>(`/skins?page=${page || 1}`)
   }
 
+  public static findBySlug(slug: string) {
+    return Api.get<ISkins>(`/skins/slug/${slug}`)
+  }
+
   public static findById(id: string) {
     return Api.get<ISkins>(`/skins/${id}`)
+  }
+
+  public static getSkinFloat(url: string) {
+    return Api.post<skinFloat>('/skins/float', { url })
   }
 
   public static findByWeapon(weapon: string) {
     return Api.get<ISkins[]>(`/skins/weapon/${weapon}`)
   }
 
-  public static findBySkinsInventory(steamid: string, token: string) {
-    return Api.get<IInventory>(`/skins/inventory/${steamid}`, {
+  public static async findBySkinsInventory(steamid: string, token: string) {
+    const response = await Api.get<IInventory>(`/skins/inventory/${steamid}`, {
       headers: { Authorization: 'Bearer ' + token },
     })
+      .then((response) => response)
+      .catch((e) => e)
+
+    return response
   }
 
   public static findBySkinsInventoryWithFilters(
     steamid: string,
     token: string,
     filterType?: string[],
-    page?: number,
-    itemsPerPage?: number,
   ) {
     return Api.post<IInventory>(
       `/skins/inventory/${steamid}`,
       {
         filterType,
-        page,
-        itemsPerPage,
       },
       { headers: { Authorization: 'Bearer ' + token } },
     )
+      .then((response) => response)
+      .catch((e) => e)
   }
 
   public static findAllSkinsByWeapon(weapon: string) {
@@ -50,15 +62,18 @@ export default class SkinService {
   }
 
   public static findAllSkinsByIdSeller(
-    sellerId: string,
-    page?: number | string,
+    steamId: string,
+    page?: number | string | undefined,
+    showDeleted = false,
   ) {
     if (page) {
       return Api.get<ISkinsResponse>(
-        `/skins/seller/user/${sellerId}?page=${page}`,
+        `/skins/seller/user/${steamId}?page=${page}&deletedAt=${showDeleted}`,
       )
     } else {
-      return Api.get<ISkinsResponse>(`/skins/seller/user/${sellerId}`)
+      return Api.get<ISkinsResponse>(
+        `/skins/seller/user/${steamId}?deletedAt=${showDeleted}`,
+      )
     }
   }
 
@@ -70,20 +85,21 @@ export default class SkinService {
       .catch((e) => e)) as AxiosPromise<string[]>
   }
 
-  public static findBySearchParameter(param: string, page?: number | string) {
-    return Api.get<ISkinsResponse>(`/skins/search/${param}?page=${page || 1}`)
+  public static findBySearchParameter(
+    param: string,
+    type: 'name' | 'category' | 'weapon',
+  ) {
+    return Api.get<ISkinsResponse>(`/skins/search/${param}?type=${type}`)
   }
 
   public static async postAllSkinsToAdvertise(
     allSkinsAdvertise: ISkinsToAdvertise[],
     token: string,
   ) {
-    console.log(allSkinsAdvertise)
     const skinsWithoutId = allSkinsAdvertise.filter((skin) => {
-      delete skin.id
       return skin
     })
-
+    console.log(skinsWithoutId)
     const result: AxiosResponse<{ status: number }> = await Api.post<{
       status: number
     }>('/skins', skinsWithoutId, {
@@ -91,9 +107,8 @@ export default class SkinService {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response)
+      .then((response) => console.log(response))
       .catch((err) => err)
-
     return result
   }
 
@@ -132,6 +147,30 @@ export default class SkinService {
       {
         buyer_id: userId,
         buyer_name: userName,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => response)
+      .catch((e) => e)
+
+    return result
+  }
+
+  public static async updateEditSkin(
+    skinId: string,
+    skin_price: number,
+    sale_type: string,
+    token: string,
+  ) {
+    const result: AxiosResponse<any> = await Api.put(
+      `/skins/${skinId}`,
+      {
+        skin_price,
+        sale_type,
       },
       {
         headers: {

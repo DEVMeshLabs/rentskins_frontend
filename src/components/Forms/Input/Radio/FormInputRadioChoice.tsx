@@ -5,7 +5,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   checked: boolean
   title: string
-  setState: (checked: boolean) => void
+  setState: () => void
 }
 
 export function FormInputRadioChoice({
@@ -21,7 +21,7 @@ export function FormInputRadioChoice({
         <input
           type="radio"
           checked={checked}
-          onChange={({ target: { checked } }) => setState(checked)}
+          onChange={() => setState()}
           name={`input-radio-choice-` + name}
           className="peer absolute"
           {...rest}
