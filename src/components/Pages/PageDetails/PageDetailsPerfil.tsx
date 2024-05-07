@@ -54,12 +54,12 @@ export function PageDetailsPerfil({ seller }: IProps) {
             />
           </Link>
           <div className="ml-4">
-            <Common.Title
+            {/* <Common.Title
               color="white"
               className="text-lg font-semibold laptop:text-2xl"
             >
               {seller.owner_name}
-            </Common.Title>
+            </Common.Title> */}
             <div className="w-[48px] laptop:w-[80px]">
               <Image
                 src={Rank.retrieveRank(seller.reliability!) as StaticImageData}

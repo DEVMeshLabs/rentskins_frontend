@@ -41,16 +41,18 @@ export default function PersonProfile({
           height={200}
           className="rounded-full"
         />
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col justify-center gap-7">
           <div className="flex flex-col gap-2">
-            <Common.Title
-              bold={600}
-              color="white"
-              size="3xl"
-              className="self-start"
-            >
-              {name || 'Usuário'}
-            </Common.Title>
+            {isSeller ?? (
+              <Common.Title
+                bold={600}
+                color="white"
+                size="3xl"
+                className="self-start"
+              >
+                {name || 'Usuário'}
+              </Common.Title>
+            )}
             <Image
               src={Rank.retrieveRank(reliability!) as StaticImageData}
               alt="Rank"
